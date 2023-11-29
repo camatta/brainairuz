@@ -1,0 +1,44 @@
+<h1>Lista de Usuários:</h1>
+
+<div class="wrapper-table">
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Time</th>
+        <th>Setor</th>
+        <th>Permissão</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.name }}</td>
+        <td>
+          <ng-container *ngIf="!user.editing">{{ user.team }}</ng-container>
+          <ng-container *ngIf="user.editing">
+            <select [(ngModel)]="user.team" (change)="onTeamChange(user)">
+              <option *ngFor="let option of teamOptions" [value]="option">{{ option }}</option>
+            </select>
+          </ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="!user.editing">{{ user.setorTratado }}</ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="!user.editing">{{ user.accessLevel }}</ng-container>
+          <ng-container *ngIf="user.editing">
+            <select>
+              <option value="Administrador">Administrador</option>
+              <option value="Líder de Equipe">Líder de Equipe</option>
+              <option value="Funcionário">Funcionário</option>
+            </select>
+          </ng-container>
+        </td>
+        <!-- <td>
+          <button (click)="user.editing = !user.editing">{{ user.editing ? 'Salvar' : 'Editar' }}</button>
+        </td> -->
+      </tr>          
+    </tbody>
+  </table>
+</div>
+

@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --D: #FF0000;
+  --C: #FFC000;
+  --B: #c1c100;
+  --A: #00d500;
+  --Enterprise: #48BAB8;
+}
+
+* {
+  color: #fff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+h1 {
+  font-weight: 700 !important;
+  font-size: 2rem !important;
+}
+
+span {
+  font-weight: 600 !important;
+}

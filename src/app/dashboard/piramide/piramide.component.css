@@ -1,0 +1,227 @@
+* {
+  box-sizing: content-box;
+}
+
+body {
+  background: #fffdf1;
+}
+
+.box {
+  position: relative;
+  width: 410px;
+  height: 500px;
+}
+/* ------------ 0 ------------ */
+.pyramid {
+  width: 200px;
+  height: 200px;
+  margin: 3em auto -2rem;
+  position: absolute;
+  left: 50%;
+  perspective-origin: center -75%;
+}
+
+.pyramid__inner {
+  transform-style: preserve-3d;  
+   transform: translateZ(-150px) translateX(-70%) rotateY(360deg); 
+  
+animation: Anim 15s linear infinite;
+}
+
+@keyframes Anim {
+  0% { transform: translateZ(-150px) translateX(-75%) rotateY(0deg); }
+  50% { transform: translateZ(-150px) translateX(75%) rotateY(180deg); }
+  100% { transform: translateZ(-150px) translateX(-75%) rotateY(360deg); }
+} 
+
+.bit {
+  position: absolute;
+  height: 0;
+  border-right: 100px solid transparent;
+  border-left: 100px solid transparent;
+  opacity: .92;
+}
+
+
+.py-1 {
+  /* transform: scale(.485) translateX(4rem) translateY(11.25rem); */
+  transform: scale(.485);
+  perspective: 5000px;
+  z-index: 3;
+  
+  top: 0;
+}
+
+.py-2 {
+ /*  transform: scale(.72) translateX(1.5rem) translateY(1.25rem); */
+  transform: scale(.72);
+  perspective: 2900px;
+  z-index: 2;
+  
+  top: 140px;
+}
+
+.py-3 {
+  transform: scale(1.2);
+  perspective: 1000px;
+  z-index: 1;
+  
+  top: 340px;
+}
+
+/* ------------ 1 ------------ */
+.py-1 .bit {
+  width: 0px;
+}
+
+.py-1 .bit-1 {
+  border-bottom: 200px solid #ff1cfc;
+}
+
+.py-1 .bit-2,
+.py-1 .bit-3,
+.py-1 .bit-4 {
+  border-bottom: 200px solid #ff1cfc;
+}
+
+.py-1  .bit-1 {
+  transform: rotateX(30deg) translateZ(57px);  
+}
+
+.py-1  .bit-2 {
+  transform: rotateX(-30deg) translateZ(-57px);    
+}
+
+.py-1  .bit-3 {
+  transform: rotateZ(-30deg) rotateY(-90deg) translateZ(-57px);
+}
+
+.py-1  .bit-4 {
+  transform:  rotateZ(30deg) rotateY(90deg) translateZ(-57px);
+}
+
+/* ------------ 2 ------------ */
+.py-2 .bit {
+  width: 140px;
+  border-right: 75px solid transparent;
+  border-left: 75px solid transparent;
+}
+
+.py-2 .bit-1{
+  border-bottom: 150px solid #742073;
+}
+
+.py-2 .bit-2,
+.py-2 .bit-3,
+.py-2 .bit-4 {
+  border-bottom: 150px solid #742073;
+}
+
+.py-2  .bit-1 {
+  transform: rotateX(30deg) translateZ(122px);  
+}
+
+.py-2  .bit-2 {
+  transform: rotateX(-30deg) translateZ(-122px);    
+}
+
+.py-2  .bit-3 {
+  transform: rotateZ(-30deg) rotateY(-90deg) translateZ(-122px);
+}
+
+.py-2  .bit-4 {
+  transform:  rotateZ(30deg) rotateY(90deg) translateZ(-122px);
+}
+
+.py-2 .bit-5 {
+  position: absolute;
+  background: #4d124c;
+  width: 140px;
+  height: 140px;
+  z-index: 10;
+  transform: rotateX(90deg) translateX(75px) translateY(0px) translateZ(121px);
+}
+
+/* ------------ 3 ------------ */
+.py-3 .bit {
+  width: 200px;
+  border-right: 75px solid transparent;
+  border-left: 75px solid transparent;
+}
+
+.py-3 .bit-1 {
+  border-bottom: 150px solid #00908a;
+}
+
+.py-3 .bit-2,
+.py-3 .bit-3,
+.py-3 .bit-4 {
+  border-bottom: 150px solid #00b3ac;
+}
+
+.py-3  .bit-1 {
+  transform: rotateX(30deg) translateZ(158px);  
+}
+
+.py-3  .bit-2 {
+  transform: rotateX(-30deg) translateZ(-158px);    
+}
+
+.py-3  .bit-3 {
+  transform: rotateZ(-30deg) rotateY(-90deg) translateZ(-158px);
+}
+
+.py-3  .bit-4 {
+  transform:  rotateZ(30deg) rotateY(90deg) translateZ(-158px);
+}
+
+.py-3 .bit-5 {
+  position: absolute;
+  background: #00908a;
+  width: 200px;
+  height: 200px;
+  z-index: 10;
+  transform: rotateX(90deg) translateX(75px) translateY(0px) translateZ(169px);
+}
+
+.py-3 .bit-6 {
+  position: absolute;
+    background: rgba(51, 51, 51, .01);
+    opacity: 1;
+    width: 355px;
+    height: 355px;
+    box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.17), inset 0px 0px 65px rgba(0, 0, 0, 0.17);
+    z-index: 10;
+    transform: rotateX(90deg) translateX(0px) translateY(0px) translateZ(107px);
+}
+
+
+/* Text style */
+span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+  font-family: sans-serif;
+  font-size: 3rem;
+  transform: rotateY(180deg) translateY(100%);
+}
+
+.bit-1 span {
+  transform: rotateY(0deg) translateY(100%);
+}
+
+.py-1 span {
+  line-height: 5rem;
+  transform: rotateY(180deg) translateY(100%) translateX(-2.5rem);
+}
+.py-1 .bit-1 span {
+  transform: rotateY(0deg) translateY(100%) translateX(-.5rem);
+}
+
+.legendas-notas {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}

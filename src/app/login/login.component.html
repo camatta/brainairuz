@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <div class="wrapper">
+    <div class="sucesso-return">
+      <div *ngIf="mensagemAviso" class="alert alert-success">
+        {{ mensagemAviso }}
+      </div>
+    </div>
+    <h1>Login</h1>
+
+    <form (ngSubmit)="login()" #loginForm="ngForm">
+  
+      <div class="row-form">
+        <label for="email">E-mail</label>
+        <input type="email" name="email" [(ngModel)]="email" id="email" required>
+      </div>
+  
+      <div class="row-form">
+        <label for="password">Senha:</label>
+        <div class="password-input">
+          <input type="{{ showPassword ? 'text' : 'password' }}" id="password" [(ngModel)]="password" name="password" required>
+          <span class="password-toggle" (click)="togglePasswordVisibility()">
+            <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </span>
+        </div>
+      </div>
+  
+      <button class="submit-login" type="submit">Entrar</button>
+  
+    </form>
+    <div class="cadastrar-login">
+      <p>Ainda não possui cadastro?</p>
+      <button routerLink="/cadastro">Cadastre-se</button>
+    </div>
+    <div class="erro-return">
+      <div class="error-message" *ngIf="errorMessage">
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
+  </div>
+</div>

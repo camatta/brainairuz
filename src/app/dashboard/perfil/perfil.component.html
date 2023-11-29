@@ -1,0 +1,10 @@
+<div class="perfil">
+  <h1>Perfil do Usuário</h1>
+  <div *ngIf="userInfo">
+    <p>Nome: {{ userInfo.name }}</p>
+    <p>Email: {{ userInfo.email }}</p>
+    <p>Time: {{ userInfo.team }}</p>
+    <p>Setor: {{ userInfo.setor }}</p>
+    <p>Permissão: {{ userInfo.accessLevel }}</p>
+  </div>
+</div>

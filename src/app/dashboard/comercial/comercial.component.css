@@ -1,0 +1,51 @@
+input, select, option {
+  border: unset;
+  background-color: #fff;
+  border-radius: 5px;
+  height: 35px;
+  width: 400px;
+  padding-left: 5px;
+  color: #240435;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+button {
+  width: 400px;
+  margin-top: 1rem;
+  padding: 10px;
+  border: unset;
+  background-color: #080b2c;
+  font-weight: 500;
+  border-radius: 5px;
+}
+
+.img-previa {
+  margin-top: 2rem;
+}
+
+canvas {
+  width: 60%;
+}
+
+h1 {
+  margin-bottom: 1rem;
+}
+
+#logo {
+  padding: 20px;
+  font-size: 14px;
+  background-color: transparent;
+  border: 2px dotted #fff;
+  color: #fff;
+  height: auto;
+}
+
+label {
+  margin-bottom: 5px;
+}
+

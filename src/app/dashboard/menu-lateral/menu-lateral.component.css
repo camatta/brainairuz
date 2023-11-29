@@ -1,0 +1,20 @@
+
+.menu-lateral ul {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-lateral ul li {
+  margin-bottom: 1rem;
+}
+
+.menu-lateral ul li button {
+  color: #fff;
+  text-decoration: unset;
+  background: unset;
+  border: unset;
+}
+
+.link-ativo {
+  font-weight: bold;
+}

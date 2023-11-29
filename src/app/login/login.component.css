@@ -1,0 +1,115 @@
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: rgb(59,88,203);
+  background: linear-gradient(107deg, rgba(59,88,203,1) 7%, rgba(176,36,190,1) 27%, rgba(75,13,104,1) 49%, rgba(8,11,44,1) 81%);
+}
+
+h1 {
+  color: #fff;
+}
+
+form {
+  margin-top: 1.5rem;
+}
+
+label {
+  color: #fff;
+  margin-right: 10px;
+  width: 100%;
+  display: flex;
+  margin-bottom: 5px;
+}
+
+input {
+  border: unset;
+  background-color: #fff;
+  border-radius: 5px;
+  height: 35px;
+  width: 100%;
+  padding-left: 5px;
+  color: #240435;
+}
+
+.row-form {
+  margin-bottom: 2rem;
+}
+
+.submit-login {
+  border: unset;
+  background-color: #240435;
+  border-radius: 5px;
+  width: 100%;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.cadastrar-login {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.cadastrar-login p {
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.wrapper {
+  width: 30%;
+}
+
+.cadastrar-login button {
+  background: unset;
+  border: unset;
+  text-decoration: underline;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.error-message {
+  padding: 10px;
+  color: #fff;
+  border: 1px solid;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.error-message p {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.password-input {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 5px;
+  cursor: pointer;
+}
+
+.password-toggle .fas {
+  color: #240435;
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    width: 100%;
+  }
+}

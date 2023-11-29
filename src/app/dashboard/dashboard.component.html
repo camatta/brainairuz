@@ -1,0 +1,20 @@
+<div class="container-fluid" id="dashboard">
+    <div class="row">
+      <div class="col-3">
+        <div class="lateral">
+          <div class="saudacao">
+            <p>Olá, <span>{{ userName }}</span></p>
+          </div>
+          <app-menu-lateral></app-menu-lateral>
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="conteudo">
+          <div class="conteudo-home" *ngIf="isHomePage()">
+            <h1>Bem-vindo ao painel interno da Nairuz</h1>
+          </div>
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+</div>

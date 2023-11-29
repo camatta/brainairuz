@@ -1,0 +1,380 @@
+<h1 class="mb-4">Validação ICP Marketing</h1>
+
+<form id="validacao-icp" (ngSubmit)="setPercentualdeFit()">
+  <div class="col-10 mb-3">
+    <label for="site_empresa" class="form-label">Site da Empresa:</label>
+    <input #siteEmpresa (change) = "setNomeEmpresa(siteEmpresa.value)" type="text" class="form-control" id="site_empresa" placeholder="www.site.com.br">
+  </div>
+  <div class="col-10 mb-3">
+    <label for="palavras_chave" class="form-label">Até 5 Palavras Chave:</label>
+    <input #palavrasChave (change) = "setPalavrasChave(palavrasChave.value)" type="text" class="form-control" id="palavras_chave" placeholder="marketing digital, inbound marketing, rd station">
+  </div>
+
+  <h2 class="mt-5">Preencha os itens abaixo:</h2>
+
+  <h5 class="mt-4 mb-3">Mercado:</h5>
+  <div class="col-10 mb-3">
+    <label for="segmentoWeb" class="form-label">
+      Como é o comportamento do segmento na web?
+      <small><a href="{{ linkGoogle }}">Clique aqui</a> para visualizar.</small>
+    </label>
+    <select id="segmentoWeb" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="10">Sem competição</option>
+      <option value="30">Neutro</option>
+      <option value="70">Competitivo</option>
+      <option value="100">Muito competitivo</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="volumePesquisa" class="form-label">
+      As palavras tem volume de pesquisa?
+      <small><a href="{{ keyPlanner }}">Clique aqui</a> para visualizar.</small>
+    </label>
+    <select id="volumePesquisa" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="100">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <h5 class="mt-5 mb-3">Negócio:</h5>
+  <div class="col-10 mb-3">
+    <label for="modeloNegocio" class="form-label">B2B / B2C ou B2C e B2B?</label>
+    <select id="modeloNegocio" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="informativo">B2B</option>
+      <option value="informativo">B2C</option>
+      <option value="informativo">B2C e B2B</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="processoCompra" class="form-label">O processo de compra é complexo?</label>
+    <select id="processoCompra" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="informativo">Sim</option>
+      <option value="informativo">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="ticketMedio" class="form-label">Qual o ticket médio?</label>
+    <select id="ticketMedio" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="30">Até R$100</option>
+      <option value="50">R$100 - R$200</option>
+      <option value="70">R$201 - R$400</option>
+      <option value="100">Mais de R$400</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="capacidadeInvestimento" class="form-label">A empresa tem capacidade de investimento?</label>
+    <select id="capacidadeInvestimento" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="100">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="estrategiaDiretor" class="form-label">A estratégia digital tem a atenção de um diretor?</label>
+    <select id="estrategiaDiretor" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="100">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="cargoContato" class="form-label">Qual é o cargo do seu contato?</label>
+    <select id="cargoContato" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="informativo">Sócio/CEO</option>
+      <option value="informativo">Diretor</option>
+      <option value="informativo">Gerente/Coordenador</option>
+      <option value="informativo">Analista</option>
+      <option value="informativo">Outros</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="areaAtuacao" class="form-label">Qual é a área de atuação da empresa?</label>
+    <select id="areaAtuacao" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="informativo">Varejo</option>
+      <option value="informativo">Fabricante</option>
+      <option value="informativo">Distribuidor</option>
+      <option value="informativo">Serviços</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="atendeSegmentoAtuacao" class="form-label">Atende o segmento de atuação da empresa?</label>
+    <select id="atendeSegmentoAtuacao" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="100">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="qtdFuncionarios" class="form-label">Número de funcionários da empresa</label>
+    <div class="d-flex gap-3 align-items-center">
+      <select #funcionarios (change) = "setPerfilFuncionarios(funcionarios.value)" id="qtdFuncionarios" class="form-select w-75">
+        <option selected>Selecione...</option>
+        <option value="0">Não possui</option>
+        <option value="30">1 a 10</option>
+        <option value="50">11 a 20</option>
+        <option value="70">21 a 200</option>
+        <option value="100">Mais de 200</option>
+      </select>
+      <span
+      *ngIf="perfilFuncionarios == '...'; else perfilFuncionariosAlterado"
+      class="perfil w-25 text-center badge bg-secondary">
+      {{ perfilFuncionarios }}
+    </span>
+    <ng-template #perfilFuncionariosAlterado>
+      <span
+        style="background-color: var(--{{ perfilFuncionarios }})!important;"
+        class="perfil w-25 text-center badge">
+        {{ perfilFuncionarios }}
+      </span>
+    </ng-template>
+    </div>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="faturamentoMensal" class="form-label">Qual o faturamento mensal da empresa?</label>
+    <div class="d-flex gap-3 align-items-center">
+      <select #faturamento (change) = "setPerfilFaturamento(faturamento.value)" id="faturamentoMensal" class="form-select w-75">
+        <option selected>Selecione...</option>
+        <option value="0">50mil</option>
+        <option value="30">51 a 100mil</option>
+        <option value="50">101 a 300mil</option>
+        <option value="70">301 a 999mil</option>
+        <option value="100">Acima de 999mil</option>
+      </select>
+      <span
+        *ngIf="perfilFaturamento == '...'; else perfilFaturamentoAlterado"
+        class="perfil w-25 text-center badge bg-secondary">
+        {{ perfilFaturamento }}
+      </span>
+      <ng-template #perfilFaturamentoAlterado>
+        <span
+          style="background-color: var(--{{ perfilFaturamento }})!important;"
+          class="perfil w-25 text-center badge">
+          {{ perfilFaturamento }}
+        </span>
+      </ng-template>
+    </div>
+  </div>
+
+  <h5 class="mt-5 mb-3">Vendas:</h5>
+  <div class="col-10 mb-3">
+    <label for="utilizaCRM" class="form-label">A empresa utiliza um CRM?</label>
+    <select id="utilizaCRM" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="70">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="tamanhoBaseContatos" class="form-label">Qual é o tamanho da base de contatos?</label>
+    <select id="tamanhoBaseContatos" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="20">0-5k e-mails</option>
+      <option value="30">5-10k e-mails</option>
+      <option value="35">10-25k e-mails</option>
+      <option value="40">25-50k e-mails</option>
+      <option value="45">50-100k e-mails</option>
+      <option value="50">Mais de 100k e-mails</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="qtdVendedores" class="form-label">Quantos vendedores a empresa tem?</label>
+    <select id="qtdVendedores" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="10">Nenhum vendedor dedicado</option>
+      <option value="40">1 a 5</option>
+      <option value="60">5 a 10</option>
+      <option value="80">10 a 20</option>
+      <option value="100">Mais de 20</option>
+    </select>
+  </div>
+
+  <h5 class="mt-5 mb-3">Maturidade digital:</h5>
+  <div class="col-10 mb-3">
+    <label for="enderecoWeb" class="form-label">Tem um endereço na web?</label>
+    <select id="enderecoWeb" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="16">Site</option>
+      <option value="20">E-commerce</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="mantemBlog" class="form-label">Mantém um blog?</label>
+    <select id="mantemBlog" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="80">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="trabalhouComAgencia" class="form-label">Já trabalhou com agência?</label>
+    <select id="trabalhouComAgencia" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="40">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="pontoFocal" class="form-label">Tem ponto focal (Gerente de Marketing ou E-commerce)?</label>
+    <div class="d-flex gap-3 align-items-center">
+      <select #pontoFocal (change) = "setPerfilPontoFocal(pontoFocal.value)" id="pontoFocal" class="form-select w-75">
+        <option selected>Selecione...</option>
+        <option value="100">Sim</option>
+        <option value="0">Não</option>
+      </select>
+      <span
+      *ngIf="perfilPontoFocal == '...'; else perfilPontoFocalAlterado"
+      class="perfil w-25 text-center badge bg-secondary">
+      {{ perfilPontoFocal }}
+    </span>
+    <ng-template #perfilPontoFocalAlterado>
+      <span
+        style="background-color: var(--{{ perfilPontoFocal }})!important;"
+        class="perfil w-25 text-center badge">
+        {{ perfilPontoFocal }}
+      </span>
+    </ng-template>
+    </div>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="timeInternoMkt" class="form-label">Tem time interno de Marketing?</label>
+    <div class="d-flex gap-3 align-items-center">
+      <select #mktInterno (change) = "setPerfilMktInterno(mktInterno.value)" id="timeInternoMkt" class="form-select w-75">
+        <option selected>Selecione...</option>
+        <option value="100">Sim</option>
+        <option value="0">Não</option>
+      </select>
+      <span
+      *ngIf="perfilMktInterno == '...'; else perfilMktInternoAlterado"
+      class="perfil w-25 text-center badge bg-secondary">
+      {{ perfilMktInterno }}
+    </span>
+    <ng-template #perfilMktInternoAlterado>
+      <span
+        style="background-color: var(--{{ perfilMktInterno }})!important;"
+        class="perfil w-25 text-center badge">
+        {{ perfilMktInterno }}
+      </span>
+    </ng-template>
+    </div>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="interacaoRedesSociais" class="form-label">Tem uma presença interativa nas redes sociais?</label>
+    <select id="interacaoRedesSociais" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="40">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="geracaoLeads" class="form-label">Tem estratégia de geração de Leads?</label>
+    <select id="geracaoLeads" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="80">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="usaAnalytics" class="form-label">Utiliza Google analytics?</label>
+    <select id="usaAnalytics" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="50">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="basicoSEO" class="form-label">
+      Faz o básico de SEO?
+      <small><a href="{{ checkSEO }}">Clique aqui</a> para visualizar.</small>
+    </label>
+    <select id="basicoSEO" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="50">Sim</option>
+      <option value="0">Não</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="boaVisitacaoSite" class="form-label">
+      Tem uma boa visitação no site?
+      <small><a href="{{ checkVisitacao }}">Clique aqui</a> para visualizar.</small>
+    </label>
+    <div class="d-flex gap-3 align-items-center">
+      <select #visitacao (change) = "setPerfilVisitacao(visitacao.value)" id="boaVisitacaoSite" class="form-select w-75">
+        <option selected>Selecione...</option>
+        <option value="0">Não possui</option>
+        <option value="30">Menor de 15k</option>
+        <option value="70B">A partir de 15k</option>
+        <option value="70">De 30 a 130k</option>
+        <option value="100">Acima de 131k</option>
+      </select>
+      <span
+      *ngIf="perfilVisitacao == '...'; else perfilVisitacaoAlterado"
+      class="perfil w-25 text-center badge bg-secondary">
+      {{ perfilVisitacao }}
+    </span>
+    <ng-template #perfilVisitacaoAlterado>
+      <span
+        style="background-color: var(--{{ perfilVisitacao }})!important;"
+        class="perfil w-25 text-center badge">
+        {{ perfilVisitacao }}
+      </span>
+    </ng-template>
+    </div>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="investeAnuncios" class="form-label">
+      Investe em anúncios?
+      <small><a href="{{ checkAnuncios }}">Clique aqui</a> para visualizar.</small>
+    </label>
+    <select id="investeAnuncios" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="0">Não possui</option>
+      <option value="40">Menor de 15k</option>
+      <option value="70">A partir de 15k</option>
+      <option value="100">Acima de 131k</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <label for="metaFaturamento" class="form-label">Possui meta de faturamento?</label>
+    <select id="metaFaturamento" class="form-select">
+      <option selected>Selecione...</option>
+      <option value="0">Não</option>
+      <option value="40">100 a 200mil</option>
+      <option value="70">201 a 300mil</option>
+      <option value="100">Acima de 300k</option>
+    </select>
+  </div>
+
+  <div class="col-10 mb-3">
+    <input class="validar" type="submit" value="Validar ICP">
+  </div>
+</form>

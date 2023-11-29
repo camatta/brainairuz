@@ -1,0 +1,53 @@
+h1 {
+  margin-bottom: 1rem;
+}
+
+p, li, h1 {
+  color: #fff;
+}
+
+.wrapper-table {
+  width: 90%;
+  margin-top: 2rem;
+  background-color: #ffffff30;
+  color: #fff;
+  border-radius: 5px;
+  border: unset;
+  padding: 10px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+table {
+  width: 100%;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+tbody tr:last-child {
+  border-bottom: 0;
+}
+
+td {
+  height: 50px;
+}
+
+select {
+  background-color: #40ca9438;
+  color: #fff;
+  border-radius: 5px;
+  border: unset;
+  padding: 10px;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 10px;
+  border: unset;
+  background-color: #080b2c;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 1rem
+}

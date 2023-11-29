@@ -1,0 +1,28 @@
+<h1>Gerador de Imagens para Novos Projetos e Clientes</h1>
+
+<form (submit)="criarImagemPersonalizada()">
+  <div class="form-group">
+    <label for="nomeCliente">Nome do Cliente:</label>
+    <input type="text" id="nomeCliente" [(ngModel)]="nomeCliente" name="nomeCliente" required>
+  </div>
+  <div class="form-group">
+    <label for="avisoProjeto">Tipo de Aviso:</label>
+    <select id="avisoProjeto" [(ngModel)]="avisoProjeto" name="avisoProjeto" required>
+      <option value="AVISO DE NOVO PROJETO!">Novo projeto</option>
+      <option value="AVISO DE NOVO CLIENTE!">Novo cliente</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="tipoProjeto">Tipo de Projeto:</label>
+    <input type="text" id="tipoProjeto" [(ngModel)]="tipoProjeto" name="tipoProjeto" required>
+  </div>
+  <div class="form-group">
+    <label for="logo">Logo (PNG):</label>
+    <input type="file" id="logo" (change)="onFileSelected($event)" accept=".png, .jpeg, .svg" />
+  </div>
+  <button type="submit">Criar Imagem Personalizada</button>
+</form>
+
+<div class="img-previa">
+  <canvas #canvas></canvas>
+</div>
