@@ -105,12 +105,14 @@ export class IcpComponent {
   fit: string = "";
   fitMessage: string = "";
   err: string = "";
+
   setPercentualdeFit(valores: any): string {
     var total = 0;
     this.err = "";
     this.fit = "";
     
     Object.keys(valores).forEach((item) => {
+
       if(valores[item] != "informativo"){
         if(valores[item] != ""){
           valores[item] == "70B" ? total += 70 : total += Number(valores[item]);
