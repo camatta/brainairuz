@@ -1,13 +1,13 @@
 <h1 class="mb-4">Validação ICP Marketing</h1>
 
-<form id="validacao-icp" (ngSubmit)="setPercentualdeFit()">
+<form id="validacao-icp" #formIcp="ngForm" (ngSubmit)="setPercentualdeFit(formIcp.value)">
   <div class="col-10 mb-3">
     <label for="site_empresa" class="form-label">Site da Empresa:</label>
-    <input #siteEmpresa (change) = "setNomeEmpresa(siteEmpresa.value)" type="text" class="form-control" id="site_empresa" placeholder="www.site.com.br">
+    <input #siteEmpresa (change) = "setNomeEmpresa(siteEmpresa.value)" type="text" class="form-control" id="site_empresa" placeholder="www.site.com.br" required>
   </div>
   <div class="col-10 mb-3">
     <label for="palavras_chave" class="form-label">Até 5 Palavras Chave:</label>
-    <input #palavrasChave (change) = "setPalavrasChave(palavrasChave.value)" type="text" class="form-control" id="palavras_chave" placeholder="marketing digital, inbound marketing, rd station">
+    <input #palavrasChave (change) = "setPalavrasChave(palavrasChave.value)" type="text" class="form-control" id="palavras_chave" placeholder="marketing digital, inbound marketing, rd station" required>
   </div>
 
   <h2 class="mt-5">Preencha os itens abaixo:</h2>
@@ -16,10 +16,11 @@
   <div class="col-10 mb-3">
     <label for="segmentoWeb" class="form-label">
       Como é o comportamento do segmento na web?
-      <small><a href="{{ linkGoogle }}">Clique aqui</a> para visualizar.</small>
+      <small *ngIf='palavrasChaveInput'><a href="{{ linkGoogle }}" target="_blank">Clique aqui</a> para visualizar.</small>
+      <small *ngIf='!palavrasChaveInput'><span id="googleDesativado">Clique aqui</span> para visualizar.</small>
     </label>
-    <select id="segmentoWeb" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="segmentoWeb" class="form-select" name="segmentoWeb" [(ngModel)] = "valores.segmentoWeb" required aria-label="select example">
+      <option value="" disabled selected>Selecione...</option>
       <option value="10">Sem competição</option>
       <option value="30">Neutro</option>
       <option value="70">Competitivo</option>
@@ -32,18 +33,18 @@
       As palavras tem volume de pesquisa?
       <small><a href="{{ keyPlanner }}">Clique aqui</a> para visualizar.</small>
     </label>
-    <select id="volumePesquisa" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="100">Sim</option>
+    <select id="volumePesquisa" class="form-select" name="volumePesquisa" [(ngModel)] = "valores.volumePesquisa" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="100">Sim</option>
     </select>
   </div>
 
   <h5 class="mt-5 mb-3">Negócio:</h5>
   <div class="col-10 mb-3">
     <label for="modeloNegocio" class="form-label">B2B / B2C ou B2C e B2B?</label>
-    <select id="modeloNegocio" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="modeloNegocio" class="form-select" name="modeloNegocio" [(ngModel)] = "valores.modeloNegocio" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="informativo">B2B</option>
       <option value="informativo">B2C</option>
       <option value="informativo">B2C e B2B</option>
@@ -52,17 +53,17 @@
 
   <div class="col-10 mb-3">
     <label for="processoCompra" class="form-label">O processo de compra é complexo?</label>
-    <select id="processoCompra" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="informativo">Sim</option>
+    <select id="processoCompra" class="form-select" name="processoCompra" [(ngModel)] = "valores.processoCompra" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="informativo">Não</option>
+      <option value="informativo">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="ticketMedio" class="form-label">Qual o ticket médio?</label>
-    <select id="ticketMedio" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="ticketMedio" class="form-select" name="ticketMedio" [(ngModel)] = "valores.ticketMedio" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="30">Até R$100</option>
       <option value="50">R$100 - R$200</option>
       <option value="70">R$201 - R$400</option>
@@ -72,26 +73,26 @@
 
   <div class="col-10 mb-3">
     <label for="capacidadeInvestimento" class="form-label">A empresa tem capacidade de investimento?</label>
-    <select id="capacidadeInvestimento" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="100">Sim</option>
+    <select id="capacidadeInvestimento" class="form-select" name="capacidadeInvestimento" [(ngModel)] = "valores.capacidadeInvestimento" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="100">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="estrategiaDiretor" class="form-label">A estratégia digital tem a atenção de um diretor?</label>
-    <select id="estrategiaDiretor" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="100">Sim</option>
+    <select id="estrategiaDiretor" class="form-select" name="estrategiaDiretor" [(ngModel)] = "valores.estrategiaDiretor" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="100">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="cargoContato" class="form-label">Qual é o cargo do seu contato?</label>
-    <select id="cargoContato" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="cargoContato" class="form-select" name="cargoContato" [(ngModel)] = "valores.cargoContato" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="informativo">Sócio/CEO</option>
       <option value="informativo">Diretor</option>
       <option value="informativo">Gerente/Coordenador</option>
@@ -102,8 +103,8 @@
 
   <div class="col-10 mb-3">
     <label for="areaAtuacao" class="form-label">Qual é a área de atuação da empresa?</label>
-    <select id="areaAtuacao" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="areaAtuacao" class="form-select" name="areaAtuacao" [(ngModel)] = "valores.areaAtuacao" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="informativo">Varejo</option>
       <option value="informativo">Fabricante</option>
       <option value="informativo">Distribuidor</option>
@@ -113,18 +114,18 @@
 
   <div class="col-10 mb-3">
     <label for="atendeSegmentoAtuacao" class="form-label">Atende o segmento de atuação da empresa?</label>
-    <select id="atendeSegmentoAtuacao" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="100">Sim</option>
+    <select id="atendeSegmentoAtuacao" class="form-select" name="atendeSegmentoAtuacao" [(ngModel)] = "valores.atendeSegmentoAtuacao" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="100">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="qtdFuncionarios" class="form-label">Número de funcionários da empresa</label>
     <div class="d-flex gap-3 align-items-center">
-      <select #funcionarios (change) = "setPerfilFuncionarios(funcionarios.value)" id="qtdFuncionarios" class="form-select w-75">
-        <option selected>Selecione...</option>
+      <select #funcionarios (change) = "setPerfilFuncionarios(funcionarios.value)" id="qtdFuncionarios" class="form-select w-75" name="qtdFuncionarios" [(ngModel)] = "valores.qtdFuncionarios" required>
+        <option value="" disabled selected>Selecione...</option>
         <option value="0">Não possui</option>
         <option value="30">1 a 10</option>
         <option value="50">11 a 20</option>
@@ -137,9 +138,7 @@
       {{ perfilFuncionarios }}
     </span>
     <ng-template #perfilFuncionariosAlterado>
-      <span
-        style="background-color: var(--{{ perfilFuncionarios }})!important;"
-        class="perfil w-25 text-center badge">
+      <span class="perfil w-25 text-center badge fit-{{ perfilFuncionarios }}">
         {{ perfilFuncionarios }}
       </span>
     </ng-template>
@@ -149,8 +148,8 @@
   <div class="col-10 mb-3">
     <label for="faturamentoMensal" class="form-label">Qual o faturamento mensal da empresa?</label>
     <div class="d-flex gap-3 align-items-center">
-      <select #faturamento (change) = "setPerfilFaturamento(faturamento.value)" id="faturamentoMensal" class="form-select w-75">
-        <option selected>Selecione...</option>
+      <select #faturamento (change) = "setPerfilFaturamento(faturamento.value)" id="faturamentoMensal" class="form-select w-75" name="faturamentoMensal" [(ngModel)] = "valores.faturamentoMensal" required>
+        <option value="" disabled selected>Selecione...</option>
         <option value="0">50mil</option>
         <option value="30">51 a 100mil</option>
         <option value="50">101 a 300mil</option>
@@ -163,9 +162,7 @@
         {{ perfilFaturamento }}
       </span>
       <ng-template #perfilFaturamentoAlterado>
-        <span
-          style="background-color: var(--{{ perfilFaturamento }})!important;"
-          class="perfil w-25 text-center badge">
+        <span class="perfil w-25 text-center badge fit-{{ perfilFaturamento }}">
           {{ perfilFaturamento }}
         </span>
       </ng-template>
@@ -175,17 +172,17 @@
   <h5 class="mt-5 mb-3">Vendas:</h5>
   <div class="col-10 mb-3">
     <label for="utilizaCRM" class="form-label">A empresa utiliza um CRM?</label>
-    <select id="utilizaCRM" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="70">Sim</option>
+    <select id="utilizaCRM" class="form-select" name="utilizaCRM" [(ngModel)] = "valores.utilizaCRM" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="70">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="tamanhoBaseContatos" class="form-label">Qual é o tamanho da base de contatos?</label>
-    <select id="tamanhoBaseContatos" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="tamanhoBaseContatos" class="form-select" name="tamanhoBaseContatos" [(ngModel)] = "valores.tamanhoBaseContatos" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="20">0-5k e-mails</option>
       <option value="30">5-10k e-mails</option>
       <option value="35">10-25k e-mails</option>
@@ -197,8 +194,8 @@
 
   <div class="col-10 mb-3">
     <label for="qtdVendedores" class="form-label">Quantos vendedores a empresa tem?</label>
-    <select id="qtdVendedores" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="qtdVendedores" class="form-select" name="qtdVendedores" [(ngModel)] = "valores.qtdVendedores" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="10">Nenhum vendedor dedicado</option>
       <option value="40">1 a 5</option>
       <option value="60">5 a 10</option>
@@ -210,8 +207,8 @@
   <h5 class="mt-5 mb-3">Maturidade digital:</h5>
   <div class="col-10 mb-3">
     <label for="enderecoWeb" class="form-label">Tem um endereço na web?</label>
-    <select id="enderecoWeb" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="enderecoWeb" class="form-select" name="enderecoWeb" [(ngModel)] = "valores.enderecoWeb" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="16">Site</option>
       <option value="20">E-commerce</option>
     </select>
@@ -219,29 +216,29 @@
 
   <div class="col-10 mb-3">
     <label for="mantemBlog" class="form-label">Mantém um blog?</label>
-    <select id="mantemBlog" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="80">Sim</option>
+    <select id="mantemBlog" class="form-select" name="mantemBlog" [(ngModel)] = "valores.mantemBlog" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="80">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="trabalhouComAgencia" class="form-label">Já trabalhou com agência?</label>
-    <select id="trabalhouComAgencia" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="40">Sim</option>
+    <select id="trabalhouComAgencia" class="form-select" name="trabalhouComAgencia" [(ngModel)] = "valores.trabalhouComAgencia" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="40">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="pontoFocal" class="form-label">Tem ponto focal (Gerente de Marketing ou E-commerce)?</label>
     <div class="d-flex gap-3 align-items-center">
-      <select #pontoFocal (change) = "setPerfilPontoFocal(pontoFocal.value)" id="pontoFocal" class="form-select w-75">
-        <option selected>Selecione...</option>
-        <option value="100">Sim</option>
+      <select #pontoFocal (change) = "setPerfilPontoFocal(pontoFocal.value)" id="pontoFocal" class="form-select w-75" name="pontoFocal" [(ngModel)] = "valores.pontoFocal" required>
+        <option value="" disabled selected>Selecione...</option>
         <option value="0">Não</option>
+        <option value="100">Sim</option>
       </select>
       <span
       *ngIf="perfilPontoFocal == '...'; else perfilPontoFocalAlterado"
@@ -249,9 +246,7 @@
       {{ perfilPontoFocal }}
     </span>
     <ng-template #perfilPontoFocalAlterado>
-      <span
-        style="background-color: var(--{{ perfilPontoFocal }})!important;"
-        class="perfil w-25 text-center badge">
+      <span class="perfil w-25 text-center badge fit-{{ perfilPontoFocal }}">
         {{ perfilPontoFocal }}
       </span>
     </ng-template>
@@ -261,10 +256,10 @@
   <div class="col-10 mb-3">
     <label for="timeInternoMkt" class="form-label">Tem time interno de Marketing?</label>
     <div class="d-flex gap-3 align-items-center">
-      <select #mktInterno (change) = "setPerfilMktInterno(mktInterno.value)" id="timeInternoMkt" class="form-select w-75">
-        <option selected>Selecione...</option>
-        <option value="100">Sim</option>
+      <select #mktInterno (change) = "setPerfilMktInterno(mktInterno.value)" id="timeInternoMkt" class="form-select w-75" name="timeInternoMkt" [(ngModel)] = "valores.timeInternoMkt" required>
+        <option value="" disabled selected>Selecione...</option>
         <option value="0">Não</option>
+        <option value="100">Sim</option>
       </select>
       <span
       *ngIf="perfilMktInterno == '...'; else perfilMktInternoAlterado"
@@ -272,9 +267,7 @@
       {{ perfilMktInterno }}
     </span>
     <ng-template #perfilMktInternoAlterado>
-      <span
-        style="background-color: var(--{{ perfilMktInterno }})!important;"
-        class="perfil w-25 text-center badge">
+      <span class="perfil w-25 text-center badge fit-{{ perfilMktInterno }}">
         {{ perfilMktInterno }}
       </span>
     </ng-template>
@@ -283,28 +276,28 @@
 
   <div class="col-10 mb-3">
     <label for="interacaoRedesSociais" class="form-label">Tem uma presença interativa nas redes sociais?</label>
-    <select id="interacaoRedesSociais" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="40">Sim</option>
+    <select id="interacaoRedesSociais" class="form-select" name="interacaoRedesSociais" [(ngModel)] = "valores.interacaoRedesSociais" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="40">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="geracaoLeads" class="form-label">Tem estratégia de geração de Leads?</label>
-    <select id="geracaoLeads" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="80">Sim</option>
+    <select id="geracaoLeads" class="form-select" name="geracaoLeads" [(ngModel)] = "valores.geracaoLeads" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="80">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="usaAnalytics" class="form-label">Utiliza Google analytics?</label>
-    <select id="usaAnalytics" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="50">Sim</option>
+    <select id="usaAnalytics" class="form-select" name="usaAnalytics" [(ngModel)] = "valores.usaAnalytics" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="50">Sim</option>
     </select>
   </div>
 
@@ -313,21 +306,22 @@
       Faz o básico de SEO?
       <small><a href="{{ checkSEO }}">Clique aqui</a> para visualizar.</small>
     </label>
-    <select id="basicoSEO" class="form-select">
-      <option selected>Selecione...</option>
-      <option value="50">Sim</option>
+    <select id="basicoSEO" class="form-select" name="basicoSEO" [(ngModel)] = "valores.basicoSEO" required>
+      <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
+      <option value="50">Sim</option>
     </select>
   </div>
 
   <div class="col-10 mb-3">
     <label for="boaVisitacaoSite" class="form-label">
       Tem uma boa visitação no site?
-      <small><a href="{{ checkVisitacao }}">Clique aqui</a> para visualizar.</small>
+      <small *ngIf='siteEmpresaInput'><a href="{{ checkVisitacao }}" target="_blank">Clique aqui</a> para visualizar.</small>
+      <small *ngIf='!siteEmpresaInput'><span id="siteDesativado">Clique aqui</span> para visualizar.</small>
     </label>
     <div class="d-flex gap-3 align-items-center">
-      <select #visitacao (change) = "setPerfilVisitacao(visitacao.value)" id="boaVisitacaoSite" class="form-select w-75">
-        <option selected>Selecione...</option>
+      <select #visitacao (change) = "setPerfilVisitacao(visitacao.value)" id="boaVisitacaoSite" class="form-select w-75" name="boaVisitacaoSite" [(ngModel)] = "valores.boaVisitacaoSite" required>
+        <option value="" disabled selected>Selecione...</option>
         <option value="0">Não possui</option>
         <option value="30">Menor de 15k</option>
         <option value="70B">A partir de 15k</option>
@@ -340,9 +334,7 @@
       {{ perfilVisitacao }}
     </span>
     <ng-template #perfilVisitacaoAlterado>
-      <span
-        style="background-color: var(--{{ perfilVisitacao }})!important;"
-        class="perfil w-25 text-center badge">
+      <span class="perfil w-25 text-center badge fit-{{ perfilVisitacao }}">
         {{ perfilVisitacao }}
       </span>
     </ng-template>
@@ -352,10 +344,11 @@
   <div class="col-10 mb-3">
     <label for="investeAnuncios" class="form-label">
       Investe em anúncios?
-      <small><a href="{{ checkAnuncios }}">Clique aqui</a> para visualizar.</small>
+      <small *ngIf='siteEmpresaInput'><a href="{{ checkAnuncios }}" target="_blank">Clique aqui</a> para visualizar.</small>
+      <small *ngIf='!siteEmpresaInput'><span id="siteDesativado">Clique aqui</span> para visualizar.</small>
     </label>
-    <select id="investeAnuncios" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="investeAnuncios" class="form-select" name="investeAnuncios" [(ngModel)] = "valores.investeAnuncios" required>
+      <option value="" disabled selected selected>Selecione...</option>
       <option value="0">Não possui</option>
       <option value="40">Menor de 15k</option>
       <option value="70">A partir de 15k</option>
@@ -365,8 +358,8 @@
 
   <div class="col-10 mb-3">
     <label for="metaFaturamento" class="form-label">Possui meta de faturamento?</label>
-    <select id="metaFaturamento" class="form-select">
-      <option selected>Selecione...</option>
+    <select id="metaFaturamento" class="form-select" name="metaFaturamento" [(ngModel)] = "valores.metaFaturamento" required>
+      <option value="" disabled selected selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="40">100 a 200mil</option>
       <option value="70">201 a 300mil</option>
@@ -374,7 +367,29 @@
     </select>
   </div>
 
+  <div class="modal fade" id="modalResultado" tabindex="-1" aria-labelledby="modalResultadoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-black fs-5" id="modalResultadoLabel" *ngIf='fit != ""'>Perfil</h2>
+          <h2 class="modal-title text-danger fw-bold fs-5" id="modalResultadoLabel" *ngIf='err != ""'>Erro</h2>
+          <button type="button" (click)="closeModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf='fit != ""'>
+          <p class="text-black">Percentual de Fit: {{ fit }}</p>
+          <p class="perfil-fit fit-{{fitMessage}}">Perfil: {{ fitMessage }}</p>
+        </div>
+        <div class="modal-body text-black" *ngIf='err != ""'>{{ err }}</div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()" data-bs-dismiss="modal">
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="col-10 mb-3">
-    <input class="validar" type="submit" value="Validar ICP">
+    <input class="validar" type="submit" (click)="openModal()" value="Validar ICP">
   </div>
 </form>

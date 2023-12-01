@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -9,9 +8,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 
 export class IcpComponent {
-  siteEmpresa: string = "";
-  palavrasChave: string = "";
-  linkGoogle: string = `https://www.google.com/trends/explore#cmpt=q&q=${this.palavrasChave}&geo=BR`;
+  siteEmpresaInput: boolean = false;
+  palavrasChaveInput: boolean = false;
+  linkGoogle: string = "";
   keyPlanner: string = "https://adwords.google.com/KeywordPlanner";
   perfilFuncionarios: string = "...";
   perfilFaturamento: string = "...";
@@ -19,15 +18,18 @@ export class IcpComponent {
   perfilMktInterno: string = "...";
   perfilVisitacao: string = "...";
   checkSEO: string = "https://seositecheckup.com/";
-  checkVisitacao: string = `http://www.browseo.net/?url=http%3A%2F%2F${this.siteEmpresa}`;
-  checkAnuncios: string = `https://www.semrush.com/br/info/${this.siteEmpresa}/+(by+adwords)`;
+  checkVisitacao: string = "";
+  checkAnuncios: string = "";
 
   setNomeEmpresa(siteEmpresa: string) {
-    this.siteEmpresa = siteEmpresa;
+    this.siteEmpresaInput = true;
+    this.checkVisitacao = `http://www.browseo.net/?url=http%3A%2F%2F${siteEmpresa}`;
+    this.checkAnuncios = `https://www.semrush.com/br/info/${siteEmpresa}/+(by+adwords)`;
   }
 
   setPalavrasChave(palavrasChave: string) {
-    this.palavrasChave = palavrasChave;
+    this.palavrasChaveInput = true;
+    this.linkGoogle = `https://www.google.com/trends/explore#cmpt=q&q=${palavrasChave}&geo=BR`;
   }
 
   setPerfilEmpresaValores(valor: string) {
@@ -70,11 +72,88 @@ export class IcpComponent {
     this.perfilVisitacao = this.setPerfilEmpresaValores(visitacao);
   }
 
-  public formLink = new FormGroup({
-    url: new FormControl('')
-  });
-
-  setPercentualdeFit() {
-    
+  valores = {
+    segmentoWeb: "",
+    volumePesquisa: "",
+    modeloNegocio: "",
+    processoCompra: "",
+    ticketMedio: "",
+    capacidadeInvestimento: "",
+    estrategiaDiretor: "",
+    cargoContato: "",
+    areaAtuacao: "",
+    atendeSegmentoAtuacao: "",
+    qtdFuncionarios: "",
+    faturamentoMensal: "",
+    utilizaCRM: "",
+    tamanhoBaseContatos: "",
+    qtdVendedores: "",
+    enderecoWeb: "",
+    mantemBlog: "",
+    trabalhouComAgencia: "",
+    pontoFocal: "",
+    timeInternoMkt: "",
+    interacaoRedesSociais: "",
+    geracaoLeads: "",
+    usaAnalytics: "",
+    basicoSEO: "",
+    boaVisitacaoSite: "",
+    investeAnuncios: "",
+    metaFaturamento: ""
   }
+
+  fit: string = "";
+  fitMessage: string = "";
+  err: string = "";
+  setPercentualdeFit(valores: any): string {
+    var total = 0;
+    this.err = "";
+    this.fit = "";
+    
+    Object.keys(valores).forEach((item) => {
+      if(valores[item] != "informativo"){
+        if(valores[item] != ""){
+          valores[item] == "70B" ? total += 70 : total += Number(valores[item]);
+        } else {
+          this.err = "Resultado inválido! Preencha TODOS os campos para gerar o Fit.";
+        }
+      }
+    })
+
+    if(this.err == "" && total != 0){
+      var resultado = Number((total / 1880 * 100).toFixed(0));
+      if(resultado <= 10){
+        this.fitMessage = "D";
+      } else if (resultado > 10 && resultado <= 30) {
+        this.fitMessage = "C";
+      } else if (resultado > 30 && resultado <= 60) {
+        this.fitMessage = "B";
+      } else if (resultado > 60 && resultado <= 80) {
+        this.fitMessage = "A";
+      } else {
+        this.fitMessage = "Enterprise";
+      }
+      this.fit = (resultado + "%");
+      return this.fit, this.fitMessage;
+    } else {
+      return this.err;
+    }
+  }
+
+  openModal() {
+    const modal = document.getElementById("modalResultado");
+    if(modal != null){
+      modal.style.display = "block";
+      modal.classList.add("show");
+    }
+  }
+
+  closeModal() {
+    const modal = document.getElementById("modalResultado");
+    if(modal != null){
+      modal.style.display = "none";
+      modal.classList.remove("show");
+    }
+  }
+
 }

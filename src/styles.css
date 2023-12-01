@@ -1,12 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
-:root {
-  --D: #FF0000;
-  --C: #FFC000;
-  --B: #c1c100;
-  --A: #00d500;
-  --Enterprise: #48BAB8;
-}
+.fit-Enterprise { background-color: #48BAB8 !important; }
+.fit-A { background-color: #00d500 !important; }
+.fit-B { background-color: #c1c100 !important; }
+.fit-C { background-color: #FFC000 !important; }
+.fit-D { background-color: #FF0000 !important; }
 
 * {
   color: #fff;

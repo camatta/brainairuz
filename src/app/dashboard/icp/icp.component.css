@@ -1,3 +1,31 @@
+#validacao-icp #googleDesativado,
+#validacao-icp #siteDesativado {
+  position: relative;
+  transition: ease-in-out .4s;
+}
+
+#validacao-icp #googleDesativado:hover::after {
+  content: "Insira as TAGS no campo acima!";
+  background-color: #ccc;
+  color: #000;
+  width: 160px;
+  padding: 10px;
+  position: absolute;
+  top: -68px;
+  right: -160px;
+}
+
+#validacao-icp #siteDesativado:hover::after {
+  content: "Insira a URL do site no campo acima!";
+  background-color: #ccc;
+  color: #000;
+  width: 160px;
+  padding: 10px;
+  position: absolute;
+  top: -68px;
+  right: -160px;
+}
+
 #validacao-icp select option {
   color: #000;
 }
@@ -21,4 +49,15 @@
 
 #validacao-icp .validar:hover {
   opacity: .7;
+}
+
+#validacao-icp .modal.fade {
+  background-color: #000000d9;
+}
+
+#validacao-icp .modal.fade .perfil-fit {
+  width: fit-content;
+  font-weight: 600;
+  border-radius: 5px;
+  padding: 4px 8px;
 }
