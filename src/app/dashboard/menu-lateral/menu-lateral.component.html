@@ -3,16 +3,8 @@
   <ul>
     <li><button routerLink="/dashboard" [class.link-ativo]="isLinkAtivo('/dashboard')">Home</button></li>
     <li><button routerLink="/dashboard/perfil" [class.link-ativo]="isLinkAtivo('/dashboard/perfil')">Perfil</button></li>
-    <li><button routerLink="/dashboard/historico" [class.link-ativo]="isLinkAtivo('/dashboard/historico')">Histórico</button></li>
-    <li *ngIf="showUsuariosLink">
-      <button routerLink="/dashboard/usuarios" [class.link-ativo]="isLinkAtivo('/dashboard/usuarios')">Usuários</button>
-    </li>
-    <li *ngIf="showAvaliacoesLink">
-      <button routerLink="/dashboard/avaliacoes" [class.link-ativo]="isLinkAtivo('/dashboard/avaliacoes')">Avaliações</button>
-    </li>
-    <!-- <li><button routerLink="/dashboard/piramide" [class.link-ativo]="isLinkAtivo('/dashboard/piramide')">Pirâmide de Nairuz</button></li> -->
     <li *ngIf="showComercialLink">
-      <button routerLink="/dashboard/comercial" [class.link-ativo]="isLinkAtivo('/dashboard/comercial')">Comercial</button>
+      <button routerLink="/dashboard/comercial" [class.link-ativo]="isLinkAtivo('/dashboard/comercial')">Gerador de Imagem</button>
     </li>
     <li *ngIf="showComercialLink">
       <button routerLink="/dashboard/icp" [class.link-ativo]="isLinkAtivo('/dashboard/icp')">Validação ICP</button>
