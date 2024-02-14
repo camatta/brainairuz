@@ -241,7 +241,8 @@ export class IcpComponent {
 
     addTableCell(doc, `Perfil: ${this.fitMessage}`, 10, 83, 70, 10);
 
-    const docName = this.nomeEmpresaInput.replace(/ /g, '_');
+    let docName = this.nomeEmpresaInput.toLowerCase();
+    docName = docName.replace(/ /g, '_');
     doc.save(`${docName}_icp.pdf`);
   }
 
