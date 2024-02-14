@@ -1,4 +1,10 @@
 import { Component } from '@angular/core';
+import { jsPDF } from 'jspdf';
+
+interface Valores {
+  [key: string]: string;
+}
+
 
 
 @Component({
@@ -72,7 +78,7 @@ export class IcpComponent {
     this.perfilVisitacao = this.setPerfilEmpresaValores(visitacao);
   }
 
-  valores = {
+  valores: Valores = {
     segmentoWeb: "",
     volumePesquisa: "",
     modeloNegocio: "",
@@ -156,6 +162,66 @@ export class IcpComponent {
       modal.style.display = "none";
       modal.classList.remove("show");
     }
+  }
+
+  generatePDF() {
+    const doc = new jsPDF();
+
+    // Imagem do PDF
+    const logo = '../../../assets/images/logo-nairuz-colorido.png';
+    
+    doc.addImage(logo, 'PNG', 10,10,40,8);
+
+    doc.text("Validação ICP", 90, 30);
+
+    const formulario = document.getElementById('validacao-icp') as HTMLFormElement;
+    const selects = formulario.querySelectorAll('select');
+
+    var valInicial = 40;
+
+    selects.forEach((select: HTMLSelectElement, index) => {
+      const campo = select.labels[0].textContent;
+      const opcaoSelecionada = select.selectedOptions[0];
+      const descricao = opcaoSelecionada.textContent;
+
+      if(index <= 12) {
+        doc.setFontSize(12);
+        doc.text(`${index + 1} - ${campo}:`, 10, valInicial);
+        doc.text(`${descricao}`, 10, valInicial + 5);
+        valInicial += 20;
+      }
+
+      if(index == 13) {
+        doc.addPage();
+        doc.addImage(logo, 'PNG', 10,10,40,8);
+        valInicial = 30;
+      }
+
+      if (index > 12 && index <= 25) {
+        doc.setFontSize(12);
+        doc.text(`${index + 1} - ${campo}:`, 10, valInicial);
+        doc.text(`${descricao}`, 10, valInicial + 5);
+        valInicial += 20;
+      }
+
+      if(index == 26) {
+        doc.addPage();
+        doc.addImage(logo, 'PNG', 10,10,40,8);
+        valInicial = 30;
+      }
+
+      if (index > 25) {
+        doc.setFontSize(12);
+        doc.text(`${index + 1} - ${campo}:`, 10, valInicial);
+        doc.text(`${descricao}`, 10, valInicial + 5);
+        valInicial += 20;
+      }
+    })
+
+    doc.setFontSize(12);
+    doc.text(`Percentual de Fit: ${this.fit}`, 10, 50);
+    doc.text(`Perfil: ${this.fitMessage}`, 10, 60);
+    doc.save("resultado_icp.pdf");
   }
 
 }

@@ -19,7 +19,7 @@
       <small *ngIf='palavrasChaveInput'><a href="{{ linkGoogle }}" target="_blank">Clique aqui</a> para visualizar.</small>
       <small *ngIf='!palavrasChaveInput'><span id="googleDesativado">Clique aqui</span> para visualizar.</small>
     </label>
-    <select id="segmentoWeb" class="form-select" name="segmentoWeb" [(ngModel)] = "valores.segmentoWeb" required aria-label="select example">
+    <select id="segmentoWeb" class="form-select" name="segmentoWeb" [(ngModel)] = "valores['segmentoWeb']" required aria-label="select example">
       <option value="" disabled selected>Selecione...</option>
       <option value="10">Sem competição</option>
       <option value="30">Neutro</option>
@@ -33,7 +33,7 @@
       As palavras tem volume de pesquisa?
       <small><a href="{{ keyPlanner }}">Clique aqui</a> para visualizar.</small>
     </label>
-    <select id="volumePesquisa" class="form-select" name="volumePesquisa" [(ngModel)] = "valores.volumePesquisa" required>
+    <select id="volumePesquisa" class="form-select" name="volumePesquisa" [(ngModel)] = "valores['volumePesquisa']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="100">Sim</option>
@@ -43,7 +43,7 @@
   <h5 class="mt-5 mb-3">Negócio:</h5>
   <div class="col-10 mb-3">
     <label for="modeloNegocio" class="form-label">B2B / B2C ou B2C e B2B?</label>
-    <select id="modeloNegocio" class="form-select" name="modeloNegocio" [(ngModel)] = "valores.modeloNegocio" required>
+    <select id="modeloNegocio" class="form-select" name="modeloNegocio" [(ngModel)] = "valores['modeloNegocio']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="informativo">B2B</option>
       <option value="informativo">B2C</option>
@@ -53,7 +53,7 @@
 
   <div class="col-10 mb-3">
     <label for="processoCompra" class="form-label">O processo de compra é complexo?</label>
-    <select id="processoCompra" class="form-select" name="processoCompra" [(ngModel)] = "valores.processoCompra" required>
+    <select id="processoCompra" class="form-select" name="processoCompra" [(ngModel)] = "valores['processoCompra']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="informativo">Não</option>
       <option value="informativo">Sim</option>
@@ -62,7 +62,7 @@
 
   <div class="col-10 mb-3">
     <label for="ticketMedio" class="form-label">Qual o ticket médio?</label>
-    <select id="ticketMedio" class="form-select" name="ticketMedio" [(ngModel)] = "valores.ticketMedio" required>
+    <select id="ticketMedio" class="form-select" name="ticketMedio" [(ngModel)] = "valores['ticketMedio']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="30">Até R$100</option>
       <option value="50">R$100 - R$200</option>
@@ -73,7 +73,7 @@
 
   <div class="col-10 mb-3">
     <label for="capacidadeInvestimento" class="form-label">A empresa tem capacidade de investimento?</label>
-    <select id="capacidadeInvestimento" class="form-select" name="capacidadeInvestimento" [(ngModel)] = "valores.capacidadeInvestimento" required>
+    <select id="capacidadeInvestimento" class="form-select" name="capacidadeInvestimento" [(ngModel)] = "valores['capacidadeInvestimento']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="100">Sim</option>
@@ -82,7 +82,7 @@
 
   <div class="col-10 mb-3">
     <label for="estrategiaDiretor" class="form-label">A estratégia digital tem a atenção de um diretor?</label>
-    <select id="estrategiaDiretor" class="form-select" name="estrategiaDiretor" [(ngModel)] = "valores.estrategiaDiretor" required>
+    <select id="estrategiaDiretor" class="form-select" name="estrategiaDiretor" [(ngModel)] = "valores['estrategiaDiretor']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="100">Sim</option>
@@ -91,7 +91,7 @@
 
   <div class="col-10 mb-3">
     <label for="cargoContato" class="form-label">Qual é o cargo do seu contato?</label>
-    <select id="cargoContato" class="form-select" name="cargoContato" [(ngModel)] = "valores.cargoContato" required>
+    <select id="cargoContato" class="form-select" name="cargoContato" [(ngModel)] = "valores['cargoContato']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="informativo">Sócio/CEO</option>
       <option value="informativo">Diretor</option>
@@ -103,7 +103,7 @@
 
   <div class="col-10 mb-3">
     <label for="areaAtuacao" class="form-label">Qual é a área de atuação da empresa?</label>
-    <select id="areaAtuacao" class="form-select" name="areaAtuacao" [(ngModel)] = "valores.areaAtuacao" required>
+    <select id="areaAtuacao" class="form-select" name="areaAtuacao" [(ngModel)] = "valores['areaAtuacao']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="informativo">Varejo</option>
       <option value="informativo">Fabricante</option>
@@ -114,7 +114,7 @@
 
   <div class="col-10 mb-3">
     <label for="atendeSegmentoAtuacao" class="form-label">Atende o segmento de atuação da empresa?</label>
-    <select id="atendeSegmentoAtuacao" class="form-select" name="atendeSegmentoAtuacao" [(ngModel)] = "valores.atendeSegmentoAtuacao" required>
+    <select id="atendeSegmentoAtuacao" class="form-select" name="atendeSegmentoAtuacao" [(ngModel)] = "valores['atendeSegmentoAtuacao']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="100">Sim</option>
@@ -124,7 +124,7 @@
   <div class="col-10 mb-3">
     <label for="qtdFuncionarios" class="form-label">Número de funcionários da empresa</label>
     <div class="d-flex gap-3 align-items-center">
-      <select #funcionarios (change) = "setPerfilFuncionarios(funcionarios.value)" id="qtdFuncionarios" class="form-select w-75" name="qtdFuncionarios" [(ngModel)] = "valores.qtdFuncionarios" required>
+      <select #funcionarios (change) = "setPerfilFuncionarios(funcionarios.value)" id="qtdFuncionarios" class="form-select w-75" name="qtdFuncionarios" [(ngModel)] = "valores['qtdFuncionarios']" required>
         <option value="" disabled selected>Selecione...</option>
         <option value="0">Não possui</option>
         <option value="30">1 a 10</option>
@@ -148,7 +148,7 @@
   <div class="col-10 mb-3">
     <label for="faturamentoMensal" class="form-label">Qual o faturamento mensal da empresa?</label>
     <div class="d-flex gap-3 align-items-center">
-      <select #faturamento (change) = "setPerfilFaturamento(faturamento.value)" id="faturamentoMensal" class="form-select w-75" name="faturamentoMensal" [(ngModel)] = "valores.faturamentoMensal" required>
+      <select #faturamento (change) = "setPerfilFaturamento(faturamento.value)" id="faturamentoMensal" class="form-select w-75" name="faturamentoMensal" [(ngModel)] = "valores['faturamentoMensal']" required>
         <option value="" disabled selected>Selecione...</option>
         <option value="0">50mil</option>
         <option value="30">51 a 100mil</option>
@@ -172,7 +172,7 @@
   <h5 class="mt-5 mb-3">Vendas:</h5>
   <div class="col-10 mb-3">
     <label for="utilizaCRM" class="form-label">A empresa utiliza um CRM?</label>
-    <select id="utilizaCRM" class="form-select" name="utilizaCRM" [(ngModel)] = "valores.utilizaCRM" required>
+    <select id="utilizaCRM" class="form-select" name="utilizaCRM" [(ngModel)] = "valores['utilizaCRM']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="70">Sim</option>
@@ -181,7 +181,7 @@
 
   <div class="col-10 mb-3">
     <label for="tamanhoBaseContatos" class="form-label">Qual é o tamanho da base de contatos?</label>
-    <select id="tamanhoBaseContatos" class="form-select" name="tamanhoBaseContatos" [(ngModel)] = "valores.tamanhoBaseContatos" required>
+    <select id="tamanhoBaseContatos" class="form-select" name="tamanhoBaseContatos" [(ngModel)] = "valores['tamanhoBaseContatos']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="20">0-5k e-mails</option>
       <option value="30">5-10k e-mails</option>
@@ -194,7 +194,7 @@
 
   <div class="col-10 mb-3">
     <label for="qtdVendedores" class="form-label">Quantos vendedores a empresa tem?</label>
-    <select id="qtdVendedores" class="form-select" name="qtdVendedores" [(ngModel)] = "valores.qtdVendedores" required>
+    <select id="qtdVendedores" class="form-select" name="qtdVendedores" [(ngModel)] = "valores['qtdVendedores']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="10">Nenhum vendedor dedicado</option>
       <option value="40">1 a 5</option>
@@ -207,7 +207,7 @@
   <h5 class="mt-5 mb-3">Maturidade digital:</h5>
   <div class="col-10 mb-3">
     <label for="enderecoWeb" class="form-label">Tem um endereço na web?</label>
-    <select id="enderecoWeb" class="form-select" name="enderecoWeb" [(ngModel)] = "valores.enderecoWeb" required>
+    <select id="enderecoWeb" class="form-select" name="enderecoWeb" [(ngModel)] = "valores['enderecoWeb']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="16">Site</option>
       <option value="20">E-commerce</option>
@@ -216,7 +216,7 @@
 
   <div class="col-10 mb-3">
     <label for="mantemBlog" class="form-label">Mantém um blog?</label>
-    <select id="mantemBlog" class="form-select" name="mantemBlog" [(ngModel)] = "valores.mantemBlog" required>
+    <select id="mantemBlog" class="form-select" name="mantemBlog" [(ngModel)] = "valores['mantemBlog']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="80">Sim</option>
@@ -225,7 +225,7 @@
 
   <div class="col-10 mb-3">
     <label for="trabalhouComAgencia" class="form-label">Já trabalhou com agência?</label>
-    <select id="trabalhouComAgencia" class="form-select" name="trabalhouComAgencia" [(ngModel)] = "valores.trabalhouComAgencia" required>
+    <select id="trabalhouComAgencia" class="form-select" name="trabalhouComAgencia" [(ngModel)] = "valores['trabalhouComAgencia']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="40">Sim</option>
@@ -235,7 +235,7 @@
   <div class="col-10 mb-3">
     <label for="pontoFocal" class="form-label">Tem ponto focal (Gerente de Marketing ou E-commerce)?</label>
     <div class="d-flex gap-3 align-items-center">
-      <select #pontoFocal (change) = "setPerfilPontoFocal(pontoFocal.value)" id="pontoFocal" class="form-select w-75" name="pontoFocal" [(ngModel)] = "valores.pontoFocal" required>
+      <select #pontoFocal (change) = "setPerfilPontoFocal(pontoFocal.value)" id="pontoFocal" class="form-select w-75" name="pontoFocal" [(ngModel)] = "valores['pontoFocal']" required>
         <option value="" disabled selected>Selecione...</option>
         <option value="0">Não</option>
         <option value="100">Sim</option>
@@ -256,7 +256,7 @@
   <div class="col-10 mb-3">
     <label for="timeInternoMkt" class="form-label">Tem time interno de Marketing?</label>
     <div class="d-flex gap-3 align-items-center">
-      <select #mktInterno (change) = "setPerfilMktInterno(mktInterno.value)" id="timeInternoMkt" class="form-select w-75" name="timeInternoMkt" [(ngModel)] = "valores.timeInternoMkt" required>
+      <select #mktInterno (change) = "setPerfilMktInterno(mktInterno.value)" id="timeInternoMkt" class="form-select w-75" name="timeInternoMkt" [(ngModel)] = "valores['timeInternoMkt']" required>
         <option value="" disabled selected>Selecione...</option>
         <option value="0">Não</option>
         <option value="100">Sim</option>
@@ -276,7 +276,7 @@
 
   <div class="col-10 mb-3">
     <label for="interacaoRedesSociais" class="form-label">Tem uma presença interativa nas redes sociais?</label>
-    <select id="interacaoRedesSociais" class="form-select" name="interacaoRedesSociais" [(ngModel)] = "valores.interacaoRedesSociais" required>
+    <select id="interacaoRedesSociais" class="form-select" name="interacaoRedesSociais" [(ngModel)] = "valores['interacaoRedesSociais']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="40">Sim</option>
@@ -285,7 +285,7 @@
 
   <div class="col-10 mb-3">
     <label for="geracaoLeads" class="form-label">Tem estratégia de geração de Leads?</label>
-    <select id="geracaoLeads" class="form-select" name="geracaoLeads" [(ngModel)] = "valores.geracaoLeads" required>
+    <select id="geracaoLeads" class="form-select" name="geracaoLeads" [(ngModel)] = "valores['geracaoLeads']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="80">Sim</option>
@@ -294,7 +294,7 @@
 
   <div class="col-10 mb-3">
     <label for="usaAnalytics" class="form-label">Utiliza Google analytics?</label>
-    <select id="usaAnalytics" class="form-select" name="usaAnalytics" [(ngModel)] = "valores.usaAnalytics" required>
+    <select id="usaAnalytics" class="form-select" name="usaAnalytics" [(ngModel)] = "valores['usaAnalytics']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="50">Sim</option>
@@ -306,7 +306,7 @@
       Faz o básico de SEO?
       <small><a href="{{ checkSEO }}">Clique aqui</a> para visualizar.</small>
     </label>
-    <select id="basicoSEO" class="form-select" name="basicoSEO" [(ngModel)] = "valores.basicoSEO" required>
+    <select id="basicoSEO" class="form-select" name="basicoSEO" [(ngModel)] = "valores['basicoSEO']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="50">Sim</option>
@@ -320,7 +320,7 @@
       <small *ngIf='!siteEmpresaInput'><span id="siteDesativado">Clique aqui</span> para visualizar.</small>
     </label>
     <div class="d-flex gap-3 align-items-center">
-      <select #visitacao (change) = "setPerfilVisitacao(visitacao.value)" id="boaVisitacaoSite" class="form-select w-75" name="boaVisitacaoSite" [(ngModel)] = "valores.boaVisitacaoSite" required>
+      <select #visitacao (change) = "setPerfilVisitacao(visitacao.value)" id="boaVisitacaoSite" class="form-select w-75" name="boaVisitacaoSite" [(ngModel)] = "valores['boaVisitacaoSite']" required>
         <option value="" disabled selected>Selecione...</option>
         <option value="0">Não possui</option>
         <option value="30">Menor de 15k</option>
@@ -347,7 +347,7 @@
       <small *ngIf='siteEmpresaInput'><a href="{{ checkAnuncios }}" target="_blank">Clique aqui</a> para visualizar.</small>
       <small *ngIf='!siteEmpresaInput'><span id="siteDesativado">Clique aqui</span> para visualizar.</small>
     </label>
-    <select id="investeAnuncios" class="form-select" name="investeAnuncios" [(ngModel)] = "valores.investeAnuncios" required>
+    <select id="investeAnuncios" class="form-select" name="investeAnuncios" [(ngModel)] = "valores['investeAnuncios']" required>
       <option value="" disabled selected selected>Selecione...</option>
       <option value="0">Não possui</option>
       <option value="40">Menor de 15k</option>
@@ -358,7 +358,7 @@
 
   <div class="col-10 mb-3">
     <label for="metaFaturamento" class="form-label">Possui meta de faturamento?</label>
-    <select id="metaFaturamento" class="form-select" name="metaFaturamento" [(ngModel)] = "valores.metaFaturamento" required>
+    <select id="metaFaturamento" class="form-select" name="metaFaturamento" [(ngModel)] = "valores['metaFaturamento']" required>
       <option value="" disabled selected selected>Selecione...</option>
       <option value="0">Não</option>
       <option value="40">100 a 200mil</option>
@@ -381,6 +381,9 @@
         </div>
         <div class="modal-body text-black" *ngIf='err != ""'>{{ err }}</div>
         <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-secondary" (click)="generatePDF()" *ngIf='fit != ""'>
+            Gerar PDF
+          </button>
           <button type="button" class="btn btn-secondary" (click)="closeModal()" data-bs-dismiss="modal">
             Fechar
           </button>

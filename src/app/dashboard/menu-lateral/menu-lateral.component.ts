@@ -29,10 +29,11 @@ export class MenuLateralComponent implements OnInit {
     const user = this.authService.getUser();
     const accessLevel = user ? user.accessLevel : '';
     const team = user ? user.team : '';
+    const name = user ? user.name : '';
 
     this.showAvaliacoesLink = accessLevel === 'Líder de Equipe' || accessLevel === 'Administrador';
     this.showUsuariosLink = accessLevel === 'Líder de Equipe' || accessLevel === 'Administrador';
-    this.showComercialLink = team === 'Comercial' || accessLevel === 'Administrador';
+    this.showComercialLink = team === 'Comercial' || accessLevel === 'Administrador' || accessLevel === 'Líder de Equipe' || name === 'Luccas Baptista' || name === 'Beatriz Cruz' || name === 'Beatriz Almeida';
   }
 
   isLinkAtivo(link: string): boolean {
