@@ -33,7 +33,7 @@ export class MenuLateralComponent implements OnInit {
 
     this.showAvaliacoesLink = accessLevel === 'Líder de Equipe' || accessLevel === 'Administrador';
     this.showUsuariosLink = accessLevel === 'Líder de Equipe' || accessLevel === 'Administrador';
-    this.showComercialLink = team === 'Comercial' || accessLevel === 'Administrador' || accessLevel === 'Líder de Equipe' || name === 'Luccas Baptista' || name === 'Beatriz Cruz Alves' || name === 'Beatriz Almeida' || name === 'Kyrsten Júnior';
+    this.showComercialLink = team === 'Comercial' || accessLevel === 'Administrador' || accessLevel === 'Líder de Equipe' || name === 'Luccas Baptista' || name === 'Beatriz Cruz Alves' || name === 'Beatriz Almeida';
   }
 
   isLinkAtivo(link: string): boolean {
