@@ -14,6 +14,7 @@ interface Valores {
 })
 
 export class IcpComponent {
+  nomeEmpresaInput: string = "...";
   siteEmpresaInput: boolean = false;
   palavrasChaveInput: boolean = false;
   linkGoogle: string = "";
@@ -27,7 +28,11 @@ export class IcpComponent {
   checkVisitacao: string = "";
   checkAnuncios: string = "";
 
-  setNomeEmpresa(siteEmpresa: string) {
+  setNomeEmpresa(nomeEmpresa: string) {
+    this.nomeEmpresaInput = nomeEmpresa;
+  }
+
+  setSiteEmpresa(siteEmpresa: string) {
     this.siteEmpresaInput = true;
     this.checkVisitacao = `http://www.browseo.net/?url=http%3A%2F%2F${siteEmpresa}`;
     this.checkAnuncios = `https://www.semrush.com/br/info/${siteEmpresa}/+(by+adwords)`;
@@ -172,56 +177,72 @@ export class IcpComponent {
     
     doc.addImage(logo, 'PNG', 10,10,40,8);
 
-    doc.text("Validação ICP", 90, 30);
+    doc.text(`Validação ICP: ${this.nomeEmpresaInput}`, 100, 30, {align: 'center'});
 
     const formulario = document.getElementById('validacao-icp') as HTMLFormElement;
     const selects = formulario.querySelectorAll('select');
 
-    var valInicial = 40;
+    var valInicial = 50;
 
     selects.forEach((select: HTMLSelectElement, index) => {
       const campo = select.labels[0].textContent;
       const opcaoSelecionada = select.selectedOptions[0];
       const descricao = opcaoSelecionada.textContent;
 
-      if(index <= 12) {
-        doc.setFontSize(12);
-        doc.text(`${index + 1} - ${campo}:`, 10, valInicial);
-        doc.text(`${descricao}`, 10, valInicial + 5);
-        valInicial += 20;
+      doc.setFontSize(12);
+
+      if(index <= 23) {
+        doc.text(`${index + 1} - ${campo}: ${descricao}`, 10, valInicial);
+        valInicial += 10;
       }
 
-      if(index == 13) {
+      if(index == 24) {
         doc.addPage();
         doc.addImage(logo, 'PNG', 10,10,40,8);
-        valInicial = 30;
+        valInicial = 40;
       }
 
-      if (index > 12 && index <= 25) {
-        doc.setFontSize(12);
-        doc.text(`${index + 1} - ${campo}:`, 10, valInicial);
-        doc.text(`${descricao}`, 10, valInicial + 5);
-        valInicial += 20;
-      }
-
-      if(index == 26) {
-        doc.addPage();
-        doc.addImage(logo, 'PNG', 10,10,40,8);
-        valInicial = 30;
-      }
-
-      if (index > 25) {
-        doc.setFontSize(12);
-        doc.text(`${index + 1} - ${campo}:`, 10, valInicial);
-        doc.text(`${descricao}`, 10, valInicial + 5);
-        valInicial += 20;
+      if (index >= 24 && index <= 30) {
+        doc.text(`${index + 1} - ${campo}: ${descricao}`, 10, valInicial);
+        valInicial += 10;
       }
     })
 
-    doc.setFontSize(12);
-    doc.text(`Percentual de Fit: ${this.fit}`, 10, 50);
-    doc.text(`Perfil: ${this.fitMessage}`, 10, 60);
-    doc.save("resultado_icp.pdf");
+    doc.setFontSize(16);
+    doc.text(`Percentual de Fit: ${this.fit}`, 10, 80);
+  
+    const fitMessage = this.fitMessage;
+    function addTableCell(doc: jsPDF, text: string, x: number, y: number, width: number, height: number) {
+      
+      if(fitMessage == "Enterprise") {
+        doc.setFillColor(72, 186, 184);
+      } else if (fitMessage == "A") {
+        doc.setFillColor(0, 213, 0);
+      } else if (fitMessage == "B") {
+        doc.setFillColor(193, 193, 0);
+      } else if (fitMessage == "C") {
+        doc.setFillColor(255, 192, 0);
+      } else if (fitMessage == "D") {
+        doc.setFillColor(0, 0, 255);
+      } else if (fitMessage == "") {
+        doc.setFillColor(168, 168, 168);
+      }
+      doc.setTextColor(255, 255, 255); // Cor do texto branco (RGB)
+      doc.setDrawColor(0, 0, 0); // Cor da borda preta (RGB)
+    
+      doc.rect(x, y, width, height, 'FD')
+    
+      const fontSize = doc.getFontSize(); // Obtém o tamanho da fonte
+      const textWidth = doc.getStringUnitWidth(text) * fontSize / doc.internal.scaleFactor;
+      const textX = x + (width - textWidth) / 2;
+      const textY = y + height / 2 + fontSize / 8; // Ajusta a posição vertical para o centro da célula
+      doc.text(text, textX, textY);
+    }
+
+    addTableCell(doc, `Perfil: ${this.fitMessage}`, 10, 83, 70, 10);
+
+    const docName = this.nomeEmpresaInput.replace(/ /g, '_');
+    doc.save(`${docName}_icp.pdf`);
   }
 
 }

@@ -2,8 +2,12 @@
 
 <form id="validacao-icp" #formIcp="ngForm" (ngSubmit)="setPercentualdeFit(formIcp.value)">
   <div class="col-10 mb-3">
+    <label for="nome_empresa" class="form-label">Nome da Empresa:</label>
+    <input #nomeEmpresa (change) = "setNomeEmpresa(nomeEmpresa.value)" type="text" class="form-control" id="nome_empresa" placeholder="Escreva aqui o nome da empresa" required>
+  </div>
+  <div class="col-10 mb-3">
     <label for="site_empresa" class="form-label">Site da Empresa:</label>
-    <input #siteEmpresa (change) = "setNomeEmpresa(siteEmpresa.value)" type="text" class="form-control" id="site_empresa" placeholder="www.site.com.br" required>
+    <input #siteEmpresa (change) = "setSiteEmpresa(siteEmpresa.value)" type="text" class="form-control" id="site_empresa" placeholder="www.site.com.br" required>
   </div>
   <div class="col-10 mb-3">
     <label for="palavras_chave" class="form-label">Até 5 Palavras Chave:</label>
@@ -16,9 +20,9 @@
   <div class="col-10 mb-3">
     <label for="segmentoWeb" class="form-label">
       Como é o comportamento do segmento na web?
-      <small *ngIf='palavrasChaveInput'><a href="{{ linkGoogle }}" target="_blank">Clique aqui</a> para visualizar.</small>
-      <small *ngIf='!palavrasChaveInput'><span id="googleDesativado">Clique aqui</span> para visualizar.</small>
     </label>
+    <small *ngIf='palavrasChaveInput'><a href="{{ linkGoogle }}" target="_blank">Clique aqui</a> para visualizar.</small>
+    <small *ngIf='!palavrasChaveInput'><span id="googleDesativado">Clique aqui</span> para visualizar.</small>
     <select id="segmentoWeb" class="form-select" name="segmentoWeb" [(ngModel)] = "valores['segmentoWeb']" required aria-label="select example">
       <option value="" disabled selected>Selecione...</option>
       <option value="10">Sem competição</option>
@@ -31,8 +35,8 @@
   <div class="col-10 mb-3">
     <label for="volumePesquisa" class="form-label">
       As palavras tem volume de pesquisa?
-      <small><a href="{{ keyPlanner }}">Clique aqui</a> para visualizar.</small>
     </label>
+    <small><a href="{{ keyPlanner }}">Clique aqui</a> para visualizar.</small>
     <select id="volumePesquisa" class="form-select" name="volumePesquisa" [(ngModel)] = "valores['volumePesquisa']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
@@ -304,8 +308,8 @@
   <div class="col-10 mb-3">
     <label for="basicoSEO" class="form-label">
       Faz o básico de SEO?
-      <small><a href="{{ checkSEO }}">Clique aqui</a> para visualizar.</small>
     </label>
+    <small><a href="{{ checkSEO }}">Clique aqui</a> para visualizar.</small>
     <select id="basicoSEO" class="form-select" name="basicoSEO" [(ngModel)] = "valores['basicoSEO']" required>
       <option value="" disabled selected>Selecione...</option>
       <option value="0">Não</option>
@@ -316,9 +320,9 @@
   <div class="col-10 mb-3">
     <label for="boaVisitacaoSite" class="form-label">
       Tem uma boa visitação no site?
-      <small *ngIf='siteEmpresaInput'><a href="{{ checkVisitacao }}" target="_blank">Clique aqui</a> para visualizar.</small>
-      <small *ngIf='!siteEmpresaInput'><span id="siteDesativado">Clique aqui</span> para visualizar.</small>
     </label>
+    <small *ngIf='siteEmpresaInput'><a href="{{ checkVisitacao }}" target="_blank">Clique aqui</a> para visualizar.</small>
+    <small *ngIf='!siteEmpresaInput'><span id="siteDesativado">Clique aqui</span> para visualizar.</small>
     <div class="d-flex gap-3 align-items-center">
       <select #visitacao (change) = "setPerfilVisitacao(visitacao.value)" id="boaVisitacaoSite" class="form-select w-75" name="boaVisitacaoSite" [(ngModel)] = "valores['boaVisitacaoSite']" required>
         <option value="" disabled selected>Selecione...</option>
@@ -344,9 +348,9 @@
   <div class="col-10 mb-3">
     <label for="investeAnuncios" class="form-label">
       Investe em anúncios?
-      <small *ngIf='siteEmpresaInput'><a href="{{ checkAnuncios }}" target="_blank">Clique aqui</a> para visualizar.</small>
-      <small *ngIf='!siteEmpresaInput'><span id="siteDesativado">Clique aqui</span> para visualizar.</small>
     </label>
+    <small *ngIf='siteEmpresaInput'><a href="{{ checkAnuncios }}" target="_blank">Clique aqui</a> para visualizar.</small>
+    <small *ngIf='!siteEmpresaInput'><span id="siteDesativado">Clique aqui</span> para visualizar.</small>
     <select id="investeAnuncios" class="form-select" name="investeAnuncios" [(ngModel)] = "valores['investeAnuncios']" required>
       <option value="" disabled selected selected>Selecione...</option>
       <option value="0">Não possui</option>
