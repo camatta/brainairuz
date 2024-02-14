@@ -13,6 +13,7 @@ export class MenuLateralComponent implements OnInit {
   showAvaliacoesLink = false;
   showUsuariosLink = false;
   showComercialLink = false;
+  showTabelaPrecos = false;
   linkAtivo: string;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
@@ -33,6 +34,7 @@ export class MenuLateralComponent implements OnInit {
 
     this.showAvaliacoesLink = accessLevel === 'Líder de Equipe' || accessLevel === 'Administrador';
     this.showUsuariosLink = accessLevel === 'Líder de Equipe' || accessLevel === 'Administrador';
+    this.showTabelaPrecos = team === 'Comercial' || accessLevel === 'Administrador' || name === 'Adriany Oliveira';
     this.showComercialLink = team === 'Comercial' || accessLevel === 'Administrador' || accessLevel === 'Líder de Equipe' || name === 'Luccas Baptista' || name === 'Beatriz Cruz Alves' || name === 'Beatriz Almeida';
   }
 

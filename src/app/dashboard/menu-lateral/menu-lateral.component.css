@@ -15,6 +15,13 @@
   border: unset;
 }
 
+.menu-lateral ul li a {
+  color: #fff;
+  text-decoration: unset;
+  background: unset;
+  border: unset;
+}
+
 .link-ativo {
   font-weight: bold;
 }
