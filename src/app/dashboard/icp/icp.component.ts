@@ -135,13 +135,13 @@ export class IcpComponent {
 
     if(this.err == "" && total != 0){
       var resultado = Number((total / 1880 * 100).toFixed(0));
-      if(resultado <= 10){
+      if(resultado < 30){
         this.fitMessage = "D";
-      } else if (resultado > 10 && resultado <= 30) {
+      } else if (resultado >= 30 && resultado < 60) {
         this.fitMessage = "C";
-      } else if (resultado > 30 && resultado <= 60) {
+      } else if (resultado >= 60 && resultado < 80) {
         this.fitMessage = "B";
-      } else if (resultado > 60 && resultado <= 80) {
+      } else if (resultado >= 80 && resultado < 90) {
         this.fitMessage = "A";
       } else {
         this.fitMessage = "Enterprise";
