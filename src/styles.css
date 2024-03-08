@@ -23,3 +23,17 @@ h1 {
 span {
   font-weight: 600 !important;
 }
+
+html, body { height: 100%; }
+
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+#tabela-valores div, #tabela-valores td,
+mat-paginator span, mat-option span,
+.mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-label {
+  color: #000;
+}
+
+mat-paginator .mat-mdc-select-arrow svg {
+  fill: #000;
+}

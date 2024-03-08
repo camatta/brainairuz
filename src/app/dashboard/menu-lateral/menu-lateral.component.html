@@ -12,6 +12,11 @@
     <li *ngIf="showTabelaPrecos">
       <button><a target="_blank" href="https://nairuzcombr-my.sharepoint.com/:x:/g/personal/contato_nairuz_com_br/EfJ_ICb8chFPl89XP7ediz4BBaSsAT6rW86FA2OdxNB4Gg?e=lG91qc">Tabela de Preços</a></button>
     </li>
+    <li *ngIf="showTabelaDeValores">
+      <button routerLink="/dashboard/tabela-valores" [class.link-ativo]="isLinkAtivo('/dashboard/tabela-valores')">
+        Tabela de Valores
+      </button>
+    </li>
     <li><button routerLink="/" [class.link-ativo]="isLinkAtivo('/')" (click)="logout()">Sair</button></li>
   </ul>
 </div>

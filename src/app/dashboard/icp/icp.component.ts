@@ -5,8 +5,6 @@ interface Valores {
   [key: string]: string;
 }
 
-
-
 @Component({
   selector: 'app-icp',
   templateUrl: './icp.component.html',

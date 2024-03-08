@@ -11,6 +11,7 @@ import { ComercialComponent } from './dashboard/comercial/comercial.component';
 import { AuthGuard } from './routes/auth.guard';
 import { PiramideComponent } from './dashboard/piramide/piramide.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
+import { TabelaDeValores } from './dashboard/tabela-valores/tabela-valores.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -21,7 +22,8 @@ const routes: Routes = [
     { path: 'historico', component: HistoricoComponent },
     { path: 'comercial', component: ComercialComponent },
     { path: 'piramide', component: PiramideComponent },
-    { path: 'icp', component: IcpComponent}
+    { path: 'icp', component: IcpComponent },
+    { path: 'tabela-valores', component: TabelaDeValores }
   ]},
   { path: 'cadastro', component: CadastroComponent },
 ];

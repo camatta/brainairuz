@@ -1,0 +1,35 @@
+.mat-mdc-header-cell {
+    color: #000;
+    text-align: center;
+}
+
+.mat-mdc-cell.acoes {
+    text-align: center;
+}
+
+.acoes mat-icon.editar {
+    color: #535353;
+    margin-right: 12px;
+    transition: all .4s;
+    cursor: pointer;
+}
+
+.acoes mat-icon.delete {
+    color: #f51c1c;
+    transition: all .4s;
+    cursor: pointer;
+}
+
+.acoes mat-icon:hover{
+    opacity: .7;
+}
+
+.main-tabela .btn-addProduto {
+    color: #fff;
+    background-color: #080b2c;
+    transition: all .4s;
+}
+
+.main-tabela .btn-addProduto:hover {
+    background-color: #232a80;
+}

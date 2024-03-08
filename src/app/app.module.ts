@@ -17,6 +17,8 @@ import { HistoricoComponent } from './dashboard/historico/historico.component';
 import { ComercialComponent } from './dashboard/comercial/comercial.component';
 import { PiramideComponent } from './dashboard/piramide/piramide.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -31,15 +33,18 @@ import { IcpComponent } from './dashboard/icp/icp.component';
     HistoricoComponent,
     ComercialComponent,
     PiramideComponent,
-    IcpComponent,
+    IcpComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    provideNgxMask()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

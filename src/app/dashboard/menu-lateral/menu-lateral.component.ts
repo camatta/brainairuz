@@ -14,6 +14,7 @@ export class MenuLateralComponent implements OnInit {
   showUsuariosLink = false;
   showComercialLink = false;
   showTabelaPrecos = false;
+  showTabelaDeValores = false;
   linkAtivo: string;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
@@ -32,10 +33,33 @@ export class MenuLateralComponent implements OnInit {
     const team = user ? user.team : '';
     const name = user ? user.name : '';
 
-    this.showAvaliacoesLink = accessLevel === 'Líder de Equipe' || accessLevel === 'Administrador';
-    this.showUsuariosLink = accessLevel === 'Líder de Equipe' || accessLevel === 'Administrador';
-    this.showTabelaPrecos = team === 'Comercial' || accessLevel === 'Administrador' || name === 'Adriany Oliveira' ||  name === 'Beatriz Cruz Alves' || team === 'Customer Success';
-    this.showComercialLink = team === 'Comercial' || accessLevel === 'Administrador' || accessLevel === 'Líder de Equipe' || name === 'Luccas Baptista' || name === 'Beatriz Cruz Alves' || name === 'Beatriz Almeida';
+    this.showAvaliacoesLink =
+      accessLevel === 'Líder de Equipe' ||
+      accessLevel === 'Administrador';
+    
+    this.showUsuariosLink =
+      accessLevel === 'Líder de Equipe' ||
+      accessLevel === 'Administrador';
+
+    this.showTabelaPrecos =
+      accessLevel === 'Administrador' ||
+      team === 'Comercial' ||
+      team === 'Customer Success' ||
+      name === 'Adriany Oliveira' ||
+      name === 'Beatriz Cruz Alves';
+
+    this.showComercialLink =
+      accessLevel === 'Administrador' ||
+      accessLevel === 'Líder de Equipe' ||
+      team === 'Comercial' ||
+      name === 'Luccas Baptista' ||
+      name === 'Beatriz Cruz Alves' ||
+      name === 'Beatriz Almeida';
+
+    this.showTabelaDeValores = accessLevel === 'Administrador';
+      // accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      // name === 'Adriany Oliveira';
   }
 
   isLinkAtivo(link: string): boolean {

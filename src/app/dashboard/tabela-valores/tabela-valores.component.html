@@ -1,0 +1,151 @@
+<div class="main-tabela">
+  <h1 class="mb-4">Tabela de Valores de Venda</h1>
+  <button button type="button" class="btn btn-addProduto mb-2" (click)="openModalNovoProduto()" data-bs-dismiss="modal">Novo produto</button>
+
+  <div class="mat-elevation-z8">
+    <table id="tabela-valores" mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+          class="mat-elevation-z8">
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">
+          No.
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="produto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by produto">
+          Produto
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.produto}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="tecnologia">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by tecnologia">
+          Tecnologia
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.tecnologia}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="valor_venda">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by valor_venda">
+          Preço de Vendas
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.valor_venda.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="observacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by observacao">
+          Observações
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.observacao}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          Ações
+        </th>
+        <td class="acoes" mat-cell *matCellDef="let element">
+          <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarTabela(element)">edit</mat-icon>
+          <mat-icon class="delete" aria-label="Remover produto">delete</mat-icon>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[10, 20, 30]"
+      showFirstLastButtons aria-label="Select page of periodic elements"
+    ></mat-paginator>
+  </div>
+
+  <!-- Modal para EDITAR produto -->
+  <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarTabela" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-black fs-5" id="modalEditarTabela">Editar</h2>
+          <button type="button" (click)="closeModalEditarTabela()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form [formGroup]="formEditarProduto" (ngSubmit)="onSubmitEdit()">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="produto-edit" class="form-label text-black">Produto:</label>
+              <input type="text" class="form-control" id="produto-edit" formControlName="produto">
+            </div>
+            <div class="mb-3">
+              <label for="tecnologia-edit" class="form-label text-black">Tecnologia:</label>
+              <input type="text" class="form-control" id="tecnologia-edit" formControlName="tecnologia">
+            </div>
+            <div class="mb-3">
+              <label for="valor-venda-edit" class="form-label text-black">Preço de vendas:</label>
+              <input type="text" prefix="R$ " mask="separator.2" thousandSeparator="." decimalMarker="," class="form-control" id="valor-venda-edit" formControlName="valor_venda">
+            </div>
+            <div class="mb-3">
+              <label for="observacao-edit" class="form-label text-black">Observações:</label>
+              <textarea style="resize: vertical;" class="form-control" id="observacao-edit" formControlName="observacao"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <!-- Criar validação, se algo foi alterado nos inputs, ativar botão SALVAR -->
+            <button type="button" class="btn btn-primary" (click)="closeModalEditarTabela()" data-bs-dismiss="modal">
+              Salvar
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="closeModalEditarTabela()" data-bs-dismiss="modal">
+              Fechar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para NOVO produto-->
+  <div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="modalNovoProduto" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-black fs-5" id="modalNovoProduto">Novo produto</h2>
+          <button type="button" (click)="closeModalNovoProduto()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form [formGroup]="formNovoProduto" (ngSubmit)="onSubmitNovoProduto()">
+          <div class="modal-body">
+            <div class="mb-3">
+              <!-- CRIAR AS VALIDAÇÕES AQUI -->
+              <label for="produto-novo" class="form-label text-black">Produto:</label>
+              <input type="text" class="form-control is-invalid" id="produto-novo" formControlName="produto" required>
+            </div>
+            <div class="mb-3">
+              <label for="tecnologia-edit" class="form-label text-black">Tecnologia:</label>
+              <input type="text" class="form-control" id="tecnologia-edit" formControlName="tecnologia">
+            </div>
+            <div class="mb-3">
+              <label for="valor-venda-edit" class="form-label text-black">Preço de vendas:</label>
+              <input type="text" prefix="R$ " mask="separator.2" thousandSeparator="." decimalMarker="," class="form-control" id="valor-venda-edit" formControlName="valor_venda">
+            </div>
+            <div class="mb-3">
+              <label for="observacao-edit" class="form-label text-black">Observações:</label>
+              <textarea style="resize: vertical;" class="form-control" id="observacao-edit" formControlName="observacao"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <!-- Criar validação, para preencher todos os dados antes de adicionar o produto -->
+            <button type="submit" class="btn btn-primary">
+              Adicionar
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="closeModalNovoProduto()" data-bs-dismiss="modal">
+              Fechar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
