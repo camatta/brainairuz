@@ -1,7 +1,10 @@
 <div class="main-tabela">
   <h1 class="mb-4">Tabela de Valores de Venda</h1>
+
+  <!-- CRIAR VALIDAÇÃO DO BOTÃO ADICIONAR PRODUTO -->
   <button button type="button" class="btn btn-addProduto mb-2" (click)="openModalNovoProduto()" data-bs-dismiss="modal">Novo produto</button>
 
+  <!-- CRIAR VALIDAÇÃO DA COLUNA AÇÕES -->
   <div class="mat-elevation-z8">
     <table id="tabela-valores" mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
           class="mat-elevation-z8">
@@ -51,8 +54,8 @@
           Ações
         </th>
         <td class="acoes" mat-cell *matCellDef="let element">
-          <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarTabela(element)">edit</mat-icon>
-          <mat-icon class="delete" aria-label="Remover produto">delete</mat-icon>
+          <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarProduto(element)">edit</mat-icon>
+          <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarProduto(element)">delete</mat-icon>
         </td>
       </ng-container>
 
@@ -66,13 +69,17 @@
     ></mat-paginator>
   </div>
 
+  
+  <!-- MODAIS -->
+  <div id="bg-modal"></div>
+
   <!-- Modal para EDITAR produto -->
-  <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarTabela" aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarProduto" aria-hidden="true" aria-role="dialog">
+    <div class="modal-dialog modal-fullscreen-sm-down">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title text-black fs-5" id="modalEditarTabela">Editar</h2>
-          <button type="button" (click)="closeModalEditarTabela()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h2 class="modal-title text-black fs-5" id="modalEditarProduto">Editar</h2>
+          <button type="button" (click)="closeModalEditarProduto()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form [formGroup]="formEditarProduto" (ngSubmit)="onSubmitEdit()">
           <div class="modal-body">
@@ -95,10 +102,10 @@
           </div>
           <div class="modal-footer d-flex justify-content-center">
             <!-- Criar validação, se algo foi alterado nos inputs, ativar botão SALVAR -->
-            <button type="button" class="btn btn-primary" (click)="closeModalEditarTabela()" data-bs-dismiss="modal">
+            <button type="button" class="btn btn-primary" (click)="closeModalEditarProduto()" data-bs-dismiss="modal">
               Salvar
             </button>
-            <button type="button" class="btn btn-secondary" (click)="closeModalEditarTabela()" data-bs-dismiss="modal">
+            <button type="button" class="btn btn-secondary" (click)="closeModalEditarProduto()" data-bs-dismiss="modal">
               Fechar
             </button>
           </div>
@@ -118,17 +125,39 @@
         <form [formGroup]="formNovoProduto" (ngSubmit)="onSubmitNovoProduto()">
           <div class="modal-body">
             <div class="mb-3">
-              <!-- CRIAR AS VALIDAÇÕES AQUI -->
               <label for="produto-novo" class="form-label text-black">Produto:</label>
-              <input type="text" class="form-control is-invalid" id="produto-novo" formControlName="produto" required>
+              <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="formNovoProduto.get('produto')?.errors?.['required'] && formNovoProduto.get('produto')?.touched"
+                id="produto-novo"
+                formControlName="produto"
+                required
+              >
             </div>
             <div class="mb-3">
               <label for="tecnologia-edit" class="form-label text-black">Tecnologia:</label>
-              <input type="text" class="form-control" id="tecnologia-edit" formControlName="tecnologia">
+              <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="formNovoProduto.get('tecnologia')?.errors?.['required'] && formNovoProduto.get('tecnologia')?.touched"
+                id="tecnologia-edit"
+                formControlName="tecnologia"
+              >
             </div>
             <div class="mb-3">
               <label for="valor-venda-edit" class="form-label text-black">Preço de vendas:</label>
-              <input type="text" prefix="R$ " mask="separator.2" thousandSeparator="." decimalMarker="," class="form-control" id="valor-venda-edit" formControlName="valor_venda">
+              <input
+                type="text"
+                prefix="R$ "
+                mask="separator.2"
+                thousandSeparator="."
+                decimalMarker=","
+                class="form-control"
+                [class.is-invalid]="formNovoProduto.get('valor_venda')?.errors?.['min'] && formNovoProduto.get('valor_venda')?.touched"
+                id="valor-venda-edit"
+                formControlName="valor_venda"
+              >
             </div>
             <div class="mb-3">
               <label for="observacao-edit" class="form-label text-black">Observações:</label>
@@ -136,8 +165,7 @@
             </div>
           </div>
           <div class="modal-footer d-flex justify-content-center">
-            <!-- Criar validação, para preencher todos os dados antes de adicionar o produto -->
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" [disabled]="!formNovoProduto.valid">
               Adicionar
             </button>
             <button type="button" class="btn btn-secondary" (click)="closeModalNovoProduto()" data-bs-dismiss="modal">
@@ -148,4 +176,34 @@
       </div>
     </div>
   </div>
+
+    <!-- Modal para EXCLUIR produto-->
+    <div class="modal fade" id="modalDeletar" tabindex="-1" aria-labelledby="modalDeletarProduto" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title text-black fs-5" id="modalDeletarProduto">Excluir produto</h2>
+            <button type="button" (click)="closeModalDeletarProduto()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form [formGroup]="formDeletarProduto" (ngSubmit)="onSubmitDeletarProduto()">
+            <div class="modal-body">
+              <div class="">
+                <div class="form-label mt-1">
+                  <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> o produto: <strong class="text-dark-emphasis">{{ formDeletarProduto.get('produto').value }}</strong></p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="submit" class="btn btn-danger">
+                Excluir
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="closeModalDeletarProduto()" data-bs-dismiss="modal">
+                Fechar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
 </div>

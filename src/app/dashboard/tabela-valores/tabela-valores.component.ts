@@ -63,16 +63,18 @@ export class TabelaDeValores implements AfterViewInit {
 
   /* *** Modais de ações *** */
 
-  // Editar produto
-  formEditarProduto = new FormGroup({
-    produto: new FormControl(''), // fazer validação, se editar já traz o valor dentro do input, se não vem vazio
-    tecnologia: new FormControl(''),
-    valor_venda: new FormControl(''),
-    observacao: new FormControl('')
+  // EDITAR produto
+  formEditarProduto = this.formBuilder.group({
+    produto: ['', Validators.required],
+    tecnologia: ['', Validators.required],
+    valor_venda: [0, Validators.min(4)],
+    observacao: ['']
   })
 
-  openModalEditarTabela(element: any) {
+  openModalEditarProduto(element: any) {
     const modal = document.getElementById("modalEdit");
+    const bgModal = document.getElementById("bg-modal");
+
     // Busca os valores da linha e insere nos inputs
     this.formEditarProduto.patchValue({
       produto: element.produto,
@@ -83,49 +85,65 @@ export class TabelaDeValores implements AfterViewInit {
 
     if(modal != null){
       modal.style.display = "block";
+      bgModal.style.display = "block";
       modal.classList.add("show");
     }
   }
 
-  closeModalEditarTabela() {
+  closeModalEditarProduto() {
     const modal = document.getElementById("modalEdit");
+    const bgModal = document.getElementById("bg-modal");
     if(modal != null){
       modal.style.display = "none";
+      bgModal.style.display = "none";
       modal.classList.remove("show");
     }
   }
+  
+  formEditarProdutoStatus: string = this.formEditarProduto.status;
 
   onSubmitEdit() {
-    console.warn(this.formEditarProduto.value);
+    if(this.formEditarProdutoStatus !== "INVALID") {
+      const editarProduto: Produtos = {
+        id: this.formEditarProduto.get('id').value,
+        produto: this.formEditarProduto.get('produto').value,
+        tecnologia: this.formEditarProduto.get('tecnologia').value,
+        valor_venda: Number(this.formEditarProduto.get('valor_venda').value),
+        observacao: this.formEditarProduto.get('observacao').value
+      }
+  
+      // this.dataSource.data.push(editarProduto);
+      this.dataSource._updateChangeSubscription();
+      this.closeModalEditarProduto();
+  
+      console.warn(this.formEditarProduto.value);
+    }
   }
 
-  // Novo Produto
+  // CRIAR Produto
   formNovoProduto = this.formBuilder.group({
     produto: ['', Validators.required],
     tecnologia: ['', Validators.required],
-    valor_venda: [0, Validators.required],
-    observacao: ['', Validators.required]
+    valor_venda: [0, Validators.min(4)],
+    observacao: ['']
   })
-
-  // formNovoProduto = new FormGroup({
-    // produto: new FormControl(''), // fazer validação, se editar já traz o valor dentro do input, se não vem vazio
-    // tecnologia: new FormControl(''),
-    // valor_venda: new FormControl(''),
-    // observacao: new FormControl('')
-  // })
 
   openModalNovoProduto() {
     const modal = document.getElementById("modalNew");
+    const bgModal = document.getElementById("bg-modal");
     if(modal != null){
       modal.style.display = "block";
+      bgModal.style.display = "block";
       modal.classList.add("show");
     }
   }
 
   closeModalNovoProduto() {
     const modal = document.getElementById("modalNew");
+    const bgModal = document.getElementById("bg-modal");
     if(modal != null){
       modal.style.display = "none";
+      bgModal.style.display = "none";
       modal.classList.remove("show");
     }
   }
@@ -142,15 +160,52 @@ export class TabelaDeValores implements AfterViewInit {
         observacao: this.formNovoProduto.get('observacao').value
       }
   
-      this.dataSource.data.push(novoProduto);
+      // this.dataSource.data.push(novoProduto);
       this.dataSource._updateChangeSubscription();
       this.closeModalNovoProduto();
   
       console.warn(this.formNovoProduto.value);
-      console.warn(this.formNovoProduto.status);
     }
-    console.log(this.formNovoProduto.status);
   }
 
+  // DELETAR Produto
+  formDeletarProduto = this.formBuilder.group({
+    produto: [''],
+    tecnologia: [''],
+    valor_venda: [],
+    observacao: ['']
+  })
+  
+  openModalDeletarProduto(element: any) {
+    const modal = document.getElementById("modalDeletar");
+    const bgModal = document.getElementById("bg-modal");
+    if(modal != null){
+      modal.style.display = "block";
+      bgModal.style.display = "block";
+      modal.classList.add("show");
+    }
+
+    // Busca os valores da linha
+    this.formDeletarProduto.patchValue({
+      produto: element.produto,
+      tecnologia: element.tecnologia,
+      valor_venda: element.valor_venda,
+      observacao: element.observacao
+    })
+  }
+
+  closeModalDeletarProduto() {
+    const modal = document.getElementById("modalDeletar");
+    const bgModal = document.getElementById("bg-modal");
+    if(modal != null){
+      modal.style.display = "none";
+      bgModal.style.display = "none";
+      modal.classList.remove("show");
+    }
+  }
+
+  onSubmitDeletarProduto() {
+    this.closeModalDeletarProduto();
+  }
 
 }

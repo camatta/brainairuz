@@ -32,6 +32,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 mat-paginator span, mat-option span,
 .mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-label {
   color: #000;
+  font-size: 14px !important;
+}
+
+.mdc-tooltip__surface.mdc-tooltip__surface-animation {
+  font-size: 14px !important;
 }
 
 mat-paginator .mat-mdc-select-arrow svg {
