@@ -27,7 +27,7 @@ mongoose.connect(MONGODB_URI, {
     console.error('Erro ao conectar ao banco MongoDB', error);
   });
 
-// Configuração do midddleware para permitir o uso de JSON nas requisições
+// Configuração do middleware para permitir o uso de JSON nas requisições
 app.use(express.json());
 
 // Middleware para analisar o corpo das solicitações como JSON
@@ -187,6 +187,19 @@ app.get('/api/users/me', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Ocorreu um erro ao obter as informações do usuário.' });
   }
 });
+
+// Importe o modelo de Products
+const Products = require('./src/app/models/Products');
+
+// Rota para obter todos os produtos
+app.get('/api/products', async (req, res) => {
+  try {
+    const produtos = await Products.find();
+    res.status(200).json(produtos);
+  } catch (error) {
+    res.status(500).send('Erro do servidor');
+  }
+})
 
 const distFolder = path.join(process.cwd(), '/dist/nairuz');
 

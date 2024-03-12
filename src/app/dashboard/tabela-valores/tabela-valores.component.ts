@@ -10,6 +10,7 @@ import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 
 import { PRODUTOS } from './produtos/produtos';
 import { Produtos } from './produtos/interfaceProdutos';
+import { ProductsService } from 'src/app/services/products.service';
 
 
 @Component({
@@ -31,19 +32,35 @@ import { Produtos } from './produtos/interfaceProdutos';
 export class TabelaDeValores implements AfterViewInit {
   displayedColumns: string[] = ['id', 'produto', 'tecnologia', 'valor_venda', 'observacao', 'actions'];
   dataSource = new MatTableDataSource<Produtos>(PRODUTOS); // para fazer a busca, preciso passar para este componente uma nova base de dados onde contenham apenas os itens da busca.
+  produtos: any[] = [];
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private _liveAnnouncer: LiveAnnouncer, private formBuilder: FormBuilder) {}
+  constructor(
+    private _liveAnnouncer: LiveAnnouncer,
+    private formBuilder: FormBuilder,
+    private productService: ProductsService
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Tradução do Paginator
     this.paginator._intl.itemsPerPageLabel="Itens por página";
     this.paginator._intl.nextPageLabel="Próxima";
     this.paginator._intl.previousPageLabel="Anterior";
     this.paginator._intl.firstPageLabel="Primeira Página";
     this.paginator._intl.lastPageLabel="Última Página";
+
+    // Carregando produtos
+    this.productService.getProducts().subscribe(
+      (data) => {
+        this.produtos = data;
+        console.log(this.produtos);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
   }
 
   ngAfterViewInit() {
@@ -161,6 +178,7 @@ export class TabelaDeValores implements AfterViewInit {
       }
   
       // this.dataSource.data.push(novoProduto);
+      PRODUTOS.push(novoProduto); // criar método put para alterar direto no banco de dados
       this.dataSource._updateChangeSubscription();
       this.closeModalNovoProduto();
   
