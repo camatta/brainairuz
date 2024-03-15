@@ -6,7 +6,11 @@
 .fit-C { background-color: #FFC000 !important; }
 .fit-D { background-color: #FF0000 !important; }
 
-* {
+/* *:not(input, textarea, select, option), input[type='submit'] {
+  color: #fff;
+} */
+
+.titlePage, button[type="submit"], input[type="submit"] {
   color: #fff;
 }
 
@@ -28,6 +32,7 @@ html, body { height: 100%; }
 
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/* TABELA DE VALORES */
 #tabela-valores div, #tabela-valores td,
 mat-paginator span, mat-option span,
 .mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-label {
@@ -41,4 +46,64 @@ mat-paginator span, mat-option span,
 
 mat-paginator .mat-mdc-select-arrow svg {
   fill: #000;
+}
+
+.main-tabela .mat-elevation-z8 {
+  background-color: #fff;
+  border-radius: var(--bs-border-radius);
+}
+
+.main-tabela .topo .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+  height: 0;
+}
+
+.main-tabela .topo .mat-mdc-text-field-wrapper,
+.main-tabela .topo .mat-mdc-form-field:hover {
+  background-color: #fff;
+  border-radius: var(--bs-border-radius);
+}
+
+.main-tabela .topo .mdc-text-field--filled .mdc-floating-label--float-above {
+  transform: none;
+}
+
+.main-tabela .topo .mat-mdc-input-element {
+  padding-left: 28px;
+  transform: translateY(70%);
+}
+
+.main-tabela .topo .mdc-floating-label {
+  transform: none;
+}
+
+.main-tabela .topo .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+  padding: 0;
+}
+
+.main-tabela .topo mat-label {
+  display: block;
+  height: 20px;
+}
+
+.main-tabela .topo .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.main-tabela .mat-mdc-paginator {
+  background-color: transparent;
+}
+
+/* CÁLCULO DE COMISSÃO */
+#formCalculoComissao .selectProduct .mat-mdc-text-field-wrapper,
+#formCalculoComissao .selectProduct:hover .mat-mdc-text-field-wrapper {
+  background-color: #fff!important;
+}
+
+#formCalculoComissao .mat-mdc-form-field:hover .mat-mdc-form-field-focus-overlay {
+  opacity: 0;
+}
+
+#formCalculoComissao .mat-mdc-form-field-subscript-wrapper {
+  display: none;
 }

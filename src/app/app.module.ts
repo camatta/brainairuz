@@ -19,6 +19,7 @@ import { PiramideComponent } from './dashboard/piramide/piramide.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideNgxMask } from 'ngx-mask';
+// import { CalculoComissaoComponent } from './dashboard/calculo-comissao/calculo-comissao.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { provideNgxMask } from 'ngx-mask';
     HistoricoComponent,
     ComercialComponent,
     PiramideComponent,
-    IcpComponent
+    IcpComponent,
+    // CalculoComissaoComponent
   ],
   imports: [
     BrowserModule,

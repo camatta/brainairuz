@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 // Definição do schema da collection Products
 const ProductsSchema = new mongoose.Schema({
+    id: {
+        type: Number,
+        required: true
+    },
     produto: {
       type: String,
       required: true,
@@ -20,7 +24,7 @@ const ProductsSchema = new mongoose.Schema({
     }
 })
 
-// Criação do modelo "Avaliacao" com base no esquema definido
+// Criação do modelo "Product" com base no esquema definido
 const Products = mongoose.model('Products', ProductsSchema);
 
 // Exportação do modelo "Produtos"

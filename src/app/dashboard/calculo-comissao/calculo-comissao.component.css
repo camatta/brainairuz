@@ -1,0 +1,9 @@
+.selectProduct .mat-mdc-select-arrow svg {
+  fill: #000;
+}
+
+.selectProduct .labelSelect,
+.selectProduct .mat-mdc-select-min-line {
+  color: #000;
+}
+

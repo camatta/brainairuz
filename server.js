@@ -21,17 +21,19 @@ mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
-    console.log('Conectado ao banco MongoDB');
-  })
-  .catch((error) => {
-    console.error('Erro ao conectar ao banco MongoDB', error);
-  });
+  console.log('Conectado ao banco MongoDB');
+})
+.catch((error) => {
+  console.error('Erro ao conectar ao banco MongoDB', error);
+});
 
 // Configuração do middleware para permitir o uso de JSON nas requisições
 app.use(express.json());
 
 // Middleware para analisar o corpo das solicitações como JSON
 app.use(bodyParser.json());
+
+// *** AVALIAÇÃO ***
 
 // Importe o modelo de Avaliacao
 const Avaliacao = require('./src/app/models/Avaliacao');
@@ -78,6 +80,8 @@ app.get('/api/avaliacoes', async (req, res) => {
     res.status(500).json({ message: 'Erro ao obter as avaliações' });
   }
 });
+
+// *** USUÁRIO ***
 
 // Rota de Cadastro
 app.post('/api/auth/cadastro', async (req, res) => {
@@ -147,7 +151,6 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-
 // Rota para obter todos os usuários
 app.get('/api/users', async (req, res) => {
   try {
@@ -188,19 +191,89 @@ app.get('/api/users/me', authMiddleware, async (req, res) => {
   }
 });
 
+// *** PRODUTOS ***
+
 // Importe o modelo de Products
-const Products = require('./src/app/models/Products');
+const Product = require('./src/app/models/Products');
 
 // Rota para obter todos os produtos
 app.get('/api/products', async (req, res) => {
   try {
-    const produtos = await Products.find();
+    const produtos = await Product.find();
     res.status(200).json(produtos);
   } catch (error) {
     res.status(500).send('Erro do servidor');
   }
 })
 
+// Rota para inserir novos produtos
+app.post('/api/products', async (req, res) => {
+  try {
+    const { id, produto, tecnologia, valor_venda, observacao } = req.body;
+
+    // Criando um novo produto utilizando o modelo importado
+    const novoProduto = new Product({
+      id,
+      produto,
+      tecnologia,
+      valor_venda,
+      observacao
+    })
+
+    await novoProduto.save();
+    res.status(201).json('Produto criado com sucesso!');
+
+  } catch {
+    res.status(500).json('Erro ao criar o produto');
+  }
+})
+
+// Rota para apagar um produto
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const deleteProduct = await Product.findByIdAndDelete(productId);
+
+    if(deleteProduct) {
+      console.log(`Produto excluído com sucesso`);
+      res.status(200).json(`Produto ${productId} excluído com sucesso`);
+    } else {
+      console.log('Produto não encontrado');
+      res.status(404).json(`Produto ${productId} não encontrado`);
+    }
+  } catch(error) {
+    console.error('Erro ao excluir o produto: ', error);
+    res.status(500).json('Erro interno do servidor ao excluir o produto');
+  }
+})
+
+app.put('/api/products/:id', async (req, res) => {
+  try {
+    const { id, produto, tecnologia, valor_venda, observacao } = req.body;
+    const productToUpdate = {
+      id,
+      produto,
+      tecnologia,
+      valor_venda,
+      observacao
+    }
+    const productId = req.params.id;
+    const updateProduct = await Product.findByIdAndUpdate(productId, productToUpdate);
+
+    if(updateProduct){
+      console.log(`Produto alterado com sucesso`);
+      res.status(200).json(`Produto ${productId} alterado com sucesso`);
+    } else {
+      console.log('Produto não encontrado');
+      res.status(404).json(`Produto ${productId} não encontrado`);
+    }
+  } catch (error) {
+    console.error('Erro ao alterar o produto: ', error);
+    res.status(500).json('Erro interno do servidor ao alterar o produto');
+  }
+})
+
+// *** OUTROS ***
 const distFolder = path.join(process.cwd(), '/dist/nairuz');
 
 app.get('*.*', express.static(distFolder, {

@@ -1,3 +1,10 @@
+#validacao-icp label,
+#validacao-icp h5,
+#validacao-icp small,
+#validacao-icp small a {
+  color: #fff;
+}
+
 #validacao-icp #googleDesativado,
 #validacao-icp #siteDesativado {
   position: relative;

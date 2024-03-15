@@ -17,6 +17,11 @@
         Tabela de Valores
       </button>
     </li>
+    <li *ngIf="showTabelaDeValores">
+      <button routerLink="/dashboard/calculo-comissao" [class.link-ativo]="isLinkAtivo('/dashboard/calculo-comissao')">
+        Cálculo de Comissão
+      </button>
+    </li>
     <li><button routerLink="/" [class.link-ativo]="isLinkAtivo('/')" (click)="logout()">Sair</button></li>
   </ul>
 </div>

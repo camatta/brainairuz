@@ -1,0 +1,17 @@
+<h1 class="titlePage">Cálculo de comissão</h1>
+
+<form id="formCalculoComissao">
+
+  <div class="col-10 mb-3">
+    <label for="site_empresa" class="form-label">Selecione o produto vendido:</label>
+    <mat-form-field class="selectProduct form-control">
+      <mat-select [formControl]="controlSelect" name="food">
+        <ngx-mat-select-search [formControl]="selectFilterControl"></ngx-mat-select-search>
+        <mat-option *ngFor="let item of produtosFiltrados" [value]="item.produto">
+          {{ item.produto }} - {{ item.tecnologia }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+</form>

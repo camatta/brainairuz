@@ -12,6 +12,7 @@ import { AuthGuard } from './routes/auth.guard';
 import { PiramideComponent } from './dashboard/piramide/piramide.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaDeValores } from './dashboard/tabela-valores/tabela-valores.component';
+import { CalculoComissaoComponent } from './dashboard/calculo-comissao/calculo-comissao.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -23,7 +24,8 @@ const routes: Routes = [
     { path: 'comercial', component: ComercialComponent },
     { path: 'piramide', component: PiramideComponent },
     { path: 'icp', component: IcpComponent },
-    { path: 'tabela-valores', component: TabelaDeValores }
+    { path: 'tabela-valores', component: TabelaDeValores },
+    { path: 'calculo-comissao', component: CalculoComissaoComponent }
   ]},
   { path: 'cadastro', component: CadastroComponent },
 ];

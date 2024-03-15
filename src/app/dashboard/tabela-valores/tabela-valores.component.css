@@ -24,6 +24,25 @@
     opacity: .7;
 }
 
+.main-tabela .topo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.main-tabela .topo .mat-mdc-form-field {
+    width: 40%;
+}
+
+.main-tabela .topo .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input,
+.main-tabela .topo mat-label {
+    color: #000;
+}
+
+.main-tabela .topo .mat-icon {
+    fill: #000;
+    font-size: 20px;
+}
+
 .main-tabela .btn-addProduto {
     color: #fff;
     background-color: #080b2c;
@@ -45,4 +64,25 @@
     overflow-x: hidden;
     overflow-y: auto;
     z-index: 1054;
+}
+
+#id-novo {
+    background-color: #ededed;
+}
+
+#alert-actions {
+    position: absolute;
+    top: 2.4rem;
+    right: 2.8rem;
+    transition: ease-in-out .4s;
+    z-index: 999;
+}
+
+#tabela-valores {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.main-tabela .topo mat-form-field.fullWidth {
+    width: 100%;
 }
