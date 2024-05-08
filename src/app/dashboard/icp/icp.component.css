@@ -1,8 +1,27 @@
-#validacao-icp label,
-#validacao-icp h5,
-#validacao-icp small,
-#validacao-icp small a {
-  color: #fff;
+label, small, small a {
+  color: #00175d;
+}
+
+small {
+  margin-left: 4px;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+input, select, option {
+  border-radius: 5px;
+  padding-left: 5px;
+  box-shadow: 0 3px 10px #0003;
+  border: unset;
+  font-size: 14px;
+  color: #00175d;
+}
+
+#validacao-icp {
+  padding-bottom: 40px;
 }
 
 #validacao-icp #googleDesativado,
@@ -13,9 +32,11 @@
 
 #validacao-icp #googleDesativado:hover::after {
   content: "Insira as TAGS no campo acima!";
-  background-color: #ccc;
-  color: #000;
+  background-color: #f9f9f9;
+  color: #00175d;
+  box-shadow: 0 3px 10px #0003;
   width: 160px;
+  border-radius: 5px;
   padding: 10px;
   position: absolute;
   top: -68px;
@@ -24,8 +45,10 @@
 
 #validacao-icp #siteDesativado:hover::after {
   content: "Insira a URL do site no campo indicado!";
-  background-color: #ccc;
-  color: #000;
+  background-color: #f9f9f9;
+  color: #00175d;
+  box-shadow: 0 3px 10px #0003;
+  border-radius: 5px;
   width: 160px;
   padding: 8px;
   position: absolute;
@@ -34,7 +57,7 @@
 }
 
 #validacao-icp select option {
-  color: #000;
+  color: #00175d;
 }
 
 #validacao-icp .perfil {
@@ -46,16 +69,17 @@
 #validacao-icp .validar {
   width: 400px;
   margin-top: 1rem;
-  padding: 7px;
+  padding: 10px;
   border: unset;
-  background-color: #080b2c;
+  background-color: #61dcab;
+  color: #00175d;
   font-weight: 500;
   border-radius: 5px;
   transition: .4s;
 }
 
 #validacao-icp .validar:hover {
-  opacity: .7;
+  opacity: .8;
 }
 
 #validacao-icp .modal.fade {
@@ -67,8 +91,5 @@
   font-weight: 600;
   border-radius: 5px;
   padding: 4px 8px;
-}
-
-#validacao-icp small {
-  margin-left: 4px;
+  color: #fff;
 }

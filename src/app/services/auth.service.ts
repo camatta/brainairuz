@@ -64,5 +64,9 @@ export class AuthService {
     // Verifica se o token está presente e não expirou
     return !!token;
   }
+
+  solicitarRedefinicaoSenha(email: string): Observable<any> {
+    return this.http.post(`${environment.URL_API}/api/auth/esqueci-senha`, { email });
+  }
   
 }

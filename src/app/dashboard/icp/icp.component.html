@@ -14,9 +14,9 @@
     <input #palavrasChave (change) = "setPalavrasChave(palavrasChave.value)" type="text" class="form-control" id="palavras_chave" placeholder="marketing digital, inbound marketing, rd station" required>
   </div>
 
-  <h2 class="titlePage mt-5">Preencha os itens abaixo:</h2>
+  <strong class="titlePage d-block mt-5">Preencha os itens abaixo:</strong>
 
-  <h5 class="mt-4 mb-3">Mercado:</h5>
+  <strong class="d-block mt-4 mb-1">Mercado:</strong>
   <div class="col-10 mb-3">
     <label for="segmentoWeb" class="form-label">
       Como é o comportamento do segmento na web?
@@ -44,7 +44,7 @@
     </select>
   </div>
 
-  <h5 class="mt-5 mb-3">Negócio:</h5>
+  <strong class="d-block mt-5 mb-1">Negócio:</strong>
   <div class="col-10 mb-3">
     <label for="modeloNegocio" class="form-label">B2B / B2C ou B2C e B2B?</label>
     <select id="modeloNegocio" class="form-select" name="modeloNegocio" [(ngModel)] = "valores['modeloNegocio']" required>
@@ -173,7 +173,7 @@
     </div>
   </div>
 
-  <h5 class="mt-5 mb-3">Vendas:</h5>
+  <strong class="d-block mt-5 mb-1">Vendas:</strong>
   <div class="col-10 mb-3">
     <label for="utilizaCRM" class="form-label">A empresa utiliza um CRM?</label>
     <select id="utilizaCRM" class="form-select" name="utilizaCRM" [(ngModel)] = "valores['utilizaCRM']" required>
@@ -208,7 +208,7 @@
     </select>
   </div>
 
-  <h5 class="mt-5 mb-3">Maturidade digital:</h5>
+  <strong class="d-block mt-5 mb-1">Maturidade digital:</strong>
   <div class="col-10 mb-3">
     <label for="enderecoWeb" class="form-label">Tem um endereço na web?</label>
     <select id="enderecoWeb" class="form-select" name="enderecoWeb" [(ngModel)] = "valores['enderecoWeb']" required>

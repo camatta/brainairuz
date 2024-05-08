@@ -7,7 +7,9 @@
   height: 100vh;
   overflow: hidden;
   background: rgb(59,88,203);
-  background: linear-gradient(107deg, rgba(59,88,203,1) 7%, rgba(176,36,190,1) 27%, rgba(75,13,104,1) 49%, rgba(8,11,44,1) 81%);
+  background-image: url(../../assets/images/nairuz/bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 h1 {
@@ -42,10 +44,10 @@ input {
 
 .submit-login {
   border: unset;
-  background-color: #240435;
-  border-radius: 5px;
+  background-color: #61dcab;
+  border-radius: 100px;
   width: 100%;
-  color: #fff;
+  color: #00175d;
   font-weight: 600;
   margin-bottom: 1rem;
   padding: 10px;
@@ -54,9 +56,11 @@ input {
 
 .cadastrar-login {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   align-items: center;
+  flex-direction: column;
+  margin-top: 4rem;
 }
 
 .cadastrar-login p {
@@ -69,7 +73,8 @@ input {
   width: 30%;
 }
 
-.cadastrar-login button {
+.cadastrar-login button,
+.esqueci-a-senha button {
   background: unset;
   border: unset;
   text-decoration: underline;
@@ -91,6 +96,7 @@ input {
 .error-message p {
   margin-bottom: 0;
   font-weight: 600;
+  color: #fff;
 }
 
 .password-input {
@@ -105,7 +111,7 @@ input {
 }
 
 .password-toggle .fas {
-  color: #240435;
+  color: #00175d;
 }
 
 @media screen and (max-width: 768px) {

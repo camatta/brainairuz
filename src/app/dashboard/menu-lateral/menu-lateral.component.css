@@ -1,3 +1,8 @@
+.menu-lateral {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eeeeee6b;
+}
 
 .menu-lateral ul {
   list-style: none;
@@ -13,15 +18,19 @@
   text-decoration: unset;
   background: unset;
   border: unset;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
 }
 
-.menu-lateral ul li a {
-  color: #fff;
-  text-decoration: unset;
-  background: unset;
-  border: unset;
+.menu-lateral ul li button i {
+  width: 20px;
 }
 
-.link-ativo {
-  font-weight: bold;
+.link-ativo, 
+.link-ativo i {
+  color: #61dcab !important;
 }

@@ -142,9 +142,9 @@ app.post('/api/auth/login', async (req, res) => {
     const token = jwt.sign({ userId: existingUser._id }, 'ef1c8080fd1db32bf420fac3bc22bc567b6c25d41d17eef10e3e4f54becc31aa');
 
     // Autenticação bem-sucedida
-    const { name, team, accessLevel, setor } = existingUser;
+    const { name, team, accessLevel, setor, setorTratado, funcao } = existingUser;
 
-    res.status(200).json({ message: 'Login bem-sucedido.', user: { name, email, team, accessLevel, setor }, token });
+    res.status(200).json({ message: 'Login bem-sucedido.', user: { name, email, team, accessLevel, setor, setorTratado, funcao }, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Ocorreu um erro durante o login.' });
@@ -182,6 +182,7 @@ app.get('/api/users/me', authMiddleware, async (req, res) => {
       funcao: req.user.accessLevel,
       setor: req.user.setor,
       setorTratado: req.user.setorTratado,
+      funcao: req.user.funcao
     };
 
     res.status(200).json(userInfo);
@@ -270,6 +271,131 @@ app.put('/api/products/:id', async (req, res) => {
   } catch (error) {
     console.error('Erro ao alterar o produto: ', error);
     res.status(500).json('Erro interno do servidor ao alterar o produto');
+  }
+})
+
+// *** COMISSÕES ***
+const Comissao = require('./src/app/models/Comissao');
+
+app.get('/api/comissoes', async (req, res) => {
+  try {
+    const comissoes = await Comissao.find();
+    res.status(200).json(comissoes);
+  } catch (error) {
+    res.status(500).send('Erro do servidor');
+  }
+})
+
+// Rota para inserir novas comissões
+app.post('/api/comissao', async (req, res) => {
+  try {
+    const { 
+      vendedor,
+      cliente,
+      mixProdutos,
+      tipoProduto,
+      multiplicador,
+      markup,
+      vendaAvulsa,
+      valorBase,
+      valorVendido,
+      qualidade,
+      mix,
+      comissaoFinal,
+      valorComissao
+    } = req.body;
+
+    // Criando um novo produto utilizando o modelo importado
+    const novaComissao = new Product({
+      vendedor,
+      cliente,
+      mixProdutos,
+      tipoProduto,
+      multiplicador,
+      markup,
+      vendaAvulsa,
+      valorBase,
+      valorVendido,
+      qualidade,
+      mix,
+      comissaoFinal,
+      valorComissao
+    })
+
+    await novaComissao.save();
+    res.status(201).json('Comissão adicionada com sucesso!');
+
+  } catch {
+    res.status(500).json('Erro ao adicionar a comissão');
+  }
+})
+
+// Rota para apagar um produto
+app.delete('/api/comissoes/:id', async (req, res) => {
+  try {
+    const idComissao = req.params._id;
+    const deleteComissao = await Comissao.findByIdAndDelete(idComissao);
+
+    if(deleteComissao) {
+      console.log(`Comissão removida com sucesso`);
+      res.status(200).json(`Comissão removida com sucesso`);
+    } else {
+      console.log('Produto não encontrado');
+      res.status(404).json(`Comissão não encontrada`);
+    }
+  } catch(error) {
+    console.error('Erro ao remover a comissão: ', error);
+    res.status(500).json('Erro interno do servidor ao remover a comissão');
+  }
+})
+
+app.put('/api/comissoes/:id', async (req, res) => {
+  try {
+    const { 
+      vendedor,
+      cliente,
+      mixProdutos,
+      tipoProduto,
+      multiplicador,
+      markup,
+      vendaAvulsa,
+      valorBase,
+      valorVendido,
+      qualidade,
+      mix,
+      comissaoFinal,
+      valorComissao
+     } = req.body;
+
+    const comissaoToUpdate = {
+      vendedor,
+      cliente,
+      mixProdutos,
+      tipoProduto,
+      multiplicador,
+      markup,
+      vendaAvulsa,
+      valorBase,
+      valorVendido,
+      qualidade,
+      mix,
+      comissaoFinal,
+      valorComissao
+    }
+
+    const idComissao = req.params._id;
+    const updateComissao = await Comissao.findByIdAndUpdate(idComissao, comissaoToUpdate);
+
+    if(updateComissao){
+      console.log(`Comissão alterada com sucesso`);
+      res.status(200).json(`Comissão alterada com sucesso`);
+    } else {
+      console.log('Comissão não encontrada');
+      res.status(404).json(`Comissão não encontrada`);
+    }
+  } catch (error) {
+    console.error('Erro ao alterar a comissão: ', error);
+    res.status(500).json('Erro interno do servidor ao alterar a comissão');
   }
 })
 

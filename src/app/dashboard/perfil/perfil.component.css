@@ -1,3 +1,8 @@
-.perfil {
-  color: #fff;
+h1 {
+  color: #00175d;
+  font-style: italic;
+}
+
+p span {
+  color: #1c1c1c;
 }

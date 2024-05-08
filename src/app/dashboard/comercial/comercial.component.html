@@ -17,8 +17,15 @@
     <input type="text" id="tipoProjeto" [(ngModel)]="tipoProjeto" name="tipoProjeto" required>
   </div>
   <div class="form-group">
-    <label for="logo">Logo (PNG):</label>
-    <input type="file" id="logo" (change)="onFileSelected($event)" accept=".png, .jpeg, .svg" />
+    <label>Logo (PNG):</label>
+    <div class="enviar-imagem">
+      <label id="logo" for="logoInput">Enviar imagem</label>
+      <span id="imgName">Nenhuma imagem selecionada</span>
+      <input type="file" id="logoInput" (change)="onFileSelected($event)" accept=".png, .jpeg, .svg" />
+      <div class="mt-3">
+        <small>Dimensão recomendada: 850 x 289</small>
+      </div>
+    </div>
   </div>
   <button type="submit">Criar Imagem Personalizada</button>
 </form>

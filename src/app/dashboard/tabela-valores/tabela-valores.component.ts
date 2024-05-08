@@ -1,15 +1,12 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormBuilder, Validators } from '@angular/forms';
 
-import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+
+import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { Produtos } from './interfaceProdutos';
@@ -21,18 +18,7 @@ import { ProductsService } from 'src/app/services/products.service';
   templateUrl: './tabela-valores.component.html',
   styleUrls: ['./tabela-valores.component.css'],
   standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    NgxMaskDirective,
-    NgxMaskPipe
-  ]
+  imports: [ SharedModule ]
 })
 
 export class TabelaDeValores implements OnInit {

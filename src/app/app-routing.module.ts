@@ -10,6 +10,7 @@ import { HistoricoComponent } from './dashboard/historico/historico.component';
 import { ComercialComponent } from './dashboard/comercial/comercial.component';
 import { AuthGuard } from './routes/auth.guard';
 import { PiramideComponent } from './dashboard/piramide/piramide.component';
+import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaDeValores } from './dashboard/tabela-valores/tabela-valores.component';
 import { CalculoComissaoComponent } from './dashboard/calculo-comissao/calculo-comissao.component';
@@ -28,6 +29,7 @@ const routes: Routes = [
     { path: 'calculo-comissao', component: CalculoComissaoComponent }
   ]},
   { path: 'cadastro', component: CadastroComponent },
+  { path: 'redefinir-senha', component: RedefinirSenhaComponent },
 ];
 
 @NgModule({

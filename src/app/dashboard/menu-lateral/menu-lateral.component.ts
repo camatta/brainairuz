@@ -15,6 +15,7 @@ export class MenuLateralComponent implements OnInit {
   showComercialLink = false;
   showTabelaPrecos = false;
   showTabelaDeValores = false;
+  showCalculoComissao = false;
   linkAtivo: string;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
@@ -42,7 +43,7 @@ export class MenuLateralComponent implements OnInit {
       accessLevel === 'Administrador';
 
     this.showTabelaPrecos =
-      accessLevel === 'Administrador' ||
+      // accessLevel === 'Administrador' ||
       team === 'Comercial' ||
       team === 'Customer Success' ||
       name === 'Adriany Oliveira' ||
@@ -56,10 +57,15 @@ export class MenuLateralComponent implements OnInit {
       name === 'Beatriz Cruz Alves' ||
       name === 'Beatriz Almeida';
 
-    this.showTabelaDeValores = accessLevel === 'Administrador';
+    this.showTabelaDeValores =
       // accessLevel === 'Administrador' ||
       // team === 'Comercial' ||
-      // name === 'Adriany Oliveira';
+      name === 'Adriany Oliveira';
+
+      this.showCalculoComissao =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      name === 'Adriany Oliveira';
   }
 
   isLinkAtivo(link: string): boolean {

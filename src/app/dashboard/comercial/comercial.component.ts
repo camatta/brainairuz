@@ -1,4 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-comercial',
@@ -90,5 +91,8 @@ export class ComercialComponent {
 
   onFileSelected(event: any) {
     this.logoFile = event.target.files[0];
+
+    let imgName: HTMLSpanElement = document.querySelector("#imgName");
+    imgName.textContent = this.logoFile.name;
   }
 }

@@ -1,31 +1,60 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Redefinindo cores Angular Material */
+:root {
+  --mdc-filled-text-field-caret-color: #00175d;
+  --mdc-filled-text-field-focus-active-indicator-color: #61dcab;
+  --mat-select-focused-arrow-color: #61dcab;
+}
+
 .fit-Enterprise { background-color: #48BAB8 !important; }
 .fit-A { background-color: #00d500 !important; }
 .fit-B { background-color: #c1c100 !important; }
 .fit-C { background-color: #FFC000 !important; }
 .fit-D { background-color: #FF0000 !important; }
 
-/* *:not(input, textarea, select, option), input[type='submit'] {
-  color: #fff;
-} */
+.titlePage {
+  color: #00175d;
+}
 
-.titlePage, button[type="submit"], input[type="submit"] {
+button[type="submit"], input[type="submit"] {
   color: #fff;
 }
 
 body {
   margin: 0;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
 }
 
 h1 {
   font-weight: 700 !important;
   font-size: 2rem !important;
+  color: #00175d;
+  font-style: italic;
+  margin-bottom: 30px !important;
 }
 
 span {
   font-weight: 600 !important;
+}
+
+p {
+  color: #1c1c1c;
+  line-height: 21px;
+  font-size: 14px;
+}
+
+.progress-bar {
+  background-color: #00175d;
+}
+
+.bg-nairuzPrimary {
+  background-color: #00175d;
+  color: #fff;
+}
+
+.bg-nairuzPrimary p, .bg-nairuzPrimary label, .bg-nairuzPrimary span {
+  color: #fff;
 }
 
 html, body { height: 100%; }
@@ -36,8 +65,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 #tabela-valores div, #tabela-valores td,
 mat-paginator span, mat-option span,
 .mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-label {
-  color: #000;
   font-size: 14px !important;
+  color: #00175d;
 }
 
 .mdc-tooltip__surface.mdc-tooltip__surface-animation {
@@ -49,8 +78,7 @@ mat-paginator .mat-mdc-select-arrow svg {
 }
 
 .main-tabela .mat-elevation-z8 {
-  background-color: #fff;
-  border-radius: var(--bs-border-radius);
+  border-radius: 5px;
 }
 
 .main-tabela .topo .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
@@ -69,7 +97,12 @@ mat-paginator .mat-mdc-select-arrow svg {
 
 .main-tabela .topo .mat-mdc-input-element {
   padding-left: 28px;
-  transform: translateY(70%);
+  transform: translateY(37%);
+}
+
+.main-tabela .topo .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+  min-height: auto;
+  height: 40px;
 }
 
 .main-tabela .topo .mdc-floating-label {
@@ -94,6 +127,16 @@ mat-paginator .mat-mdc-select-arrow svg {
   background-color: transparent;
 }
 
+.mat-mdc-icon-button {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-mdc-icon-button svg {
+  fill: #00175d;
+}
+
 /* CÁLCULO DE COMISSÃO */
 #formCalculoComissao .selectProduct .mat-mdc-text-field-wrapper,
 #formCalculoComissao .selectProduct:hover .mat-mdc-text-field-wrapper {
@@ -106,4 +149,24 @@ mat-paginator .mat-mdc-select-arrow svg {
 
 #formCalculoComissao .mat-mdc-form-field-subscript-wrapper {
   display: none;
+}
+
+#formCalculoComissao .mdc-text-field {
+  background-color: #fff;
+  padding: 0;
+}
+
+#formCalculoComissao .mdc-line-ripple {
+  display: none;
+}
+
+#formCalculoComissao .mat-mdc-form-field-infix {
+  min-height: auto;
+  height: 40px;
+  padding: 0;
+  background: #fff;
+}
+
+#produtoVendido .mat-mdc-select-min-line {
+  font-weight: 400 !important;
 }

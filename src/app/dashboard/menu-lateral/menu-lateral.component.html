@@ -1,27 +1,30 @@
 <!-- Seu HTML adaptado -->
 <div class="menu-lateral">
   <ul>
-    <li><button routerLink="/dashboard" [class.link-ativo]="isLinkAtivo('/dashboard')">Home</button></li>
-    <li><button routerLink="/dashboard/perfil" [class.link-ativo]="isLinkAtivo('/dashboard/perfil')">Perfil</button></li>
+    <li><button routerLink="/dashboard" [class.link-ativo]="isLinkAtivo('/dashboard')"><i class="fas fa-home"></i>Home</button></li>
+    <li><button routerLink="/dashboard/perfil" [class.link-ativo]="isLinkAtivo('/dashboard/perfil')"><i class="fas fa-user"></i>Perfil</button></li>
     <li *ngIf="showComercialLink">
-      <button routerLink="/dashboard/comercial" [class.link-ativo]="isLinkAtivo('/dashboard/comercial')">Gerador de Imagem</button>
+      <button routerLink="/dashboard/comercial" [class.link-ativo]="isLinkAtivo('/dashboard/comercial')"><i class="fa-solid fa-file-image"></i>Gerador de Imagem</button>
     </li>
     <li *ngIf="showComercialLink">
-      <button routerLink="/dashboard/icp" [class.link-ativo]="isLinkAtivo('/dashboard/icp')">Validação ICP</button>
+      <button routerLink="/dashboard/icp" [class.link-ativo]="isLinkAtivo('/dashboard/icp')"><i class="fa-solid fa-chart-line"></i>Validação ICP</button>
     </li>
     <li *ngIf="showTabelaPrecos">
-      <button><a target="_blank" href="https://nairuzcombr-my.sharepoint.com/:x:/g/personal/contato_nairuz_com_br/EfJ_ICb8chFPl89XP7ediz4BBaSsAT6rW86FA2OdxNB4Gg?e=lG91qc">Tabela de Preços</a></button>
+      <button>
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        <a target="_blank" href="https://nairuzcombr-my.sharepoint.com/:x:/g/personal/contato_nairuz_com_br/EfJ_ICb8chFPl89XP7ediz4BBaSsAT6rW86FA2OdxNB4Gg?e=lG91qc">Tabela de Preços</a>
+      </button>
     </li>
     <li *ngIf="showTabelaDeValores">
       <button routerLink="/dashboard/tabela-valores" [class.link-ativo]="isLinkAtivo('/dashboard/tabela-valores')">
-        Tabela de Valores
+        <i class="fa-solid fa-table-columns"></i>Tabela de Valores
       </button>
     </li>
     <li *ngIf="showTabelaDeValores">
       <button routerLink="/dashboard/calculo-comissao" [class.link-ativo]="isLinkAtivo('/dashboard/calculo-comissao')">
-        Cálculo de Comissão
+        <i class="fa-solid fa-coins"></i>Cálculo de Comissão
       </button>
     </li>
-    <li><button routerLink="/" [class.link-ativo]="isLinkAtivo('/')" (click)="logout()">Sair</button></li>
+    <li><button routerLink="/" [class.link-ativo]="isLinkAtivo('/')" (click)="logout()"><i class="fas fa-sign-out-alt"></i>Sair</button></li>
   </ul>
 </div>

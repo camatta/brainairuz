@@ -19,4 +19,13 @@ export class UserService {
     const headers = new HttpHeaders().set('Authorization', token);
     return this.http.get<any>(environment.URL_API + '/api/users/me', { headers });
   }
+
+  getUserById(userId: string): Observable<any> {
+    return this.http.get<any>(environment.URL_API + `/api/users/${userId}`);
+  }
+
+  updateUser(user: any) {
+    return this.http.put<any>(environment.URL_API + '/api/editar-usuario', user);
+  }
+  
 }

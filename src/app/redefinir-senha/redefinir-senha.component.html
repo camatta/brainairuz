@@ -1,0 +1,14 @@
+<div class="container-fluid">
+  <div class="wrapper">
+    <h1>Redefinir Senha</h1>
+    <form [formGroup]="redefinirSenhaForm" (ngSubmit)="onSubmit()">
+      <div class="row-form">
+        <label for="email-recover">Preencha seu e-mail já cadastrado:</label>
+        <input type="email" id="email-recover" formControlName="email" required>
+      </div>
+      <div class="row-form">
+        <button type="submit" class="submit-senha">Solicitar Redefinição</button>
+      </div>
+    </form>
+  </div>
+</div>

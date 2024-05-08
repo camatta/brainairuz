@@ -2,27 +2,48 @@
   padding-left: 0;
 }
 
+.col-2, .col-10 {
+  padding: 0;
+}
+
 #dashboard {
   width: 100%;
   height: 100vh;
-  background: rgb(59,88,203);
-  background: linear-gradient(107deg, rgba(59,88,203,1) 7%, rgba(176,36,190,1) 27%, rgba(75,13,104,1) 49%, rgba(8,11,44,1) 81%);
+  background: #fff;
+  position: relative;
+}
+
+.conteudo::after {
+  content: '';
+  width: 860px;
+  height: 400px;
+  position: fixed;
+  right: 0rem;
+  bottom: 0;
+  background-image: url(../../assets/images/n-nairuz.svg);
+  opacity: .1;
+  background-size: cover;
+  z-index: 0;
 }
 
 h1 {
-  color: #fff;
+  color: #00175d;
+  font-style: italic;
 }
 
 .lateral {
   height: 100vh;
   padding: 2rem;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  background-color: #00175d;
+  position: relative;
+  z-index: 10;
 }
 
 .conteudo {
-  padding: 2rem;
   height: 100vh;
   overflow-y: scroll;
+  position: relative;
 }
 
 /*SCROLL */
@@ -33,5 +54,96 @@ h1 {
 .saudacao p {
   color: #fff;
   padding-left: 6px;
-  font-size: 20px;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.saudacao p span {
+  color: #61dcab;
+}
+
+.header-topo {
+  background-color: #01134c;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  justify-content: end;
+}
+
+.main-content {
+  padding: 2rem 5rem;
+  position: relative;
+  z-index: 1;
+}
+
+h2 {
+  color: #1c1c1c;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+h5 {
+  color: #00175d;
+  font-weight: 600;
+}
+
+.text-muted {
+  color: #1c1c1c !important;
+  max-width: 100px;
+  margin-left: auto;
+}
+
+.round {
+    line-height: 60px;
+    color: #61dcab;
+    width: 60px;
+    height: 60px;
+    font-size: 26px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 10%;
+    background: #00175d;
+}
+
+.round i {
+  color: #61dcab;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.progress-bar {
+  background-color: #00175d;
+}
+
+.progress-bar-animated {
+  animation: 1s linear infinite progress-bar-stripes !important;
+}
+
+.footer-wrapper {
+  color: #01134c;
+  font-size: 14px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  padding-top: 20px;
+  left: 16.2%;
+  width: 83.8%;
+  background-color: #fff;
+}
+
+.footer {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #00175d;
+}
+
+.footer p {
+  margin-bottom: 0;
+  color: #01134c;
 }
