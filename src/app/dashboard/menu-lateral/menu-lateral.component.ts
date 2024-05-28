@@ -10,7 +10,6 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 
 export class MenuLateralComponent implements OnInit {
-  showAvaliacoesLink = false;
   showUsuariosLink = false;
   showComercialLink = false;
   showTabelaPrecos = false;
@@ -33,10 +32,6 @@ export class MenuLateralComponent implements OnInit {
     const accessLevel = user ? user.accessLevel : '';
     const team = user ? user.team : '';
     const name = user ? user.name : '';
-
-    this.showAvaliacoesLink =
-      accessLevel === 'Líder de Equipe' ||
-      accessLevel === 'Administrador';
     
     this.showUsuariosLink =
       accessLevel === 'Líder de Equipe' ||

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Definição do schema da collection Products
-const ComissoesSchema = new mongoose.Schema({
+const CommissionsSchema = new mongoose.Schema({
     vendedor: {
       type: String,
       required: true,
@@ -61,7 +61,7 @@ const ComissoesSchema = new mongoose.Schema({
 })
 
 // Criação do modelo "Comissao" com base no esquema definido
-const Comissao = mongoose.model('Comissao', ComissoesSchema);
+const Commissions = mongoose.model('Commissions', CommissionsSchema);
 
 // Exportação do modelo "Comissões"
-module.exports = Comissao;
+module.exports = Commissions;
