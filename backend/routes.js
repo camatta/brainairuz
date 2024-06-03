@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 
 const router = express.Router();
 
@@ -64,17 +63,5 @@ router.post('/api/comissao', CreateCommissionController);
 router.delete('/api/comissoes/:id', DeleteCommissionController);
 
 router.put('/api/comissoes/:id', UpdateCommissionController);
-
-
-// *** OUTROS ***
-const distFolder = path.join(process.cwd(), '/dist/nairuz');
-
-router.get('*.*', express.static(distFolder, {
-  maxAge: '1y'
-}));
-
-router.use("*", function(req, resp) {
-  resp.sendFile(__dirname + '/dist/nairuz/index.html');
-});
 
 module.exports = router;
