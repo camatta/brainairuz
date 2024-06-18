@@ -16,12 +16,12 @@ export class AuthService {
     return this.http.post<any>(environment.URL_API + '/api/auth/login', loginData).pipe(
       map(response => {
         console.log('Resposta do login:', response);
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('token', response.message.token);
+        localStorage.setItem('user', JSON.stringify(response.message.user));
         return response;
       })
     );
-  }
+  };
 
   getToken(): string {
     return localStorage.getItem('token') || '';

@@ -8,13 +8,13 @@ exports.DeleteProductController = async (req, res) => {
 
     if(deleteProductService) {
       console.log(`Produto excluído com sucesso`);
-      return res.status(200).json(`Produto ${productId} excluído com sucesso`);
+      return res.status(200).json({ message: `Produto ${productId} excluído com sucesso` });
     } else {
       console.log('Produto não encontrado');
-      return res.status(404).json(`Produto ${productId} não encontrado`);
+      return res.status(404).json({ message: `Produto ${productId} não encontrado` });
     }
   } catch(error) {
     console.error('Erro ao excluir o produto: ', error);
-    return res.status(500).json('Erro interno do servidor ao excluir o produto');
+    return res.status(500).json({ error: 'Erro interno do servidor ao excluir o produto' });
   }
 }

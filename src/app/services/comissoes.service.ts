@@ -17,7 +17,7 @@ export class ComissoesService {
   }
 
   setComissao(newComissao: Comissao) {
-    return this.http.post(environment.URL_API + '/api/comissao', newComissao);
+    return this.http.post<Comissao>(environment.URL_API + '/api/comissao', newComissao);
   }
 
   deleteComissao(idComissao: string) {

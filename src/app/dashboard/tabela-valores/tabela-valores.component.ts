@@ -147,7 +147,11 @@ export class TabelaDeValores implements OnInit {
           this.closeModalNovoProduto();
         },
         (error) => {
-          console.error(`Erro ao criar o produto: ${error}`)
+          console.error(`Erro ao criar o produto: ${error}`);
+          this.showMessageAction('ERRO ao criar o produto');
+          this.loadMatTable();
+          this.produtos._updateChangeSubscription();
+          this.closeModalNovoProduto();
         }
       );
     }

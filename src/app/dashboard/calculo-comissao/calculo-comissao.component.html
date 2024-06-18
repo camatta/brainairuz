@@ -40,7 +40,7 @@
 <div class="mat-elevation-z8">
   <div class="sectionTable">
     <table id="tabela-valores" mat-table [dataSource]="tabelaVendas" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
-
+      
       <!-- Cliente Column -->
       <ng-container matColumnDef="cliente" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cliente">
@@ -49,12 +49,20 @@
         <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
       </ng-container>
 
+      <!-- Data da Venda Column -->
+      <ng-container matColumnDef="dataVenda">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dataVenda">
+          Venda em
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.dataVenda | date }} </td>
+      </ng-container>
+
       <!-- Mix Produtos Column -->
       <ng-container matColumnDef="mixProdutos">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mixProdutos">
           Mix Produtos
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.mixProdutos}} </td>
+        <td mat-cell *matCellDef="let element"> {{ element.mixProdutos }} </td>
       </ng-container>
 
       <!-- Tipo Produto Column -->
@@ -70,7 +78,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by multiplicador">
           Multiplicador
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.multiplicador}} </td>
+        <td mat-cell *matCellDef="let element"> {{ element.multiplicador }} </td>
       </ng-container>
 
       <!-- Qualidade=Markup Column -->
@@ -78,7 +86,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by markup">
           Qualidade=Markup
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.markup}} </td>
+        <td mat-cell *matCellDef="let element"> {{ element.markup }} </td>
       </ng-container>
 
       <!-- Venda Avulsa Column -->
@@ -177,17 +185,22 @@
 <div id="bg-modal"></div>
 
 <!-- Modal para NOVA venda-->
-<div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="modalNovoProduto" aria-hidden="true">
+<div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="modalNovaVenda" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title text-black fs-5" id="modalNovoProduto">Nova Venda</h2>
+        <h2 class="modal-title text-black fs-5" id="modalNovaVenda">Nova Venda</h2>
         <button type="button" (click)="closeModalNovaVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <form id="formCalculoComissao" [formGroup]="formNovaVenda" class="container" >
+      <form id="formCalculoComissao" [formGroup]="formNovaVenda" class="container">
         <div class="col-10 mt-5 mb-3">
           <strong>Preencha os campos abaixo:</strong>
+        </div>
+
+        <div class="col-12 mb-3">
+          <label for="dataVenda" class="form-label">Data da Venda:</label>
+          <input type="date" id="dataVenda" class="form-control col-12" formControlName="dataVenda" required />
         </div>
       
         <div class="col-12 mb-3">
@@ -212,7 +225,105 @@
               <mat-form-field class="form-search">
                 <input matInput (keyup)="applyFilter($event)" placeholder="O que está procurando?" #input>
               </mat-form-field>
-              <mat-option (click)="setInputsValores()" *ngFor="let item of produtosFiltrados" [value]="item.produto">
+              <mat-option (click)="setInputsValoresNovaVenda()" *ngFor="let item of produtosFiltrados" [value]="item.produto">
+                {{ item.produto }} - {{ item.tecnologia }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+    
+        <div class="col-12 mb-3">
+          <label for="multiplicador" class="form-label">Multiplicador:</label>
+          <select formControlName="multiplicador" id="multiplicador" class="selectForm form-select">
+            <option value="1">1</option>
+            <option value="6">6</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+          </select>
+        </div>
+      
+        <div class="col-12 mb-3">
+          <label for="markup" class="form-label">Qualidade = Markup:</label>
+          <input
+            type="number"
+            formControlName="markup"
+            step="0.1"
+            class="form-control form-floating col-12"
+            id="markup"
+            required
+          />
+        </div>
+      
+        <div class="col-12 mb-3">
+          <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
+          <input
+            type="text"
+            prefix="R$ "
+            mask="separator.2"
+            thousandSeparator="."
+            decimalMarker=","
+            class="form-control"
+            id="vendaAvulsa"
+            formControlName="vendaAvulsa"
+            required
+          >
+        </div>
+      
+        <div class="col-12 mb-3">
+          <label for="fatorMultiplicador" class="form-label">Fator Multiplicador:</label>
+          <input
+            type="number"
+            formControlName="fatorMultiplicador"
+            step="0.001"
+            class="form-control form-floating col-12"
+            id="fatorMultiplicador"
+            required
+          />
+        </div>
+
+        <button type="submit" (click)="onSubmitNovaVenda()" [disabled]="!formNovaVenda.valid" class="col-12 btn-calcular">Inserir</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para EDITAR venda-->
+<div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarVenda" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title text-black fs-5" id="modalEditarVenda">Nova Venda</h2>
+        <button type="button" (click)="closeModalEditarVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form id="formCalculoComissao" [formGroup]="formEditarVenda" class="container">
+        <div class="col-10 mt-5 mb-3">
+          <strong>Altere os campos abaixo:</strong>
+        </div>
+      
+        <div class="col-12 mb-3">
+          <label for="nomeCliente" class="form-label">Nome do cliente:</label>
+          <input type="text" id="nomeCliente" class="form-control col-12" formControlName="nomeCliente" required />
+        </div>
+      
+        <div class="col-12 mb-3">
+          <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
+          <select formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
+            <option value="marketing">Marketing</option>
+            <option value="sustentacao">Sustentação</option>
+            <option value="tecnologia">Tecnologia</option>
+            <option value="help">Help</option>
+          </select>
+        </div>
+      
+        <div class="col-12 mb-3">
+          <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
+          <mat-form-field class="selectForm form-control">
+            <mat-select formControlName="produtoVendido" id="produtoVendido">
+              <mat-form-field class="form-search">
+                <input matInput (keyup)="applyFilter($event)" placeholder="O que está procurando?" #input>
+              </mat-form-field>
+              <mat-option (click)="setInputsValoresEditarVenda()" *ngFor="let item of produtosFiltrados" [value]="item.produto">
                 {{ item.produto }} - {{ item.tecnologia }}
               </mat-option>
             </mat-select>
@@ -269,83 +380,25 @@
           />
         </div>
 
-        <button type="submit" (click)="onSubmitNovaVenda()" [disabled]="!formNovaVenda.valid" class="col-12 btn-calcular">Inserir</button>
-
+        <button type="submit" (click)="onSubmitEditarVenda()" [disabled]="!formEditarVenda.valid" class="col-12 btn-calcular">Editar</button>
       </form>
-
-
-      <!-- <form [formGroup]="formNovoProduto" (ngSubmit)="onSubmitNovoProduto()">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="id-novo" class="form-label text-black">No:</label>
-            <input type="number" class="form-control" id="id-novo" formControlName="id" value="Disabled readonly input" aria-label="Disabled input" readonly />
-          </div>
-          <div class="mb-3">
-            <label for="produto-novo" class="form-label text-black">Produto:</label>
-            <input
-              type="text"
-              class="form-control"
-              [class.is-invalid]="formNovoProduto.get('produto')?.errors?.['required'] && formNovoProduto.get('produto')?.touched"
-              id="produto-novo"
-              formControlName="produto"
-              required
-            >
-          </div>
-          <div class="mb-3">
-            <label for="tecnologia-edit" class="form-label text-black">Tecnologia:</label>
-            <input
-              type="text"
-              class="form-control"
-              [class.is-invalid]="formNovoProduto.get('tecnologia')?.errors?.['required'] && formNovoProduto.get('tecnologia')?.touched"
-              id="tecnologia-edit"
-              formControlName="tecnologia"
-            >
-          </div>
-          <div class="mb-3">
-            <label for="valor-venda-edit" class="form-label text-black">Preço de vendas:</label>
-            <input
-              type="text"
-              prefix="R$ "
-              mask="separator.2"
-              thousandSeparator="."
-              decimalMarker=","
-              class="form-control"
-              [class.is-invalid]="formNovoProduto.get('valor_venda')?.errors?.['min'] && formNovoProduto.get('valor_venda')?.touched"
-              id="valor-venda-edit"
-              formControlName="valor_venda"
-            >
-          </div>
-          <div class="mb-3">
-            <label for="observacao-edit" class="form-label text-black">Observações:</label>
-            <textarea style="resize: vertical;" class="form-control" id="observacao-edit" formControlName="observacao"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer d-flex justify-content-center">
-          <button type="submit" class="btn btn-primary" [disabled]="!formNovoProduto.valid">
-            Adicionar
-          </button>
-          <button type="button" class="btn btn-secondary" (click)="closeModalNovaVenda()" data-bs-dismiss="modal">
-            Fechar
-          </button>
-        </div>
-      </form> -->
     </div>
   </div>
 </div>
 
-<!-- Modal para EXCLUIR produto-->
-<div class="modal fade" id="modalDeletar" tabindex="-1" aria-labelledby="modalDeletarProduto" aria-hidden="true">
+<!-- Modal para EXCLUIR venda-->
+<div class="modal fade" id="modalDeletar" tabindex="-1" aria-labelledby="modalDeletarVenda" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title text-black fs-5" id="modalDeletarProduto">Excluir produto</h2>
+        <h2 class="modal-title text-black fs-5" id="modalDeletarVenda">Excluir produto</h2>
         <button type="button" (click)="closeModalDeletarVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <!-- <form [formGroup]="formDeletarProduto" (ngSubmit)="onSubmitDeletarVenda()">
+      <form [formGroup]="formDeletarVenda" (ngSubmit)="onSubmitDeletarVenda()">
         <div class="modal-body">
           <div class="">
             <div class="form-label mt-1">
-              <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> o produto: <strong class="text-dark-emphasis">{{ formDeletarProduto.get('produto').value }}</strong></p>
+              <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> a comissão: <strong class="text-dark-emphasis">{{ formDeletarVenda.get('cliente').value }}</strong></p>
             </div>
           </div>
         </div>
@@ -357,7 +410,7 @@
             Fechar
           </button>
         </div>
-      </form> -->
+      </form>
     </div>
   </div>
 </div>

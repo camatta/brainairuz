@@ -1,43 +1,14 @@
 const { CreateCommissionService } = require("../../services/commissions/CreateCommissionService");
 
-exports.CreateCommissionController = async (req, res) => {
+module.exports.CreateCommissionController = async (req, res) => {
   try {
-    const { 
-      vendedor,
-      cliente,
-      mixProdutos,
-      tipoProduto,
-      multiplicador,
-      markup,
-      vendaAvulsa,
-      valorBase,
-      valorVendido,
-      qualidade,
-      mix,
-      comissaoFinal,
-      valorComissao
-    } = req.body;
+    const { dataVenda, vendedor, cliente, mixProdutos, tipoProduto, multiplicador, markup, vendaAvulsa, fatorMultiplicador, valorBase, valorVendido, qualidade, mix, comissaoFinal, valorComissao } = req.body;
 
-    const createCommissionService = await CreateCommissionService({ 
-      vendedor,
-      cliente,
-      mixProdutos,
-      tipoProduto,
-      multiplicador,
-      markup,
-      vendaAvulsa,
-      valorBase,
-      valorVendido,
-      qualidade,
-      mix,
-      comissaoFinal,
-      valorComissao
-    });
+    const createCommissionService = await CreateCommissionService({ dataVenda, vendedor, cliente, mixProdutos, tipoProduto, multiplicador, markup, vendaAvulsa, fatorMultiplicador, valorBase, valorVendido, qualidade, mix, comissaoFinal, valorComissao });
 
-    console.log('Comissão adicionada com sucesso!')
-    res.status(201).json(createCommissionService);
+    res.status(201).json({ message: 'Comissão criada com sucesso!', createCommissionService });
 
-  } catch {
-    res.status(500).json('Erro ao adicionar a comissão');
+  } catch(error) {
+    res.status(500).json({ error: 'Erro ao adicionar a comissão', error });
   }
 }

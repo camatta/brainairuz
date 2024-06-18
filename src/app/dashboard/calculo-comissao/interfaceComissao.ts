@@ -1,4 +1,5 @@
 export interface Comissao {
+  dataVenda: Date;
   vendedor: string;
   cliente: string;
   mixProdutos: string;
@@ -7,10 +8,10 @@ export interface Comissao {
   markup: number;
   vendaAvulsa: number;
   fatorMultiplicador: number;
-  valorBase: number; // não
-  valorVendido: number; // não
-  qualidade: number; // não
-  mix: number; // não
-  comissaoFinal: number; // não
-  valorComissao: number; // não
+  valorBase: number;
+  valorVendido: number;
+  qualidade: number;
+  mix: number;
+  comissaoFinal: number;
+  valorComissao: number;
 }

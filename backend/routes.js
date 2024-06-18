@@ -59,7 +59,7 @@ router.get('/api/comissoes', ListCommissionsController);
 // Rota para inserir novas comissões
 router.post('/api/comissao', CreateCommissionController);
 
-// Rota para apagar um produto
+// Rota para apagar uma comissão
 router.delete('/api/comissoes/:id', DeleteCommissionController);
 
 router.put('/api/comissoes/:id', UpdateCommissionController);

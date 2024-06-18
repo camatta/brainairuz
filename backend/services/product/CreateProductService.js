@@ -1,6 +1,6 @@
 const Product = require('../../models/Products');
 
-exports.CreateProductService = async ({ id, produto, tecnologia, valor_venda, observacao }) => {
+module.exports.CreateProductService = async ({ id, produto, tecnologia, valor_venda, observacao }) => {
   // Criando um novo produto utilizando o modelo importado
   const novoProduto = new Product({
     id: id,

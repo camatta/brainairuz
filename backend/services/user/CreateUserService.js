@@ -1,6 +1,6 @@
 const User = require('../../models/User');
 
-exports.CreateUserService = async ({ name, email, password, team, accessLevel, setor, setorTratado }) => {
+module.exports.CreateUserService = async ({ name, email, password, team, accessLevel, setor, setorTratado }) => {
   
   // Verifique se o usuário já existe no banco de dados
   const existingUser = await User.findOne({ email });

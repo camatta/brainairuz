@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../../models/User');
 
-exports.AuthUserService = async ( { email, password }) => {
+module.exports.AuthUserService = async ( { email, password }) => {
 
   // Verifique se o usuário existe no banco de dados
   const existingUser = await User.findOne({ email });

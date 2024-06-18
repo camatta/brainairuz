@@ -18,13 +18,13 @@ exports.UpdateProductController = async (req, res) => {
     
     if(updateProductService){
       console.log(`Produto alterado com sucesso`);
-      res.status(200).json(`Produto ${productId} alterado com sucesso`);
+      res.status(200).json({ message: `Produto ${productId} alterado com sucesso` });
     } else {
       console.log('Produto não encontrado');
-      res.status(404).json(`Produto ${productId} não encontrado`);
+      res.status(404).json({ message: `Produto ${productId} não encontrado` });
     }
   } catch (error) {
     console.error('Erro ao alterar o produto: ', error);
-    res.status(500).json('Erro interno do servidor ao alterar o produto');
+    res.status(500).json({ error: 'Erro interno do servidor ao alterar o produto' });
   }
 }

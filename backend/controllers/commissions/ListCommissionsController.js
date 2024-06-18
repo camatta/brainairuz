@@ -7,6 +7,6 @@ exports.ListCommissionsController = async (req, res) => {
     res.status(200).json(listCommissionsService);
     
   } catch (error) {
-    res.status(500).send('Erro do servidor');
+    res.status(500).send({ error: 'Erro do servidor' });
   }
 }
