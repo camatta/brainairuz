@@ -58,8 +58,56 @@
   transition: all .4s;
 }
 
+.filter-month label {
+  color: #00175d;
+  font-size: 14px;
+}
+
+#months {
+  width: 200px;
+  font-size: 14px;
+  color: #00175d;
+  border: unset;
+  border-radius: 5px;
+  box-shadow: 0 3px 10px #0003;
+  padding-left: 8px;
+}
+
 .btn-addVenda:hover {
   opacity: .8;
+}
+
+.inputFatorMultiplicador::-webkit-inner-spin-button,
+.inputFatorMultiplicador::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.inputFatorMultiplicador {
+  background-color: #00175d;
+  color: #fff;
+  border: none;
+  text-align: center;
+}
+
+#formFatorMultiplicador button {
+  background-color: transparent;
+  border: none;
+  right: 1rem;
+}
+
+#formFatorMultiplicador mat-icon.editar {
+  color: #61dcab;
+  transition: all .4s;
+  cursor: pointer;
+}
+
+#formFatorMultiplicador mat-icon.editar:hover{
+  opacity: .7;
+}
+
+.inputFatorMultiplicador:focus{
+  outline: none;
 }
 
 #formCalculoComissao .btn-calcular {
@@ -116,6 +164,19 @@
   overflow-x: scroll;
 }
 
+.sectionTable::-webkit-scrollbar {
+  height: 12px; /* width of the entire scrollbar */
+}
+
+.sectionTable::-webkit-scrollbar-track {
+  background: #eee; /* color of the tracking area */
+}
+
+.sectionTable::-webkit-scrollbar-thumb {
+  background-color: #00175d; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+}
+
 .mat-mdc-table .mat-mdc-header-cell {
   min-width: 150px;
 }
@@ -139,4 +200,12 @@
 
 .modal-dialog {
   max-width: 768px;
+}
+
+#alert-actions {
+  position: absolute;
+  top: 2.4rem;
+  right: 5rem;
+  transition: ease-in-out .4s;
+  z-index: 999;
 }

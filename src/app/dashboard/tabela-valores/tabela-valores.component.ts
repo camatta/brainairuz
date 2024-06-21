@@ -61,6 +61,11 @@ export class TabelaDeValores implements OnInit {
     this.paginator._intl.previousPageLabel="Anterior";
     this.paginator._intl.firstPageLabel="Primeira Página";
     this.paginator._intl.lastPageLabel="Última Página";
+    this.paginator._intl.getRangeLabel = (page, pageSize, length) => {
+      const startIndex = page * pageSize;
+      const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+      return `${startIndex + 1} - ${endIndex} de ${length}`;
+    };
   }
 
   loadMatTable() {
@@ -97,7 +102,7 @@ export class TabelaDeValores implements OnInit {
     id: this.ultimoId + 1,
     produto: ['', Validators.required],
     tecnologia: ['', Validators.required],
-    valor_venda: [0, Validators.min(4)],
+    valor_venda: [0, Validators.required],
     observacao: ['']
   })
 
@@ -160,7 +165,7 @@ export class TabelaDeValores implements OnInit {
       id: this.ultimoId + 1,
       produto: ['', Validators.required],
       tecnologia: ['', Validators.required],
-      valor_venda: [0, Validators.min(4)],
+      valor_venda: [0, Validators.required],
       observacao: ['']
     })
 
@@ -172,7 +177,7 @@ export class TabelaDeValores implements OnInit {
     id: [],
     produto: ['', Validators.required],
     tecnologia: ['', Validators.required],
-    valor_venda: [0, Validators.min(4)],
+    valor_venda: [0, Validators.required],
     observacao: ['']
   })
 

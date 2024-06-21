@@ -35,6 +35,7 @@
     "jspdf": "^2.5.1",
     "mongoose": "^7.3.0",
     "ngx-mask": "^16.4.2",
+    "primeng": "^16.0.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

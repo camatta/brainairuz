@@ -2,9 +2,9 @@ const { CreateCommissionService } = require("../../services/commissions/CreateCo
 
 module.exports.CreateCommissionController = async (req, res) => {
   try {
-    const { dataVenda, vendedor, cliente, mixProdutos, tipoProduto, multiplicador, markup, vendaAvulsa, fatorMultiplicador, valorBase, valorVendido, qualidade, mix, comissaoFinal, valorComissao } = req.body;
+    const { dataVenda, mes, vendedor, cliente, mixProdutos, tipoProduto, multiplicador, markup, vendaAvulsa, valorBase, valorVendido } = req.body;
 
-    const createCommissionService = await CreateCommissionService({ dataVenda, vendedor, cliente, mixProdutos, tipoProduto, multiplicador, markup, vendaAvulsa, fatorMultiplicador, valorBase, valorVendido, qualidade, mix, comissaoFinal, valorComissao });
+    const createCommissionService = await CreateCommissionService({ dataVenda, mes, vendedor, cliente, mixProdutos, tipoProduto, multiplicador, markup, vendaAvulsa, valorBase, valorVendido });
 
     res.status(201).json({ message: 'Comissão criada com sucesso!', createCommissionService });
 

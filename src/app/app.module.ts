@@ -19,6 +19,7 @@ import { ComercialComponent } from './dashboard/comercial/comercial.component';
 import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.component';
+import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.comp
     RedefinirSenhaComponent,
     IcpComponent,
     TabelaMetasComponent,
+    AdicionarOportunidadeComponent,
   ],
   imports: [
     BrowserModule,

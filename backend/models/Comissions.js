@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 // Definição do schema da collection Products
 const CommissionsSchema = new mongoose.Schema({
     dataVenda: {
-      type: Date,
+      type: String,
+      required: true
+    },
+    mes: {
+      type: String,
       required: true
     },
     vendedor: {
@@ -11,16 +15,16 @@ const CommissionsSchema = new mongoose.Schema({
       required: true,
     },
     cliente: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     mixProdutos: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     tipoProduto: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     multiplicador: {
       type: Number,
@@ -34,31 +38,11 @@ const CommissionsSchema = new mongoose.Schema({
       type: Number,
       required: true
     },
-    fatorMultiplicador: {
-      type: Number,
-      required: true
-    },
     valorBase: {
       type: Number,
       required: true
     },
     valorVendido: {
-      type: Number,
-      required: true
-    },
-    qualidade: {
-      type: Number,
-      required: true
-    },
-    mix: {
-      type: Number,
-      required: true
-    },
-    comissaoFinal: {
-      type: Number,
-      required: true
-    },
-    valorComissao: {
       type: Number,
       required: true
     },

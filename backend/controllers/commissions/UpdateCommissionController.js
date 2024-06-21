@@ -1,9 +1,10 @@
 const { UpdateCommissionService } = require("../../services/commissions/UpdateCommissionService");
 
-exports.UpdateCommissionController = async (req, res) => {
+module.exports.UpdateCommissionController = async (req, res) => {
   try {
     const {
       dataVenda,
+      mes,
       vendedor,
       cliente,
       mixProdutos,
@@ -12,17 +13,14 @@ exports.UpdateCommissionController = async (req, res) => {
       markup,
       vendaAvulsa,
       valorBase,
-      valorVendido,
-      qualidade,
-      mix,
-      comissaoFinal,
-      valorComissao
+      valorVendido
      } = req.body;
 
     const idComissao = req.params.id;
 
     const updateCommissionService = UpdateCommissionService({ 
       dataVenda,
+      mes,
       vendedor,
       cliente,
       mixProdutos,
@@ -31,11 +29,7 @@ exports.UpdateCommissionController = async (req, res) => {
       markup,
       vendaAvulsa,
       valorBase,
-      valorVendido,
-      qualidade,
-      mix,
-      comissaoFinal,
-      valorComissao
+      valorVendido
      }, idComissao);
 
     if(updateCommissionService){

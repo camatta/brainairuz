@@ -1,6 +1,6 @@
 const { ListCommissionsService } = require("../../services/commissions/ListCommissionsService");
 
-exports.ListCommissionsController = async (req, res) => {
+module.exports.ListCommissionsController = async (req, res) => {
   try {
     const listCommissionsService = await ListCommissionsService();
 

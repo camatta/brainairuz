@@ -12,8 +12,12 @@ export class ComissoesService {
 
   constructor(private http: HttpClient) { }
 
-  getComissoes(): Observable<any[]> {
-    return this.http.get<any[]>(environment.URL_API + '/api/comissoes')
+  getComissoes(filter: string): Observable<any[]> {
+    if(filter == "nulo"){
+      return this.http.get<any[]>(environment.URL_API + '/api/comissoes');
+    } else {
+      return this.http.get<any[]>(environment.URL_API + `/api/comissoes/${filter}`);
+    }
   }
 
   setComissao(newComissao: Comissao) {

@@ -1,6 +1,6 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -13,6 +13,7 @@ import { ComissoesService } from 'src/app/services/comissoes.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { Comissao } from './interfaceComissao';
 import { AuthService } from 'src/app/services/auth.service';
+import { FilterElement } from 'canvg';
 
 @Component({
   selector: 'app-calculo-comissao',
@@ -23,12 +24,49 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 
 export class CalculoComissaoComponent implements OnInit {
-  displayedColumns: string[] = ['cliente', 'dataVenda', 'mixProdutos', 'tipoProduto', 'multiplicador', 'markup', 'vendaAvulsa', 'valorBase', 'valorVendido', 'qualidade', 'mix', 'comissaoFinal', 'valorComissao','actions'];
+  displayedColumns: string[] = ['cliente', 'dataVenda','mesVenda', 'mixProdutos', 'tipoProduto', 'multiplicador', 'markup', 'vendaAvulsa', 'valorBase', 'valorVendido', 'actions'];
   tabelaVendas: MatTableDataSource<Comissao> = new MatTableDataSource<Comissao>([]);
   msgActions: string;
   produtos: Produtos[] = [];
   produtosFiltrados: any[] = [];
+  mesFiltro: string = null;
+  vendedor = this.authService.getUser();  // Traz o nome do vendedor
+
+  /* INDICADORES GERADOS A PARTIR DAS VENDAS */
   vendasTotal: number = 0;   // Soma de todos os Valores Vendidos
+  fatorMultiplicador: number = 0.025; // Entrada de INPUT
+  metaVendedor: number = 0.04; // Igual planilha para exemplo (Criar requisição no futuro - verificar de onde virá esses valores)
+  qualidade: number = 0; // Se valorTotal == 0 então qualidade = 0 senão (valorTotal * 2) / soma(valoresBase)
+  metaEmpresa: number = 0.1; // Igual planilha para exemplo (Criar requisição no futuro - verificar de onde virá esses valores)
+  mix: number = 0.5; // Se tiver pelo menos 1 produto MKT e 1 produto TEC, mix = 1 senão mix = 0,5
+  comissaoFinal: number = 0; // (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
+  valorComissao: number = 1.68; // (vendasTotal * comissaoFinal) / 100) - (vendasTotal * comissaoFinal) / 100) * 0.16
+  valorBaseTotal: number = 0;
+
+  /* Variáveis de controle de front */
+  mostrarBotaoEditar: boolean = true;
+  mostrarBotaoEnviar: boolean = false;
+  formFatorMultiplicador = this.formBuilder.group({
+    fatorMultiplicador: [{ value: 0.025, disabled: true }]
+  });
+
+  editarFator(){
+    this.mostrarBotaoEditar = false;
+    this.mostrarBotaoEnviar = true;
+    this.formFatorMultiplicador.get('fatorMultiplicador').enable();
+    let input = document.getElementById("fatorMultiplicador");
+    input.focus();
+  }
+
+  enviarFator(){
+    this.mostrarBotaoEditar = true;
+    this.mostrarBotaoEnviar = false;
+    this.formFatorMultiplicador.get('fatorMultiplicador').disable();
+    let input = document.getElementById("fatorMultiplicador");
+    input.blur();
+    this.fatorMultiplicador = this.formFatorMultiplicador.get('fatorMultiplicador').value;
+    this.loadComissoes();
+  }
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -55,6 +93,12 @@ export class CalculoComissaoComponent implements OnInit {
     this.paginator._intl.previousPageLabel="Anterior";
     this.paginator._intl.firstPageLabel="Primeira Página";
     this.paginator._intl.lastPageLabel="Última Página";
+    this.paginator._intl.getRangeLabel = (page, pageSize, length) => {
+      const startIndex = page * pageSize;
+      const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+      return `${startIndex + 1} - ${endIndex} de ${length}`;
+    };
+      
   }
 
   // Carrega todos os produtos
@@ -76,16 +120,58 @@ export class CalculoComissaoComponent implements OnInit {
     return haveProductMixTechnology && haveProductMixMarketing;
   }
 
-  // Carrega todas as comissões
-  loadComissoes() {
-    this.comissoesService.getComissoes().subscribe(
+  // Função para filtrar comissões por mês
+  filterPerMonth(event: any) {
+    this.loadComissoes(event.target.value);
+  }
+
+  // Carrega as comissões de acordo com o filtro
+  loadComissoes(filter: string = "nulo") {
+    this.comissoesService.getComissoes(filter).subscribe(
       async (data) => {
         this.tabelaVendas = new MatTableDataSource<Comissao>(data);
+
+        let somaVendas: number = 0;
+        let somaValoresBase: number = 0;
+
         data.map((venda) => {
-          this.vendasTotal += venda.valorBase + venda.vendaAvulsa;
-          // if(venda.mix == 0.5) {
-          //   this.verifyProductsMix(data) ? this.onSubmitEditarVenda(data) : null;
-          // }
+          // VENDAS TOTAL
+          if(venda.valorVendido) {
+            somaVendas += Number(venda.valorVendido);
+            this.vendasTotal = somaVendas;
+          }
+
+          // VALOR BASE
+          if(venda.valorBase) {
+            somaValoresBase += venda.valorBase;
+            this.valorBaseTotal < somaValoresBase ? this.valorBaseTotal = somaValoresBase : this.valorBaseTotal;
+          }
+
+          // QUALIDADE
+          if(this.vendasTotal == 0) {
+            this.qualidade = this.vendasTotal;
+          } else {
+            this.qualidade = Number(((this.vendasTotal * 2) / this.valorBaseTotal).toFixed(2));
+          }
+
+          // MIX
+          this.verifyProductsMix(data);
+          if(this.verifyProductsMix(data)) {
+            // if(venda.mix == 0.5) { this.changeMixValue(venda, true) }
+            if(this.mix == 0.5) { this.mix = 1 }
+          } else {
+            // if(venda.mix == 1){ this.changeMixValue(venda, false) }
+            if(this.mix == 1){ this.mix = 0.5 }
+          }
+
+          // COMISSÃO FINAL
+          // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
+          // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
+          let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.mix * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
+          calcComissaoFinal >= 6.2 ? this.comissaoFinal = 6.2 : this.comissaoFinal = calcComissaoFinal;
+
+          // R$ COMISSÃO
+          this.valorComissao = Number((((this.vendasTotal * this.comissaoFinal) / 100) - (((this.vendasTotal * this.comissaoFinal) / 100) * 0.16)).toFixed(2));
         });
       }, (err) => {
         console.error(err)
@@ -102,18 +188,6 @@ export class CalculoComissaoComponent implements OnInit {
     }
   }
 
-  // Traz o nome do vendedor
-  vendedor = this.authService.getUser();
-
-  // Criar regra de cálculo baseada na nova tabela de metas (criar)
-  metaVendedor: number = 0.4;
-
-  // Criar regra de cálculo baseada na nova tabela de metas (criar)
-  metaEmpresa: number = 0.1;
-
-  // Se valorTotal == 0 então qualidade = 0 senão (valorTotal * 2) / soma(valoresBase)
-  qualidade: number = 0;
-
   // Função para fazer a busca dentro do input "Produto vendido"
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -129,6 +203,38 @@ export class CalculoComissaoComponent implements OnInit {
     this.msgActions = message;
     setTimeout(() => toast.classList.add('show'), 700);
     setTimeout(() => toast.classList.remove('show'), 4000);
+  }
+
+  // Função que define o mês da venda de acordo com a data passada pelo cliente
+  defineMes(mes: string) {
+    switch(mes) {
+      case "01":
+        return "Janeiro";
+      case "02":
+        return "Fevereiro";
+      case "03":
+        return "Março";
+      case "04":
+        return "Abril";
+      case "05":
+        return "Maio";
+      case "06":
+        return "Junho";
+      case "07":
+        return "Julho";
+      case "08":
+        return "Agosto";
+      case "09":
+        return "Setembro";
+      case "10":
+        return "Outubro";
+      case "11":
+        return "Novembro";
+      case "12":
+        return "Dezembro";
+      default:
+        return "Erro no mês enviado";
+    }
   }
 
   // CRIAR Comissão
@@ -154,14 +260,13 @@ export class CalculoComissaoComponent implements OnInit {
   }
 
   formNovaVenda = this.formBuilder.group({
-    dataVenda: [new Date(), Validators.required],
+    dataVenda: ['', Validators.required],
     nomeCliente: ['', Validators.required],
     mixProdutos: ['', Validators.required],
     produtoVendido: ['', Validators.required],
     multiplicador: ['', Validators.required],
     markup: [0, Validators.required],
-    vendaAvulsa: ['0,00', Validators.required],
-    fatorMultiplicador: ['', Validators.required],
+    vendaAvulsa: [0, Validators.required],
     valorBase: ['']
   });
 
@@ -188,15 +293,14 @@ export class CalculoComissaoComponent implements OnInit {
       let multiplicador = Number(this.formNovaVenda.get("multiplicador").value);
       let markup = Number(this.formNovaVenda.get("markup").value);
       let vendaAvulsa = Number(this.formNovaVenda.get("vendaAvulsa").value);
-      let fatorMultiplicador = Number(this.formNovaVenda.get('fatorMultiplicador').value);
       let valorBase = Number(this.formNovaVenda.get('valorBase').value.replace(",", "."));
       let valorVendido: number = 0;
-      let qualidade: number = 0;
-      let mix: number = 0; // Se tiver pelo menos 1 produto MKT e 1 produto TEC, mix = 1 senão mix = 0,5
-      let comissaoFinal: number = 0;
-      let valorComissao: number = 0;
   
       // CALCULAR
+
+      //Formatando data
+      let data = dataVenda.split("-");
+      dataVenda = `${data[2]}/${data[1]}/${data[0]}`;
   
       // Se Mix de Produtos == HELP então usar vendaAvulsa
       // senão se valor base == "" então valorVendido == 0 senão (valorBase / 2) * markup;
@@ -207,32 +311,10 @@ export class CalculoComissaoComponent implements OnInit {
       } else {
         valorVendido = (valorBase / 2) * markup;
       }
-  
-      // venda avulsa + valor base
-      this.vendasTotal = vendaAvulsa + valorBase;
-  
-      // verificar regra acima
-      if(this.vendasTotal == 0) {
-        qualidade = Number(this.vendasTotal.toFixed(2));
-      } else {
-        qualidade = Number(((this.vendasTotal * 2) / valorBase).toFixed(2));
-      }
-  
-      // Se tiver pelo menos 1 produto MKT e 1 produto TEC, mix = 1 senão mix = 0,5
-      const validaProdutosVendidosMarketing = this.tabelaVendas.data.some(item => item.mixProdutos === "marketing");
-      const validaProdutosVendidosTecnologia = this.tabelaVendas.data.some(item => item.mixProdutos === "tecnologia");
-      validaProdutosVendidosMarketing && validaProdutosVendidosTecnologia ? mix = 1 : mix = 0.5;
-  
-      // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
-      // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
-      let calcComissaoFinal = Number((100 * fatorMultiplicador * mix * qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
-      calcComissaoFinal >= 6.2 ? comissaoFinal = 6.2 : comissaoFinal = calcComissaoFinal;
-  
-      // Cálculo Valor (R$) Comissão
-      valorComissao = ((this.vendasTotal * comissaoFinal) / 100) - (((this.vendasTotal * comissaoFinal) / 100) * 0.16);
 
       const novaVenda = {
         dataVenda: dataVenda,
+        mes: this.defineMes(data[1]),
         vendedor: vendedor,
         cliente: cliente,
         mixProdutos: mixProdutos,
@@ -240,27 +322,23 @@ export class CalculoComissaoComponent implements OnInit {
         multiplicador: multiplicador,
         markup: markup,
         vendaAvulsa: vendaAvulsa,
-        fatorMultiplicador: fatorMultiplicador,
         valorBase: valorBase,
-        valorVendido: valorVendido,
-        qualidade: qualidade,
-        mix: mix,
-        comissaoFinal: comissaoFinal,
-        valorComissao: valorComissao
+        valorVendido: valorVendido
       }
       
       this.comissoesService.setComissao(novaVenda).subscribe(
-        (res) => {
+        async (res) => {
           this.showMessageAction('Comissão adicionada com sucesso');
           console.log(novaVenda);
-          this.loadComissoes();
+          await this.loadComissoes();
           this.tabelaVendas._updateChangeSubscription();
           this.closeModalNovaVenda();
         },
-        (error) => {
+        async (error) => {
+          console.log(novaVenda);
           console.error(`Erro ao inserir a comissão: ${error}`);
           this.showMessageAction('ERRO ao criar a comissão');
-          this.loadComissoes();
+          await this.loadComissoes();
           this.tabelaVendas._updateChangeSubscription();
           this.closeModalNovaVenda();
         }
@@ -268,14 +346,13 @@ export class CalculoComissaoComponent implements OnInit {
     }
 
     this.formNovaVenda = this.formBuilder.group({
-      dataVenda: [new Date(), Validators.required],
+      dataVenda: ['', Validators.required],
       nomeCliente: ['', Validators.required],
       mixProdutos: ['', Validators.required],
       produtoVendido: ['', Validators.required],
       multiplicador: ['', Validators.required],
       markup: [0, Validators.required],
-      vendaAvulsa: ['', Validators.required],
-      fatorMultiplicador: ['', Validators.required],
+      vendaAvulsa: [0, Validators.required],
       valorBase: ['']
     });
   }
@@ -284,14 +361,13 @@ export class CalculoComissaoComponent implements OnInit {
   // EDITAR Comissão
   formEditarVenda = this.formBuilder.group({
     _id: [],
-    dataVenda: [new Date(), Validators.required],
+    dataVenda: ['', Validators.required],
     nomeCliente: ['', Validators.required],
     mixProdutos: ['', Validators.required],
     produtoVendido: ['', Validators.required],
     multiplicador: ['', Validators.required],
     markup: [0, Validators.required],
-    vendaAvulsa: ['', Validators.required],
-    fatorMultiplicador: ['', Validators.required],
+    vendaAvulsa: [0, Validators.required],
     valorBase: ['']
   })
 
@@ -308,7 +384,6 @@ export class CalculoComissaoComponent implements OnInit {
       multiplicador: element.multiplicador,
       markup: element.markup,
       vendaAvulsa: element.vendaAvulsa,
-      fatorMultiplicador: element.fatorMultiplicador,
       valorBase: element.valorBase
     })
 
@@ -339,161 +414,62 @@ export class CalculoComissaoComponent implements OnInit {
     })
   }
 
-  onSubmitEditarVenda(data = null) {
-    if(data === null) {
-      this.formEditarVenda.updateValueAndValidity();
-      const formEditarVendaStatus: string = this.formEditarVenda.status;
+  onSubmitEditarVenda() {
+    const id: string = this.formEditarVenda.get('_id').value;
+    let dataVenda = this.formEditarVenda.get('dataVenda').value;
+    let vendedor = this.vendedor.name;
+    let cliente = this.formEditarVenda.get('nomeCliente').value;
+    let mixProdutos = this.formEditarVenda.get("mixProdutos").value;
+    let tipoProduto = this.formEditarVenda.get('produtoVendido').value;
+    let multiplicador = Number(this.formEditarVenda.get("multiplicador").value);
+    let markup = Number(this.formEditarVenda.get("markup").value);
+    let vendaAvulsa = Number(this.formEditarVenda.get("vendaAvulsa").value);
+    let valorBase = Number(this.formEditarVenda.get('valorBase').value);
+    let valorVendido: number = 0;
 
-      if(formEditarVendaStatus !== "INVALID") {
-        const id: string = this.formEditarVenda.get('_id').value;
-        let dataVenda = this.formEditarVenda.get('dataVenda').value;
-        let vendedor = this.vendedor.name;
-        let cliente = this.formEditarVenda.get('nomeCliente').value;
-        let mixProdutos = this.formEditarVenda.get("mixProdutos").value;
-        let tipoProduto = this.formEditarVenda.get('produtoVendido').value;
-        let multiplicador = Number(this.formEditarVenda.get("multiplicador").value);
-        let markup = Number(this.formEditarVenda.get("markup").value);
-        let vendaAvulsa = Number(this.formEditarVenda.get("vendaAvulsa").value);
-        let fatorMultiplicador = Number(this.formEditarVenda.get('fatorMultiplicador').value);
-        let valorBase = Number(this.formEditarVenda.get('valorBase').value);
-        let valorVendido: number = 0;
-        let qualidade: number = 0;
-        let mix: number = 0;
-        let comissaoFinal: number = 0;
-        let valorComissao: number = 0;
-    
-        // CALCULAR
-    
-        // Se Mix de Produtos == HELP então usar vendaAvulsa
-        // senão se valor base == "" então valorVendido == 0 senão (valorBase / 2) * markup;
-        if(mixProdutos == "help"){
-          valorVendido = vendaAvulsa;
-        } else if(mixProdutos == ""){
-          valorVendido = 0;
-        } else {
-          valorVendido = (valorBase / 2) * markup;
-        }
-    
-        // venda avulsa + valor base
-        this.vendasTotal = vendaAvulsa + valorBase;
-    
-        // verificar regra acima
-        this.vendasTotal == 0 ? qualidade = this.vendasTotal : qualidade = (this.vendasTotal * 2) / valorBase;
-    
-        // Se tiver pelo menos 1 produto MKT e 1 produto TEC, mix = 1 senão mix = 0,5
-        const validaProdutosVendidosMarketing = this.tabelaVendas.data.some(item => item.mixProdutos === "marketing");
-        const validaProdutosVendidosTecnologia = this.tabelaVendas.data.some(item => item.mixProdutos === "tecnologia");
-        validaProdutosVendidosMarketing && validaProdutosVendidosTecnologia ? mix = 1 : mix = 0.5;
-    
-        // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
-        // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
-        let calcComissaoFinal = 100 * fatorMultiplicador * mix * qualidade * this.metaEmpresa * this.metaVendedor;
-        calcComissaoFinal >= 6.2 ? comissaoFinal = 6.2 : comissaoFinal = calcComissaoFinal;
-    
-        // Cálculo Valor (R$) Comissão
-        valorComissao = ((this.vendasTotal * comissaoFinal) / 100) - (((this.vendasTotal * comissaoFinal) / 100) * 0.16);
+    //Formatando data
+    let data = dataVenda.split("-");
+    dataVenda = `${data[2]}/${data[1]}/${data[0]}`;
 
-        const editarVenda = {
-          dataVenda: dataVenda,
-          vendedor: vendedor,
-          cliente: cliente,
-          mixProdutos: mixProdutos,
-          tipoProduto: tipoProduto,
-          multiplicador: multiplicador,
-          markup: markup,
-          vendaAvulsa: vendaAvulsa,
-          fatorMultiplicador: fatorMultiplicador,
-          valorBase: valorBase,
-          valorVendido: valorVendido,
-          qualidade: qualidade,
-          mix: mix,
-          comissaoFinal: comissaoFinal,
-          valorComissao: valorComissao
-        }
-        
-        this.comissoesService.updateComissao(id, editarVenda).subscribe(
-          async (res) => {
-            this.showMessageAction('Comissão alterada com sucesso');
-            await this.loadComissoes();
-            this.tabelaVendas._updateChangeSubscription();
-            this.closeModalEditarVenda();
-          },
-          (error) => {
-            console.error(`Erro ao editar a comissão: ${error}`);
-            this.showMessageAction('ERRO ao editar a comissão');
-            this.loadComissoes();
-            this.tabelaVendas._updateChangeSubscription();
-            this.closeModalEditarVenda();
-          }
-        );
-      }
+    // Se Mix de Produtos == HELP então usar vendaAvulsa
+    // senão se valor base == "" então valorVendido == 0 senão (valorBase / 2) * markup;
+    if(mixProdutos == "help"){
+      valorVendido = vendaAvulsa;
+    } else if(mixProdutos == ""){
+      valorVendido = 0;
     } else {
-      const id: string = data._id;
-      let dataVenda = data.dataVenda;
-      let vendedor = data.vendedor;
-      let cliente = data.cliente;
-      let mixProdutos = data.mixProdutos;
-      let tipoProduto = data.tipoProduto;
-      let multiplicador = data.multiplicador
-      let markup = data.markup;
-      let vendaAvulsa = data.vendaAvulsa;
-      let fatorMultiplicador = data.fatorMultiplicador;
-      let valorBase = data.valorBase;
-      let valorVendido: number = data.valorVendido;
-      let qualidade: number = data.qualidade;
-      let mix: number = data.mix;
-      let comissaoFinal: number = data.comissaoFinal;
-      let valorComissao: number = data.valorComissao;
-  
-      // CALCULAR
-  
-      // Se tiver pelo menos 1 produto MKT e 1 produto TEC, mix = 1 senão mix = 0,5
-      const validaProdutosVendidosMarketing = this.tabelaVendas.data.some(item => item.mixProdutos === "marketing");
-      const validaProdutosVendidosTecnologia = this.tabelaVendas.data.some(item => item.mixProdutos === "tecnologia");
-      validaProdutosVendidosMarketing && validaProdutosVendidosTecnologia ? mix = 1 : mix = 0.5;
-  
-      // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
-      // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
-      let calcComissaoFinal = 100 * fatorMultiplicador * mix * qualidade * this.metaEmpresa * this.metaVendedor;
-      calcComissaoFinal >= 6.2 ? comissaoFinal = 6.2 : comissaoFinal = calcComissaoFinal;
-  
-      // Cálculo Valor (R$) Comissão
-      valorComissao = ((this.vendasTotal * comissaoFinal) / 100) - (((this.vendasTotal * comissaoFinal) / 100) * 0.16);
-
-      const editarVenda = {
-        dataVenda: dataVenda,
-        vendedor: vendedor,
-        cliente: cliente,
-        mixProdutos: mixProdutos,
-        tipoProduto: tipoProduto,
-        multiplicador: multiplicador,
-        markup: markup,
-        vendaAvulsa: vendaAvulsa,
-        fatorMultiplicador: fatorMultiplicador,
-        valorBase: valorBase,
-        valorVendido: valorVendido,
-        qualidade: qualidade,
-        mix: mix,
-        comissaoFinal: comissaoFinal,
-        valorComissao: valorComissao
-      }
-
-      this.comissoesService.updateComissao(id, editarVenda).subscribe(
-        async (res) => {
-          this.showMessageAction('Comissão alterada com sucesso');
-          await this.loadComissoes();
-          this.tabelaVendas._updateChangeSubscription();
-          this.closeModalEditarVenda();
-        },
-        (error) => {
-          console.error(`Erro ao editar a comissão: ${error}`);
-          this.showMessageAction('ERRO ao editar a comissão');
-          this.loadComissoes();
-          this.tabelaVendas._updateChangeSubscription();
-          this.closeModalEditarVenda();
-        }
-      );
+      valorVendido = (valorBase / 2) * markup;
     }
+
+    const editarVenda = {
+      dataVenda: dataVenda,
+      mes: this.defineMes(data[1]),
+      vendedor: vendedor,
+      cliente: cliente,
+      mixProdutos: mixProdutos,
+      tipoProduto: tipoProduto,
+      multiplicador: multiplicador,
+      markup: markup,
+      vendaAvulsa: vendaAvulsa,
+      valorBase: valorBase,
+      valorVendido: valorVendido
+    }
+    
+    this.comissoesService.updateComissao(id, editarVenda).subscribe(
+      async (res) => {
+        this.showMessageAction('Comissão alterada com sucesso');
+        await this.loadComissoes();
+        this.tabelaVendas._updateChangeSubscription();
+        this.closeModalEditarVenda();
+      },
+      async (error) => {
+        console.error(`Erro ao editar a comissão: ${error}`);
+        this.showMessageAction('ERRO ao editar a comissão');
+        await this.loadComissoes();
+        this.tabelaVendas._updateChangeSubscription();
+        this.closeModalEditarVenda();
+      }
+    );
   }
 
 
@@ -532,16 +508,16 @@ export class CalculoComissaoComponent implements OnInit {
   onSubmitDeletarVenda() {
     const id: string = this.formDeletarVenda.get('_id').value;
     this.comissoesService.deleteComissao(id).subscribe(
-      (res) => {
+      async (res) => {
         this.showMessageAction('Produto excluído com sucesso');
-        this.loadComissoes();
+        await this.loadComissoes();
         this.tabelaVendas._updateChangeSubscription();
         this.closeModalDeletarVenda();
       },
-      (error) => {
+      async (error) => {
         console.error(`Erro ao excluir a comissão: ${error}`);
         this.showMessageAction('ERRO ao excluir a comissão');
-        this.loadComissoes();
+        await this.loadComissoes();
         this.tabelaVendas._updateChangeSubscription();
         this.closeModalDeletarVenda();
       }
