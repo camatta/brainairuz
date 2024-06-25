@@ -1,39 +1,21 @@
-const Commissions = require("../../models/Comissions");
+const Commission = require("../../models/Comissions");
 
-exports.CreateCommissionService = async ({ 
-  vendedor,
-  cliente,
-  mixProdutos,
-  tipoProduto,
-  multiplicador,
-  markup,
-  vendaAvulsa,
-  valorBase,
-  valorVendido,
-  qualidade,
-  mix,
-  comissaoFinal,
-  valorComissao
-}) => {
-
+module.exports.CreateCommissionService = async ({ dataVenda, mes, vendedor, cliente, mixProdutos, tipoProduto, multiplicador, markup, vendaAvulsa, valorBase, valorVendido }) => {
   // Criando uma nova comissão utilizando o modelo importado
-  const novaComissao = new Commissions({
-    vendedor,
-    cliente,
-    mixProdutos,
-    tipoProduto,
-    multiplicador,
-    markup,
-    vendaAvulsa,
-    valorBase,
-    valorVendido,
-    qualidade,
-    mix,
-    comissaoFinal,
-    valorComissao
+  const novaComissao = new Commission({
+    dataVenda: dataVenda,
+    mes: mes,
+    vendedor: vendedor,
+    cliente: cliente,
+    mixProdutos: mixProdutos,
+    tipoProduto: tipoProduto,
+    multiplicador: multiplicador,
+    markup: markup,
+    vendaAvulsa: vendaAvulsa,
+    valorBase: valorBase,
+    valorVendido: valorVendido
   })
 
   await novaComissao.save();
-
   return novaComissao;
 }

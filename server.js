@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express(); 
+const path = require('path');
 const bodyParser = require('body-parser');
 
 const routes = require('./backend/routes');
@@ -31,6 +32,17 @@ app.use(bodyParser.json());
 
 // Utilizando o arquivo de rotas
 app.use(routes);
+
+// *** OUTROS ***
+const distFolder = path.join(process.cwd(), '/dist/nairuz');
+
+app.get('*.*', express.static(distFolder, {
+  maxAge: '1y'
+}));
+
+app.use("*", function(req, resp) {
+  resp.sendFile(__dirname + '/dist/nairuz/index.html');
+});
 
 // Inicialização do servidor
 const port = process.env['PORT'] || 3000;

@@ -1,8 +1,10 @@
 const { UpdateCommissionService } = require("../../services/commissions/UpdateCommissionService");
 
-exports.UpdateCommissionController = async (req, res) => {
+module.exports.UpdateCommissionController = async (req, res) => {
   try {
-    const { 
+    const {
+      dataVenda,
+      mes,
       vendedor,
       cliente,
       mixProdutos,
@@ -11,16 +13,14 @@ exports.UpdateCommissionController = async (req, res) => {
       markup,
       vendaAvulsa,
       valorBase,
-      valorVendido,
-      qualidade,
-      mix,
-      comissaoFinal,
-      valorComissao
+      valorVendido
      } = req.body;
 
-    const idComissao = req.params._id;
+    const idComissao = req.params.id;
 
     const updateCommissionService = UpdateCommissionService({ 
+      dataVenda,
+      mes,
       vendedor,
       cliente,
       mixProdutos,
@@ -29,22 +29,18 @@ exports.UpdateCommissionController = async (req, res) => {
       markup,
       vendaAvulsa,
       valorBase,
-      valorVendido,
-      qualidade,
-      mix,
-      comissaoFinal,
-      valorComissao
+      valorVendido
      }, idComissao);
 
     if(updateCommissionService){
       console.log(`Comissão alterada com sucesso`);
-      res.status(200).json(`Comissão alterada com sucesso`);
+      res.status(200).json({ message: `Comissão alterada com sucesso` });
     } else {
       console.log('Comissão não encontrada');
-      res.status(404).json(`Comissão não encontrada`);
+      res.status(404).json({ message: `Comissão não encontrada` });
     }
   } catch (error) {
     console.error('Erro ao alterar a comissão: ', error);
-    res.status(500).json('Erro interno do servidor ao alterar a comissão');
+    res.status(500).json({ error: 'Erro interno do servidor ao alterar a comissão' });
   }
 }

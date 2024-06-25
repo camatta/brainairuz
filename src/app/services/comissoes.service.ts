@@ -12,12 +12,16 @@ export class ComissoesService {
 
   constructor(private http: HttpClient) { }
 
-  getComissoes(): Observable<any[]> {
-    return this.http.get<any[]>(environment.URL_API + '/api/comissoes')
+  getComissoes(filter: string): Observable<any[]> {
+    if(filter == "nulo"){
+      return this.http.get<any[]>(environment.URL_API + '/api/comissoes');
+    } else {
+      return this.http.get<any[]>(environment.URL_API + `/api/comissoes/${filter}`);
+    }
   }
 
   setComissao(newComissao: Comissao) {
-    return this.http.post(environment.URL_API + '/api/comissao', newComissao);
+    return this.http.post<Comissao>(environment.URL_API + '/api/comissao', newComissao);
   }
 
   deleteComissao(idComissao: string) {

@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 
 const router = express.Router();
 
@@ -23,6 +22,7 @@ const { ListCommissionsController } = require('./controllers/commissions/ListCom
 const { CreateCommissionController } = require('./controllers/commissions/CreateCommissionController');
 const { DeleteCommissionController } = require('./controllers/commissions/DeleteCommissionController');
 const { UpdateCommissionController } = require('./controllers/commissions/UpdateCommissionController');
+const { ListCommissionsByMonthController } = require('./controllers/commissions/ListCommissionsByMonthController');
 
 
 // *** USUÁRIO ***
@@ -60,21 +60,13 @@ router.get('/api/comissoes', ListCommissionsController);
 // Rota para inserir novas comissões
 router.post('/api/comissao', CreateCommissionController);
 
-// Rota para apagar um produto
+// Rota para apagar uma comissão
 router.delete('/api/comissoes/:id', DeleteCommissionController);
 
+// Rota para editar uma comissão
 router.put('/api/comissoes/:id', UpdateCommissionController);
 
-
-// *** OUTROS ***
-const distFolder = path.join(process.cwd(), '/dist/nairuz');
-
-router.get('*.*', express.static(distFolder, {
-  maxAge: '1y'
-}));
-
-router.use("*", function(req, resp) {
-  resp.sendFile(__dirname + '/dist/nairuz/index.html');
-});
+//Rota para filtrar comissões por mês
+router.get('/api/comissoes/:month', ListCommissionsByMonthController);
 
 module.exports = router;

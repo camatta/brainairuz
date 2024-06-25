@@ -1,20 +1,20 @@
 const { DeleteCommissionService } = require("../../services/commissions/DeleteCommissionService");
 
 
-exports.DeleteCommissionController = async (req, res) => {
+module.exports.DeleteCommissionController = async (req, res) => {
   try {
-    const idComissao = req.params._id;
+    const idComissao = req.params.id;
     const deleteCommissionService = await DeleteCommissionService(idComissao);
 
     if(deleteCommissionService) {
       console.log(`Comissão removida com sucesso`);
-      res.status(200).json(`Comissão removida com sucesso`);
+      res.status(200).json({ message: `Comissão removida com sucesso` });
     } else {
-      console.log('Produto não encontrado');
-      res.status(404).json(`Comissão não encontrada`);
+      console.log('Comissão não encontrada');
+      res.status(404).json({ message: `Comissão não encontrada`});
     }
   } catch(error) {
     console.error('Erro ao remover a comissão: ', error);
-    res.status(500).json('Erro interno do servidor ao remover a comissão');
+    res.status(500).json({ error: 'Erro interno do servidor ao remover a comissão' });
   }
 }

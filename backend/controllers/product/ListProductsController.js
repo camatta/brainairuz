@@ -5,6 +5,6 @@ exports.ListProductsController = async (req, res) => {
     const listProductsService = await ListProductsService();
     res.status(200).json(listProductsService);
   } catch (error) {
-    res.status(500).send('Erro do servidor');
+    res.status(500).json({ error: 'Erro do servidor' });
   }
 }

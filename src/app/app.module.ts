@@ -22,6 +22,7 @@ import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.comp
 import { ContratosComponent } from './dashboard/contratos/contratos.component';
 import { ContratosListarComponent } from './dashboard/contratos/contratos-listar/contratos-listar.component';
 import { ContratoFormComponent } from './dashboard/contratos/contrato-form/contrato-form.component';
+import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
 
 import localePt from '@angular/common/locales/pt';
 registerLocaleData(localePt, 'pt-BR');
@@ -40,6 +41,7 @@ registerLocaleData(localePt, 'pt-BR');
     IcpComponent,
     TabelaMetasComponent,
     ContratosComponent,
+    AdicionarOportunidadeComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 
 
-exports.DetailUserService = async (user) => {
+module.exports.DetailUserService = async (user) => {
   
   // Verifique se o usuário está autenticado
   if (!user) {
