@@ -1,0 +1,94 @@
+.contrato-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 75%);
+  z-index: 10;
+}
+
+form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 50%;
+  padding: 32px 32px 80px;
+  background: #00175D;
+  border: 0;
+  border-radius: 20px;
+}
+
+.close-contrato-modal {
+  border: 0;
+  background: 0;
+  color: #fff;
+  padding: 0;
+  line-height: 0;
+  display: block;
+  text-align: right;
+  font-size: 18px;
+  float: right;
+}
+
+.contrato-modal-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: center;
+  color: #fff;
+  max-width: 300px;
+  margin: 40px auto 16px;
+}
+.contrato-modal-header p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  color: #fff;
+  margin: 0;
+}
+
+.contrato-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 364px;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 40px;
+}
+.contrato-modal-actions > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 31.47px;
+  padding: 16px;
+  border-radius: 73px;
+  color: #fff;
+  background: transparent;
+  transition: all .3s ease-in-out;
+}
+.contrato-modal-actions button:not(.download) {
+  box-shadow: inset 0 0 0 1px #fff;
+  -webkit-box-shadow: inset 0 0 0 0.7px #ECECEC;
+  -moz-box-shadow: inset 0 0 0 0.7px #ECECEC;
+}
+.contrato-modal-actions button:not(.download):hover {
+  background: #FFFFFF;
+  color: #00175D;
+}
+
+.contrato-modal-actions button.download {
+  background: #61DCAB;
+  color: #00175D;
+}
+.contrato-modal-actions button.download:hover {
+  background: #3AC990;
+}
+
+.contrato-modal-actions i {
+  font-size: 20px;
+}

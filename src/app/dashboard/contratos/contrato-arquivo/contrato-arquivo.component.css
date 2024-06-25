@@ -1,0 +1,436 @@
+.pdf-page {
+  width: 595px; /* A4 width in pixels */
+  height: 842px;
+}
+
+.tc-boreal {
+  color: #61DCAB !important;
+}
+.tc-branco {
+  color: #fff;
+}
+
+#page1 {
+  background: url(../../../../assets/images/contratos/capa-contrato.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.capa-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.capa-conteudo h2 {
+  font-size: 22px;
+  font-weight: 400;
+  color: #fff;
+  line-height: 33px;
+  margin: 0;
+}
+.capa-conteudo h3 {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 48px;
+  margin-bottom: 42px;
+  color: #61DCAB;
+}
+.capa-conteudo h4 {
+  max-width: 358px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px 45px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.pdf-conteudo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+.pdf-copo {
+  padding: 65px 65px 0;
+  height: 100%;
+  background: #fff;
+}
+.pdf-copo.gradient {
+  background: linear-gradient(203.44deg, #034C8C 0.32%, #00175D 102.15%);
+}
+
+#page2 h2 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 27px;
+  color: #fff;
+  margin: 0;
+}
+#page2 h3 {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 39px;
+  color: #61DCAB;
+  margin: 0 0 32px;
+}
+#page2 .info {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #fff;
+  margin: 0 0 24px;
+}
+.contrato-partes {
+  padding: 24px;
+  border-radius: 0px 16px;
+  border: 1px solid #fff;
+}
+.contrato-partes h4 {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 24px;
+  color: #61DCAB;
+  margin: 0 0 16px;
+}
+.contrato-partes p {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+  margin: 0;
+  color: #fff;
+}
+.contrato-partes:first-of-type {
+  margin-bottom: 16px;
+}
+
+#page3 .info {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #fff;
+  margin: 0 0 32px;
+}
+
+.clausula * {
+  color: #fff;
+}
+.clausula h2 {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 21px;
+  margin: 0 0 8px;
+}
+.clausula p {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+  margin: 0;
+}
+.clausula p + p {
+  margin-top: 16px;
+}
+.clausula-ins {
+  margin-top: 16px;
+}
+.clausula-ins p + p {
+  margin: 0;
+}
+.clausula i {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+  color: #61DCAB;
+  font-style: normal;
+}
+
+.p-clausula {
+  padding: 16px;
+  border-radius: 0px 16px;
+  border: 1px solid #fff;
+}
+.p-clausula:not(:first-of-type) {
+  margin-top: 16px;
+}
+.p-clausula h2 {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 18px;
+  margin: 0 0 8px;
+}
+.p-clausula p {
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 13.5px;
+  margin: 0;
+}
+
+#page5 h2 {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 21px;
+  margin: 0 0 8px;
+}
+.mark-enum {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.mark-enum mark {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 32px;
+  color: #00175D;
+  min-width: 32px;
+  height: 32px;
+  text-align: center;
+  background: #61DCAB;
+  border-radius: 0 6px;
+  padding: 0;
+}
+.mark-enum span {
+  font-size: 10px;
+  font-weight: 400 !important;
+  line-height: 15px;
+}
+.clausula-let {
+  padding: 16px;
+  border-radius: 0px 16px;
+  border: 1px solid #fff;
+}
+.clausula-let + .clausula-let {
+  margin-top: 16px;
+}
+.clausula-let h3 {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 18px;
+  margin-bottom: 8px;
+}
+.clausula-let p {
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 13.5px;
+  margin: 0;
+}
+.clausula-let p strong {
+  font-weight: 800;
+}
+.clausula-let + .mark-enum {
+  margin-top: 24px;
+}
+
+.mark-enum.align-initial {
+  align-items: initial;
+}
+.pt-mt-bt {
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid #fff;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+.clausula.fim {
+  margin-top: 210px;
+}
+
+.anexos-header {
+  margin-bottom: 51px;
+  text-align: center;
+}
+.anexos-header h2 {
+  font-size: 26px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 39px;
+  margin: 0;
+}
+.anexos-header h3 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin: 0;
+  color: #1C1C1C;
+}
+.anexos-conteudo h4 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #1C1C1C;
+  margin-bottom: 24px;
+}
+
+.anexo {
+  display: flex;
+  gap: 14px;
+}
+.anexo + .anexo {
+  margin-top: 32px;
+}
+.anexo-num {
+  min-width: 48px;
+  height: 48px;
+  padding: 0;
+  background: #61DCAB;
+  color: #00175D;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 48px;
+  border-radius: 0 8px;
+}
+.anexo-titulo {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+  margin-bottom: 2px;
+  color: #1C1C1C;
+}
+.anexo-desc {
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 13.5px;
+  color: #1C1C1C;
+  margin: 0;
+}
+
+.geral-info {
+  display: flex;
+  gap: 15px;
+}
+.info-box {
+  border: 1px solid #1C1C1C;
+  border-radius: 0 8px;
+  padding: 16px 20px;
+  width: 225px;
+}
+.info-box h5 {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 24px;
+  color: #61DCAB;
+  margin-bottom: 16px;
+}
+.info-box p {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+  color: #1C1C1C;
+  margin: 0;
+}
+.info-box a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 13.5px;
+  background: #F4F4F4;
+  color: #1C1C1C;
+  padding: 8px;
+  text-decoration: none;
+  margin-top: 16px;
+}
+.info-box svg {
+  min-width: 10px;
+}
+
+.escopo-item {
+  border: 1px solid #1C1C1C;
+  border-radius: 0 8px;
+  padding: 16px 20px;
+}
+.escopo-item + .escopo-item {
+  margin-top: 24px;
+}
+.escopo-item h5 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 20px;
+  color: #61DCAB;
+  margin-bottom: 16px;
+}
+.escopo-item h5 strong {
+  font-weight: 800;
+}
+.escopo-item .escopo-desc {
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 13.5px;
+  color: #1C1C1C;
+}
+.escopo-mark {
+  display: flex;
+  font-size: 9px;
+  line-height: 13.5px;
+  gap: 8px;
+  margin: 0;
+  color: #1C1C1C;
+}
+.escopo-mark mark {
+  padding: 0;
+  background: #61DCAB;
+  min-width: 18px;
+  height: 18px;
+  text-align: center;
+  line-height: 18px;
+  font-weight: 700;
+  color: #00175D;
+}
+
+.escopo-mark-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.escopo-mark-list .escopo-mark {
+  width: 195px;
+}
+
+.table-escopo thead {
+  background: #00175D;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 15px;
+}
+.table-escopo thead th {
+  padding: 8px 16px;
+}
+.table-escopo tbody {
+  border: 0.4px solid #C8C8C8;
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 13.5px;
+}
+.table-escopo tbody td {
+  padding: 8px 12px;
+  border: 0.4px solid #C8C8C8;
+}
+th.marco {
+  width: 170px;
+  border-right: 0.4px solid #FFFFFF;
+}
+
+.escopo-note {
+  background: #F3F3F3;
+  padding: 12px 16px;
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 13.5px;
+  margin: 0;
+}
+.escopo-note strong {
+  font-weight: 800;
+}

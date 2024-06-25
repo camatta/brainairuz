@@ -1,0 +1,28 @@
+<dialog id="contrato-modal" [open]="contractCreated || isContractReadyToView">
+  <div class="contrato-modal-backdrop"></div>
+
+  <form method="dialog">
+    <button type="submit" title="Fechar" class="close-contrato-modal" (click)="closeModal()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  
+    <div class="contrato-modal-header">
+      <h2 *ngIf="isContractReadyToView">Você já pode visualizar o contrato!</h2>
+      
+      <h2 *ngIf="!isContractReadyToView">{{ contractUpdated ? 'Contrato atualizado com sucesso!' : 'Contrato criado com sucesso!' }}</h2>
+      <p *ngIf="!isContractReadyToView">Você já pode visualizá-lo na página de contratos.</p>
+    </div>
+  
+    <div class="contrato-modal-actions">
+      <button type="button" (click)="openPdfInNewTab()">
+        <i class="fa-solid fa-eye"></i>
+        <span>Visualizar contrato</span>
+      </button>
+
+      <button type="button" (click)="downloadPdf()" class="download">
+        <i class="fa-solid fa-download"></i>
+        <span>Baixar contrato</span>
+      </button>
+    </div>
+  </form>
+</dialog>

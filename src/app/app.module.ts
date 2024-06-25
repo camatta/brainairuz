@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID  } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -6,7 +7,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideNgxMask } from 'ngx-mask';
-
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -19,6 +19,12 @@ import { ComercialComponent } from './dashboard/comercial/comercial.component';
 import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.component';
+import { ContratosComponent } from './dashboard/contratos/contratos.component';
+import { ContratosListarComponent } from './dashboard/contratos/contratos-listar/contratos-listar.component';
+import { ContratoFormComponent } from './dashboard/contratos/contrato-form/contrato-form.component';
+
+import localePt from '@angular/common/locales/pt';
+registerLocaleData(localePt, 'pt-BR');
 
 @NgModule({
   declarations: [
@@ -33,6 +39,7 @@ import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.comp
     RedefinirSenhaComponent,
     IcpComponent,
     TabelaMetasComponent,
+    ContratosComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,10 +47,13 @@ import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.comp
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ContratoFormComponent,
+    ContratosListarComponent,
   ],
   providers: [
-    provideNgxMask()
+    provideNgxMask(),
+    { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,189 @@
+<section class="contratos-criar">
+  <div class="contratos-criar-header">
+    <h1>{{ isEditMode ? 'Edição de Contrato' : 'Criação de Contrato'}}</h1>
+  </div>
+
+  <div class="contratos-criar-body">
+    <form name="contractForm" #contractFormRef="ngForm" (ngSubmit)="onContractFormSubmit()" ngNativeValidate>
+      <fieldset ngModelGroup="nzGroup" #nzGroupRef="ngModelGroup">
+        <legend>Informações Iniciais</legend>
+        <div class="fieldset-group">
+          <div class="input-group show">
+            <label for="empresa_responsavel">Empresa Responsavel</label>
+            <select name="nzEmpresaResponsavel" id="empresa_responsavel" required ngModel #nzEmpresaResponsavelRef="ngModel">
+              <option *ngFor="let company of COMPANIES_LIST.list" [value]="company.id === '' ? company.id : company.name" [disabled]="company.id === ''">{{company.name}}</option>
+            </select>
+            <span *ngIf="nzEmpresaResponsavelRef.invalid && (nzEmpresaResponsavelRef.touched || nzEmpresaResponsavelRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+          
+          <div class="input-group" [ngClass]="{'show': isEditMode || !nzEmpresaResponsavelRef.invalid && (nzEmpresaResponsavelRef.touched || nzEmpresaResponsavelRef.dirty)}">
+            <label for="time">Time</label>
+            <select name="nzTime" id="time" required ngModel #nzTimeRef="ngModel">
+              <option  *ngFor="let team of TEAMS_LIST.list" [value]="team.id === '' ? team.id : team.name" [disabled]="team.id === ''">{{ team.name }}</option>
+            </select>
+            <span *ngIf="nzTimeRef.invalid && (nzTimeRef.touched || nzTimeRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !nzTimeRef.invalid && (nzTimeRef.touched || nzTimeRef.dirty)}">
+            <label for="tipo_site">Tipo de Site</label>
+            <select name="nzTipoSite" id="tipo_site" (change)="handleServiceTypeChange($event)" required ngModel #nzTipoSiteRef="ngModel">
+              <option *ngFor="let project of PROJECT_LIST.list" [value]="project.id === '' ? project.id : project.name" [disabled]="project.id === ''">{{ project.name }}</option>
+            </select>
+            <span *ngIf="nzTipoSiteRef.invalid && (nzTipoSiteRef.touched || nzTipoSiteRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !nzTipoSiteRef.invalid && (nzTipoSiteRef.touched || nzTipoSiteRef.dirty)}">
+            <label for="servico">{{ SERVICES_LIST.name }}</label>
+            <select name="nzServico" id="servico" required ngModel #nzServicoRef="ngModel">
+              <option *ngFor="let service of SERVICES_LIST.list" [value]="service.id === '' ? service.id : service.name" [disabled]="service.id === ''">{{ service.name }}</option>
+            </select>
+            <span *ngIf="nzServicoRef.invalid && (nzServicoRef.touched || nzServicoRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !nzServicoRef.invalid && (nzServicoRef.touched || nzServicoRef.dirty)}">
+            <label for="servico_plataforma">{{ SERVICES_LIST_OPTIONS.name }}</label>
+            <select name="nzServicoPlataforma" id="servico_plataforma" required ngModel #nzServicoPlataformaRef="ngModel">
+              <option *ngFor="let service_option of SERVICES_LIST_OPTIONS.list" [value]="service_option.id === '' ? service_option.id : service_option.name" [disabled]="service_option.id === ''">{{ service_option.name }}</option>
+            </select>
+            <span *ngIf="nzServicoPlataformaRef.invalid && (nzServicoPlataformaRef.touched || nzServicoPlataformaRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="contract-step extEmpresa" [ngClass]="{'show': isEditMode||  !nzGroupRef.invalid && (nzGroupRef.touched || nzGroupRef.dirty)}" ngModelGroup="extEmpresaGroup" #extEmpresaGroupRef="ngModelGroup">
+        <legend>Informações do Cliente</legend>
+        <p class="alert-client" *ngIf="!clientAlreadyExist">CNPJ não encontrado na base, favor preencher os campos abaixo.</p>
+        <div class="fieldset-group">
+          <div class="input-group show">
+            <label for="empresa_cnpj">CNPJ</label>
+            <input type="text" name="extEmpresaCnpj" id="empresa_cnpj" placeholder="00.000.000/0000-00" maxlength="18" mask="00.000.000/0000-00" ngModel #extEmpresaCnpjRef="ngModel" (ngModelChange)="onChangeCnpj($event)" required>
+            <div *ngIf="extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)" class="invalid-alert">
+              <span *ngIf="extEmpresaCnpjRef.errors?.['required']">Campo obrigatório.</span>
+              <span *ngIf="extEmpresaCnpjRef.errors?.['mask']">Campo inválido</span>
+            </div>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)}">
+            <label for="empresa_nome">Nome da Empresa</label>
+            <input type="text" name="extEmpresaNome" id="empresa_nome" placeholder="Nome Exemplo" ngModel #extEmpresaNomeRef="ngModel" required>
+            <span *ngIf="extEmpresaNomeRef.invalid && (extEmpresaNomeRef.touched || extEmpresaNomeRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)}">
+            <label for="empresa_ie">Inscrição Estadual</label>
+            <input type="text" name="extEmpresaIE" id="empresa_ie" placeholder="000.000.000" mask="000.000.000" maxlength="11" ngModel #extEmpresaIERef="ngModel">
+            <div *ngIf="extEmpresaIERef.invalid && (extEmpresaIERef.touched || extEmpresaIERef.dirty)" class="invalid-alert">
+              <span *ngIf="extEmpresaIERef.errors?.['required']">Campo obrigatório.</span>
+              <span *ngIf="extEmpresaIERef.errors?.['mask']">Campo inválido</span>
+            </div>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)}">
+            <label for="empresa_endereco">Endereço</label>
+            <input type="text" name="extEmpresaEndereco" id="empresa_endereco" placeholder="Rua Exemplo, 123" ngModel #extEmpresaEnderecoRef="ngModel" required>
+            <span *ngIf="extEmpresaEnderecoRef.invalid && (extEmpresaEnderecoRef.touched || extEmpresaEnderecoRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)}">
+            <label for="empresa_bairro">Bairro</label>
+            <input type="text" name="extEmpresaBairro" id="empresa_bairro" placeholder="Bairro Exemplo" ngModel #extEmpresaBairroRef="ngModel" required>
+            <span *ngIf="extEmpresaBairroRef.invalid && (extEmpresaBairroRef.touched || extEmpresaBairroRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)}">
+            <label for="empresa_cep">CEP</label>
+            <input type="text" name="extEmpresaCEP" id="empresa_cep" placeholder="00000-000" mask="00000-000" maxlength="9" ngModel #extEmpresaCEPRef="ngModel" required>
+            <div *ngIf="extEmpresaCEPRef.invalid && (extEmpresaCEPRef.touched || extEmpresaCEPRef.dirty)" class="invalid-alert">
+              <span *ngIf="extEmpresaCEPRef.errors?.['required']">Campo obrigatório.</span>
+              <span *ngIf="extEmpresaCEPRef.errors?.['mask']">Campo inválido</span>
+            </div>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)}">
+            <label for="empresa_cpf_socio_adm">CPF Representante Legal</label>
+            <input type="text" name="extEmpresaCpfRepLegal" id="empresa_cpf_socio_adm" placeholder="000.000.000-00" mask="000.000.000-00" maxlength="14" ngModel #extEmpresaCpfRepLegalRef="ngModel" required>
+            <div *ngIf="extEmpresaCpfRepLegalRef.invalid && (extEmpresaCpfRepLegalRef.touched || extEmpresaCpfRepLegalRef.dirty)" class="invalid-alert">
+              <span *ngIf="extEmpresaCpfRepLegalRef.errors?.['required']">Campo obrigatório.</span>
+              <span *ngIf="extEmpresaCpfRepLegalRef.errors?.['mask']">Campo inválido</span>
+            </div>
+            <span *ngIf="extEmpresaCpfRepLegalRef.invalid && extEmpresaCEPRef.valid && (extEmpresaCEPRef.untouched && !extEmpresaCEPRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)}">
+            <label for="empresa_nome_socio_adm">Nome Representante Legal</label>
+            <input type="text" name="extEmpresaNomeRepLegal" id="empresa_nome_socio_adm" placeholder="Nome Exemplo" ngModel #extEmpresaNomeRepLegalRef="ngModel" required>
+            <span *ngIf="extEmpresaNomeRepLegalRef.invalid && (extEmpresaNomeRepLegalRef.touched || extEmpresaNomeRepLegalRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+            <span *ngIf="extEmpresaNomeRepLegalRef.invalid && extEmpresaCEPRef.valid && (extEmpresaCEPRef.untouched && !extEmpresaCEPRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="contract-step" [ngClass]="{'show': isEditMode || !extEmpresaGroupRef.invalid && (extEmpresaGroupRef.touched || extEmpresaGroupRef.dirty)}" ngModelGroup="projetoGroup" #projetoGroupRef="ngModelGroup">
+        <legend>Informações do Projeto</legend>
+        <div class="fieldset-group">
+          <div class="input-group show">
+            <label for="projeto_prazo">Prazo</label>
+            <div class="input-wrapper">
+              <input type="text" name="projetoPrazo" id="projeto_prazo" placeholder="00" pattern="[0-9]*" ngModel #projetoPrazoRef="ngModel" required>
+              <span>dias úteis</span>
+            </div>
+            <div *ngIf="projetoPrazoRef.invalid && (projetoPrazoRef.touched || projetoPrazoRef.dirty)" class="invalid-alert">
+              <span *ngIf="projetoPrazoRef.errors?.['required']">Campo obrigatório.</span>
+              <span *ngIf="projetoPrazoRef.errors?.['pattern']">Apenas números são permitidos.</span>
+            </div>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !projetoPrazoRef.invalid && (projetoPrazoRef.touched || projetoPrazoRef.dirty)}">
+            <label for="projeto_valor">Valor</label>
+            <input type="text" name="projetoValor" id="projeto_valor" placeholder="R$ 0.000,00" prefix="R$" mask="separator-2" thousandSeparator="." decimalMarker="," (ngModelChange)="onInputProjectValue($event)" ngModel #projetoValorRef="ngModel" required>
+            <span *ngIf="projetoValorRef.invalid && (projetoValorRef.touched || projetoValorRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !projetoValorRef.invalid && (projetoValorRef.touched || projetoValorRef.dirty)}">
+            <label for="projeto_parcelas">Número de Parcelas</label>
+            <input type="text" name="projetoParcelas" id="projeto_parcelas" placeholder="00" pattern="[0-9]*" ngModel #projetoParcelasRef="ngModel" (ngModelChange)="onInputInstallmentsChange($event)" required>
+            <div *ngIf="projetoParcelasRef.invalid && (projetoParcelasRef.touched || projetoParcelasRef.dirty)" class="invalid-alert">
+              <span *ngIf="projetoParcelasRef.errors?.['required']">Campo obrigatório.</span>
+              <span *ngIf="projetoParcelasRef.errors?.['pattern']">Apenas números são permitidos.</span>
+            </div>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !projetoParcelasRef.invalid && (projetoParcelasRef.touched || projetoParcelasRef.dirty)}">
+            <label for="projeto_parcelas_valor">Valor de cada Parcela</label>
+            <input type="text" name="projetoParcelasValor" id="projeto_parcelas_valor" placeholder="R$ 0.000,00" prefix="R$" mask="separator-2" thousandSeparator="." decimalMarker="," ngModel #projetoParcelas_valorRef="ngModel" required>
+            <span *ngIf="projetoParcelas_valorRef.invalid && (projetoParcelas_valorRef.touched || projetoParcelas_valorRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+            <span *ngIf="projetoParcelas_valorRef.valid && (projetoParcelas_valorRef.untouched && !projetoParcelas_valorRef.dirty)" class="invalid-alert">Clique para revisar</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !projetoParcelas_valorRef.invalid && (projetoParcelas_valorRef.touched || projetoParcelas_valorRef.dirty)}">
+            <label for="projeto_multa">Valor da Multa por Rescisão</label>
+            <input type="text" name="projetoMulta" id="projeto_multa" placeholder="R$ 0.000,00" prefix="R$" mask="separator-2" thousandSeparator="." decimalMarker="," ngModel #projetoMultaRef="ngModel" required>
+            <span *ngIf="projetoMultaRef.invalid && (projetoMultaRef.touched || projetoMultaRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+            <span *ngIf="projetoMultaRef.valid && (projetoMultaRef.untouched && !projetoMultaRef.dirty)" class="invalid-alert">Clique para revisar</span>
+          </div>
+
+          <div class="input-group" [ngClass]="{'show': isEditMode || !projetoMultaRef.invalid && (projetoMultaRef.touched || projetoMultaRef.dirty)}">
+            <label for="projeto_data">Data do Contrato</label>
+            <input type="date" name="projetoData" id="projeto_data" ngModel #projetoDataRef="ngModel" required>
+            <span *ngIf="projetoDataRef.invalid && (projetoDataRef.touched || projetoDataRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+            <span *ngIf="isEditMode || projetoDataRef.valid && (projetoDataRef.untouched && !projetoDataRef.dirty)" class="invalid-alert">Clique para revisar</span>
+          </div>
+
+          <div class="input-group textarea" [ngClass]="{'show': isEditMode || !projetoDataRef.invalid && (projetoDataRef.touched || projetoDataRef.dirty)}">
+            <label for="projeto_informacoes">Demais informações</label>
+            <angular-editor [config]="editorConfig" ngModel #projetoInformacoesRef="ngModel" name="projetoInformacoes" required class="editor-informacoes"></angular-editor>
+            <span *ngIf="projetoInformacoesRef.invalid && (projetoInformacoesRef.touched || projetoInformacoesRef.dirty)" class="invalid-alert">Campo obrigatório</span>
+          </div>
+        </div>
+      </fieldset>
+      <button type="submit" [ngClass]="{'show': !contractFormRef.invalid}" [disabled]="contractFormRef.invalid">{{ isEditMode ? 'Atualizar Contrato' : 'Criar Contrato' }}</button>
+    </form>
+  </div>
+  
+  <app-contrato-progresso *ngIf="isGeneratingPdf" [percentage]="progress" [contractUpdated]="isEditMode"></app-contrato-progresso>
+  <app-contrato-modal-pdf *ngIf="contratoCriado" [contractUpdated]="isEditMode" [contractCreated]="contratoCriado" [pdfUrl]="pdfUrl"></app-contrato-modal-pdf>
+
+  <div class="contrato-arquivo" *ngIf="!!contractToView">
+    <app-contrato-arquivo [contract]="contractToView"></app-contrato-arquivo>
+  </div>
+</section>

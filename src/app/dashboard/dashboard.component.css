@@ -37,7 +37,7 @@ h1 {
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   background-color: #00175d;
   position: relative;
-  z-index: 10;
+  z-index: 1;
 }
 
 .conteudo {
@@ -73,7 +73,7 @@ h1 {
 }
 
 .main-content {
-  padding: 2rem 5rem;
+  padding: 2rem 5rem 5rem;
   position: relative;
   z-index: 1;
 }

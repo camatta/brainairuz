@@ -1,0 +1,12 @@
+<div class="loading-indicator">
+  <div class="loading-modal-backdrop"></div>
+
+  <div class="progress-content">
+    <h2 *ngIf="!isLoadingContract">O contrato está<br/> sendo {{ contractUpdated ? 'atualizado' : 'criado' }}. Aguarde.</h2>
+    <h2 *ngIf="isLoadingContract">O contrato está<br/> sendo carregado. Aguarde.</h2>
+    <p>{{ percentage }}% concluído.</p>
+    <div class="progress-bar">
+      <div class="progress" [style]="{width: percentage+'%'}"></div>
+    </div>
+  </div>
+</div>

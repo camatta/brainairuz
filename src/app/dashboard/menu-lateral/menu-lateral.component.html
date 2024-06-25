@@ -6,6 +6,34 @@
     <li *ngIf="showComercialLink">
       <button routerLink="/dashboard/comercial" [class.link-ativo]="isLinkAtivo('/dashboard/comercial')"><i class="fa-solid fa-file-image"></i>Gerador de Imagem</button>
     </li>
+    <li *ngIf="showComercialLink" class="has-children" [ngClass]="{'submenu-open': showSubmenu}">
+      <button type="button" (click)="handleSubmenu()">
+        <i class="fa-solid fa-file-contract"></i>
+        <span>Contratos<i class="fa-solid fa-chevron-down"></i></span>
+      </button>
+      <ul class="submenu">
+        <li>
+          <button type="button" routerLink="/dashboard/contratos" [class.link-ativo]="isLinkAtivo('/dashboard/contratos')">
+            <i class="fas fa-home"></i>Página Inicial
+          </button>
+        </li>
+        <li>
+          <button type="button" routerLink="/dashboard/contratos/criar" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/criar')">
+            <i class="fa-solid fa-pen"></i>Criar Contratos
+          </button>
+        </li>
+        <li>
+          <button type="button" routerLink="/dashboard/contratos/listar" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/listar')">
+            <i class="fa-solid fa-folder"></i>Contratos Criados
+          </button>
+        </li>
+        <li>
+          <button type="button" routerLink="/dashboard/contratos/arquivo" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/arquivo')">
+            <i class="fa-solid fa-file-contract"></i>Ver Modelo
+          </button>
+        </li>
+      </ul>
+    </li>
     <li *ngIf="showComercialLink">
       <button routerLink="/dashboard/icp" [class.link-ativo]="isLinkAtivo('/dashboard/icp')"><i class="fa-solid fa-chart-line"></i>Validação ICP</button>
     </li>

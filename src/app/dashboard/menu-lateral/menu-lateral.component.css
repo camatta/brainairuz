@@ -28,9 +28,30 @@
 
 .menu-lateral ul li button i {
   width: 20px;
+  transition: all .3s ease-in-out;
 }
 
 .link-ativo, 
 .link-ativo i {
   color: #61dcab !important;
+}
+
+.has-children button {
+  width: 100%;
+}
+.has-children span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.has-children .submenu {
+  padding-left: 16px;
+  display: none;
+}
+.has-children.submenu-open .submenu {
+  display: block;
+}
+.has-children.submenu-open .fa-chevron-down {
+  transform: rotate(-180deg);
 }

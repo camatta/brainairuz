@@ -1,0 +1,142 @@
+h1 {
+  color: #00175D;
+}
+
+legend {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 27px;
+  margin-bottom: 32px;
+  color: #000;
+}
+
+.contract-step {
+  display: none;
+}
+.contract-step.show {
+  display: block;
+}
+.contract-step.extEmpresa legend {
+  margin: 0 0 8px;
+}
+.contract-step.extEmpresa .alert-client {
+  font-size: 14px;
+  line-height: 21px;
+  margin: 0;
+  color: #666666;
+}
+.contract-step.extEmpresa .fieldset-group {
+  margin-top: 32px;
+}
+
+.fieldset-group {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 24px;
+}
+.input-group {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: calc(100% / 3 - 16px);
+  transition: all .3s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+.input-group.show,
+form button.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.input-group .invalid-alert {
+  position: absolute;
+  z-index: 0;
+  bottom: -18px;
+  font-size: 12px;
+  color: #FF0F0F;
+}
+.input-group.textarea {
+  width: 100%;
+  margin-bottom: 32px;
+}
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.input-wrapper input {
+  width: 100%;
+}
+.input-wrapper span {
+  font-size: 14px;
+  font-weight: 400 !important;
+  line-height: 21px;
+  color: #666666;
+  min-width: fit-content;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #000;
+}
+
+input, select, textarea {
+  font-size: 14px;
+  line-height: 21px;
+  padding: 8px 76px 8px 16px;
+  background: #ECECEC;
+  color: #666666;
+  border-radius: 4px !important;
+  border: 0;
+}
+input#projeto_data {
+  padding-right: 16px;
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7' fill='none'%3E%3Cpath d='M11.8334 1.09477L6.00008 6.9281L0.166748 1.09477L1.20216 0.05935L6.00008 4.85727L10.798 0.0593495L11.8334 1.09477Z' fill='%231C1B1F'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 16px) center;
+}
+
+textarea {
+  min-height: 129px;
+}
+
+fieldset + fieldset {
+  border-top: 1px solid #ECECEC;
+  margin-top: 40px;
+  padding-top: 40px;
+}
+
+h1 {
+  font-size: initial !important;
+  font-style: initial !important;
+  line-height: 1 !important;
+}
+
+form button {
+  border: 0;
+  border-radius: 111px;
+  background: #61DCAB;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #00175D;
+  padding: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s ease-in-out;
+}
+.contrato-arquivo {
+  position: fixed;
+  left: -100%;
+}

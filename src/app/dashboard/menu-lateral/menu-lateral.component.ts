@@ -15,6 +15,7 @@ export class MenuLateralComponent implements OnInit {
   showTabelaPrecos = false;
   showTabelaDeValores = false;
   showCalculoComissao = false;
+  showSubmenu: boolean = false
   linkAtivo: string;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
@@ -65,6 +66,10 @@ export class MenuLateralComponent implements OnInit {
 
   isLinkAtivo(link: string): boolean {
     return this.linkAtivo === link;
+  }
+
+  handleSubmenu() {
+    this.showSubmenu = !this.showSubmenu
   }
 
   logout(): void {

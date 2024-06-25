@@ -11,6 +11,11 @@ import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.compo
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaDeValores } from './dashboard/tabela-valores/tabela-valores.component';
 import { CalculoComissaoComponent } from './dashboard/calculo-comissao/calculo-comissao.component';
+import { ContratosComponent } from './dashboard/contratos/contratos.component';
+import { ContratoFormComponent } from './dashboard/contratos/contrato-form/contrato-form.component';
+import { ContratosListarComponent } from './dashboard/contratos/contratos-listar/contratos-listar.component';
+import { ContratosIndexComponent } from './dashboard/contratos/contratos-index/contratos-index.component';
+import { ContratoArquivoComponent } from './dashboard/contratos/contrato-arquivo/contrato-arquivo.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -18,6 +23,13 @@ const routes: Routes = [
     { path: 'usuarios', component: UsuariosComponent },
     { path: 'perfil', component: PerfilComponent },
     { path: 'comercial', component: ComercialComponent },
+    { path: 'contratos', component:  ContratosComponent, children: [
+      { path: '', component: ContratosIndexComponent },
+      { path: 'criar', component: ContratoFormComponent },
+      { path: 'editar/:id', component: ContratoFormComponent },
+      { path: 'listar', component: ContratosListarComponent },
+      { path: 'arquivo', component: ContratoArquivoComponent },
+    ]},
     { path: 'icp', component: IcpComponent },
     { path: 'tabela-valores', component: TabelaDeValores },
     { path: 'calculo-comissao', component: CalculoComissaoComponent }

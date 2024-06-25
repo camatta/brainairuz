@@ -1,0 +1,21 @@
+<dialog id="contrato-modal" [open]="modalActive">
+  <div class="contrato-modal-backdrop"></div>
+
+  <form method="dialog"> 
+    <div class="contrato-modal-header">
+      <h2>{{ message }}</h2>
+    </div>
+  
+    <div class="contrato-modal-actions">
+      <button type="button" (click)="decline()" *ngIf="!confirmedResponse">
+        {{ modalTextCancel }}
+      </button>
+
+      <button type="button" (click)="confirm()" class="confirm" *ngIf="!confirmedResponse">
+        {{ modalTextConfirm }}
+      </button>
+
+      <button type="button" (click)="finalConfirm()" class="confirm" *ngIf="confirmedResponse">OK</button>
+    </div>
+  </form>
+</dialog>
