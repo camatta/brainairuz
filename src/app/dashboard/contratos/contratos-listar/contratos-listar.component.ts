@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { ContratosService } from '../../../services/contratos.service';
+import { ContractsService } from '../../../services/contracts.service';
 import { AdvancedFilterPipe } from './advanced-filter.pipe';
 import { ConfirmModalService } from 'src/app/services/confirm-modal.service';
-import { Contrato } from '../IContrato';
+import { Contract } from '../contract.model';
 import { ContratoArquivoComponent } from '../contrato-arquivo/contrato-arquivo.component';
 import { PdfGeneratorService } from 'src/app/services/pdf-generator.service';
 import { ContratoProgressoComponent } from '../contrato-progresso/contrato-progresso.component';
@@ -29,23 +29,23 @@ import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-
   standalone: true
 })
 export class ContratosListarComponent {
-  CONTRATOS: Contrato[] = [];
+  CONTRATOS: Contract[] = [];
   
   progress: number = 0;
   private progressSubscription: Subscription | undefined;
   pdfUrl: string | null = null;
   isLoadingPdf: boolean = false;
   isContractReady: boolean;
-  contractToView: Contrato;
+  contractToView: Contract;
 
   searchClient:string = '';
   searchAuthor:string = '';
   searchStatus:string= '';
 
-  constructor(private contratosService: ContratosService, private confirmModalService: ConfirmModalService, private router: Router, private pdfGeneratorService: PdfGeneratorService) {}
+  constructor(private contractsService: ContractsService, private confirmModalService: ConfirmModalService, private router: Router, private pdfGeneratorService: PdfGeneratorService) {}
 
   ngOnInit() {
-    this.CONTRATOS = this.contratosService.getContratos();
+    this.CONTRATOS = this.contractsService.getContracts();
 
     this.progressSubscription = this.pdfGeneratorService.progress$.subscribe(progress => {
       this.progress = progress;
@@ -59,8 +59,8 @@ export class ContratosListarComponent {
   }
 
   onDelete(id: string) {
-    this.contratosService.deleteContrato(id)
-    this.CONTRATOS = this.contratosService.getContratos()
+    this.contractsService.deleteContract(id)
+    this.CONTRATOS = this.contractsService.getContracts()
   }
 
   onEdit(id: string) {
@@ -68,17 +68,17 @@ export class ContratosListarComponent {
   }
 
   onChangeContractStatus(id: string, newStatus: string) {   
-    this.contratosService.editContratoStatus(id, newStatus);
+    this.contractsService.editContractStatus(id, newStatus);
 
-    this.CONTRATOS = this.contratosService.getContratos()
+    this.CONTRATOS = this.contractsService.getContracts()
   }
   returnPreviousStatus(id: string, status: string) {
-    this.contratosService.editContratoStatus(id, status);
+    this.contractsService.editContractStatus(id, status);
 
-    this.CONTRATOS = this.contratosService.getContratos()
+    this.CONTRATOS = this.contractsService.getContracts()
   }
 
-  confirmEdit(contrato: Contrato) {
+  confirmEdit(contrato: Contract) {
     this.confirmModalService.open(
       `Deseja prosseguir com a edição do contrato “${contrato.extEmpresaGroup.extEmpresaNome}”?`,
       '',
@@ -107,7 +107,7 @@ export class ContratosListarComponent {
     )
   }
 
-  async onViewContract(contract: Contrato) {
+  async onViewContract(contract: Contract) {
     this.isContractReady = false;
     this.progress = 0;
     this.isLoadingPdf = true; // Ativar estado de carregamento,

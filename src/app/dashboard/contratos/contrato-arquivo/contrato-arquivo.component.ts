@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 
-import { Contrato } from "../IContrato";
+import { Contract } from "../contract.model";
 import { SharedModule } from "src/app/modules/shared-module/shared-module.module";
 import { DateMaskPipe } from "../../../pipes/date-mask.pipe";
 import { ContratoFooterAzulComponent } from "./contrato-footer-azul/contrato-footer-azul.component";
@@ -23,7 +23,7 @@ import { NumberToTextPipe } from "src/app/pipes/number-to-text.pipe";
   ]
 })
 export class ContratoArquivoComponent {
-  @Input() contract: Contrato | null = null;
+  @Input() contract: Contract | null = null;
 
   constructor() {}
 }

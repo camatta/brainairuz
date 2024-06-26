@@ -6,7 +6,7 @@ import { AngularEditorModule, AngularEditorConfig } from '@kolkov/angular-editor
 import { Subscription } from 'rxjs';
 
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
-import { ContratosService } from '../../../services/contratos.service';
+import { ContractsService } from '../../../services/contracts.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { PdfGeneratorService } from 'src/app/services/pdf-generator.service';
 import { ClientsService } from 'src/app/services/clients.service';
@@ -18,7 +18,7 @@ import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-
 
 import { COMPANIES, DEV_SERVICES, DEV_SERVICE_OPTIONS, HELP_SERVICES, HELP_SERVICE_OPTIONS, PROJECT_TYPES, TEAMS } from '../servicos-data-in-memory';
 import { type COMPANY, type SERVICE, type PROJECT, type TEAM } from '../types';
-import { Contrato } from '../IContrato';
+import { Contract } from '../contract.model';
 import { nanoid } from 'nanoid';
 
 @Component({
@@ -30,7 +30,7 @@ import { nanoid } from 'nanoid';
 })
 export class ContratoFormComponent {
   @ViewChild('contractFormRef') contractForm: NgForm;
-  contractToView: Contrato;
+  contractToView: Contract;
 
   isEditMode: boolean = false;
   contractId: string;
@@ -112,7 +112,7 @@ export class ContratoFormComponent {
 
   constructor(
     private authService: AuthService,
-    private contratosService: ContratosService,
+    private contractsService: ContractsService,
     private pdfGeneratorService: PdfGeneratorService,
     private clientsService: ClientsService,
     private confirmModalService: ConfirmModalService,
@@ -142,7 +142,7 @@ export class ContratoFormComponent {
   }
 
   async loadContract() {
-    const contract = await this.contratosService.getContratoById(this.contractId);
+    const contract = await this.contractsService.getContractById(this.contractId);
     this.contratoAutor = contract.contratoAutor;
     this.contratoStatus = contract.contratoStatus;
     this.contratoServico = contract.contratoServico;
@@ -247,7 +247,7 @@ export class ContratoFormComponent {
     }
 
     // cria novo contrato
-    await this.contratosService.createContrato(newContrato);
+    await this.contractsService.createContract(newContrato);
 
     // cria novo cliente na base de dados para consultar posteriormente
     const newClient = {
@@ -279,7 +279,7 @@ export class ContratoFormComponent {
       ...this.contractForm.value
     }
 
-    await this.contratosService.editContrato(editedContract)
+    await this.contractsService.editContract(editedContract)
     await this.generatePdf();
 
     this.contratoCriado = true

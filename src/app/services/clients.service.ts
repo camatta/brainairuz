@@ -14,17 +14,7 @@ type Client = {
   providedIn: 'root'
 })
 export class ClientsService {
-  private CLIENTS: Client[] = [
-    {
-      empresa_cnpj: "12345678901234",
-      nome_empresa: "Cyclotronics",
-      inscricao_estadual: "123456789",
-      empresa_endereco: "Rua teste, 123",
-      empresa_bairro: "bairro teste",
-      empresa_cep: "13054500",
-      criado_em: "2024-06-24"
-    }
-  ];
+  private CLIENTS: Client[] = [];
 
   constructor() {}
 
