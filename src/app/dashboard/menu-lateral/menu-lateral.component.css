@@ -15,6 +15,7 @@
 
 .menu-lateral ul li button {
   color: #fff;
+  text-align: left;
   text-decoration: unset;
   background: unset;
   border: unset;
@@ -22,7 +23,7 @@
   line-height: 1;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 30px;
 }
 

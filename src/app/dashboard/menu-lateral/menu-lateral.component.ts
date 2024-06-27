@@ -15,6 +15,7 @@ export class MenuLateralComponent implements OnInit {
   showTabelaPrecos = false;
   showTabelaDeValores = false;
   showCalculoComissao = false;
+  showAdicionarOportunidade = false;
   linkAtivo: string;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
@@ -35,14 +36,16 @@ export class MenuLateralComponent implements OnInit {
     
     this.showUsuariosLink =
       accessLevel === 'Líder de Equipe' ||
-      accessLevel === 'Administrador';
+      accessLevel === 'Administrador'
+    ;
 
     this.showTabelaPrecos =
-      // accessLevel === 'Administrador' ||
+      accessLevel === 'Administrador' ||
       team === 'Comercial' ||
       team === 'Customer Success' ||
       name === 'Adriany Oliveira' ||
-      name === 'Beatriz Cruz Alves';
+      name === 'Beatriz Cruz Alves'
+    ;
 
     this.showComercialLink =
       accessLevel === 'Administrador' ||
@@ -50,17 +53,27 @@ export class MenuLateralComponent implements OnInit {
       team === 'Comercial' ||
       name === 'Luccas Baptista' ||
       name === 'Beatriz Cruz Alves' ||
-      name === 'Beatriz Almeida';
+      name === 'Beatriz Almeida'
+    ;
 
     this.showTabelaDeValores =
-      // accessLevel === 'Administrador' ||
-      // team === 'Comercial' ||
-      name === 'Adriany Oliveira';
-
-      this.showCalculoComissao =
       accessLevel === 'Administrador' ||
       // team === 'Comercial' ||
-      name === 'Adriany Oliveira';
+      name === 'Adriany Oliveira'
+    ;
+
+    this.showCalculoComissao =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      team === 'Tecnologia'
+      name === 'Adriany Oliveira'
+    ;
+      
+    this.showAdicionarOportunidade =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      name === 'Adriany Oliveira'
+    ;
   }
 
   isLinkAtivo(link: string): boolean {

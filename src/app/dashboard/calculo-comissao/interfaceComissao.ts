@@ -1,7 +1,9 @@
 export interface Comissao {
   dataVenda: string;
   mes: string;
-  vendedor: string;
+  ano: string;
+  vendedor?: string;
+  status: string;
   cliente: string;
   mixProdutos: string;
   tipoProduto: string;

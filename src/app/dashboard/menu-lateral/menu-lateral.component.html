@@ -20,9 +20,14 @@
         <i class="fa-solid fa-table-columns"></i>Tabela de Valores
       </button>
     </li>
-    <li *ngIf="showTabelaDeValores">
+    <li *ngIf="showCalculoComissao">
       <button routerLink="/dashboard/calculo-comissao" [class.link-ativo]="isLinkAtivo('/dashboard/calculo-comissao')">
         <i class="fa-solid fa-coins"></i>Cálculo de Comissão
+      </button>
+    </li>
+    <li *ngIf="showAdicionarOportunidade">
+      <button routerLink="/dashboard/adicionar-oportunidade" [class.link-ativo]="isLinkAtivo('/dashboard/adicionar-oportunidade')">
+        <i class="fa-solid fa-circle-plus"></i>Adicionar Oportunidade
       </button>
     </li>
     <li><button routerLink="/" [class.link-ativo]="isLinkAtivo('/')" (click)="logout()"><i class="fas fa-sign-out-alt"></i>Sair</button></li>
