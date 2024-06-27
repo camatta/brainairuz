@@ -1,6 +1,6 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -13,7 +13,6 @@ import { ComissoesService } from 'src/app/services/comissoes.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { Comissao } from './interfaceComissao';
 import { AuthService } from 'src/app/services/auth.service';
-import { FilterElement } from 'canvg';
 
 @Component({
   selector: 'app-calculo-comissao',
@@ -24,13 +23,25 @@ import { FilterElement } from 'canvg';
 })
 
 export class CalculoComissaoComponent implements OnInit {
-  displayedColumns: string[] = ['cliente', 'dataVenda','mesVenda', 'mixProdutos', 'tipoProduto', 'multiplicador', 'markup', 'vendaAvulsa', 'valorBase', 'valorVendido', 'actions'];
+  displayedColumns: string[] = [
+    'cliente',
+    'status',
+    'dataVenda',
+    'mixProdutos',
+    'tipoProduto',
+    'multiplicador',
+    'markup',
+    'vendaAvulsa',
+    'valorBase',
+    'valorVendido',
+    'actions'
+  ];
   tabelaVendas: MatTableDataSource<Comissao> = new MatTableDataSource<Comissao>([]);
   msgActions: string;
   produtos: Produtos[] = [];
   produtosFiltrados: any[] = [];
   mesFiltro: string = null;
-  vendedor = this.authService.getUser();  // Traz o nome do vendedor
+  currentUser = this.authService.getUser();  // Traz os dados do usuário
 
   /* INDICADORES GERADOS A PARTIR DAS VENDAS */
   vendasTotal: number = 0;   // Soma de todos os Valores Vendidos
@@ -43,7 +54,14 @@ export class CalculoComissaoComponent implements OnInit {
   valorComissao: number = 1.68; // (vendasTotal * comissaoFinal) / 100) - (vendasTotal * comissaoFinal) / 100) * 0.16
   valorBaseTotal: number = 0;
 
-  /* Variáveis de controle de front */
+  /* Variáveis e métodos de controle de front */
+  userPermission(): boolean {
+    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"){
+      return true;
+    }
+    return false;
+  }
+
   mostrarBotaoEditar: boolean = true;
   mostrarBotaoEnviar: boolean = false;
   formFatorMultiplicador = this.formBuilder.group({
@@ -67,6 +85,36 @@ export class CalculoComissaoComponent implements OnInit {
     this.fatorMultiplicador = this.formFatorMultiplicador.get('fatorMultiplicador').value;
     this.loadComissoes();
   }
+  
+
+  mixProdutosValidate: boolean = true;
+
+  defineMixProdutosValidate(): boolean {
+    const modalNew = document.getElementById("modalNew");
+    const modalEdit = document.getElementById("modalEdit");
+    let mixProdutosNovaVenda = this.formNovaVenda.get('mixProdutos').value;
+    let mixProdutosEditarVenda = this.formEditarVenda.get('mixProdutos').value;
+
+    if(modalNew.style.display == "block") {
+      if(mixProdutosNovaVenda == 'help' || mixProdutosNovaVenda == ''){
+        return this.mixProdutosValidate = false;
+      } else {
+        return this.mixProdutosValidate = true;
+      }
+    } else if(modalEdit.style.display == "block") {
+      if(mixProdutosEditarVenda == 'help' || mixProdutosEditarVenda == ''){
+        return this.mixProdutosValidate = false;
+      } else {
+        return this.mixProdutosValidate = true;
+      }
+    } else {
+      return this.mixProdutosValidate = false;
+    }
+  }
+
+  yearsSelectFilter: string[] = []; // Array povoado pelo método loadComissoes()
+
+  /* Fim Variáveis e métodos de controle de front */
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -80,7 +128,24 @@ export class CalculoComissaoComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    
+
+    if(this.userPermission()) {
+      this.displayedColumns = [
+        'cliente',
+        'vendedor',
+        'status',
+        'dataVenda',
+        'mixProdutos',
+        'tipoProduto',
+        'multiplicador',
+        'markup',
+        'vendaAvulsa',
+        'valorBase',
+        'valorVendido',
+        'actions'
+      ]
+    }
+
     // Carrega todos os produtos
     this.loadProdutos();
 
@@ -120,63 +185,94 @@ export class CalculoComissaoComponent implements OnInit {
     return haveProductMixTechnology && haveProductMixMarketing;
   }
 
-  // Função para filtrar comissões por mês
-  filterPerMonth(event: any) {
-    this.loadComissoes(event.target.value);
+  // Função para filtrar comissões por mês e/ou ano
+  submitFormFilter() {
+    let yearSelect: HTMLSelectElement = document.querySelector("#years");
+    let monthSelect: HTMLSelectElement = document.querySelector("#months");
+    let vendedorSelect: HTMLSelectElement = document.querySelector("#vendedor");
+
+    let year: string = yearSelect.selectedOptions[0].value;
+    let month: string = monthSelect.selectedOptions[0].value;
+    let vendedor: string = vendedorSelect.selectedOptions[0].value;
+
+    this.loadComissoes(month, year, vendedor);
   }
 
   // Carrega as comissões de acordo com o filtro
-  loadComissoes(filter: string = "nulo") {
-    this.comissoesService.getComissoes(filter).subscribe(
-      async (data) => {
-        this.tabelaVendas = new MatTableDataSource<Comissao>(data);
+  loadComissoes(filterMonth: string = "sem filtro", filterYear: string = "sem filtro", vendedor: string = "sem filtro") {
+    if(this.userPermission()) {
+      let usuario: string = "adm";
+      this.comissoesService.getComissoes(usuario, filterMonth, filterYear, vendedor).subscribe(
+        async (data) => {
+          this.generateTableAndCommissions(data);
+        }, (err) => {
+          console.error(err);
+        }
+      );
+    } else {
+      let vendedor: string = this.currentUser.name;
+      this.comissoesService.getComissoes(vendedor, filterMonth, filterYear).subscribe(
+        async (data) => {
+          this.generateTableAndCommissions(data);
+        }, (err) => {
+          console.error(err);
+        }
+      );
+    }
+  }
 
-        let somaVendas: number = 0;
-        let somaValoresBase: number = 0;
+  // Cria a tabela e faz o cálculo das comissões de acordo com o método loadComissoes
+  generateTableAndCommissions(data: any) {
+    this.tabelaVendas = new MatTableDataSource<Comissao>(data);
 
-        data.map((venda) => {
-          // VENDAS TOTAL
-          if(venda.valorVendido) {
-            somaVendas += Number(venda.valorVendido);
-            this.vendasTotal = somaVendas;
-          }
+    let somaVendas: number = 0;
+    let somaValoresBase: number = 0;
 
-          // VALOR BASE
-          if(venda.valorBase) {
-            somaValoresBase += venda.valorBase;
-            this.valorBaseTotal < somaValoresBase ? this.valorBaseTotal = somaValoresBase : this.valorBaseTotal;
-          }
-
-          // QUALIDADE
-          if(this.vendasTotal == 0) {
-            this.qualidade = this.vendasTotal;
-          } else {
-            this.qualidade = Number(((this.vendasTotal * 2) / this.valorBaseTotal).toFixed(2));
-          }
-
-          // MIX
-          this.verifyProductsMix(data);
-          if(this.verifyProductsMix(data)) {
-            // if(venda.mix == 0.5) { this.changeMixValue(venda, true) }
-            if(this.mix == 0.5) { this.mix = 1 }
-          } else {
-            // if(venda.mix == 1){ this.changeMixValue(venda, false) }
-            if(this.mix == 1){ this.mix = 0.5 }
-          }
-
-          // COMISSÃO FINAL
-          // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
-          // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
-          let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.mix * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
-          calcComissaoFinal >= 6.2 ? this.comissaoFinal = 6.2 : this.comissaoFinal = calcComissaoFinal;
-
-          // R$ COMISSÃO
-          this.valorComissao = Number((((this.vendasTotal * this.comissaoFinal) / 100) - (((this.vendasTotal * this.comissaoFinal) / 100) * 0.16)).toFixed(2));
-        });
-      }, (err) => {
-        console.error(err)
+    data.map((venda) => {
+      // BUSCA OS ANOS PARA INSERIR NO SELECT DO FRONT
+      const ano = venda.ano;
+      if(!this.yearsSelectFilter.includes(ano)){
+        this.yearsSelectFilter.push(ano);
       }
-    );
+
+      // VENDAS TOTAL
+      if(venda.valorVendido) {
+        somaVendas += Number(venda.valorVendido);
+        this.vendasTotal = somaVendas;
+      }
+
+      // VALOR BASE
+      if(venda.valorBase) {
+        somaValoresBase += venda.valorBase;
+        this.valorBaseTotal < somaValoresBase ? this.valorBaseTotal = somaValoresBase : this.valorBaseTotal;
+      }
+
+      // QUALIDADE
+      if(this.vendasTotal == 0) {
+        this.qualidade = this.vendasTotal;
+      } else {
+        this.qualidade = Number(((this.vendasTotal * 2) / this.valorBaseTotal).toFixed(2));
+      }
+
+      // MIX
+      this.verifyProductsMix(data);
+      if(this.verifyProductsMix(data)) {
+        // if(venda.mix == 0.5) { this.changeMixValue(venda, true) }
+        if(this.mix == 0.5) { this.mix = 1 }
+      } else {
+        // if(venda.mix == 1){ this.changeMixValue(venda, false) }
+        if(this.mix == 1){ this.mix = 0.5 }
+      }
+
+      // COMISSÃO FINAL
+      // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
+      // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
+      let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.mix * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
+      calcComissaoFinal >= 6.2 ? this.comissaoFinal = 6.2 : this.comissaoFinal = calcComissaoFinal;
+
+      // R$ COMISSÃO
+      this.valorComissao = Number((((this.vendasTotal * this.comissaoFinal) / 100) - (((this.vendasTotal * this.comissaoFinal) / 100) * 0.16)).toFixed(2));
+    });
   }
 
   /** Announce the change in sort state for assistive technology. */
@@ -238,7 +334,7 @@ export class CalculoComissaoComponent implements OnInit {
   }
 
   // CRIAR Comissão
-  openModalNovaVenda(){  
+  openModalNovaVenda(){
     const modal = document.getElementById("modalNew");
     const bgModal = document.getElementById("bg-modal");
 
@@ -252,6 +348,7 @@ export class CalculoComissaoComponent implements OnInit {
   closeModalNovaVenda() {
     const modal = document.getElementById("modalNew");
     const bgModal = document.getElementById("bg-modal");
+
     if(modal != null){
       modal.style.display = "none";
       bgModal.style.display = "none";
@@ -261,6 +358,7 @@ export class CalculoComissaoComponent implements OnInit {
 
   formNovaVenda = this.formBuilder.group({
     dataVenda: ['', Validators.required],
+    status: ['Aguardando Aprovação', Validators.required],
     nomeCliente: ['', Validators.required],
     mixProdutos: ['', Validators.required],
     produtoVendido: ['', Validators.required],
@@ -286,7 +384,8 @@ export class CalculoComissaoComponent implements OnInit {
 
     if(formNovaVendaStatus !== "INVALID") {
       let dataVenda = this.formNovaVenda.get('dataVenda').value;
-      let vendedor = this.vendedor.name;
+      let status = this.formNovaVenda.get('status').value;
+      let vendedor = this.currentUser.name;
       let cliente = this.formNovaVenda.get('nomeCliente').value;
       let mixProdutos = this.formNovaVenda.get("mixProdutos").value;
       let tipoProduto = this.formNovaVenda.get('produtoVendido').value;
@@ -315,7 +414,9 @@ export class CalculoComissaoComponent implements OnInit {
       const novaVenda = {
         dataVenda: dataVenda,
         mes: this.defineMes(data[1]),
+        ano: data[0],
         vendedor: vendedor,
+        status: status,
         cliente: cliente,
         mixProdutos: mixProdutos,
         tipoProduto: tipoProduto,
@@ -347,6 +448,7 @@ export class CalculoComissaoComponent implements OnInit {
 
     this.formNovaVenda = this.formBuilder.group({
       dataVenda: ['', Validators.required],
+      status: ['Aguardando Aprovação', Validators.required],
       nomeCliente: ['', Validators.required],
       mixProdutos: ['', Validators.required],
       produtoVendido: ['', Validators.required],
@@ -362,6 +464,7 @@ export class CalculoComissaoComponent implements OnInit {
   formEditarVenda = this.formBuilder.group({
     _id: [],
     dataVenda: ['', Validators.required],
+    status: ['', Validators.required],
     nomeCliente: ['', Validators.required],
     mixProdutos: ['', Validators.required],
     produtoVendido: ['', Validators.required],
@@ -371,13 +474,20 @@ export class CalculoComissaoComponent implements OnInit {
     valorBase: ['']
   })
 
-  openModalEditarVenda(element: any){
+  openModalEditarVenda(element: any) {
     const modal = document.getElementById("modalEdit");
     const bgModal = document.getElementById("bg-modal");
+
+    // Formatando data
+    let dataVenda = element.dataVenda;
+    let data = dataVenda.split("/");
+    dataVenda = `${data[2]}-${data[1]}-${data[0]}`;
 
     // Busca os valores da linha e insere nos inputs
     this.formEditarVenda.patchValue({
       _id: element._id,
+      dataVenda: dataVenda,
+      status: element.status,
       nomeCliente: element.cliente,
       mixProdutos: element.mixProdutos,
       produtoVendido: element.tipoProduto,
@@ -417,7 +527,7 @@ export class CalculoComissaoComponent implements OnInit {
   onSubmitEditarVenda() {
     const id: string = this.formEditarVenda.get('_id').value;
     let dataVenda = this.formEditarVenda.get('dataVenda').value;
-    let vendedor = this.vendedor.name;
+    let status = this.formEditarVenda.get('status').value;
     let cliente = this.formEditarVenda.get('nomeCliente').value;
     let mixProdutos = this.formEditarVenda.get("mixProdutos").value;
     let tipoProduto = this.formEditarVenda.get('produtoVendido').value;
@@ -427,7 +537,7 @@ export class CalculoComissaoComponent implements OnInit {
     let valorBase = Number(this.formEditarVenda.get('valorBase').value);
     let valorVendido: number = 0;
 
-    //Formatando data
+    // Formatando data
     let data = dataVenda.split("-");
     dataVenda = `${data[2]}/${data[1]}/${data[0]}`;
 
@@ -444,7 +554,8 @@ export class CalculoComissaoComponent implements OnInit {
     const editarVenda = {
       dataVenda: dataVenda,
       mes: this.defineMes(data[1]),
-      vendedor: vendedor,
+      ano: data[2],
+      status: status,
       cliente: cliente,
       mixProdutos: mixProdutos,
       tipoProduto: tipoProduto,

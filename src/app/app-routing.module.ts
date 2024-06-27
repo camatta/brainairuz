@@ -16,6 +16,7 @@ import { ContratoFormComponent } from './dashboard/contratos/contrato-form/contr
 import { ContratosListarComponent } from './dashboard/contratos/contratos-listar/contratos-listar.component';
 import { ContratosIndexComponent } from './dashboard/contratos/contratos-index/contratos-index.component';
 import { ContratoArquivoComponent } from './dashboard/contratos/contrato-arquivo/contrato-arquivo.component';
+import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -30,9 +31,10 @@ const routes: Routes = [
       { path: 'listar', component: ContratosListarComponent },
       { path: 'arquivo', component: ContratoArquivoComponent },
     ]},
+    { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
     { path: 'icp', component: IcpComponent },
     { path: 'tabela-valores', component: TabelaDeValores },
-    { path: 'calculo-comissao', component: CalculoComissaoComponent }
+    { path: 'calculo-comissao', component: CalculoComissaoComponent },
   ]},
   { path: 'cadastro', component: CadastroComponent },
   { path: 'redefinir-senha', component: RedefinirSenhaComponent },

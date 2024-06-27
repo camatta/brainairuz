@@ -63,8 +63,9 @@
   font-size: 14px;
 }
 
-#months {
-  width: 200px;
+.select-nairuz {
+  min-height: 30px;
+  height: 100%;
   font-size: 14px;
   color: #00175d;
   border: unset;

@@ -6,11 +6,19 @@ const CommissionsSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    ano: {
+      type: String,
+      required: true
+    },
     mes: {
       type: String,
       required: true
     },
     vendedor: {
+      type: String,
+      required: true,
+    },
+    status: {
       type: String,
       required: true,
     },

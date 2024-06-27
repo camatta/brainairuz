@@ -12,12 +12,30 @@ export class ComissoesService {
 
   constructor(private http: HttpClient) { }
 
-  getComissoes(filter: string): Observable<any[]> {
-    if(filter == "nulo"){
-      return this.http.get<any[]>(environment.URL_API + '/api/comissoes');
+  getComissoes(currentUser: string, filterMonth: string, filterYear: string, vendedor?: string): Observable<any[]> {
+    let url = environment.URL_API + '/api/comissoes';
+
+    if (currentUser === 'adm') {
+      if(filterYear !== 'sem filtro'){
+        url += `?year=${filterYear}`
+      }
+      if (filterMonth !== 'sem filtro') {
+        url += (filterYear !== 'sem filtro') ? `&month=${filterMonth}` : `?month=${filterMonth}`;
+      }
+      if(vendedor !== 'sem filtro') {
+        url += (filterMonth !== 'sem filtro') || (filterYear !== 'sem filtro') ? `&vendedor=${vendedor}` : `?vendedor=${vendedor}`;
+      }
     } else {
-      return this.http.get<any[]>(environment.URL_API + `/api/comissoes/${filter}`);
+      url += `?user=${currentUser}`;
+      if (filterYear !== 'sem filtro') {
+        url += `&year=${filterYear}`;
+      }
+      if (filterMonth !== 'sem filtro') {
+        url += (filterYear !== 'sem filtro') ? `&month=${filterMonth}` : `&month=${filterMonth}`;
+      }
     }
+  
+    return this.http.get<any[]>(url);
   }
 
   setComissao(newComissao: Comissao) {

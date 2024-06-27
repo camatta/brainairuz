@@ -2,7 +2,14 @@ const { ListCommissionsService } = require("../../services/commissions/ListCommi
 
 module.exports.ListCommissionsController = async (req, res) => {
   try {
-    const listCommissionsService = await ListCommissionsService();
+    const usuario = req.query.user;
+    const ano = req.query.year;
+    const mes = req.query.month;
+    const vendedor = req.query.vendedor;
+
+    console.log({ usuario: usuario, ano: ano, mes: mes, vendedor: vendedor });
+    
+    const listCommissionsService = await ListCommissionsService({ usuario: usuario, ano: ano, mes: mes, vendedor: vendedor });
 
     res.status(200).json(listCommissionsService);
     

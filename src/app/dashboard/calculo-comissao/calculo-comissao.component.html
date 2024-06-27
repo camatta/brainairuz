@@ -30,10 +30,10 @@
               class="inputFatorMultiplicador w-50"
               id="fatorMultiplicador"
             />
-            <button *ngIf="mostrarBotaoEditar" (click)="editarFator()" mat-icon-button aria-label="Editar Fator" class="position-absolute p-0">
+            <button *ngIf="mostrarBotaoEditar && userPermission()" (click)="editarFator()" mat-icon-button aria-label="Editar Fator" class="position-absolute p-0">
               <mat-icon class="editar" aria-label="Editar fatorMultiplicador">edit</mat-icon>
             </button>
-            <button *ngIf="mostrarBotaoEnviar" (click)="enviarFator()" mat-icon-button aria-label="Enviar Fator" class="position-absolute p-0" type="submit">
+            <button *ngIf="mostrarBotaoEnviar && userPermission()" (click)="enviarFator()" mat-icon-button aria-label="Enviar Fator" class="position-absolute p-0" type="submit">
               <mat-icon class="editar" aria-label="Editar fatorMultiplicador">check</mat-icon>
             </button>
         </form>
@@ -93,24 +93,46 @@
   <div class="topo d-flex justify-content-between mt-5 mb-2">
     <button button type="button" class="btn btn-addVenda" (click)="openModalNovaVenda()" data-bs-dismiss="modal">Cadastrar Venda</button>
 
-    <div class="filter-month">
-      <label for="months" class="me-3">Filtrar por mês:</label>
-      <select (change)="filterPerMonth($event)" id="months" class="h-100">
-        <option selected value="nulo">Todos</option>
-        <option value="Janeiro">Janeiro</option>
-        <option value="Fevereiro">Fevereiro</option>
-        <option value="Março">Março</option>
-        <option value="Abril">Abril</option>
-        <option value="Maio">Maio</option>
-        <option value="Junho">Junho</option>
-        <option value="Julho">Julho</option>
-        <option value="Agosto">Agosto</option>
-        <option value="Setembro">Setembro</option>
-        <option value="Outubro">Outubro</option>
-        <option value="Novembro">Novembro</option>
-        <option value="Dezembro">Dezembro</option>
-      </select>
-    </div>
+    <form class="d-flex gap-5">
+      <div *ngIf="userPermission()" class="filter-month">
+        <label for="vendedor" class="me-3">Filtrar por Vendedor:</label>
+        <select (change)="submitFormFilter()" id="vendedor" class="select-nairuz h-100">
+          <option selected value="sem filtro">Todos</option>
+          <option value="Kyrsten Júnior">Kyrsten Júnior</option>
+          <option value="Dev Nairuz">Dev Nairuz</option>
+          <!-- <option *ngFor="let year of yearsSelectFilter" [value]="year">
+            {{ year }}
+          </option> -->
+        </select>
+      </div>
+      <div class="filter-month">
+        <label for="years" class="me-3">Filtrar por Ano:</label>
+        <select (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
+          <option selected value="sem filtro">Todos</option>
+          <option *ngFor="let year of yearsSelectFilter" [value]="year">
+            {{ year }}
+          </option>
+        </select>
+      </div>
+      <div class="filter-month">
+        <label for="months" class="me-3">Filtrar por mês:</label>
+        <select (change)="submitFormFilter()" id="months" class="select-nairuz h-100">
+          <option selected value="sem filtro">Todos</option>
+          <option value="Janeiro">Janeiro</option>
+          <option value="Fevereiro">Fevereiro</option>
+          <option value="Março">Março</option>
+          <option value="Abril">Abril</option>
+          <option value="Maio">Maio</option>
+          <option value="Junho">Junho</option>
+          <option value="Julho">Julho</option>
+          <option value="Agosto">Agosto</option>
+          <option value="Setembro">Setembro</option>
+          <option value="Outubro">Outubro</option>
+          <option value="Novembro">Novembro</option>
+          <option value="Dezembro">Dezembro</option>
+        </select>
+      </div>
+    </form>
 
   </div>
 
@@ -118,7 +140,6 @@
   <div class="mat-elevation-z8">
     <div class="sectionTable">
       <table id="tabela-valores" mat-table [dataSource]="tabelaVendas" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
-        
         <!-- Cliente Column -->
         <ng-container matColumnDef="cliente" sticky>
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cliente">
@@ -127,20 +148,28 @@
           <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
         </ng-container>
 
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by status">
+            Status
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+        </ng-container>
+
+        <!-- Vendedor Column -->
+        <ng-container *ngIf="userPermission()" matColumnDef="vendedor">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by vendedor">
+            Vendedor
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.vendedor }} </td>
+        </ng-container>
+
         <!-- Data da Venda Column -->
         <ng-container matColumnDef="dataVenda">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dataVenda">
             Venda em
           </th>
           <td mat-cell *matCellDef="let element"> {{ element.dataVenda }} </td>
-        </ng-container>
-
-        <!-- Data da Venda Column -->
-        <ng-container matColumnDef="mesVenda">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mesVenda">
-            Mês da Venda
-          </th>
-          <td mat-cell *matCellDef="let element"> {{ element.mes }} </td>
         </ng-container>
 
         <!-- Mix Produtos Column -->
@@ -244,6 +273,16 @@
             <strong>Preencha os campos abaixo:</strong>
           </div>
 
+          <div *ngIf="userPermission()" class="col-12 d-flex flex-column align-items-start mb-3">
+            <label class="form-label">Status:</label>
+            <select formControlName="status" id="status" class="selectForm form-select">
+              <option value="Aguardando Aprovação">Aguardando Aprovação</option>
+              <option value="Aprovado">Aprovado</option>
+              <option value="Reprovado">Reprovado</option>
+              <option value="Pagamento Efetuado">Pagamento Efetuado</option>
+            </select>
+          </div>
+
           <div class="col-12 mb-3">
             <label for="dataVenda" class="form-label">Data da Venda:</label>
             <input type="date" id="dataVenda" class="form-control col-12" formControlName="dataVenda" required />
@@ -256,15 +295,15 @@
         
           <div class="col-12 mb-3">
             <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
-            <select formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
+            <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
               <option value="marketing">Marketing</option>
               <option value="sustentacao">Sustentação</option>
               <option value="tecnologia">Tecnologia</option>
-              <option value="help">Help</option>
+              <option value="help">Help Suporte A</option>
             </select>
           </div>
         
-          <div class="col-12 mb-3">
+          <div *ngIf="mixProdutosValidate" class="col-12 mb-3">
             <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
             <mat-form-field class="selectForm form-control">
               <mat-select formControlName="produtoVendido" id="produtoVendido">
@@ -279,13 +318,15 @@
           </div>
       
           <div class="col-12 mb-3">
-            <label for="multiplicador" class="form-label">Multiplicador:</label>
-            <select formControlName="multiplicador" id="multiplicador" class="selectForm form-select">
-              <option value="1">1</option>
-              <option value="6">6</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-            </select>
+            <label for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
+            <input
+              type="number"
+              formControlName="multiplicador"
+              step="1"
+              id="multiplicador"
+              class="form-control form-floating col-12"
+              required
+            />
           </div>
         
           <div class="col-12 mb-3">
@@ -300,7 +341,7 @@
             />
           </div>
         
-          <div class="col-12 mb-3">
+          <div *ngIf="!mixProdutosValidate" class="col-12 mb-3">
             <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
             <input
               type="text"
@@ -325,13 +366,24 @@
   <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarVenda" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header mb-5">
           <h2 class="modal-title text-black fs-5" id="modalEditarVenda">Editar Venda</h2>
           <button type="button" (click)="closeModalEditarVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <form id="formCalculoComissao" [formGroup]="formEditarVenda" class="container">
-          <div class="col-12 mt-5 mb-3">
+          <div  *ngIf="userPermission()" class="col-12 d-flex flex-column align-items-start mb-3">
+            <label class="form-label">Status:</label>
+
+            <select formControlName="status" id="status" class="selectForm form-select">
+              <option value="Aguardando Aprovação">Aguardando Aprovação</option>
+              <option value="Aprovado">Aprovado</option>
+              <option value="Reprovado">Reprovado</option>
+              <option value="Pagamento Efetuado">Pagamento Efetuado</option>
+            </select>
+          </div>
+
+          <div class="col-12 mb-3">
             <label for="dataVenda" class="form-label">Data da Venda:</label>
             <input type="date" id="dataVenda" class="form-control col-12" formControlName="dataVenda" required />
           </div>
@@ -347,11 +399,11 @@
               <option value="marketing">Marketing</option>
               <option value="sustentacao">Sustentação</option>
               <option value="tecnologia">Tecnologia</option>
-              <option value="help">Help</option>
+              <option value="help">Help Suporte A</option>
             </select>
           </div>
         
-          <div class="col-12 mb-3">
+          <div *ngIf="mixProdutosValidate" class="col-12 mb-3">
             <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
             <mat-form-field class="selectForm form-control">
               <mat-select formControlName="produtoVendido" id="produtoVendido">
@@ -366,7 +418,7 @@
           </div>
       
           <div class="col-12 mb-3">
-            <label for="multiplicador" class="form-label">Multiplicador:</label>
+            <label for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
             <select formControlName="multiplicador" id="multiplicador" class="selectForm form-select">
               <option value="1">1</option>
               <option value="6">6</option>
@@ -388,7 +440,7 @@
           </div>
         
 
-          <div class="col-12 mb-3">
+          <div *ngIf="!mixProdutosValidate" class="col-12 mb-3">
             <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
             <input
               type="text"
