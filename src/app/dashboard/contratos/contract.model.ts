@@ -2,23 +2,26 @@ export interface Contract {
   contratoId: string,
   contratoAutor: string,
   contratoStatus: string,
-  contratoServico: string,
-  criadoEm: string,
-  atualizadoEm?: string | null,
+  contratoEmpresa: string,
+  contratoTime: string,
+  contratoCriadoEm: string,
+  contratoAtualizadoEm?: string | null,
   nzGroup: {
-    nzEmpresaResponsavel: string;
     nzTime: string;
-    nzTipoSite: string;
+    nzTipoProjeto: string;
+    nzProjetoPlataforma?: string;
+    nzProjetoHoras?: number | "";
     nzServico: string;
-    nzServicoPlataforma: string;
   },
   extEmpresaGroup: {
     extEmpresaCnpj: number;
     extEmpresaNome: string;
-    extEmpresaIE?: number | null | string;
+    extEmpresaIE?: number | "";
+    extEmpresaCEP: number;
     extEmpresaEndereco: string;
     extEmpresaBairro: string;
-    extEmpresaCEP: number;
+    extEmpresaCidade: string;
+    extEmpresaEstado: string;
     extEmpresaCpfRepLegal: number;
     extEmpresaNomeRepLegal: string;
   },
@@ -29,6 +32,7 @@ export interface Contract {
     projetoParcelasValor: number;
     projetoMulta: number;
     projetoData: string;
+    projetoCarencia: number;
     projetoInformacoes: string;
   }
 }

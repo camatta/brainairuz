@@ -1,12 +1,15 @@
 import { Injectable } from "@angular/core";
 
 type Client = {
-  empresa_cnpj: string;
-  nome_empresa: string;
-  inscricao_estadual?: string;
-  empresa_endereco: string;
-  empresa_bairro: string;
-  empresa_cep: string;
+  _id?: string;
+  empresaCnpj: string;
+  empresaNome: string;
+  empresaIE?: number | "";
+  empresaCep: number;
+  empresaEndereco: string;
+  empresaBairro: string;
+  empresaCidade: string;
+  empresaEstado: string;
   criado_em: string;
 }
 
@@ -24,7 +27,7 @@ export class ClientsService {
   }
 
   async getClientById(id: string): Promise<Client | null> {
-    const client = await this.CLIENTS.find(({ empresa_cnpj }) => empresa_cnpj === id)
+    const client = await this.CLIENTS.find(({ empresaCnpj }) => empresaCnpj === id)
 
     if(client) {
       return client
@@ -33,8 +36,7 @@ export class ClientsService {
   }
 
   async createClient(client: Client) {
-    const clientAlreadyExists = await this.CLIENTS.findIndex(({ empresa_cnpj }) => empresa_cnpj === client.empresa_cnpj);
-    console.log(clientAlreadyExists)
+    const clientAlreadyExists = await this.CLIENTS.findIndex(({ empresaCnpj }) => empresaCnpj === client.empresaCnpj );
 
     if(clientAlreadyExists === -1) {
       await this.CLIENTS.push(client);

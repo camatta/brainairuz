@@ -22,7 +22,7 @@
 
       <div class="contrato-partes">
         <h4>Contratante</h4>
-        <p><strong>{{ contract?.extEmpresaGroup?.extEmpresaNome ? contract?.extEmpresaGroup?.extEmpresaNome : 'YYYYYYYYY'}}</strong>, pessoa jurídica de direito privado, devidamente inscrita no CNPJ/MF sob nº {{ contract?.extEmpresaGroup?.extEmpresaCnpj ? (contract?.extEmpresaGroup?.extEmpresaCnpj | mask: '00.000.000/0000-00') : 'XX.XXX.XXX/XXXX-XX'}}, {{ contract?.extEmpresaGroup?.extEmpresaIE ? 'e inscrição estadual  ' + (contract?.extEmpresaGroup?.extEmpresaIE | mask: 'XXX.XXX.XXX') : '' }} estabelecida na cidade YYYYYYY, Estado do YYYYYYYY, na {{ contract?.extEmpresaGroup?.extEmpresaEndereco ? contract?.extEmpresaGroup?.extEmpresaEndereco : 'Rua YYYYYYY, XXX, YYYYYY' }}, CEP {{ contract?.extEmpresaGroup?.extEmpresaCEP ? (contract?.extEmpresaGroup?.extEmpresaCEP | mask: 'XXXXX-XXX') : 'YYYYY-YYY' }}, neste ato representada por seu sócio administrador, o(a) Sr(a). {{ contract?.extEmpresaGroup?.extEmpresaNomeRepLegal ? contract?.extEmpresaGroup?.extEmpresaNomeRepLegal : 'YYYYYY' }}, devidamente inscrito no CPF/MF sob o nº {{ contract?.extEmpresaGroup?.extEmpresaCpfRepLegal ? (contract?.extEmpresaGroup?.extEmpresaCpfRepLegal | mask: 'XXX.XXX.XXX-XX') : 'XXX.XXX.XXX-XX' }}.</p>
+        <p><strong>{{ contract?.extEmpresaGroup?.extEmpresaNome ? contract?.extEmpresaGroup?.extEmpresaNome : 'YYYYYYYYY'}}</strong>, pessoa jurídica de direito privado, devidamente inscrita no CNPJ/MF sob nº {{ contract?.extEmpresaGroup?.extEmpresaCnpj ? (contract?.extEmpresaGroup?.extEmpresaCnpj | mask: '00.000.000/0000-00') : 'XX.XXX.XXX/XXXX-XX'}}, {{ contract?.extEmpresaGroup?.extEmpresaIE ? 'e inscrição estadual  ' + (contract?.extEmpresaGroup?.extEmpresaIE | mask: 'XXX.XXX.XXX') : '' }} estabelecida na cidade {{ contract?.extEmpresaGroup?.extEmpresaCidade ? contract?.extEmpresaGroup?.extEmpresaCidade : 'YYYYYYY'}}, Estado do {{ contract?.extEmpresaGroup?.extEmpresaEstado ? contract?.extEmpresaGroup?.extEmpresaEstado : 'YYYYYYYY' }}, na {{ contract?.extEmpresaGroup?.extEmpresaEndereco ? (contract?.extEmpresaGroup?.extEmpresaEndereco + ', ' + contract?.extEmpresaGroup?.extEmpresaBairro ) : 'Rua YYYYYYY, XXX, YYYYYY' }}, CEP {{ contract?.extEmpresaGroup?.extEmpresaCEP ? (contract?.extEmpresaGroup?.extEmpresaCEP | mask: 'XXXXX-XXX') : 'YYYYY-YYY' }}, neste ato representada por seu sócio administrador, o(a) Sr(a). {{ contract?.extEmpresaGroup?.extEmpresaNomeRepLegal ? contract?.extEmpresaGroup?.extEmpresaNomeRepLegal : 'YYYYYY' }}, devidamente inscrito no CPF/MF sob o nº {{ contract?.extEmpresaGroup?.extEmpresaCpfRepLegal ? (contract?.extEmpresaGroup?.extEmpresaCpfRepLegal | mask: 'XXX.XXX.XXX-XX') : 'XXX.XXX.XXX-XX' }}.</p>
       </div>
     </div>
     
@@ -34,13 +34,13 @@
   <div class="pdf-conteudo">
     <div class="pdf-copo gradient">
       <p class="info">
-        As partes acima identificadas têm, entre si, justo e acertado o presente Contrato de Prestação de Serviços para Implementação de Layout {{ contract?.nzGroup?.nzServico ? contract?.nzGroup?.nzServico : 'Personalizado' }} para {{ contract?.nzGroup?.nzTipoSite ? contract?.nzGroup?.nzTipoSite : 'E-Commerce' }}, o qual se regerá pelas cláusulas
+        As partes acima identificadas têm, entre si, justo e acertado o presente Contrato de Prestação de Serviços para Implementação de Layout {{ contract?.nzGroup?.nzServico ? contract?.nzGroup?.nzServico : 'Personalizado' }} para {{ contract?.nzGroup?.nzTipoProjeto ? contract?.nzGroup?.nzTipoProjeto : 'E-Commerce' }}, o qual se regerá pelas cláusulas
 e condições seguintes:
       </p>
 
       <div class="clausula">
         <h2>Cláusula 1ª</h2>
-        <p>O objeto do presente contrato consiste na prestação de serviços de implementação de Layout e configuração do {{ contract?.nzGroup?.nzTipoSite ? contract?.nzGroup?.nzTipoSite : 'E-Commerce' }} na plataforma da {{ contract?.nzGroup?.nzServicoPlataforma ? contract?.nzGroup?.nzServicoPlataforma : 'XXXXX' }} conforme a proposta comercial.</p>
+        <p>O objeto do presente contrato consiste na prestação de serviços de implementação de Layout e configuração do {{ contract?.nzGroup?.nzTipoProjeto ? contract?.nzGroup?.nzTipoProjeto : 'E-Commerce' }} na plataforma da {{ contract?.nzGroup?.nzProjetoPlataforma ? contract?.nzGroup?.nzProjetoPlataforma : 'XXXXX' }} conforme a proposta comercial.</p>
       </div>
 
       <div class="clausula pt-mt-bt">
@@ -145,7 +145,7 @@ e condições seguintes:
 
       <div class="clausula pt-mt-bt">
         <h2>Cláusula 6ª</h2>
-        <p>Este Contrato não poderá ser rescindido durante o período acordado de XX dias úteis, por nenhuma das partes, somente se fundada em uma justificativa real (recusa da execução de serviços, não entrega dos serviços executados dentro do prazo, mora no pagamento no dia acertado, ou qualquer outro ato que infrinja alguma norma deste Contrato).</p>
+        <p>Este Contrato não poderá ser rescindido durante o período acordado de {{ contract?.projetoGroup?.projetoCarencia ? contract?.projetoGroup?.projetoCarencia : 'XX' }} dias úteis, por nenhuma das partes, somente se fundada em uma justificativa real (recusa da execução de serviços, não entrega dos serviços executados dentro do prazo, mora no pagamento no dia acertado, ou qualquer outro ato que infrinja alguma norma deste Contrato).</p>
       </div>
 
       <div class="p-clausula">
@@ -425,7 +425,7 @@ e condições seguintes:
               <mark class="anexo-num">3.</mark>
               <div class="anexo-texto">
                 <h5 class="anexo-titulo">Front-End:</h5>
-                <p class="anexo-desc">A parte visual do {{ contract?.nzGroup?.nzTipoSite ? contract?.nzGroup?.nzTipoSite : 'E-commerce'}}, onde realizamos toda interação e construção da experiência do usuário. Tanto o Layout, quanto o desenvolvimento por meio de códigos;</p>
+                <p class="anexo-desc">A parte visual do {{ contract?.nzGroup?.nzTipoProjeto ? contract?.nzGroup?.nzTipoProjeto : 'E-commerce'}}, onde realizamos toda interação e construção da experiência do usuário. Tanto o Layout, quanto o desenvolvimento por meio de códigos;</p>
               </div>
             </div>
 
@@ -566,7 +566,7 @@ e condições seguintes:
           <div class="geral-info">
             <div class="info-box">
               <h5>1.</h5>
-              <p>A contratante deverá fornecer acesso admin ao painel {{ contract?.nzGroup?.nzServicoPlataforma ? contract.nzGroup.nzServicoPlataforma : 'VTEX'}} para o seguinte e-mail até o preenchimento do briefing:</p>
+              <p>A contratante deverá fornecer acesso admin ao painel {{ contract?.nzGroup?.nzProjetoPlataforma ? contract.nzGroup.nzProjetoPlataforma : 'VTEX'}} para o seguinte e-mail até o preenchimento do briefing:</p>
               <a href="mailto:desenvolvimento@nairuz.com.br" class="info-link"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
                 <path d="M1 7.99999C0.725 7.99999 0.489583 7.90208 0.29375 7.70624C0.0979167 7.51041 0 7.27499 0 6.99999V0.999992C0 0.724992 0.0979167 0.489576 0.29375 0.293742C0.489583 0.097909 0.725 -7.62939e-06 1 -7.62939e-06H9C9.275 -7.62939e-06 9.51042 0.097909 9.70625 0.293742C9.90208 0.489576 10 0.724992 10 0.999992V6.99999C10 7.27499 9.90208 7.51041 9.70625 7.70624C9.51042 7.90208 9.275 7.99999 9 7.99999H1ZM5 4.49999L9 1.99999V0.999992L5 3.49999L1 0.999992V1.99999L5 4.49999Z" fill="#61DCAB"/>
                 </svg><span>desenvolvimento@nairuz.com.br</span></a>
@@ -785,7 +785,7 @@ e condições seguintes:
                   </svg>
                 <strong>Cadastro de<br/>Produtos e Imagens</strong>
               </h5>
-              <p class="escopo-desc">Devem ocorrer via ERP, sendo de responsabilidade da contratante. E para os sistemas que não disponibilizam a funcionalidade de uploader de imagens, estas devem ocorrer via programa ou diretamente na plataforma e os dados serão replicados do ERP e/ou programa para o E-commerce. Caso o ERP não tenha integração com a plataforma nativa, a {{ contract?.nzGroup?.nzServicoPlataforma ? contract?.nzGroup?.nzServicoPlataforma : 'Vtex'}} disponibiliza integração via API. Deste modo o fornecedor do ERP da contratante pode se conectar diretamente ou a contratada pode apresentar um parceiro integrador para o desenvolvimento da API.</p>
+              <p class="escopo-desc">Devem ocorrer via ERP, sendo de responsabilidade da contratante. E para os sistemas que não disponibilizam a funcionalidade de uploader de imagens, estas devem ocorrer via programa ou diretamente na plataforma e os dados serão replicados do ERP e/ou programa para o E-commerce. Caso o ERP não tenha integração com a plataforma nativa, a {{ contract?.nzGroup?.nzProjetoPlataforma ? contract?.nzGroup?.nzProjetoPlataforma : 'Vtex'}} disponibiliza integração via API. Deste modo o fornecedor do ERP da contratante pode se conectar diretamente ou a contratada pode apresentar um parceiro integrador para o desenvolvimento da API.</p>
 
               <p class="escopo-note"><strong>Nota:</strong> A contratada, informará a contratante a data limite para estruturação do ERP, visto que a plataforma é passiva e depende do envio dos dados do ERP para mesma para validação de todo o fluxo dentro da plataforma.</p>
             </div>
@@ -856,7 +856,7 @@ e condições seguintes:
                 </svg>
                 <strong>Treinamento e<br/>Documentação</strong>
               </h5>
-              <p class="escopo-mark">Acesso ao EAD e documentação da {{ contract?.nzGroup?.nzServicoPlataforma ? contract?.nzGroup?.nzServicoPlataforma : 'VTEX' }}.</p>
+              <p class="escopo-mark">Acesso ao EAD e documentação da {{ contract?.nzGroup?.nzProjetoPlataforma ? contract?.nzGroup?.nzProjetoPlataforma : 'VTEX' }}.</p>
             </div>
           </div>
         </div>
