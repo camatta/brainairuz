@@ -72,7 +72,7 @@
 
           <div class="input-group" [ngClass]="{'show': isEditMode || !extEmpresaCnpjRef.invalid && (extEmpresaCnpjRef.touched || extEmpresaCnpjRef.dirty)}">
             <label for="empresa_cep">CEP</label>
-            <input type="text" name="extEmpresaCEP" id="empresa_cep" placeholder="00000-000" mask="00000-000" maxlength="9" ngModel #extEmpresaCEPRef="ngModel" required>
+            <input type="text" name="extEmpresaCEP" id="empresa_cep" placeholder="00000-000" mask="00000-000" maxlength="9" ngModel #extEmpresaCEPRef="ngModel" (ngModelChange)="onCepChange($event)" required>
             <div *ngIf="extEmpresaCEPRef.invalid && (extEmpresaCEPRef.touched || extEmpresaCEPRef.dirty)" class="invalid-alert">
               <span *ngIf="extEmpresaCEPRef.errors?.['required']">Campo obrigatório.</span>
               <span *ngIf="extEmpresaCEPRef.errors?.['mask']">Campo inválido</span>

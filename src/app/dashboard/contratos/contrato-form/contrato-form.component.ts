@@ -20,6 +20,7 @@ import { DEV_SERVICES, DEV_SERVICE_OPTIONS, HELP_SERVICES, HELP_SERVICE_OPTIONS,
 import { type COMPANY, type SERVICE, type PROJECT, type TEAM } from '../types';
 import { Contract } from '../contract.model';
 import { nanoid } from 'nanoid';
+import { type CEP, ViaCepService } from 'src/app/services/via.cep.service';
 
 @Component({
   selector: 'app-contrato-form',
@@ -116,7 +117,8 @@ export class ContratoFormComponent {
     private pdfGeneratorService: PdfGeneratorService,
     private clientsService: ClientsService,
     private confirmModalService: ConfirmModalService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private viaCepService: ViaCepService
   ) {}
 
   ngOnInit() {
@@ -230,6 +232,25 @@ export class ContratoFormComponent {
           extEmpresaGroup.get('extEmpresaCidade').setValue('');
           extEmpresaGroup.get('extEmpresaEstado').setValue('');
         }
+      }
+    }
+  }
+
+  onCepChange(cep: string) {
+    if(!this.isEditMode && cep !== null) {
+      if(cep.length === 8) {
+        this.viaCepService.getCepInfo(cep).subscribe(viaCepResponse => {
+          if(viaCepResponse) {
+            const extEmpresaGroup = this.contractForm.controls['extEmpresaGroup'];
+
+            extEmpresaGroup.get('extEmpresaEndereco').setValue(viaCepResponse.logradouro);
+            extEmpresaGroup.get('extEmpresaBairro').setValue(viaCepResponse.bairro);
+            extEmpresaGroup.get('extEmpresaCidade').setValue(viaCepResponse.localidade);
+
+            const estado = this.viaCepService.getStateName(viaCepResponse.uf)
+            extEmpresaGroup.get('extEmpresaEstado').setValue(estado);
+          }
+        })
       }
     }
   }
