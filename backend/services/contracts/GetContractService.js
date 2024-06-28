@@ -3,10 +3,6 @@ const Contracts = require("../../models/Contracts");
 module.exports.GetContractService = async ( _id ) => {
   try {
     const contract = await Contracts.findById( _id );
-
-    if(!contract) {
-      throw new Error({ message: "Contrato não existe!" })
-    }
   
     return contract
   } catch(error) {
