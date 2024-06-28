@@ -26,10 +26,6 @@ module.exports.CreateClientController = async (req, res) => {
       criado_em
     });
 
-    if(newClient.error) {
-      res.status(500).send(newClient)
-    }
-
     res.status(201).send( newClient )
 
   } catch(error) {
