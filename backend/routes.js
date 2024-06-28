@@ -23,6 +23,18 @@ const { CreateCommissionController } = require('./controllers/commissions/Create
 const { DeleteCommissionController } = require('./controllers/commissions/DeleteCommissionController');
 const { UpdateCommissionController } = require('./controllers/commissions/UpdateCommissionController');
 
+// Clients controllers
+const { CreateClientController } = require('./controllers/clients/CreateClientController');
+const { ListClientsController } = require('./controllers/clients/ListClientsController');
+const { GetClientController } = require('./controllers/clients/GetClientController');
+
+// Contracts controllers
+const { ListContractsController } = require('./controllers/contracts/ListContractsController');
+const { CreateContractController } = require('./controllers/contracts/CreateContractController');
+const { GetContractController } = require('./controllers/contracts/GetContractController');
+const { UpdateContractController } = require('./controllers/contracts/UpdateContractController');
+const { DeleteContractController } = require('./controllers/contracts/DeleteContractController');
+
 
 // *** USUÁRIO ***
 // Rota de Cadastro
@@ -64,5 +76,36 @@ router.delete('/api/comissoes/:id', DeleteCommissionController);
 
 // Rota para editar uma comissão
 router.put('/api/comissoes/:id', UpdateCommissionController);
+
+/**
+ * Rotas para Contratos
+ */
+// Rota para criar um contrato
+router.post('/api/contract', authMiddleware, CreateContractController);
+
+// Rota para consultar todos contratos
+router.get('/api/contracts', authMiddleware, ListContractsController);
+
+// Rota para consultar um contrato por id
+router.get('/api/contract/:id', authMiddleware, GetContractController);
+
+// Rota para editar um contrato
+router.put('/api/contract/:id', authMiddleware, UpdateContractController);
+
+// Rota para excluir um contrato
+router.delete('/api/contract/:id', authMiddleware, DeleteContractController)
+
+/**
+ * Rotas para Clientes
+ * os dados estão vindo da criação de um novo contrato
+ */
+// Rota para Criar um novo cliente
+router.post('/api/client', authMiddleware, CreateClientController);
+
+// Rota para consultar todos os clientes
+router.get('/api/clients', authMiddleware, ListClientsController);
+
+// Rota para consultar cliente via CNPJ
+router.get('/api/client/:cnpj', authMiddleware, GetClientController); 
 
 module.exports = router;
