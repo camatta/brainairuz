@@ -2,7 +2,7 @@ import { NgModule, LOCALE_ID  } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,6 +23,7 @@ import { ContratosComponent } from './dashboard/contratos/contratos.component';
 import { ContratosListarComponent } from './dashboard/contratos/contratos-listar/contratos-listar.component';
 import { ContratoFormComponent } from './dashboard/contratos/contrato-form/contrato-form.component';
 import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 import localePt from '@angular/common/locales/pt';
 registerLocaleData(localePt, 'pt-BR');
@@ -55,7 +56,12 @@ registerLocaleData(localePt, 'pt-BR');
   ],
   providers: [
     provideNgxMask(),
-    { provide: LOCALE_ID, useValue: 'pt-BR' }
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
