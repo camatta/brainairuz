@@ -43,7 +43,7 @@
           <div class="contrato-actions">
             <button type="button" title="Ver" class="contrato-action" (click)="onViewContract(contrato)"><i class="fa-solid fa-eye"></i></button>
             <button type="button" title="Editar" class="contrato-action" *ngIf="contrato.contratoStatus === 'Minuta contratual'" (click)="confirmEdit(contrato)"><i class="fa-solid fa-pen"></i></button>
-            <button type="button" title="Deletar" class="contrato-action" *ngIf="contrato.contratoStatus !== 'Concluído'" (click)="confirmDelete(contrato.contratoId, contrato.extEmpresaGroup.extEmpresaNome)"><i class="fa-solid fa-trash-can"></i></button>
+            <button type="button" title="Deletar" class="contrato-action" *ngIf="contrato.contratoStatus !== 'Concluído'" (click)="confirmDelete(contrato._id, contrato.extEmpresaGroup.extEmpresaNome)"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         </div>
 
