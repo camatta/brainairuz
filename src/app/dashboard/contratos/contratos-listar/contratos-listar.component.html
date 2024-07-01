@@ -49,7 +49,7 @@
 
         <div class="contrato-card-body">
           <p class="contrato-value">{{ contrato.projetoGroup.projetoValor | currency:'BRL' }}</p>
-          <select name="contrato-status" id="contrato-status" (change)="confirmStatusChange(contrato.contratoId, $event, contrato.contratoStatus)">
+          <select name="contrato-status" id="contrato-status" (change)="confirmStatusChange(contrato._id, $event, contrato.contratoStatus)">
             <option value="Minuta contratual" [selected]="contrato.contratoStatus === 'Minuta contratual'">Minuta contratual</option>
             <option value="Aguardando assinatura" [selected]="contrato.contratoStatus === 'Aguardando assinatura'">Aguardando assinatura</option>
             <option value="Concluído" [selected]="contrato.contratoStatus === 'Concluído'">Concluído</option>
