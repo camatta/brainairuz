@@ -170,7 +170,7 @@
             <label for="projeto_data">Data do Contrato</label>
             <input type="date" name="projetoData" id="projeto_data" ngModel #projetoDataRef="ngModel" required>
             <span *ngIf="projetoDataRef.invalid && (projetoDataRef.touched || projetoDataRef.dirty)" class="invalid-alert">Campo obrigatório</span>
-            <span *ngIf="isEditMode || projetoDataRef.valid && (projetoDataRef.untouched && !projetoDataRef.dirty)" class="invalid-alert">Clique para revisar</span>
+            <span *ngIf="projetoDataRef.valid && (projetoDataRef.untouched && !projetoDataRef.dirty)" class="invalid-alert">Clique para revisar</span>
           </div>
 
           <div class="input-group" [ngClass]="{'show': isEditMode || !projetoDataRef.invalid && (projetoDataRef.touched || projetoDataRef.dirty)}">
