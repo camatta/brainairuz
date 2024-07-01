@@ -25,8 +25,8 @@
           </div>
 
           <div class="input-group" [ngClass]="{'show': isEditMode || !nzTipoProjetoRef.invalid && (nzTipoProjetoRef.touched || nzTipoProjetoRef.dirty)}">
-            <label for="projetoPlataforma">{{ SERVICES_LIST_OPTIONS.name }}</label>
-            <select name="projetoPlataforma" id="projetoPlataforma" required ngModel #nzProjetoPlataformaRef="ngModel">
+            <label for="nzProjetoPlataforma">{{ SERVICES_LIST_OPTIONS.name }}</label>
+            <select name="nzProjetoPlataforma" id="nzProjetoPlataforma" required ngModel #nzProjetoPlataformaRef="ngModel">
               <option *ngFor="let service_option of SERVICES_LIST_OPTIONS.list" [value]="service_option.id === '' ? service_option.id : service_option.name" [disabled]="service_option.id === ''">{{ service_option.name }}</option>
             </select>
             <span *ngIf="nzProjetoPlataformaRef.invalid && (nzProjetoPlataformaRef.touched || nzProjetoPlataformaRef.dirty)" class="invalid-alert">Campo obrigatório</span>
