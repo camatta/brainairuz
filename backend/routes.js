@@ -34,6 +34,7 @@ const { CreateContractController } = require('./controllers/contracts/CreateCont
 const { GetContractController } = require('./controllers/contracts/GetContractController');
 const { UpdateContractController } = require('./controllers/contracts/UpdateContractController');
 const { DeleteContractController } = require('./controllers/contracts/DeleteContractController');
+const { UpdateContractStatusController } = require('./controllers/contracts/UpdateContractStatusController');
 
 
 // *** USUÁRIO ***
@@ -91,6 +92,9 @@ router.get('/api/contract/:id', authMiddleware, GetContractController);
 
 // Rota para editar um contrato
 router.put('/api/contract/:id', authMiddleware, UpdateContractController);
+
+// Rota para editar o status de um contrato
+router.patch('/api/contract/:id/status', authMiddleware, UpdateContractStatusController);
 
 // Rota para excluir um contrato
 router.delete('/api/contract/:id', authMiddleware, DeleteContractController)
