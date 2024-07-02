@@ -11,9 +11,7 @@
       <label for="author">Responsável</label>
       <select name="author" id="author" [(ngModel)]="searchAuthor">
         <option value="">Selecione</option>
-        <option value="Camila Silva">Camila Silva</option>
-        <option value="César Achiles">César Achiles</option>
-        <option value="Valéria Queiroz">Valéria Queiroz</option>
+        <option *ngFor="let author of AUTHORS" [value]="author.name">{{author.name}}</option>
       </select>
     </div>
     <div class="filter status">

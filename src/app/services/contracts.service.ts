@@ -1,67 +1,39 @@
 import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 import { Contract } from "../dashboard/contratos/contract.model";
+import { environment } from "src/environments/environment";
+
+const API_URL = environment.URL_API;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContractsService {
-  private CONTRACTS: Contract[] = [];
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
-
-  getContracts() {
-    const allContracts = this.CONTRACTS;
-    return allContracts;
+  getContracts(): Observable<{ contracts: Contract[] }> {
+    return this.http.get<{ contracts: Contract[] }>(`${API_URL}/api/contracts`);
   }
 
-  async getContractById(id: string) {
-    const contract = await this.CONTRACTS.find(({ contratoId }) => contratoId === id)
-
-    return contract;
+  getContractById(id: string): Observable<{ contract: Contract }> {
+    return this.http.get<{ contract: Contract }>(`${API_URL}/api/contracts/${id}`);
   }
 
-  async createContract( contract: Contract ) {
-    await this.CONTRACTS.unshift(contract);
+  createContract( newContract: Contract ): Observable<Contract> {
+    return this.http.post<Contract>(`${API_URL}/api/contracts`, {contract: newContract});
   }
 
-  deleteContract(contractId: string) {
-    const allContracts = this.CONTRACTS;
-    const newContracts = allContracts.filter((contract) => contract.contratoId !== contractId )
-    
-    this.CONTRACTS = newContracts;
+  deleteContract(contractId: string): Observable<{ deletedContract: Contract, message: string }> {
+    return this.http.delete<{ deletedContract: Contract, message: string }>(`${API_URL}/api/contracts/${contractId}`);
   }
 
-  editContract(contract: Contract) {
-    const allContracts = this.CONTRACTS;
-    const newContracts = allContracts.map(existingContract => {
-      if(existingContract.contratoId === contract.contratoId) {
-        return {
-          ...existingContract, // Retém todas as propriedades do contrato original
-          ...contract // Substitui as propriedades com os valores do contrato atualizado
-        };
-      } else {
-        return existingContract; // Retorna o contrato original se não for para ser atualizado
-      }
-    });
-
-    this.CONTRACTS = newContracts;
+  editContract(_id: string, contractToEdit: Contract): Observable<{ updatedContract: Contract, message: string }> {
+    return this.http.put<{ updatedContract: Contract, message: string }>(`${API_URL}/api/contracts/${_id}`, {contract: contractToEdit});
   }
 
-  editContractStatus(id: string, status: string) {
-    const allContracts = this.CONTRACTS;
-    const contractToEdit = allContracts.findIndex(({ contratoId }) => contratoId === id)
-
-    if(contractToEdit !== -1) {
-      allContracts[contractToEdit].contratoStatus = status;
-
-      this.CONTRACTS = allContracts;
-    }
-
-    this.CONTRACTS = allContracts;
+  editContractStatus(_id: string, newStatus: string): Observable<{ updatedContract: Contract, message: string } | { message: string, error: any }> {
+    return this.http.patch<{ updatedContract: Contract, message: string } | { message: string, error: any }>(`${API_URL}/api/contracts/${_id}/status`, {status: newStatus});
   }
-
-  /* countContratosByYear() {
-    let quantity
-  } */
 }

@@ -1,4 +1,7 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "src/environments/environment";
 
 type Client = {
   _id?: string;
@@ -17,29 +20,17 @@ type Client = {
   providedIn: 'root'
 })
 export class ClientsService {
-  private CLIENTS: Client[] = [];
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
-
-  async getClients(): Promise<Client[]> {
-    const allClients = await this.CLIENTS;
-    return allClients;
+  getClients(): Observable<{clients: Client[], message: string}> {
+    return this.http.get<{clients: Client[], message: string}>(`${environment.URL_API}/api/clients`);
   }
 
-  async getClientById(id: string): Promise<Client | null> {
-    const client = await this.CLIENTS.find(({ empresaCnpj }) => empresaCnpj === id)
-
-    if(client) {
-      return client
-    }
-    return null
+  getClientByCnpj(cnpj: string): Observable<{client: Client, message: string}> | Observable<{message: string}> {
+    return this.http.get<{client: Client, message: string} | {message: string}>(`${environment.URL_API}/api/clients/${cnpj}`)
   }
 
-  async createClient(client: Client) {
-    const clientAlreadyExists = await this.CLIENTS.findIndex(({ empresaCnpj }) => empresaCnpj === client.empresaCnpj );
-
-    if(clientAlreadyExists === -1) {
-      await this.CLIENTS.push(client);
-    }
+  createClient(client: Client): Observable<Client> {
+    return this.http.post<Client>(`${environment.URL_API}/api/clients`, client);
   }
 }

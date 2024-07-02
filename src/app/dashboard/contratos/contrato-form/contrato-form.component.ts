@@ -17,7 +17,7 @@ import { ContratoProgressoComponent } from '../contrato-progresso/contrato-progr
 import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-pdf.component';
 
 import { DEV_SERVICES, DEV_SERVICE_OPTIONS, HELP_SERVICES, HELP_SERVICE_OPTIONS, PROJECT_TYPES, TEAMS } from '../servicos-data-in-memory';
-import { type COMPANY, type SERVICE, type PROJECT, type TEAM } from '../types';
+import { type SERVICE, type PROJECT, type TEAM } from '../types';
 import { Contract } from '../contract.model';
 import { nanoid } from 'nanoid';
 import { type CEP, ViaCepService } from 'src/app/services/via.cep.service';
@@ -34,6 +34,7 @@ export class ContratoFormComponent {
   contractToView: Contract;
 
   isEditMode: boolean = false;
+  contractMongo_id: string;
   contractId: string;
   contratoAutor: string = '';
   contratoStatus: string = 'Minuta contratual';
@@ -129,8 +130,8 @@ export class ContratoFormComponent {
     });
 
     this.route.paramMap.subscribe(params => {
-      this.contractId = params.get('id');
-      this.isEditMode = !!this.contractId;
+      this.contractMongo_id = params.get('id');
+      this.isEditMode = !!this.contractMongo_id;
       if (this.isEditMode) {
         this.loadContract();
       }
@@ -144,19 +145,21 @@ export class ContratoFormComponent {
   }
 
   async loadContract() {
-    const contract = await this.contractsService.getContractById(this.contractId);
-    this.contratoAutor = contract.contratoAutor;
-    this.contratoStatus = contract.contratoStatus;
-    this.contratoEmpresa = contract.contratoEmpresa;
-    this.contratoTime = contract.contratoTime;
-    this.contratoCriadoEm = contract.contratoCriadoEm
-    this.contratoAtualizadoEm = contract.contratoAtualizadoEm;
-    
-    this.contractForm.setValue({
-      nzGroup: contract.nzGroup,
-      extEmpresaGroup: contract.extEmpresaGroup,
-      projetoGroup: contract.projetoGroup
-    })
+    this.contractsService.getContractById(this.contractMongo_id).subscribe(({ contract }) => {
+      this.contractId = contract.contratoId,
+      this.contratoAutor = contract.contratoAutor;
+      this.contratoStatus = contract.contratoStatus;
+      this.contratoEmpresa = contract.contratoEmpresa;
+      this.contratoTime = contract.contratoTime;
+      this.contratoCriadoEm = contract.contratoCriadoEm
+      this.contratoAtualizadoEm = contract.contratoAtualizadoEm;
+      
+      this.contractForm.setValue({
+        nzGroup: contract.nzGroup,
+        extEmpresaGroup: contract.extEmpresaGroup,
+        projetoGroup: contract.projetoGroup
+      });
+    });
   }
 
   handleServiceTypeChange(event: Event): void {
@@ -204,42 +207,49 @@ export class ContratoFormComponent {
   async onChangeCnpj(cnpj: string) {
     if(cnpj !== null) {
       if(cnpj.length === 14) {
-        const client = await this.clientsService.getClientById( cnpj );
-  
         const extEmpresaGroup = this.contractForm.controls['extEmpresaGroup'];
+        this.clientsService.getClientByCnpj( cnpj ).subscribe({
+          next: ({ client }) => {
         
-        if(client !== null && extEmpresaGroup) {
-          extEmpresaGroup.get('extEmpresaNome').setValue(client.empresaNome);
-          
-          if(client.empresaIE) {
-            extEmpresaGroup.get('extEmpresaIE').setValue(client.empresaIE);
+            if(client !== null && extEmpresaGroup) {
+              this.clientAlreadyExist = true;
+  
+              extEmpresaGroup.get('extEmpresaNome').setValue(client.empresaNome);
+              
+              if(client.empresaIE) {
+                extEmpresaGroup.get('extEmpresaIE').setValue(client.empresaIE);
+              }
+      
+              extEmpresaGroup.get('extEmpresaCEP').setValue(client.empresaCep);
+              extEmpresaGroup.get('extEmpresaEndereco').setValue(client.empresaEndereco);
+              extEmpresaGroup.get('extEmpresaBairro').setValue(client.empresaBairro);
+              extEmpresaGroup.get('extEmpresaCidade').setValue(client.empresaCidade);
+              extEmpresaGroup.get('extEmpresaEstado').setValue(client.empresaEstado);
+      
+            } else {
+              this.clientAlreadyExist = false;
+      
+              extEmpresaGroup.get('extEmpresaNome').setValue('');
+              extEmpresaGroup.get('extEmpresaIE').setValue('');
+              extEmpresaGroup.get('extEmpresaCEP').setValue('');
+              extEmpresaGroup.get('extEmpresaEndereco').setValue('');
+              extEmpresaGroup.get('extEmpresaBairro').setValue('');
+              extEmpresaGroup.get('extEmpresaCidade').setValue('');
+              extEmpresaGroup.get('extEmpresaEstado').setValue('');
+            }
+          },
+          error: error => {
+            alert(`Algo deu errado ao consultar clietes.\n${error}`);
           }
-  
-          extEmpresaGroup.get('extEmpresaCEP').setValue(client.empresaCep);
-          extEmpresaGroup.get('extEmpresaEndereco').setValue(client.empresaEndereco);
-          extEmpresaGroup.get('extEmpresaBairro').setValue(client.empresaBairro);
-          extEmpresaGroup.get('extEmpresaCidade').setValue(client.empresaCidade);
-          extEmpresaGroup.get('extEmpresaEstado').setValue(client.empresaEstado);
-  
-        } else {
-          this.clientAlreadyExist = false;
-  
-          extEmpresaGroup.get('extEmpresaNome').setValue('');
-          extEmpresaGroup.get('extEmpresaIE').setValue('');
-          extEmpresaGroup.get('extEmpresaCEP').setValue('');
-          extEmpresaGroup.get('extEmpresaEndereco').setValue('');
-          extEmpresaGroup.get('extEmpresaBairro').setValue('');
-          extEmpresaGroup.get('extEmpresaCidade').setValue('');
-          extEmpresaGroup.get('extEmpresaEstado').setValue('');
-        }
+        });
       }
     }
   }
 
   onCepChange(cep: string) {
-    if(!this.isEditMode && cep !== null) {
+    if(!this.isEditMode && cep !== null && !this.clientAlreadyExist) {
       if(cep.length === 8) {
-        this.viaCepService.getCepInfo(cep).subscribe(viaCepResponse => {
+        this.viaCepService.getCepInfo(cep).subscribe((viaCepResponse: CEP) => {
           if(viaCepResponse) {
             const extEmpresaGroup = this.contractForm.controls['extEmpresaGroup'];
 
@@ -255,13 +265,14 @@ export class ContratoFormComponent {
     }
   }
 
-  async onConfirmCreate() {
+  onConfirmCreate() {
+    this.contratoCriado = false;
     let generatedId = nanoid();
     generatedId = generatedId.toLowerCase();
 
     if(this.contractForm.value.nzGroup.nzTime === 'Marketing') {
-      this.contratoTime = 'Marketing';
       this.contratoEmpresa = 'Nairuz';
+      this.contratoTime = 'Marketing';
     }
 
     const newContrato = {
@@ -270,35 +281,48 @@ export class ContratoFormComponent {
       contratoStatus: this.contratoStatus,
       contratoEmpresa: this.contratoEmpresa,
       contratoTime: this.contratoTime,
-      criadoEm: new Date().toLocaleString(),
+      contratoCriadoEm: new Date(Date.now()).toISOString(),
       ...this.contractForm.value
     }
 
     // cria novo contrato
-    await this.contractsService.createContract(newContrato);
+    this.contractsService.createContract(newContrato).subscribe({
+      next: async () => {
+        // cria novo cliente na base de dados para consultar posteriormente
+        const client = {
+          empresaCnpj: this.contractForm.value.extEmpresaGroup.extEmpresaCnpj,
+          empresaNome: this.contractForm.value.extEmpresaGroup.extEmpresaNome,
+          empresaIE: this.contractForm.value.extEmpresaGroup.extEmpresaIE,
+          empresaCep: this.contractForm.value.extEmpresaGroup.extEmpresaCEP,
+          empresaEndereco: this.contractForm.value.extEmpresaGroup.extEmpresaEndereco,
+          empresaBairro: this.contractForm.value.extEmpresaGroup.extEmpresaBairro,
+          empresaCidade: this.contractForm.value.extEmpresaGroup.extEmpresaCidade,
+          empresaEstado: this.contractForm.value.extEmpresaGroup.extEmpresaEstado,
+          criado_em: new Date(Date.now()).toISOString()
+        }
+        this.clientsService.getClientByCnpj( client.empresaCnpj ).subscribe(
+          (getClientByCnpjResponse) => {
+            if(getClientByCnpjResponse.client === null) {
+              this.clientsService.createClient(client).subscribe();
+              this.clientAlreadyExist = true;
+            }
+          }
+        )
 
-    // cria novo cliente na base de dados para consultar posteriormente
-    const newClient = {
-      empresaCnpj: this.contractForm.value.extEmpresaGroup.extEmpresaCnpj,
-      empresaNome: this.contractForm.value.extEmpresaGroup.extEmpresaNome,
-      empresaIE: this.contractForm.value.extEmpresaGroup.extEmpresaIE,
-      empresaCep: this.contractForm.value.extEmpresaGroup.extEmpresaCEP,
-      empresaEndereco: this.contractForm.value.extEmpresaGroup.extEmpresaEndereco,
-      empresaBairro: this.contractForm.value.extEmpresaGroup.extEmpresaBairro,
-      empresaCidade: this.contractForm.value.extEmpresaGroup.extEmpresaCidade,
-      empresaEstado: this.contractForm.value.extEmpresaGroup.extEmpresaEstado,
-      criado_em: new Date().toLocaleString()
-    }
-    await this.clientsService.createClient(newClient);
-    this.clientAlreadyExist = true;
-
-    await this.generatePdf();
-
-    this.contratoCriado = true
-    this.contractForm.resetForm()
+        await this.generatePdf();
+        this.contratoCriado = true;
+        this.contractForm.resetForm();
+      },
+      error: (error) => {
+        this.contractForm.resetForm();
+        alert(`Algo deu errado ao criar um novo contrato!\n${error}`);
+      }
+    });
   }
 
   async onConfirmEdit () {
+    this.contratoCriado = false;
+
     const editedContract = {
       contratoId: this.contractId,
       contratoAutor: this.contratoAutor,
@@ -306,16 +330,23 @@ export class ContratoFormComponent {
       contratoEmpresa: this.contratoEmpresa,
       contratoTime: this.contratoTime,
       contratoCriadoEm: this.contratoCriadoEm,
-      contratoAtualizadoEm: new Date().toLocaleString(),
+      contratoAtualizadoEm: new Date(Date.now()).toISOString(),
       ...this.contractForm.value
     }
 
-    await this.contractsService.editContract(editedContract)
-    await this.generatePdf();
-
-    this.contratoCriado = true
-
-    this.contractForm.resetForm()
+    this.contractsService.editContract(this.contractMongo_id, editedContract).subscribe({
+      next: async () => {
+        await this.generatePdf();
+    
+        this.contratoCriado = true
+    
+        this.contractForm.resetForm();
+      },
+      error: err => {
+        this.contractForm.resetForm();
+        alert(`Algo deu errado ao editar o contrato!\n${err}`);
+      }
+    });
   }
 
   async onContractFormSubmit() {
@@ -359,7 +390,7 @@ export class ContratoFormComponent {
         this.pdfUrl = URL.createObjectURL(pdfBlob);
       }
     } catch (error) {
-      console.error('Erro ao gerar PDF:', error);
+      alert(`Erro ao gerar PDF: \n${error}`);
     } finally {
       this.isGeneratingPdf = false; // Desativar estado de carregamento
     }

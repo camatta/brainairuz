@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { type User, UserService } from 'src/app/services/user.service';
 import { ContractsService } from '../../../services/contracts.service';
-import { AdvancedFilterPipe } from './advanced-filter.pipe';
 import { ConfirmModalService } from 'src/app/services/confirm-modal.service';
-import { Contract } from '../contract.model';
-import { ContratoArquivoComponent } from '../contrato-arquivo/contrato-arquivo.component';
 import { PdfGeneratorService } from 'src/app/services/pdf-generator.service';
+
+import { Contract } from '../contract.model';
+import { AdvancedFilterPipe } from './advanced-filter.pipe';
+import { ContratoArquivoComponent } from '../contrato-arquivo/contrato-arquivo.component';
 import { ContratoProgressoComponent } from '../contrato-progresso/contrato-progresso.component';
 import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-pdf.component';
 
@@ -30,6 +32,7 @@ import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-
 })
 export class ContratosListarComponent {
   CONTRATOS: Contract[] = [];
+  AUTHORS: User[] = [];
   
   progress: number = 0;
   private progressSubscription: Subscription | undefined;
@@ -42,14 +45,32 @@ export class ContratosListarComponent {
   searchAuthor:string = '';
   searchStatus:string= '';
 
-  constructor(private contractsService: ContractsService, private confirmModalService: ConfirmModalService, private router: Router, private pdfGeneratorService: PdfGeneratorService) {}
+  constructor(
+    private contractsService: ContractsService,
+    private confirmModalService: ConfirmModalService,
+    private router: Router,
+    private pdfGeneratorService: PdfGeneratorService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
-    this.CONTRATOS = this.contractsService.getContracts();
+    this.contractsService.getContracts().subscribe(({ contracts }) => {
+      this.CONTRATOS = contracts;
+    });
 
     this.progressSubscription = this.pdfGeneratorService.progress$.subscribe(progress => {
       this.progress = progress;
     });
+
+    this.userService.getUsers().subscribe(({ users }) => {
+      if(users) {
+        users.map(user => {
+          if(user.team === "Comercial") {
+            this.AUTHORS.push(user);
+          }
+        });
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -59,35 +80,72 @@ export class ContratosListarComponent {
   }
 
   onDelete(id: string) {
-    this.contractsService.deleteContract(id)
-    this.CONTRATOS = this.contractsService.getContracts()
+    // Find the item index
+    const contractIndex = this.CONTRATOS.findIndex(({ _id }) => _id === id);
+
+    // Store the item for rollback
+    const contractToDelete = this.CONTRATOS[contractIndex];
+
+    // Optimistically remove the item from the UI
+    this.CONTRATOS.splice(contractIndex, 1);
+
+    // Send the delete request to the server
+    this.contractsService.deleteContract(id).subscribe({
+      next: response => {
+        //console.log('Item deleted successfully', response);
+      },
+      error: error => {
+        // Rollback the UI change
+        this.CONTRATOS.splice(contractIndex, 0, contractToDelete);
+
+        // Optionally, notify the user
+        alert(`Algo deu errado ao excluir o contrato!.\n${error}`);
+      }
+    });
   }
 
   onEdit(id: string) {
     this.router.navigate(['/dashboard/contratos/editar', id]);
   }
 
-  onChangeContractStatus(id: string, newStatus: string) {   
-    this.contractsService.editContractStatus(id, newStatus);
+  onChangeContractStatus(id: string, newStatus: string) {
+    // Find the item index
+    const contractIndex = this.CONTRATOS.findIndex(({ _id }) => _id === id);
 
-    this.CONTRATOS = this.contractsService.getContracts()
+    // Store the item for rollback
+    const contractOldStatus = this.CONTRATOS[contractIndex].contratoStatus;
+    this.CONTRATOS[contractIndex].contratoStatus = newStatus;
+    
+    this.contractsService.editContractStatus(id, newStatus).subscribe({
+      next: response => {
+        //console.log(response);
+      },
+      error: error => {
+        // Rollback the UI change
+        this.CONTRATOS[contractIndex].contratoStatus = contractOldStatus;
+         // Optionally, notify the user
+         alert(`Algo deu errado ao atualizar o status do contrato!.\n${error}`);
+      }
+    });
   }
-  returnPreviousStatus(id: string, status: string) {
-    this.contractsService.editContractStatus(id, status);
 
-    this.CONTRATOS = this.contractsService.getContracts()
+  returnPreviousStatus() {
+    this.contractsService.getContracts().subscribe({
+      next: ({ contracts }) => {
+        this.CONTRATOS = contracts;
+      }
+    });
   }
 
   confirmEdit(contrato: Contract) {
     this.confirmModalService.open(
       `Deseja prosseguir com a edição do contrato “${contrato.extEmpresaGroup.extEmpresaNome}”?`,
       '',
-      () => this.onEdit(contrato.contratoId)
+      () => this.onEdit(contrato._id)
     )
   }
 
   confirmStatusChange(id: string, event: Event, actualStatus: string) {
-    event.preventDefault()
     const element = event.target as HTMLSelectElement;
     const newStatus = element.value;
 
@@ -95,7 +153,7 @@ export class ContratosListarComponent {
       `Deseja alterar o status de “${actualStatus}” para “${newStatus}”?`,
       `Alteração realizada com sucesso!`,
       () => this.onChangeContractStatus(id, newStatus),
-      () => this.returnPreviousStatus(id, actualStatus)
+      () => this.returnPreviousStatus()
     )
   }
 
