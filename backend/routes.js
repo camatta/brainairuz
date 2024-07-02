@@ -35,6 +35,7 @@ const { GetContractController } = require('./controllers/contracts/GetContractCo
 const { UpdateContractController } = require('./controllers/contracts/UpdateContractController');
 const { DeleteContractController } = require('./controllers/contracts/DeleteContractController');
 const { UpdateContractStatusController } = require('./controllers/contracts/UpdateContractStatusController');
+const { DeleteClientController } = require('./controllers/clients/DeleteClientController');
 
 
 // *** USUÁRIO ***
@@ -82,34 +83,37 @@ router.put('/api/comissoes/:id', UpdateCommissionController);
  * Rotas para Contratos
  */
 // Rota para criar um contrato
-router.post('/api/contract', authMiddleware, CreateContractController);
+router.post('/api/contracts', authMiddleware, CreateContractController);
 
 // Rota para consultar todos contratos
 router.get('/api/contracts', authMiddleware, ListContractsController);
 
 // Rota para consultar um contrato por id
-router.get('/api/contract/:id', authMiddleware, GetContractController);
+router.get('/api/contracts/:id', authMiddleware, GetContractController);
 
 // Rota para editar um contrato
-router.put('/api/contract/:id', authMiddleware, UpdateContractController);
+router.put('/api/contracts/:id', authMiddleware, UpdateContractController);
 
 // Rota para editar o status de um contrato
-router.patch('/api/contract/:id/status', authMiddleware, UpdateContractStatusController);
+router.patch('/api/contracts/:id/status', authMiddleware, UpdateContractStatusController);
 
 // Rota para excluir um contrato
-router.delete('/api/contract/:id', authMiddleware, DeleteContractController)
+router.delete('/api/contracts/:id', authMiddleware, DeleteContractController)
 
 /**
  * Rotas para Clientes
  * os dados estão vindo da criação de um novo contrato
  */
 // Rota para Criar um novo cliente
-router.post('/api/client', authMiddleware, CreateClientController);
+router.post('/api/clients', authMiddleware, CreateClientController);
 
 // Rota para consultar todos os clientes
 router.get('/api/clients', authMiddleware, ListClientsController);
 
 // Rota para consultar cliente via CNPJ
-router.get('/api/client/:cnpj', authMiddleware, GetClientController); 
+router.get('/api/clients/:cnpj', authMiddleware, GetClientController);
+
+// Rota para deletar cliente via CNPJ
+router.delete('/api/clients/:cnpj', authMiddleware, DeleteClientController); 
 
 module.exports = router;
