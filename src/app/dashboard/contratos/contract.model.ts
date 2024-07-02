@@ -1,4 +1,5 @@
-export interface Contract {
+export type Contract = {
+  _id?: string,
   contratoId: string,
   contratoAutor: string,
   contratoStatus: string,
