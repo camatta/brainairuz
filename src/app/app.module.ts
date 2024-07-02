@@ -20,8 +20,6 @@ import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.compo
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.component';
 import { ContratosComponent } from './dashboard/contratos/contratos.component';
-import { ContratosListarComponent } from './dashboard/contratos/contratos-listar/contratos-listar.component';
-import { ContratoFormComponent } from './dashboard/contratos/contrato-form/contrato-form.component';
 import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
@@ -51,8 +49,6 @@ registerLocaleData(localePt, 'pt-BR');
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    ContratoFormComponent,
-    ContratosListarComponent,
   ],
   providers: [
     provideNgxMask(),
