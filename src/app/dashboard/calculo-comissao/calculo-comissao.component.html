@@ -94,7 +94,7 @@
     <button button type="button" class="btn btn-addVenda" (click)="openModalNovaVenda()" data-bs-dismiss="modal">Cadastrar Venda</button>
 
     <form class="d-flex gap-5">
-      <div *ngIf="userPermission()" class="filter-month">
+      <div *ngIf="userPermission()" class="filter-commissions">
         <label for="vendedor" class="me-3">Filtrar por Vendedor:</label>
         <select (change)="submitFormFilter()" id="vendedor" class="select-nairuz h-100">
           <option selected value="sem filtro">Todos</option>
@@ -105,7 +105,7 @@
           </option> -->
         </select>
       </div>
-      <div class="filter-month">
+      <div class="filter-commissions">
         <label for="years" class="me-3">Filtrar por Ano:</label>
         <select (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
           <option selected value="sem filtro">Todos</option>
@@ -114,7 +114,7 @@
           </option>
         </select>
       </div>
-      <div class="filter-month">
+      <div class="filter-commissions">
         <label for="months" class="me-3">Filtrar por mês:</label>
         <select (change)="submitFormFilter()" id="months" class="select-nairuz h-100">
           <option selected value="sem filtro">Todos</option>
@@ -294,12 +294,12 @@
           </div>
         
           <div class="col-12 mb-3">
-            <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
+            <div class="d-flex gap-3">
+              <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
+              <button (click)="redirectToMixProdutos()" class="btn btn-primary btn-mix-produto mb-2">Gerenciar mix de produtos</button>
+            </div>
             <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
-              <option value="marketing">Marketing</option>
-              <option value="sustentacao">Sustentação</option>
-              <option value="tecnologia">Tecnologia</option>
-              <option value="help">Help Suporte A</option>
+              <option *ngFor="let item of mixProdutos" value="{{ item.mixProduto }}">{{ item.mixProduto }}</option>
             </select>
           </div>
         

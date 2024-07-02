@@ -14,7 +14,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 // Biblioteca: Prime NG
-import { ButtonModule } from 'primeng/button';
+
+// Biblioteca: NGX Mask
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 
 // Services
@@ -37,10 +38,9 @@ import { ProductsService } from 'src/app/services/products.service';
     MatIconModule,
     MatButtonToggleModule,
     NgxMaskDirective,
-    NgxMaskPipe,
-    ButtonModule
+    NgxMaskPipe
   ],
-  providers: [LiveAnnouncer, ProductsService, AuthService],
+  providers: [ LiveAnnouncer, ProductsService, AuthService ],
   exports: [
     CommonModule,
     ReactiveFormsModule,
@@ -54,8 +54,7 @@ import { ProductsService } from 'src/app/services/products.service';
     MatIconModule,
     MatButtonToggleModule,
     NgxMaskDirective,
-    NgxMaskPipe,
-    ButtonModule
+    NgxMaskPipe
   ]
 })
 export class SharedModule { }

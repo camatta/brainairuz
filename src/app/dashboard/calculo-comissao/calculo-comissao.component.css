@@ -58,9 +58,15 @@
   transition: all .4s;
 }
 
-.filter-month label {
+.filter-commissions label {
   color: #00175d;
   font-size: 14px;
+}
+
+.btn-mix-produto {
+  --bs-btn-padding-y: 0;
+  --bs-btn-padding-x: .3rem;
+  --bs-btn-font-size: .65rem;
 }
 
 .select-nairuz {

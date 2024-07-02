@@ -12,6 +12,7 @@ import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaDeValores } from './dashboard/tabela-valores/tabela-valores.component';
 import { CalculoComissaoComponent } from './dashboard/calculo-comissao/calculo-comissao.component';
 import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
+import { MixProdutosComponent } from './dashboard/mix-produtos/mix-produtos.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -21,6 +22,7 @@ const routes: Routes = [
     { path: 'comercial', component: ComercialComponent },
     { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
     { path: 'icp', component: IcpComponent },
+    { path: 'mix-produtos', component: MixProdutosComponent },
     { path: 'tabela-valores', component: TabelaDeValores },
     { path: 'calculo-comissao', component: CalculoComissaoComponent },
   ]},

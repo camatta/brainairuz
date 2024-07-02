@@ -1,6 +1,7 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -9,10 +10,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 
 import { Produtos } from '../tabela-valores/interfaceProdutos';
-import { ComissoesService } from 'src/app/services/comissoes.service';
-import { ProductsService } from 'src/app/services/products.service';
 import { Comissao } from './interfaceComissao';
 import { AuthService } from 'src/app/services/auth.service';
+import { MixProdutosService } from 'src/app/services/mixProdutos.service';
+import { ProductsService } from 'src/app/services/products.service';
+import { ComissoesService } from 'src/app/services/comissoes.service';
 
 @Component({
   selector: 'app-calculo-comissao',
@@ -38,6 +40,7 @@ export class CalculoComissaoComponent implements OnInit {
   ];
   tabelaVendas: MatTableDataSource<Comissao> = new MatTableDataSource<Comissao>([]);
   msgActions: string;
+  mixProdutos: any = [];
   produtos: Produtos[] = [];
   produtosFiltrados: any[] = [];
   mesFiltro: string = null;
@@ -112,6 +115,10 @@ export class CalculoComissaoComponent implements OnInit {
     }
   }
 
+  redirectToMixProdutos(){
+    this.router.navigate(['/dashboard/mix-produtos']);
+  }
+
   yearsSelectFilter: string[] = []; // Array povoado pelo método loadComissoes()
 
   /* Fim Variáveis e métodos de controle de front */
@@ -121,14 +128,17 @@ export class CalculoComissaoComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private mixProdutosService: MixProdutosService,
     private _liveAnnouncer: LiveAnnouncer,
     private formBuilder: FormBuilder,
     private comissoesService: ComissoesService,
-    private productService: ProductsService
+    private productService: ProductsService,
+    private router: Router,
   ){}
 
   ngOnInit(): void {
 
+    // Verifica a permissão do usuário
     if(this.userPermission()) {
       this.displayedColumns = [
         'cliente',
@@ -145,6 +155,17 @@ export class CalculoComissaoComponent implements OnInit {
         'actions'
       ]
     }
+
+    // Carrega todos os mix de produtos
+    this.mixProdutosService.getMixProdutos().subscribe(
+      async (data) => {
+        data.forEach(result => {
+          this.mixProdutos.push(result);
+        });
+      }, (err) => {
+        console.error(err)
+      }
+    );
 
     // Carrega todos os produtos
     this.loadProdutos();
@@ -180,8 +201,8 @@ export class CalculoComissaoComponent implements OnInit {
 
   // Verifica os Mix de produtos para definir o valor Mix do Mês
   verifyProductsMix(data) {
-    const haveProductMixTechnology = data.some(produto => produto.mixProdutos === "tecnologia");
-    const haveProductMixMarketing = data.some(produto => produto.mixProdutos === "marketing");
+    const haveProductMixTechnology = data.some(produto => produto.mixProdutos === "Tecnologia");
+    const haveProductMixMarketing = data.some(produto => produto.mixProdutos === "Marketing");
     return haveProductMixTechnology && haveProductMixMarketing;
   }
 
@@ -403,7 +424,7 @@ export class CalculoComissaoComponent implements OnInit {
   
       // Se Mix de Produtos == HELP então usar vendaAvulsa
       // senão se valor base == "" então valorVendido == 0 senão (valorBase / 2) * markup;
-      if(mixProdutos == "help"){
+      if(mixProdutos == "Help Suporte A"){
         valorVendido = vendaAvulsa;
       } else if(mixProdutos == ""){
         valorVendido = 0;
@@ -620,7 +641,7 @@ export class CalculoComissaoComponent implements OnInit {
     const id: string = this.formDeletarVenda.get('_id').value;
     this.comissoesService.deleteComissao(id).subscribe(
       async (res) => {
-        this.showMessageAction('Produto excluído com sucesso');
+        this.showMessageAction('Comissão excluída com sucesso');
         await this.loadComissoes();
         this.tabelaVendas._updateChangeSubscription();
         this.closeModalDeletarVenda();

@@ -23,6 +23,12 @@ const { CreateCommissionController } = require('./controllers/commissions/Create
 const { DeleteCommissionController } = require('./controllers/commissions/DeleteCommissionController');
 const { UpdateCommissionController } = require('./controllers/commissions/UpdateCommissionController');
 
+// Mix Products
+const { ListMixProductsController } = require('./controllers/mixProducts/ListMixProductsController');
+const { CreateMixProductController } = require('./controllers/mixProducts/CreateMixProductController');
+const { UpdateMixProductController } = require('./controllers/mixProducts/UpdateMixProductController');
+const { DeleteMixProductController } = require('./controllers/mixProducts/DeleteMixProductController');
+
 
 // *** USUÁRIO ***
 // Rota de Cadastro
@@ -50,6 +56,20 @@ router.delete('/api/products/:id', DeleteProductController);
 
 // Rota para editar um produto
 router.put('/api/products/:id', UpdateProductController);
+
+
+// *** MIX DE PRODUTOS ***
+// Rota para obter todos os mixes de produtos
+router.get('/api/mix-produtos', ListMixProductsController);
+
+// Rota para criar mix de produtos
+router.post('/api/mix-produtos', CreateMixProductController);
+
+// Rota para editar mix de produtos
+router.put('/api/mix-produtos/:id', UpdateMixProductController);
+
+// Rota para remover mix de produtos
+router.delete('/api/mix-produtos/:id', DeleteMixProductController);
 
 
 // *** COMISSÕES ***

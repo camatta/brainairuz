@@ -14,6 +14,7 @@ export class MenuLateralComponent implements OnInit {
   showComercialLink = false;
   showTabelaPrecos = false;
   showTabelaDeValores = false;
+  showMixProdutos = false;
   showCalculoComissao = false;
   showAdicionarOportunidade = false;
   linkAtivo: string;
@@ -39,14 +40,6 @@ export class MenuLateralComponent implements OnInit {
       accessLevel === 'Administrador'
     ;
 
-    this.showTabelaPrecos =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial' ||
-      team === 'Customer Success' ||
-      name === 'Adriany Oliveira' ||
-      name === 'Beatriz Cruz Alves'
-    ;
-
     this.showComercialLink =
       accessLevel === 'Administrador' ||
       accessLevel === 'Líder de Equipe' ||
@@ -56,7 +49,21 @@ export class MenuLateralComponent implements OnInit {
       name === 'Beatriz Almeida'
     ;
 
+    this.showTabelaPrecos =
+      accessLevel === 'Administrador' ||
+      team === 'Comercial' ||
+      team === 'Customer Success' ||
+      name === 'Adriany Oliveira' ||
+      name === 'Beatriz Cruz Alves'
+    ;
+
     this.showTabelaDeValores =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      name === 'Adriany Oliveira'
+    ;
+
+    this.showMixProdutos =
       accessLevel === 'Administrador' ||
       // team === 'Comercial' ||
       name === 'Adriany Oliveira'
@@ -65,7 +72,6 @@ export class MenuLateralComponent implements OnInit {
     this.showCalculoComissao =
       accessLevel === 'Administrador' ||
       // team === 'Comercial' ||
-      team === 'Tecnologia'
       name === 'Adriany Oliveira'
     ;
       
