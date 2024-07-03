@@ -17,7 +17,7 @@ export type Contract = {
   extEmpresaGroup: {
     extEmpresaCnpj: number;
     extEmpresaNome: string;
-    extEmpresaIE?: number | "";
+    extEmpresaIE?: string;
     extEmpresaCEP: number;
     extEmpresaEndereco: string;
     extEmpresaBairro: string;
