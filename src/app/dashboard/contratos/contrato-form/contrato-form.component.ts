@@ -417,7 +417,3 @@ export class ContratoFormComponent {
     }
   }
 }
-function complete(value: { contract: Contract; }): void {
-  throw new Error('Function not implemented.');
-}
-
