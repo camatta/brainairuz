@@ -76,21 +76,21 @@ export class ContratosIndexComponent {
         icon: 'fa-solid fa-code',
         quantity: this.totalTechContracts,
         title: 'Contratos criados de Tecnologia',
-        percentage: Math.floor(this.totalTechContracts / this.totalContractsYear) * 100
+        percentage: Math.floor((this.totalTechContracts / this.totalContractsYear) * 100)
       });
 
       this.contractsResume.push({
         icon: 'fa-solid fa-arrow-pointer',
         quantity: this.totalMketContracts,
         title: 'Contratos criados de Marketing',
-        percentage: Math.floor(this.totalMketContracts / this.totalContractsYear) * 100
+        percentage: Math.floor((this.totalMketContracts / this.totalContractsYear )* 100)
       });
 
       this.contractsResume.push({
         icon: 'fa-solid fa-file-contract',
         quantity: this.totalContractsMonth,
         title: 'Contratos criados neste mês',
-        percentage: Math.floor(this.totalContractsMonth / this.totalContractsYear) * 100
+        percentage: Math.floor((this.totalContractsMonth / this.totalContractsYear) * 100)
       });
 
       this.isFetching = false;
