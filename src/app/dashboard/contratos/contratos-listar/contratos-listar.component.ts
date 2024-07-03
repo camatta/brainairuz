@@ -14,6 +14,7 @@ import { AdvancedFilterPipe } from './advanced-filter.pipe';
 import { ContratoArquivoComponent } from '../contrato-arquivo/contrato-arquivo.component';
 import { ContratoProgressoComponent } from '../contrato-progresso/contrato-progresso.component';
 import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-pdf.component';
+import { SpinnerComponent } from 'src/app/ui/loader/spinner.component';
 
 @Component({
   selector: 'app-contratos-listar',
@@ -26,11 +27,13 @@ import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-
     AdvancedFilterPipe,
     ContratoArquivoComponent,
     ContratoProgressoComponent,
-    ContratoModalpdfComponent
+    ContratoModalpdfComponent,
+    SpinnerComponent
   ],
   standalone: true
 })
 export class ContratosListarComponent {
+  isFetching: boolean = true;
   CONTRATOS: Contract[] = [];
   AUTHORS: User[] = [];
   
@@ -54,23 +57,35 @@ export class ContratosListarComponent {
   ) {}
 
   ngOnInit() {
-    this.contractsService.getContracts().subscribe(({ contracts }) => {
-      this.CONTRATOS = contracts;
+    this.contractsService.getContracts().subscribe({
+      next: ({ contracts }) => {
+        this.CONTRATOS = contracts;
+        this.isFetching = false;
+      },
+      error: err => {
+        alert(`Algo deu errado ao carregar os contratos!\n${err}`);
+        this.isFetching = false;
+      }
     });
 
     this.progressSubscription = this.pdfGeneratorService.progress$.subscribe(progress => {
       this.progress = progress;
     });
 
-    this.userService.getUsers().subscribe(({ users }) => {
-      if(users) {
-        users.map(user => {
-          if(user.team === "Comercial") {
-            this.AUTHORS.push(user);
-          }
-        });
+    this.userService.getUsers().subscribe({
+      next: ({ users }) => {
+        if(users) {
+          users.map(user => {
+            if(user.team === "Comercial") {
+              this.AUTHORS.push(user);
+            }
+          });
+        }
+      },
+      error: err => {
+        alert(`Algo deu errado ao carregar usuários!\n${err}`);
       }
-    })
+    });
   }
 
   ngOnDestroy() {

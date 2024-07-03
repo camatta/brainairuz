@@ -42,7 +42,7 @@
         </div>
       </fieldset>
 
-      <fieldset class="contract-step extEmpresa" [ngClass]="{'show': isEditMode||  !nzGroupRef.invalid && (nzGroupRef.touched || nzGroupRef.dirty)}" ngModelGroup="extEmpresaGroup" #extEmpresaGroupRef="ngModelGroup">
+      <fieldset class="contract-step extEmpresa" [ngClass]="{'show': isEditMode||  !nzGroupRef.invalid && (nzGroupRef.touched || nzGroupRef.dirty), 'fetching': isFetching}" ngModelGroup="extEmpresaGroup" #extEmpresaGroupRef="ngModelGroup">
         <legend>Informações do Cliente</legend>
         <p class="alert-client" *ngIf="!clientAlreadyExist">CNPJ não encontrado na base, favor preencher os campos abaixo.</p>
         <div class="fieldset-group">

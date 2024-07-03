@@ -32,6 +32,7 @@ import { type CEP, ViaCepService } from 'src/app/services/via.cep.service';
 export class ContratoFormComponent {
   @ViewChild('contractFormRef') contractForm: NgForm;
   contractToView: Contract;
+  isFetching: boolean = false;
 
   isEditMode: boolean = false;
   contractMongo_id: string;
@@ -145,7 +146,9 @@ export class ContratoFormComponent {
   }
 
   async loadContract() {
-    this.contractsService.getContractById(this.contractMongo_id).subscribe(({ contract }) => {
+    this.isFetching = true;
+    this.contractsService.getContractById(this.contractMongo_id).subscribe({
+      next: ({ contract }) => {
       this.contractId = contract.contratoId,
       this.contratoAutor = contract.contratoAutor;
       this.contratoStatus = contract.contratoStatus;
@@ -159,7 +162,13 @@ export class ContratoFormComponent {
         extEmpresaGroup: contract.extEmpresaGroup,
         projetoGroup: contract.projetoGroup
       });
-    });
+
+      this.isFetching = false;
+    },
+    error: err => {
+      this.isFetching = false;
+      alert(`Algo deu errado ao carregar o contrato!\n${err}`)
+    }});
   }
 
   handleServiceTypeChange(event: Event): void {
@@ -207,6 +216,8 @@ export class ContratoFormComponent {
   async onChangeCnpj(cnpj: string) {
     if(cnpj !== null) {
       if(cnpj.length === 14) {
+        this.isFetching = true;
+
         const extEmpresaGroup = this.contractForm.controls['extEmpresaGroup'];
         this.clientsService.getClientByCnpj( cnpj ).subscribe({
           next: ({ client }) => {
@@ -237,8 +248,10 @@ export class ContratoFormComponent {
               extEmpresaGroup.get('extEmpresaCidade').setValue('');
               extEmpresaGroup.get('extEmpresaEstado').setValue('');
             }
+            this.isFetching = false;
           },
           error: error => {
+            this.isFetching = false;
             alert(`Algo deu errado ao consultar clietes.\n${error}`);
           }
         });
@@ -249,7 +262,10 @@ export class ContratoFormComponent {
   onCepChange(cep: string) {
     if(!this.isEditMode && cep !== null && !this.clientAlreadyExist) {
       if(cep.length === 8) {
-        this.viaCepService.getCepInfo(cep).subscribe((viaCepResponse: CEP) => {
+        this.isFetching = true;
+
+        this.viaCepService.getCepInfo(cep).subscribe({
+          next: (viaCepResponse: CEP) => {
           if(viaCepResponse) {
             const extEmpresaGroup = this.contractForm.controls['extEmpresaGroup'];
 
@@ -260,7 +276,12 @@ export class ContratoFormComponent {
             const estado = this.viaCepService.getStateName(viaCepResponse.uf)
             extEmpresaGroup.get('extEmpresaEstado').setValue(estado);
           }
-        })
+          this.isFetching = false;
+        },
+        error: err => {
+          this.isFetching = false;
+          alert(`Algo deu errado ao consultar o CEP.\n${err}`);
+        }});
       }
     }
   }
@@ -396,3 +417,7 @@ export class ContratoFormComponent {
     }
   }
 }
+function complete(value: { contract: Contract; }): void {
+  throw new Error('Function not implemented.');
+}
+

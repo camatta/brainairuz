@@ -1,12 +1,17 @@
 <section class="contratos-listar">
   <div class="contratos-listar-header">
     <h1>Contratos Criados</h1>
-    <div class="contratos-search" *ngIf="CONTRATOS.length">
+    <div class="contratos-search" *ngIf="CONTRATOS.length && !isFetching">
       <input type="text" name="contrato" id="contrato" placeholder="Insira o nome do cliente" [(ngModel)]="searchClient" [value]="searchClient">
       <i class="fa-solid fa-magnifying-glass"></i>
     </div>
   </div>
-  <div class="toolbar" *ngIf="CONTRATOS.length">
+
+  <div class="loader" *ngIf="isFetching">
+    <app-spinner></app-spinner>
+  </div>
+  
+  <div class="toolbar" *ngIf="CONTRATOS.length && !isFetching">
     <div class="filter author">
       <label for="author">Responsável</label>
       <select name="author" id="author" [(ngModel)]="searchAuthor">
@@ -62,7 +67,7 @@
       </div>
     </div>
 
-    <div *ngIf="!CONTRATOS.length">
+    <div *ngIf="!CONTRATOS.length && !isFetching">
       <p>Nenhum contrato criado até o momento.</p>
       <p><a routerLink="/dashboard/contratos/criar">Clique aqui para criar um contrato</a></p>
     </div>
