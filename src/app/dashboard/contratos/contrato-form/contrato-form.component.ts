@@ -254,7 +254,7 @@ export class ContratoFormComponent {
           },
           error: error => {
             this.isFetching = false;
-            alert(`Algo deu errado ao consultar clietes.\n${error}`);
+            alert(`Algo deu errado ao consultar clientes.\n${JSON.stringify(error)}`);
           }
         });
       }
@@ -298,7 +298,7 @@ export class ContratoFormComponent {
       this.contratoTime = 'Marketing';
     }
 
-    const newContrato = {
+    const newContrato: Contract = {
       contratoId: generatedId,
       contratoAutor: this.contratoAutor,
       contratoStatus: this.contratoStatus,
@@ -336,9 +336,8 @@ export class ContratoFormComponent {
         this.contratoCriado = true;
         this.contractForm.resetForm();
       },
-      error: (error) => {
-        this.contractForm.resetForm();
-        alert(`Algo deu errado ao criar um novo contrato!\n${error}`);
+      error: (err) => {
+        alert(`Algo deu errado ao criar um novo contrato!\n${JSON.stringify(err)}`);
       }
     });
   }
@@ -346,7 +345,7 @@ export class ContratoFormComponent {
   async onConfirmEdit () {
     this.contratoCriado = false;
 
-    const editedContract = {
+    const editedContract: Contract = {
       contratoId: this.contractId,
       contratoAutor: this.contratoAutor,
       contratoStatus: this.contratoStatus,
@@ -367,7 +366,7 @@ export class ContratoFormComponent {
       },
       error: err => {
         this.contractForm.resetForm();
-        alert(`Algo deu errado ao editar o contrato!\n${err}`);
+        alert(`Algo deu errado ao editar o contrato!\n${err.error}`);
       }
     });
   }
