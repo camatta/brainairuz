@@ -1,0 +1,6 @@
+.spinner-wrapper {
+  text-align: center;
+}
+.spinner-border.text-primary {
+  color: #00175D !important;
+}
