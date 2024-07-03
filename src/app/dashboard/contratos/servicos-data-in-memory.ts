@@ -1,22 +1,3 @@
-export const COMPANIES = {
-  id: 'companies',
-  name: 'Empresa responsável',
-  list: [
-    {
-      id: '',
-      name: 'Selecione'
-    },
-    {
-      id: 'nairuz',
-      name: 'Nairuz'
-    },
-    {
-      id: 'nztec',
-      name: 'NZTEC'
-    }
-  ]
-}
-
 export const TEAMS = {
   id: 'teams',
   name: 'Time',
@@ -82,13 +63,17 @@ export const DEV_SERVICES = {
   ]
 }
 
-export const DEV_SERVICE_OPTIONS = {
+export const DEV_COMMERCE_OPTIONS = {
   id: 'service_options',
   name: 'Plataforma',
   list: [
     {
       id: '',
       name: 'Selecione'
+    },
+    {
+      id: 'biz',
+      name: 'BizCommerce'
     },
     {
       id: 'linx',
@@ -99,6 +84,10 @@ export const DEV_SERVICE_OPTIONS = {
       name: 'MageShop'
     },
     {
+      id: 'nexxas',
+      name: "Nexxas"
+    },
+    {
       id: 'vtex',
       name: 'VTEX'
     },
@@ -107,9 +96,32 @@ export const DEV_SERVICE_OPTIONS = {
       name: 'Wake'
     },
     {
+      id: 'woocommerce',
+      name: 'WooCommerce'
+    },
+    {
       id: 'outros',
       name: 'Outros'
     }
+  ]
+}
+
+export const DEV_INST_OPTIONS = {
+  id: 'service_options',
+  name: 'Plataforma',
+  list: [
+    {
+      id: '',
+      name: 'Selecione'
+    },
+    {
+      id: 'wordpress',
+      name: 'WordPress'
+    },
+    {
+      id: 'outros',
+      name: 'Outros'
+    },
   ]
 }
 
@@ -137,28 +149,5 @@ export const HELP_SERVICES = {
       id: 'cro',
       name: 'CRO'
     }
-  ]
-}
-
-export const HELP_SERVICE_OPTIONS = {
-  id: 'service_options',
-  name: 'Pacote de horas',
-  list: [
-    {
-      id: '',
-      name: 'Selecione'
-    },
-    {
-      id: 'pack_10',
-      name: '10 horas'
-    },
-    {
-      id: 'pack_15',
-      name: '15 horas'
-    },
-    {
-      id: 'pack_20',
-      name: '20 horas'
-    },
   ]
 }
