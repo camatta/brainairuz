@@ -415,8 +415,8 @@ e condições seguintes:
               <mark class="anexo-num">2.</mark>
               <div class="anexo-texto">
                 <h5 class="anexo-titulo">Account:</h5>
-                <p class="anexo-desc">A account é sempre o que antecede o myvtex.com no domínio. Refere-se ao nome da conta do contratante, tanto para integrações quanto para criação de chamados. Pra realizar o login na VTEX IO é através da account.</p>
-                <p class="anexo-desc">Exemplo: https://agencianairuzpartnerbr.myvtex.com/</p>
+                <p class="anexo-desc">A account é sempre o que antecede o {{ contract?.nzGroup?.nzProjetoPlataforma ? contract.nzGroup.nzProjetoPlataforma : 'myvtex'}}.com no domínio. Refere-se ao nome da conta do contratante, tanto para integrações quanto para criação de chamados. Pra realizar o login na {{ contract?.nzGroup?.nzProjetoPlataforma ? contract.nzGroup.nzProjetoPlataforma : 'VTEX IO'}} é através da account.</p>
+                <p class="anexo-desc">Exemplo: https://agencianairuzpartnerbr.{{ contract?.nzGroup?.nzProjetoPlataforma ? contract.nzGroup.nzProjetoPlataforma : 'myvtex'}}.com/</p>
                 <p class="anexo-desc">Exemplo Account: agencianairuzpartnerbr</p>
               </div>
             </div>
@@ -433,7 +433,7 @@ e condições seguintes:
               <mark class="anexo-num">4.</mark>
               <div class="anexo-texto">
                 <h5 class="anexo-titulo">Back-End:</h5>
-                <p class="anexo-desc">A estrutura da plataforma de E-commerce, neste caso VTEX, onde a contratada não possui autonomia para alterações (exemplo: fluxo do carrinho de compras até a finalização do pedido) e não faz parte do escopo deste projeto. Resumidamente o back-end trabalha em boa parte dos casos fazendo a ponte entre os dados que vem do navegador rumo ao banco de dados e vice-versa, sempre aplicando as devidas regras de negócio, validações e garantias num ambiente restrito ao usuário final (ou seja, onde ele não consegue acessar ou manipular algo);</p>
+                <p class="anexo-desc">A estrutura da plataforma de E-commerce, neste caso {{ contract?.nzGroup?.nzProjetoPlataforma ? contract.nzGroup.nzProjetoPlataforma : 'VTEX'}}, onde a contratada não possui autonomia para alterações (exemplo: fluxo do carrinho de compras até a finalização do pedido) e não faz parte do escopo deste projeto. Resumidamente o back-end trabalha em boa parte dos casos fazendo a ponte entre os dados que vem do navegador rumo ao banco de dados e vice-versa, sempre aplicando as devidas regras de negócio, validações e garantias num ambiente restrito ao usuário final (ou seja, onde ele não consegue acessar ou manipular algo);</p>
               </div>
             </div>
           </div>
