@@ -1,8 +1,8 @@
 const Contract = require('../../models/Contracts');
 
-module.exports.DeleteContractService = async ( _id ) => {
+module.exports.DeleteContractService = async ( id ) => {
   try {
-    const deletedContract = await Contract.findOneAndDelete( _id );
+    const deletedContract = await Contract.findOneAndDelete({ _id: id });
 
     return deletedContract;
 
