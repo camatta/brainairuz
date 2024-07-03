@@ -11,7 +11,7 @@
           <div class="input-group show">
             <label for="nzTime">Time</label>
             <select name="nzTime" id="nzTime" required ngModel #nzTimeRef="ngModel">
-              <option  *ngFor="let team of TEAMS_LIST.list" [value]="team.id === '' ? team.id : team.name" [disabled]="team.id === ''">{{ team.name }}</option>
+              <option  *ngFor="let team of TEAMS_LIST.list" [value]="team.id === '' ? team.id : team.name">{{ team.name }}</option>
             </select>
             <span *ngIf="nzTimeRef.invalid && (nzTimeRef.touched || nzTimeRef.dirty)" class="invalid-alert">Campo obrigatório</span>
           </div>
@@ -19,7 +19,7 @@
           <div class="input-group" [ngClass]="{'show': isEditMode || !nzTimeRef.invalid && (nzTimeRef.touched || nzTimeRef.dirty)}">
             <label for="tipo_site">Tipo de Projeto</label>
             <select name="nzTipoProjeto" id="tipo_site" (change)="handleServiceTypeChange($event)" required ngModel #nzTipoProjetoRef="ngModel">
-              <option *ngFor="let project of PROJECT_LIST.list" [value]="project.id === '' ? project.id : project.name" [disabled]="project.id === ''">{{ project.name }}</option>
+              <option *ngFor="let project of PROJECT_LIST.list" [value]="project.id === '' ? project.id : project.name">{{ project.name }}</option>
             </select>
             <span *ngIf="nzTipoProjetoRef.invalid && (nzTipoProjetoRef.touched || nzTipoProjetoRef.dirty)" class="invalid-alert">Campo obrigatório</span>
           </div>
@@ -28,7 +28,7 @@
           *ngIf="!nzTipoProjetoRef?.value?.toLowerCase().includes('outros')">
             <label for="nzProjetoPlataforma">{{ SERVICES_LIST_OPTIONS.name }}</label>
             <select name="nzProjetoPlataforma" id="nzProjetoPlataforma" required ngModel #nzProjetoPlataformaRef="ngModel">
-              <option *ngFor="let service_option of SERVICES_LIST_OPTIONS.list" [value]="service_option.id === '' ? service_option.id : service_option.name" [disabled]="service_option.id === ''">{{ service_option.name }}</option>
+              <option *ngFor="let service_option of SERVICES_LIST_OPTIONS.list" [value]="service_option.id === '' ? service_option.id : service_option.name">{{ service_option.name }}</option>
             </select>
             <span *ngIf="nzProjetoPlataformaRef.invalid && (nzProjetoPlataformaRef.touched || nzProjetoPlataformaRef.dirty)" class="invalid-alert">Campo obrigatório</span>
           </div>
