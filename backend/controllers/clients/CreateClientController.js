@@ -26,6 +26,10 @@ module.exports.CreateClientController = async (req, res) => {
       criado_em
     });
 
+    if(newClient.error) {
+      res.status(400).send({ message: "Algo deu errado ao criar um novo cliente", newClient });
+    }
+
     res.status(201).send( newClient )
 
   } catch(error) {

@@ -5,6 +5,10 @@ module.exports.CreateContractController = async (req, res) => {
     const { contract } = req.body;
   
     const newContract = await CreateContractService( contract );
+    
+    if(newContract.error) {
+      res.status(400).send({ message: "Algo deu errado ao criar o contrato", newContract });
+    }
 
     res.status(201).send( newContract )
 
