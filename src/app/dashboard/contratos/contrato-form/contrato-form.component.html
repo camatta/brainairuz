@@ -24,7 +24,8 @@
             <span *ngIf="nzTipoProjetoRef.invalid && (nzTipoProjetoRef.touched || nzTipoProjetoRef.dirty)" class="invalid-alert">Campo obrigatório</span>
           </div>
 
-          <div class="input-group" [ngClass]="{'show': isEditMode || !nzTipoProjetoRef.invalid && (nzTipoProjetoRef.touched || nzTipoProjetoRef.dirty)}">
+          <div class="input-group" [ngClass]="{'show': isEditMode || !nzTipoProjetoRef.invalid && (nzTipoProjetoRef.touched || nzTipoProjetoRef.dirty)}"
+          *ngIf="!nzTipoProjetoRef?.value?.toLowerCase().includes('outros')">
             <label for="nzProjetoPlataforma">{{ SERVICES_LIST_OPTIONS.name }}</label>
             <select name="nzProjetoPlataforma" id="nzProjetoPlataforma" required ngModel #nzProjetoPlataformaRef="ngModel">
               <option *ngFor="let service_option of SERVICES_LIST_OPTIONS.list" [value]="service_option.id === '' ? service_option.id : service_option.name" [disabled]="service_option.id === ''">{{ service_option.name }}</option>
@@ -32,10 +33,23 @@
             <span *ngIf="nzProjetoPlataformaRef.invalid && (nzProjetoPlataformaRef.touched || nzProjetoPlataformaRef.dirty)" class="invalid-alert">Campo obrigatório</span>
           </div>
 
-          <div class="input-group servicos-group" [ngClass]="{'show': isEditMode || !nzProjetoPlataformaRef.invalid && (nzProjetoPlataformaRef.touched || nzProjetoPlataformaRef.dirty)}">
+          <div class="input-group" [ngClass]="{'show': isEditMode || !nzTipoProjetoRef.invalid && (nzTipoProjetoRef.touched || nzTipoProjetoRef.dirty)}"
+          *ngIf="nzTipoProjetoRef?.value?.toLowerCase().includes('outros')">
+            <label for="nzProjetoHoras">Pacote de horas</label>
+            <div class="input-wrapper">
+              <input type="text" name="nzProjetoHoras" id="nzProjetoHoras" placeholder="00" pattern="[0-9]*" ngModel #nzProjetoHorasRef="ngModel" required>
+              <span>Horas</span>
+            </div>
+            <div *ngIf="nzProjetoHorasRef.invalid && (nzProjetoHorasRef.touched || nzProjetoHorasRef.dirty)" class="invalid-alert">
+              <span *ngIf="nzProjetoHorasRef.errors?.['required']">Campo obrigatório.</span>
+              <span *ngIf="nzProjetoHorasRef.errors?.['pattern']">Apenas números são permitidos.</span>
+            </div>
+          </div>
+
+          <div class="input-group servicos-group" [ngClass]="{'show': isEditMode || !nzTipoProjetoRef?.invalid && (nzTipoProjetoRef?.touched || nzTipoProjetoRef?.dirty)}">
             <label for="nzServico">{{ SERVICES_LIST.name }}</label>
             <select name="nzServico" id="nzServico" required ngModel #nzServicoRef="ngModel">
-              <option *ngFor="let service of SERVICES_LIST.list" [value]="service.id === '' ? service.id : service.name" [disabled]="service.id === ''">{{ service.name }}</option>
+              <option *ngFor="let service of SERVICES_LIST.list" [value]="service.id === '' ? service.id : service.name">{{ service.name }}</option>
             </select>
             <span *ngIf="nzServicoRef.invalid && (nzServicoRef.touched || nzServicoRef.dirty)" class="invalid-alert">Campo obrigatório</span>
           </div>
