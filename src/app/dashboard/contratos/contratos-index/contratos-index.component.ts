@@ -69,7 +69,7 @@ export class ContratosIndexComponent {
         icon: 'fa-solid fa-file-contract',
         quantity: this.totalContractsYear,
         title: 'Contratos criados neste ano',
-        percentage: 100
+        percentage: this.totalContractsYear ? 100 : this.totalContractsYear
       });
 
       this.contractsResume.push({
