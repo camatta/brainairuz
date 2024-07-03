@@ -12,7 +12,7 @@ const ContractSchema = new mongoose.Schema({
     nzTime: { type: String, require: true },
     nzTipoProjeto: { type: String, require: true },
     nzProjetoPlataforma: { type: String },
-    nzProjetoHoras: { String: String },
+    nzProjetoHoras: { type: String },
     nzServico: { type: String, require: true }
   },
   extEmpresaGroup: {
