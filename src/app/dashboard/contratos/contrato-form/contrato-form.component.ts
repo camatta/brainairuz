@@ -60,7 +60,7 @@ export class ContratoFormComponent {
   editorConfig: AngularEditorConfig = {
     editable: true,
     sanitize: true,
-    minHeight: '129px',
+    minHeight: '260px',
     placeholder: 'Exemplo',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Poppins',
@@ -108,8 +108,7 @@ export class ContratoFormComponent {
       },
     ],
     toolbarHiddenButtons: [
-      ['textColor','backgroundColor', 'link', 'unlink', 'insertImage', 'insertVideo', 'insertHorizontalRule', 'removeFormat', 'toggleEditorMode', 'customClasses', 'removeFormat', 'heading',
-    'fontName']
+      ['undo', 'redo','textColor','backgroundColor', 'link', 'unlink', 'insertImage', 'insertVideo', 'insertHorizontalRule', 'removeFormat', 'toggleEditorMode', 'customClasses', 'removeFormat', 'heading', 'indent', 'outdent', 'fontName']
     ]
   };
 
