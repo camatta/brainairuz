@@ -16,7 +16,7 @@ import { ContratoArquivoComponent } from '../contrato-arquivo/contrato-arquivo.c
 import { ContratoProgressoComponent } from '../contrato-progresso/contrato-progresso.component';
 import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-pdf.component';
 
-import { DEV_SERVICES, DEV_COMMERCE_OPTIONS, HELP_SERVICES, PROJECT_TYPES, TEAMS, DEV_INST_OPTIONS } from '../servicos-data-in-memory';
+import { DEV_COMMERCE_SERVICES, DEV_COMMERCE_OPTIONS, HELP_SERVICES, PROJECT_TYPES, TEAMS, DEV_INST_OPTIONS, DEV_INST_SERVICES } from '../servicos-data-in-memory';
 import { type SERVICE, type PROJECT, type TEAM } from '../types';
 import { Contract } from '../contract.model';
 import { nanoid } from 'nanoid';
@@ -54,7 +54,7 @@ export class ContratoFormComponent {
   
   TEAMS_LIST: TEAM = TEAMS;
   PROJECT_LIST: PROJECT = PROJECT_TYPES;
-  SERVICES_LIST: SERVICE = DEV_SERVICES;
+  SERVICES_LIST: SERVICE = DEV_COMMERCE_SERVICES;
   SERVICES_LIST_OPTIONS: SERVICE = DEV_COMMERCE_OPTIONS;
 
   editorConfig: AngularEditorConfig = {
@@ -178,11 +178,11 @@ export class ContratoFormComponent {
       this.SERVICES_LIST = HELP_SERVICES;
 
     } else if (selectElement.value.toLowerCase().includes('commerce')) {
-      this.SERVICES_LIST = DEV_SERVICES;
       this.SERVICES_LIST_OPTIONS = DEV_COMMERCE_OPTIONS;
+      this.SERVICES_LIST = DEV_COMMERCE_SERVICES;
     } else {
-      this.SERVICES_LIST = DEV_SERVICES;
       this.SERVICES_LIST_OPTIONS = DEV_INST_OPTIONS;
+      this.SERVICES_LIST = DEV_INST_SERVICES;
     }
   }
 

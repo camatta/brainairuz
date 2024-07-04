@@ -40,29 +40,6 @@ export const PROJECT_TYPES = {
   ]
 }
 
-export const DEV_SERVICES = {
-  id: 'services',
-  name: 'Serviço',
-  list: [
-    {
-      id: '',
-      name: 'Selecione'
-    },
-    {
-      id: 'layout_personalizado',
-      name: 'Personalizado'
-    },
-    {
-      id: 'tema',
-      name: 'Tema'
-    },
-    {
-      id: 'tema_customizado',
-      name: 'Tema Customizado'
-    }
-  ]
-}
-
 export const DEV_COMMERCE_OPTIONS = {
   id: 'service_options',
   name: 'Plataforma',
@@ -106,6 +83,33 @@ export const DEV_COMMERCE_OPTIONS = {
   ]
 }
 
+export const DEV_COMMERCE_SERVICES = {
+  id: 'services',
+  name: 'Serviço',
+  list: [
+    {
+      id: '',
+      name: 'Selecione'
+    },
+    {
+      id: 'migracao',
+      name: 'Migração'
+    },
+    {
+      id: 'layout_personalizado',
+      name: 'Personalizado'
+    },
+    {
+      id: 'tema',
+      name: 'Tema'
+    },
+    {
+      id: 'tema_customizado',
+      name: 'Tema Customizado'
+    }
+  ]
+}
+
 export const DEV_INST_OPTIONS = {
   id: 'service_options',
   name: 'Plataforma',
@@ -117,6 +121,33 @@ export const DEV_INST_OPTIONS = {
     {
       id: 'wordpress',
       name: 'WordPress'
+    },
+    {
+      id: 'outros',
+      name: 'Outros'
+    },
+  ]
+}
+
+export const DEV_INST_SERVICES = {
+  id: 'services',
+  name: 'Serviço',
+  list: [
+    {
+      id: '',
+      name: 'Selecione'
+    },
+    {
+      id: 'blog',
+      name: 'Blog'
+    },
+    {
+      id: 'multipage',
+      name: 'Multipage'
+    },
+    {
+      id: 'onepage',
+      name: 'One Page'
     },
     {
       id: 'outros',
@@ -148,6 +179,14 @@ export const HELP_SERVICES = {
     {
       id: 'cro',
       name: 'CRO'
+    },
+    {
+      id: 'api',
+      name: 'API de Integração'
+    },
+    {
+      id: 'outros',
+      name: 'Outros'
     }
   ]
 }
