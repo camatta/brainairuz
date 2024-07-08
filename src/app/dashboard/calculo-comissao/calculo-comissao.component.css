@@ -51,15 +51,15 @@
 }
 
 .btn-addVenda {
-  background-color: #61dcab;
-  color: #00175d;
+  background-color: var(--nairuz-secondary);
+  color: var(--nairuz-primary);
   font-weight: 500;
   border-radius: 5px;
   transition: all .4s;
 }
 
 .filter-commissions label {
-  color: #00175d;
+  color: var(--nairuz-primary);
   font-size: 14px;
 }
 
@@ -73,7 +73,7 @@
   min-height: 30px;
   height: 100%;
   font-size: 14px;
-  color: #00175d;
+  color: var(--nairuz-primary);
   border: unset;
   border-radius: 5px;
   box-shadow: 0 3px 10px #0003;
@@ -91,7 +91,7 @@
 }
 
 .inputFatorMultiplicador {
-  background-color: #00175d;
+  background-color: var(--nairuz-primary);
   color: #fff;
   border: none;
   text-align: center;
@@ -104,7 +104,7 @@
 }
 
 #formFatorMultiplicador mat-icon.editar {
-  color: #61dcab;
+  color: var(--nairuz-secondary);
   transition: all .4s;
   cursor: pointer;
 }
@@ -126,8 +126,8 @@
   margin-top: 1rem;
   padding: 10px;
   border: unset;
-  background-color: #61dcab;
-  color: #00175d;
+  background-color: var(--nairuz-secondary);
+  color: var(--nairuz-primary);
   font-weight: 500;
   border-radius: 5px;
   transition: .4s;
@@ -146,7 +146,7 @@
 }
 
 #tabela-valores .acoes mat-icon.editar {
-  color: #61dcab;
+  color: var(--nairuz-secondary);
   margin-right: 12px;
   transition: all .4s;
   cursor: pointer;
@@ -163,7 +163,7 @@
 }
 
 .mat-mdc-header-cell {
-  color: #00175d;
+  color: var(--nairuz-primary);
   text-align: center;
 }
 
@@ -180,7 +180,7 @@
 }
 
 .sectionTable::-webkit-scrollbar-thumb {
-  background-color: #00175d; /* color of the scroll thumb */
+  background-color: var(--nairuz-primary); /* color of the scroll thumb */
   border-radius: 20px; /* roundness of the scroll thumb */
 }
 
@@ -215,4 +215,11 @@
   right: 5rem;
   transition: ease-in-out .4s;
   z-index: 999;
+}
+
+mat-spinner {
+  width: 20px !important;
+  height: 20px !important;
+  --mdc-circular-progress-size: 20px !important;
+  --mdc-circular-progress-active-indicator-width: 20px !important;
 }

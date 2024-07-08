@@ -11,11 +11,27 @@
 
   <!-- INDICADORES GERAIS -->
   <div class="baseCalculo row row-gap-3 mt-4 mb-3 justify-content-center">
+    <!--Meta Geral do Mês para a Empresa -->
+    <div class="col-6">
+      <div class="bg-nairuzPrimary">
+        <label for="vendaTotal" class="form-label">Meta Empresa (Total do Mês)</label>
+        <p class="fs-6">{{ ((metaTotalMesEmpresa * 100).toFixed(2)).replace(".", ",") }} %</p>
+      </div>
+    </div>
+
+    <!--Meta Geral do Mês para o Vendedor -->
+    <div class="col-6">
+      <div class="bg-nairuzPrimary">
+        <label for="vendaTotal" class="form-label">Meta Vendedor (Total do Mês)</label>
+        <p class="fs-6">{{ ((metaTotalMesVendedor * 100).toFixed(2)).replace(".", ",") }} %</p>
+      </div>
+    </div>
+
     <!--Vendas Total-->
     <div class="col-3">
       <div class="bg-nairuzPrimary">
         <label for="vendaTotal" class="form-label">Vendas Total</label>
-        <p class="fs-6">R$ {{ vendasTotal }}</p>
+        <p class="fs-6">{{ vendasTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
       </div>
     </div>
 
@@ -40,11 +56,11 @@
       </div>
     </div>
 
-    <!--Meta Vendedor-->
+    <!--Meta Vendedor Para Comissão-->
     <div class="col-3">
       <div class="bg-nairuzPrimary">
         <label for="metaVendedor" class="form-label">Meta Vendedor</label>
-        <p class="fs-6">{{ metaVendedor * 100 }} %</p>
+        <p class="fs-6">{{ ((metaVendedor * 100).toFixed(2)).replace(".", ",") }} %</p>
       </div>
     </div>
 
@@ -56,7 +72,7 @@
       </div>
     </div>
 
-    <!--Meta Empresa-->
+    <!--Meta Empresa Para Comissão-->
     <div class="col-3">
       <div class="bg-nairuzPrimary">
         <label for="metaEmpresa" class="form-label">Meta Empresa</label>
@@ -76,7 +92,8 @@
     <div class="col-3">
       <div class="bg-nairuzPrimary">
         <label for="Valor Comissão" class="form-label">Comissão Final</label>
-        <p class="fs-6">{{ comissaoFinal }}</p>
+        <mat-spinner *ngIf="onLoad"></mat-spinner>
+        <p *ngIf="!onLoad" class="fs-6">{{ comissaoFinal }}</p>
       </div>
     </div>
 
@@ -84,7 +101,8 @@
     <div class="col-3">
       <div class="bg-nairuzPrimary">
         <label for="Valor Comissão" class="form-label">Valor Comissão</label>
-        <p class="fs-6">R$ {{ valorComissao }}</p>
+        <mat-spinner *ngIf="onLoad"></mat-spinner>
+        <p *ngIf="!onLoad" class="fs-6">{{ valorComissao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
       </div>
     </div>
   </div>
@@ -97,28 +115,29 @@
       <div *ngIf="userPermission()" class="filter-commissions">
         <label for="vendedor" class="me-3">Filtrar por Vendedor:</label>
         <select (change)="submitFormFilter()" id="vendedor" class="select-nairuz h-100">
-          <option selected value="sem filtro">Todos</option>
-          <option value="Kyrsten Júnior">Kyrsten Júnior</option>
+          <option value="sem filtro">Todos</option>
+          <option selected value="Kyrsten Júnior">Kyrsten Júnior</option>
           <option value="Dev Nairuz">Dev Nairuz</option>
-          <!-- <option *ngFor="let year of yearsSelectFilter" [value]="year">
-            {{ year }}
-          </option> -->
+          <option *ngFor="let vendedor of vendedores" [value]="vendedor">
+            {{ vendedor }}
+          </option>
         </select>
       </div>
       <div class="filter-commissions">
         <label for="years" class="me-3">Filtrar por Ano:</label>
-        <select (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
-          <option selected value="sem filtro">Todos</option>
-          <option *ngFor="let year of yearsSelectFilter" [value]="year">
+        <select *ngIf="yearsSelectFilter.length > 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
+          <option *ngFor="let year of yearsSelectFilter" [value]="year" [selected]="year === currentYear">
             {{ year }}
           </option>
+        </select>
+        <select *ngIf="yearsSelectFilter.length <= 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
+          <option selected value="{{ currentYear }}">{{currentYear}}</option>
         </select>
       </div>
       <div class="filter-commissions">
         <label for="months" class="me-3">Filtrar por mês:</label>
         <select (change)="submitFormFilter()" id="months" class="select-nairuz h-100">
-          <option selected value="sem filtro">Todos</option>
-          <option value="Janeiro">Janeiro</option>
+          <option selected value="Janeiro">Janeiro</option>
           <option value="Fevereiro">Fevereiro</option>
           <option value="Março">Março</option>
           <option value="Abril">Abril</option>
@@ -323,6 +342,7 @@
               type="number"
               formControlName="multiplicador"
               step="1"
+              min="1"
               id="multiplicador"
               class="form-control form-floating col-12"
               required
@@ -330,15 +350,35 @@
           </div>
         
           <div class="col-12 mb-3">
-            <label for="markup" class="form-label">Qualidade = Markup:</label>
+            <label for="markup-novo" class="form-label">Qualidade = Markup:</label>
             <input
+              *ngIf="!userPermission()"
               type="number"
               formControlName="markup"
               step="0.1"
+              min="1.6"
               class="form-control form-floating col-12"
-              id="markup"
+              id="markup-novo"
+              (change)="verifyValueMarkup($event)"
               required
             />
+            <input
+              *ngIf="userPermission()"
+              type="number"
+              formControlName="markup"
+              step="0.1"
+              min="1.4"
+              class="form-control form-floating col-12"
+              id="markup-novo"
+              (change)="verifyValueMarkup($event)"
+              required
+            />
+            <div *ngIf="!userPermission()" class="invalid-feedback">
+              Para markup abaixo de 1,6 é necessário aprovação.
+            </div>
+            <div *ngIf="userPermission()" class="invalid-feedback">
+              O limite de markup é de 1.4. Para liberação de menor valor, é necessário entrar em contato com o desenvolvedor.
+            </div>
           </div>
         
           <div *ngIf="!mixProdutosValidate" class="col-12 mb-3">
@@ -394,12 +434,12 @@
           </div>
         
           <div class="col-12 mb-3">
-            <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
-            <select formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
-              <option value="marketing">Marketing</option>
-              <option value="sustentacao">Sustentação</option>
-              <option value="tecnologia">Tecnologia</option>
-              <option value="help">Help Suporte A</option>
+            <div class="d-flex gap-3">
+              <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
+              <button (click)="redirectToMixProdutos()" class="btn btn-primary btn-mix-produto mb-2">Gerenciar mix de produtos</button>
+            </div>
+            <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
+              <option *ngFor="let item of mixProdutos" value="{{ item.mixProduto }}">{{ item.mixProduto }}</option>
             </select>
           </div>
         
@@ -419,24 +459,46 @@
       
           <div class="col-12 mb-3">
             <label for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
-            <select formControlName="multiplicador" id="multiplicador" class="selectForm form-select">
-              <option value="1">1</option>
-              <option value="6">6</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-            </select>
+            <input
+              type="number"
+              formControlName="multiplicador"
+              step="1"
+              id="multiplicador"
+              class="form-control form-floating col-12"
+              required
+            />
           </div>
         
           <div class="col-12 mb-3">
-            <label for="markup" class="form-label">Qualidade = Markup:</label>
+            <label for="markup-editar" class="form-label">Qualidade = Markup:</label>
             <input
+              *ngIf="!userPermission()"
               type="number"
               formControlName="markup"
               step="0.1"
+              min="1.6"
               class="form-control form-floating col-12"
-              id="markup"
+              id="markup-editar"
+              (change)="verifyValueMarkup($event)"
               required
             />
+            <input
+              *ngIf="userPermission()"
+              type="number"
+              formControlName="markup"
+              step="0.1"
+              min="1.4"
+              class="form-control form-floating col-12"
+              id="markup-editar"
+              (change)="verifyValueMarkup($event)"
+              required
+            />
+            <div *ngIf="!userPermission()" class="invalid-feedback">
+              Para markup abaixo de 1,6 é necessário aprovação.
+            </div>
+            <div *ngIf="userPermission()" class="invalid-feedback">
+              O limite de markup é de 1.4. Para liberação de menor valor, é necessário entrar em contato com o desenvolvedor.
+            </div>
           </div>
         
 
@@ -455,7 +517,7 @@
             >
           </div>
 
-          <button type="submit" (click)="onSubmitEditarVenda()" class="col-12 btn-calcular">Editar</button>
+          <button type="submit" (click)="onSubmitEditarVenda()" [disabled]="!formEditarVenda.valid" class="col-12 btn-calcular">Editar</button>
         </form>
       </div>
     </div>

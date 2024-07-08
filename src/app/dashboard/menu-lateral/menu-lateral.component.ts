@@ -13,8 +13,9 @@ export class MenuLateralComponent implements OnInit {
   showUsuariosLink = false;
   showComercialLink = false;
   showTabelaPrecos = false;
-  showTabelaDeValores = false;
   showMixProdutos = false;
+  showTabelaDeValores = false;
+  showTabelaDeMetas = false;
   showCalculoComissao = false;
   showAdicionarOportunidade = false;
   linkAtivo: string;
@@ -57,13 +58,19 @@ export class MenuLateralComponent implements OnInit {
       name === 'Beatriz Cruz Alves'
     ;
 
+    this.showMixProdutos =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      name === 'Adriany Oliveira'
+    ;
+
     this.showTabelaDeValores =
       accessLevel === 'Administrador' ||
       // team === 'Comercial' ||
       name === 'Adriany Oliveira'
     ;
 
-    this.showMixProdutos =
+    this.showTabelaDeMetas =
       accessLevel === 'Administrador' ||
       // team === 'Comercial' ||
       name === 'Adriany Oliveira'

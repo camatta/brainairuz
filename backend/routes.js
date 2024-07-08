@@ -23,11 +23,17 @@ const { CreateCommissionController } = require('./controllers/commissions/Create
 const { DeleteCommissionController } = require('./controllers/commissions/DeleteCommissionController');
 const { UpdateCommissionController } = require('./controllers/commissions/UpdateCommissionController');
 
-// Mix Products
+// Mix Products Controllers
 const { ListMixProductsController } = require('./controllers/mixProducts/ListMixProductsController');
 const { CreateMixProductController } = require('./controllers/mixProducts/CreateMixProductController');
 const { UpdateMixProductController } = require('./controllers/mixProducts/UpdateMixProductController');
 const { DeleteMixProductController } = require('./controllers/mixProducts/DeleteMixProductController');
+
+// Metas Controllers
+const { ListGoalsController } = require('./controllers/goals/ListGoalsController');
+const { CreateGoalController } = require('./controllers/goals/CreateGoalController');
+const { UpdateGoalController } = require('./controllers/goals/UpdateGoalController');
+const { DeleteGoalController } = require('./controllers/goals/DeleteGoalController');
 
 
 // *** USUÁRIO ***
@@ -70,6 +76,20 @@ router.put('/api/mix-produtos/:id', UpdateMixProductController);
 
 // Rota para remover mix de produtos
 router.delete('/api/mix-produtos/:id', DeleteMixProductController);
+
+
+// *** METAS ***
+// Rota para listar todas as metas
+router.get('/api/metas', ListGoalsController);
+
+// Rota para criar metas
+router.post('/api/metas', CreateGoalController);
+
+// Rota para editar uma meta
+router.put('/api/metas/:id', UpdateGoalController);
+
+// Rota para remover uma meta
+router.delete('/api/metas/:id', DeleteGoalController);
 
 
 // *** COMISSÕES ***

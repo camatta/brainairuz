@@ -10,6 +10,7 @@ import { AuthGuard } from './routes/auth.guard';
 import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaDeValores } from './dashboard/tabela-valores/tabela-valores.component';
+import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.component';
 import { CalculoComissaoComponent } from './dashboard/calculo-comissao/calculo-comissao.component';
 import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
 import { MixProdutosComponent } from './dashboard/mix-produtos/mix-produtos.component';
@@ -20,11 +21,12 @@ const routes: Routes = [
     { path: 'usuarios', component: UsuariosComponent },
     { path: 'perfil', component: PerfilComponent },
     { path: 'comercial', component: ComercialComponent },
-    { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
     { path: 'icp', component: IcpComponent },
     { path: 'mix-produtos', component: MixProdutosComponent },
     { path: 'tabela-valores', component: TabelaDeValores },
+    { path: 'tabela-metas', component: TabelaMetasComponent },
     { path: 'calculo-comissao', component: CalculoComissaoComponent },
+    { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
   ]},
   { path: 'cadastro', component: CadastroComponent },
   { path: 'redefinir-senha', component: RedefinirSenhaComponent },

@@ -12,9 +12,20 @@ import { SharedModule } from 'src/app/modules/shared-module/shared-module.module
 import { Produtos } from '../tabela-valores/interfaceProdutos';
 import { Comissao } from './interfaceComissao';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import { MixProdutosService } from 'src/app/services/mixProdutos.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { ComissoesService } from 'src/app/services/comissoes.service';
+import { MetasService } from 'src/app/services/metas.service';
+
+type Meta = {
+  _id: string;
+  mes: string;
+  metaEmpresa: number;
+  metaRealizadaEmpresa: number;
+  metaIndividual: number;
+  metaRealizadaIndividual: number;
+}
 
 @Component({
   selector: 'app-calculo-comissao',
@@ -44,20 +55,27 @@ export class CalculoComissaoComponent implements OnInit {
   produtos: Produtos[] = [];
   produtosFiltrados: any[] = [];
   mesFiltro: string = null;
-  currentUser = this.authService.getUser();  // Traz os dados do usuário
+  vendedores: any[] = [];
+  currentUser = this.authService.getUser();  // Traz os dados do usuário logado
+  date = new Date();
+  currentYear = String(this.date.getFullYear());
 
   /* INDICADORES GERADOS A PARTIR DAS VENDAS */
-  vendasTotal: number = 0;   // Soma de todos os Valores Vendidos
+  vendasTotal: number = 0; // Soma de todos os Valores Vendidos
   fatorMultiplicador: number = 0.025; // Entrada de INPUT
-  metaVendedor: number = 0.04; // Igual planilha para exemplo (Criar requisição no futuro - verificar de onde virá esses valores)
+  metaTotalMesVendedor: number = 0; // Vendas total / Meta individual que vem da tabela de metas
+  metaVendedor: number = 0; // Regra feita dentro do método loadMetas para um limite na % de comissão
   qualidade: number = 0; // Se valorTotal == 0 então qualidade = 0 senão (valorTotal * 2) / soma(valoresBase)
-  metaEmpresa: number = 0.1; // Igual planilha para exemplo (Criar requisição no futuro - verificar de onde virá esses valores)
+  metaTotalMesEmpresa: number = 0; // Meta Realizada da Empresa / Meta Total da Empresa (todos os valores vem da tabela de metas)
+  metaEmpresa: number = 0; // Regra feita dentro do método loadMetas para um limite na % de comissão
   mix: number = 0.5; // Se tiver pelo menos 1 produto MKT e 1 produto TEC, mix = 1 senão mix = 0,5
   comissaoFinal: number = 0; // (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
-  valorComissao: number = 1.68; // (vendasTotal * comissaoFinal) / 100) - (vendasTotal * comissaoFinal) / 100) * 0.16
-  valorBaseTotal: number = 0;
+  valorComissao: number = 0; // (vendasTotal * comissaoFinal) / 100) - (vendasTotal * comissaoFinal) / 100) * 0.16
+  valorBaseTotal: number = 0; // Valor Base vem da tabela de valores dos produtos
 
   /* Variáveis e métodos de controle de front */
+  onLoad: boolean = false;
+
   userPermission(): boolean {
     if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"){
       return true;
@@ -128,17 +146,19 @@ export class CalculoComissaoComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private mixProdutosService: MixProdutosService,
     private _liveAnnouncer: LiveAnnouncer,
     private formBuilder: FormBuilder,
     private comissoesService: ComissoesService,
     private productService: ProductsService,
+    private metasService: MetasService,
     private router: Router,
   ){}
 
   ngOnInit(): void {
 
-    // Verifica a permissão do usuário
+    // Verifica a permissão do usuário para mostrar itens de edição
     if(this.userPermission()) {
       this.displayedColumns = [
         'cliente',
@@ -157,18 +177,16 @@ export class CalculoComissaoComponent implements OnInit {
     }
 
     // Carrega todos os mix de produtos
-    this.mixProdutosService.getMixProdutos().subscribe(
-      async (data) => {
-        data.forEach(result => {
-          this.mixProdutos.push(result);
-        });
-      }, (err) => {
-        console.error(err)
-      }
-    );
+    this.loadMixesDeProdutos();
 
     // Carrega todos os produtos
     this.loadProdutos();
+
+    // Carrega todos os vendedores para inserir no input do filtro do front
+    this.loadVendedores();
+
+    // Carrega todos os anos das comissões para inserir no select do filtro
+    this.loadAnosComissoes();
 
     // Carrega todas as comissões
     this.loadComissoes();
@@ -187,6 +205,50 @@ export class CalculoComissaoComponent implements OnInit {
       
   }
 
+  // Carrega todos os anos das comissões para inserir no select do filtro
+  loadAnosComissoes() {
+    this.comissoesService.getComissoes("adm", "sem filtro", "sem filtro", "sem filtro").subscribe(
+      async (data) => {
+        data.forEach((venda) => {
+          // BUSCA OS ANOS PARA INSERIR NO SELECT DO FRONT
+          const ano = venda.ano;
+          if(!this.yearsSelectFilter.includes(ano)){
+            this.yearsSelectFilter.push(ano);
+          } 
+        })
+      }
+    )
+  }
+
+  // Carrega todos os vendedores
+  loadVendedores() {
+    // Carrega vendedores do time Comercial
+    this.userService.getUsers().subscribe(
+      async(data: any) => {
+        data.message.map((user: any) => {
+          if(user.team == "Comercial") {
+            this.vendedores.push(user.name);
+          }
+        })
+      }, (err) => {
+        console.error("Erro ao carregar time comercial: ", err);
+      }
+    )
+  }
+
+  // Carrega todos os mix de produtos
+  loadMixesDeProdutos() {
+    this.mixProdutosService.getMixProdutos().subscribe(
+      async (data) => {
+        data.forEach(result => {
+          this.mixProdutos.push(result);
+        });
+      }, (err) => {
+        console.error(err)
+      }
+    );
+  }
+
   // Carrega todos os produtos
   loadProdutos() {
     this.productService.getProducts().subscribe(
@@ -200,13 +262,34 @@ export class CalculoComissaoComponent implements OnInit {
   }
 
   // Verifica os Mix de produtos para definir o valor Mix do Mês
-  verifyProductsMix(data) {
-    const haveProductMixTechnology = data.some(produto => produto.mixProdutos === "Tecnologia");
-    const haveProductMixMarketing = data.some(produto => produto.mixProdutos === "Marketing");
+  verifyProductsMix(data: any) {
+    const haveProductMixTechnology = data.some((produto: any) => produto.mixProdutos === "Tecnologia");
+    const haveProductMixMarketing = data.some((produto: any) => produto.mixProdutos === "Marketing");
     return haveProductMixTechnology && haveProductMixMarketing;
   }
 
-  // Função para filtrar comissões por mês e/ou ano
+  // Verifica o valor digitado no input number do Markup
+  verifyValueMarkup(element: any) {
+    let valueInput = element.target.value;
+    let input: HTMLInputElement = document.querySelector(`#${element.target.id}`);
+    let message: HTMLDivElement = input.parentElement.querySelector(".invalid-feedback");
+    message.style.display = "none";
+    input.style.border = "none";
+
+    if(!this.userPermission()){
+      if(valueInput < 1.6) {
+        message.style.display = "block";
+        input.style.border = "1px solid red";
+      }
+    } else {
+      if(valueInput < 1.4) {
+        message.style.display = "block";
+        input.style.border = "1px solid red";
+      }
+    }
+  }
+
+  // Função para filtrar comissões por vendedor, mês e/ou ano
   submitFormFilter() {
     let yearSelect: HTMLSelectElement = document.querySelector("#years");
     let monthSelect: HTMLSelectElement = document.querySelector("#months");
@@ -214,18 +297,32 @@ export class CalculoComissaoComponent implements OnInit {
 
     let year: string = yearSelect.selectedOptions[0].value;
     let month: string = monthSelect.selectedOptions[0].value;
-    let vendedor: string = vendedorSelect.selectedOptions[0].value;
+    let vendedor: string;
+
+    if(vendedorSelect){
+      vendedor = vendedorSelect.selectedOptions[0].value;
+    } else {
+      vendedor = this.currentUser.name;
+    }
 
     this.loadComissoes(month, year, vendedor);
   }
 
   // Carrega as comissões de acordo com o filtro
-  loadComissoes(filterMonth: string = "sem filtro", filterYear: string = "sem filtro", vendedor: string = "sem filtro") {
+  loadComissoes(filterMonth: string = "Janeiro", filterYear: string = this.currentYear, vendedor: string = "Kyrsten Júnior") {
     if(this.userPermission()) {
       let usuario: string = "adm";
+      // Carrega as comissões
       this.comissoesService.getComissoes(usuario, filterMonth, filterYear, vendedor).subscribe(
         async (data) => {
-          this.generateTableAndCommissions(data);
+          if(data.length > 0) {
+            this.loadMetas(vendedor, filterMonth);
+            this.generateTableAndCommissions(data);
+          } else {
+            let zerar: boolean = true;
+            this.loadMetas(vendedor, filterMonth, zerar);
+            this.generateTableAndCommissions(data);
+          }
         }, (err) => {
           console.error(err);
         }
@@ -234,6 +331,7 @@ export class CalculoComissaoComponent implements OnInit {
       let vendedor: string = this.currentUser.name;
       this.comissoesService.getComissoes(vendedor, filterMonth, filterYear).subscribe(
         async (data) => {
+          this.loadMetas(vendedor, filterMonth);
           this.generateTableAndCommissions(data);
         }, (err) => {
           console.error(err);
@@ -242,59 +340,129 @@ export class CalculoComissaoComponent implements OnInit {
     }
   }
 
+  // Carrega as comissões de acordo com o filtro
+  loadMetas(vendedor: string, filterMonth: string, zerar?: boolean) {
+    // Carrega as metas do mês selecionado
+    if(vendedor !== "sem filtro") {
+      this.metasService.getMetas(vendedor, this.currentYear).subscribe(
+        async (data) => {
+          if(data.length > 0) {
+            if(!zerar) {
+              data.map((meta) => {
+                if(meta.mes == filterMonth) {
+                  // Fórmulas para Metas Gerais o Mês
+                  this.metaTotalMesVendedor = Number((this.vendasTotal / meta.metaIndividual).toFixed(2));
+                  this.metaTotalMesEmpresa = Number((meta.metaRealizadaEmpresa / meta.metaEmpresa).toFixed(2));
+  
+                  if(Number.isNaN(this.metaTotalMesVendedor) || this.metaTotalMesVendedor == Infinity) {
+                    this.metaTotalMesVendedor = 0;
+                  }
+  
+                  if(Number.isNaN(this.metaTotalMesEmpresa) || this.metaTotalMesEmpresa == Infinity) {
+                    this.metaTotalMesEmpresa = 0;
+                  }
+  
+                  // Fórmula para Meta do Vendedor
+                  if(this.metaTotalMesVendedor >= 2 && this.metaTotalMesEmpresa >= 1){ // o 2 é 200% e o 1 é 100%
+                    this.metaVendedor = 1.2;
+                  } else if(this.metaTotalMesVendedor > 1 && this.metaTotalMesEmpresa >= 1) {
+                    this.metaVendedor = 1.1;
+                  } else if(this.metaTotalMesVendedor >= 1) {
+                    this.metaVendedor = 1;
+                  } else {
+                    this.metaVendedor = Number(this.metaTotalMesVendedor.toFixed(2));
+                  }
+  
+                  // Fórmula para Meta Empresa
+                  if(this.metaTotalMesEmpresa > 1){
+                    this.metaEmpresa = 1;
+                  } else {
+                    this.metaEmpresa = this.metaTotalMesEmpresa;
+                  }
+                }
+              })
+            } else {
+              this.metaTotalMesVendedor = 0;
+              this.metaVendedor = 0;
+              this.metaTotalMesEmpresa = 0;
+              this.metaEmpresa = 0;
+            }
+          } else {
+            this.metaTotalMesVendedor = 0;
+            this.metaVendedor = 0;
+            this.metaTotalMesEmpresa = 0;
+            this.metaEmpresa = 0;
+          }
+        }, async (error) => {
+          console.error(error);
+        }
+      )
+    }
+
+  }
+
   // Cria a tabela e faz o cálculo das comissões de acordo com o método loadComissoes
   generateTableAndCommissions(data: any) {
-    this.tabelaVendas = new MatTableDataSource<Comissao>(data);
+    if(data.length > 0) {
+      this.tabelaVendas = new MatTableDataSource<Comissao>(data);
 
-    let somaVendas: number = 0;
-    let somaValoresBase: number = 0;
+      let somaVendas: number = 0;
+      let somaValoresBase: number = 0;
+  
+      data.map((venda) => {
+        // VENDAS TOTAL
+        if(venda.valorVendido) {
+          somaVendas += Number(venda.valorVendido);
+          this.vendasTotal = somaVendas;
+        }
+  
+        // VALOR BASE
+        if(venda.valorBase) {
+          somaValoresBase += venda.valorBase;
+          this.valorBaseTotal < somaValoresBase ? this.valorBaseTotal = somaValoresBase : this.valorBaseTotal;
+        }
+  
+        // QUALIDADE
+        if(this.vendasTotal == 0) {
+          this.qualidade = this.vendasTotal;
+        } else {
+          this.qualidade = Number(((this.vendasTotal * 2) / this.valorBaseTotal).toFixed(2));
+        }
+  
+        // MIX
+        this.verifyProductsMix(data);
+        if(this.verifyProductsMix(data)) {
+          this.mix == 0.5 ? this.mix = 1 : this.mix = 1;
+        } else {
+          this.mix == 1 ? this.mix = 0.5 : this.mix = 0.5;
+        }
+  
+        this.onLoad = true;
+        setTimeout(() => { // Usei o timeout por que as metas estavam demorando para retornar e afetando o cálculo da comissão
+          // COMISSÃO FINAL
+          // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
+          // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
+          let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.mix * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
+          calcComissaoFinal >= 6.2 ? this.comissaoFinal = 6.2 : this.comissaoFinal = calcComissaoFinal;
+  
+          // R$ COMISSÃO
+          this.valorComissao = Number((((this.vendasTotal * this.comissaoFinal) / 100) - (((this.vendasTotal * this.comissaoFinal) / 100) * 0.16)).toFixed(2));
+          this.onLoad = false;
+        }, 5000);
+  
+      });
+    } else {
+      this.tabelaVendas = new MatTableDataSource<Comissao>(data);
+      this.vendasTotal = 0;
+      this.valorBaseTotal = 0;
+      this.qualidade = 0;
+      this.mix = 0.5;
+      this.comissaoFinal = 0;
+      this.valorComissao = 0;
+    }
 
-    data.map((venda) => {
-      // BUSCA OS ANOS PARA INSERIR NO SELECT DO FRONT
-      const ano = venda.ano;
-      if(!this.yearsSelectFilter.includes(ano)){
-        this.yearsSelectFilter.push(ano);
-      }
-
-      // VENDAS TOTAL
-      if(venda.valorVendido) {
-        somaVendas += Number(venda.valorVendido);
-        this.vendasTotal = somaVendas;
-      }
-
-      // VALOR BASE
-      if(venda.valorBase) {
-        somaValoresBase += venda.valorBase;
-        this.valorBaseTotal < somaValoresBase ? this.valorBaseTotal = somaValoresBase : this.valorBaseTotal;
-      }
-
-      // QUALIDADE
-      if(this.vendasTotal == 0) {
-        this.qualidade = this.vendasTotal;
-      } else {
-        this.qualidade = Number(((this.vendasTotal * 2) / this.valorBaseTotal).toFixed(2));
-      }
-
-      // MIX
-      this.verifyProductsMix(data);
-      if(this.verifyProductsMix(data)) {
-        // if(venda.mix == 0.5) { this.changeMixValue(venda, true) }
-        if(this.mix == 0.5) { this.mix = 1 }
-      } else {
-        // if(venda.mix == 1){ this.changeMixValue(venda, false) }
-        if(this.mix == 1){ this.mix = 0.5 }
-      }
-
-      // COMISSÃO FINAL
-      // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
-      // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
-      let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.mix * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
-      calcComissaoFinal >= 6.2 ? this.comissaoFinal = 6.2 : this.comissaoFinal = calcComissaoFinal;
-
-      // R$ COMISSÃO
-      this.valorComissao = Number((((this.vendasTotal * this.comissaoFinal) / 100) - (((this.vendasTotal * this.comissaoFinal) / 100) * 0.16)).toFixed(2));
-    });
   }
+
 
   /** Announce the change in sort state for assistive technology. */
   announceSortChange(sortState: Sort) {
@@ -452,7 +620,7 @@ export class CalculoComissaoComponent implements OnInit {
         async (res) => {
           this.showMessageAction('Comissão adicionada com sucesso');
           console.log(novaVenda);
-          await this.loadComissoes();
+          await this.submitFormFilter();
           this.tabelaVendas._updateChangeSubscription();
           this.closeModalNovaVenda();
         },
@@ -460,7 +628,7 @@ export class CalculoComissaoComponent implements OnInit {
           console.log(novaVenda);
           console.error(`Erro ao inserir a comissão: ${error}`);
           this.showMessageAction('ERRO ao criar a comissão');
-          await this.loadComissoes();
+          await this.submitFormFilter();
           this.tabelaVendas._updateChangeSubscription();
           this.closeModalNovaVenda();
         }
@@ -590,14 +758,14 @@ export class CalculoComissaoComponent implements OnInit {
     this.comissoesService.updateComissao(id, editarVenda).subscribe(
       async (res) => {
         this.showMessageAction('Comissão alterada com sucesso');
-        await this.loadComissoes();
+        await this.submitFormFilter();
         this.tabelaVendas._updateChangeSubscription();
         this.closeModalEditarVenda();
       },
       async (error) => {
         console.error(`Erro ao editar a comissão: ${error}`);
         this.showMessageAction('ERRO ao editar a comissão');
-        await this.loadComissoes();
+        await this.submitFormFilter();
         this.tabelaVendas._updateChangeSubscription();
         this.closeModalEditarVenda();
       }
@@ -642,14 +810,14 @@ export class CalculoComissaoComponent implements OnInit {
     this.comissoesService.deleteComissao(id).subscribe(
       async (res) => {
         this.showMessageAction('Comissão excluída com sucesso');
-        await this.loadComissoes();
+        await this.submitFormFilter();
         this.tabelaVendas._updateChangeSubscription();
         this.closeModalDeletarVenda();
       },
       async (error) => {
         console.error(`Erro ao excluir a comissão: ${error}`);
         this.showMessageAction('ERRO ao excluir a comissão');
-        await this.loadComissoes();
+        await this.submitFormFilter();
         this.tabelaVendas._updateChangeSubscription();
         this.closeModalDeletarVenda();
       }

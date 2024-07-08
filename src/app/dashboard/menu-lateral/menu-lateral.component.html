@@ -15,14 +15,19 @@
         <a target="_blank" href="https://nairuzcombr-my.sharepoint.com/:x:/g/personal/contato_nairuz_com_br/EfJ_ICb8chFPl89XP7ediz4BBaSsAT6rW86FA2OdxNB4Gg?e=lG91qc">Tabela de Preços</a>
       </button>
     </li>
+    <li *ngIf="showMixProdutos">
+      <button routerLink="/dashboard/mix-produtos" [class.link-ativo]="isLinkAtivo('/dashboard/mix-produtos')">
+        <i class="fa-solid fa-tags"></i>Mix de Produtos
+      </button>
+    </li>
     <li *ngIf="showTabelaDeValores">
       <button routerLink="/dashboard/tabela-valores" [class.link-ativo]="isLinkAtivo('/dashboard/tabela-valores')">
         <i class="fa-solid fa-table-columns"></i>Tabela de Valores
       </button>
     </li>
-    <li *ngIf="showMixProdutos">
-      <button routerLink="/dashboard/mix-produtos" [class.link-ativo]="isLinkAtivo('/dashboard/mix-produtos')">
-        <i class="fa-solid fa-tags"></i>Mix de Produtos
+    <li *ngIf="showTabelaDeMetas">
+      <button routerLink="/dashboard/tabela-metas" [class.link-ativo]="isLinkAtivo('/dashboard/tabela-metas')">
+        <i class="fa-solid fa-bullseye"></i>Tabela de Metas
       </button>
     </li>
     <li *ngIf="showCalculoComissao">
