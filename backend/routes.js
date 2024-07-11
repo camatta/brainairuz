@@ -42,6 +42,19 @@ const { CreateAuthorController } = require('./controllers/authors/CreateAuthorCo
 const { ListAuthorsController } = require('./controllers/authors/ListAuthorsController');
 const { GetAuthorController } = require('./controllers/authors/GetAuthorController');
 
+// Mix Products Controllers
+const { ListMixProductsController } = require('./controllers/mixProducts/ListMixProductsController');
+const { CreateMixProductController } = require('./controllers/mixProducts/CreateMixProductController');
+const { UpdateMixProductController } = require('./controllers/mixProducts/UpdateMixProductController');
+const { DeleteMixProductController } = require('./controllers/mixProducts/DeleteMixProductController');
+
+// Metas Controllers
+const { ListGoalsController } = require('./controllers/goals/ListGoalsController');
+const { CreateGoalController } = require('./controllers/goals/CreateGoalController');
+const { UpdateGoalController } = require('./controllers/goals/UpdateGoalController');
+const { DeleteGoalController } = require('./controllers/goals/DeleteGoalController');
+
+
 // *** USUÁRIO ***
 // Rota de Cadastro
 router.post('/api/auth/cadastro', CreateUserController);
@@ -68,6 +81,34 @@ router.delete('/api/products/:id', DeleteProductController);
 
 // Rota para editar um produto
 router.put('/api/products/:id', UpdateProductController);
+
+
+// *** MIX DE PRODUTOS ***
+// Rota para obter todos os mixes de produtos
+router.get('/api/mix-produtos', ListMixProductsController);
+
+// Rota para criar mix de produtos
+router.post('/api/mix-produtos', CreateMixProductController);
+
+// Rota para editar mix de produtos
+router.put('/api/mix-produtos/:id', UpdateMixProductController);
+
+// Rota para remover mix de produtos
+router.delete('/api/mix-produtos/:id', DeleteMixProductController);
+
+
+// *** METAS ***
+// Rota para listar todas as metas
+router.get('/api/metas', ListGoalsController);
+
+// Rota para criar metas
+router.post('/api/metas', CreateGoalController);
+
+// Rota para editar uma meta
+router.put('/api/metas/:id', UpdateGoalController);
+
+// Rota para remover uma meta
+router.delete('/api/metas/:id', DeleteGoalController);
 
 
 // *** COMISSÕES ***

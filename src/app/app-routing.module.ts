@@ -10,6 +10,7 @@ import { AuthGuard } from './routes/auth.guard';
 import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaDeValores } from './dashboard/tabela-valores/tabela-valores.component';
+import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.component';
 import { CalculoComissaoComponent } from './dashboard/calculo-comissao/calculo-comissao.component';
 import { ContratosComponent } from './dashboard/contratos/contratos.component';
 import { ContratoFormComponent } from './dashboard/contratos/contrato-form/contrato-form.component';
@@ -17,6 +18,7 @@ import { ContratosListarComponent } from './dashboard/contratos/contratos-listar
 import { ContratosIndexComponent } from './dashboard/contratos/contratos-index/contratos-index.component';
 import { ContratoArquivoComponent } from './dashboard/contratos/contrato-arquivo/contrato-arquivo.component';
 import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
+import { MixProdutosComponent } from './dashboard/mix-produtos/mix-produtos.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -33,8 +35,11 @@ const routes: Routes = [
     ]},
     { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
     { path: 'icp', component: IcpComponent },
+    { path: 'mix-produtos', component: MixProdutosComponent },
     { path: 'tabela-valores', component: TabelaDeValores },
+    { path: 'tabela-metas', component: TabelaMetasComponent },
     { path: 'calculo-comissao', component: CalculoComissaoComponent },
+    { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
   ]},
   { path: 'cadastro', component: CadastroComponent },
   { path: 'redefinir-senha', component: RedefinirSenhaComponent },

@@ -1,0 +1,122 @@
+<main class="mb-5">
+    <!-- TOAST DE RETORNO DAS REQUISIÇÕES (CRIAR, EDITAR OU DELETAR) -->
+    <div id="alert-actions" class="toast text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body"> {{ msgActions }} </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  
+    <h1 class="titlePage">Mix de Produtos</h1>
+  
+    <!-- AÇÕES DO USUÁRIO -->
+    <div class="topo d-flex justify-content-between mt-5 mb-2">
+      <button button type="button" class="btn btn-addVenda" (click)="openModalNovoMixProduto()" data-bs-dismiss="modal">Cadastrar Mix de Produto</button>
+    </div>
+  
+    <!-- COLUNAS DA TABELA -->
+    <div class="mat-elevation-z8">
+      <div class="sectionTable">
+        <table id="tabela-valores" mat-table [dataSource]="tabelaMixProdutos" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+          
+            <!-- Mix de Produtos Column -->
+            <ng-container matColumnDef="mixProduto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mixProduto">
+                    Mix Produto
+                </th>
+                <td mat-cell *matCellDef="let element"> {{ element.mixProduto }} </td>
+            </ng-container>
+  
+            <!-- Ações Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>
+                Ações
+                </th>
+                <td class="acoes" mat-cell *matCellDef="let element">
+                    <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarMixProduto(element)">delete</mat-icon>
+                    <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarMixProduto(element)">edit</mat-icon>
+                </td>
+            </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+  
+      <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons aria-label="Select page of periodic elements"></mat-paginator>
+    </div>
+  
+    <!-- MODAIS -->
+    <div id="bg-modal"></div>
+  
+    <!-- Modal para NOVO Mix de Produto -->
+    <div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="modalNovoMixProduto" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title text-black fs-5" id="modalNovoMixProduto">Novo Mix de Produto</h2>
+            <button type="button" (click)="closeModalNovoMixProduto()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+  
+          <form id="modalsForm" [formGroup]="formNovoMixProduto" class="container">
+            <div class="col-12 mt-5 mb-3">
+              <label for="mixProduto" class="form-label">Mix de Produto:</label>
+              <input type="text" id="mixProduto" class="form-control col-12" formControlName="mixProduto" required />
+            </div>
+  
+            <button type="submit" (click)="onSubmitNovoMixProduto()" [disabled]="!formNovoMixProduto.valid" class="col-12 btn-calcular">Inserir</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal para EDITAR Mix de Produto -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarMixProduto" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header mb-5">
+            <h2 class="modal-title text-black fs-5" id="modalEditarMixProduto">Editar Mix de Produto</h2>
+            <button type="button" (click)="closeModalEditarMixProduto()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+  
+          <form id="modalsForm" [formGroup]="formEditarMixProduto" class="container">
+            <div class="col-12 mb-3">
+              <label for="mixProduto" class="form-label">Mix de Produto:</label>
+              <input type="text" id="mixProduto" class="form-control col-12" formControlName="mixProduto" required />
+            </div>
+  
+            <button type="submit" (click)="onSubmitEditarMixProduto()" [disabled]="!formEditarMixProduto.valid" class="col-12 btn-calcular">Editar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal para EXCLUIR Mix de Produto -->
+    <div class="modal fade" id="modalDeletar" tabindex="-1" aria-labelledby="modalDeletarMixProduto" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title text-black fs-5" id="modalDeletarVenda">Excluir Mix de Produto</h2>
+            <button type="button" (click)="closeModalDeletarMixProduto()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form [formGroup]="formDeletarMixProduto" (ngSubmit)="onSubmitDeletarMixProduto()">
+            <div class="modal-body">
+              <div class="">
+                <div class="form-label mt-1">
+                  <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> o mix de produto: <strong class="text-dark-emphasis">{{ formDeletarMixProduto.get('mixProduto').value }}</strong></p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="submit" class="btn btn-danger">
+                Excluir
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="closeModalDeletarMixProduto()" data-bs-dismiss="modal">
+                Fechar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>

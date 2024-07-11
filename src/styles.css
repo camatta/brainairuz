@@ -1,12 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
 
 /* Redefinindo cores Angular Material */
 :root {
-  --mdc-filled-text-field-caret-color: #00175d;
-  --mdc-filled-text-field-focus-active-indicator-color: #61dcab;
-  --mat-select-focused-arrow-color: #61dcab;
+  --nairuz-primary: #00175d;
+  --nairuz-secondary: #61dcab;
+
+  --mdc-filled-text-field-caret-color: var(--nairuz-primary);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--nairuz-secondary);
+  --mat-select-focused-arrow-color: var(--nairuz-secondary);
 }
 
 .fit-Enterprise { background-color: #48BAB8 !important; }
@@ -16,7 +20,7 @@
 .fit-D { background-color: #FF0000 !important; }
 
 .titlePage {
-  color: #00175d;
+  color: var(--nairuz-primary);
 }
 
 button[type="submit"], input[type="submit"] {
@@ -31,7 +35,7 @@ body {
 h1 {
   font-weight: 700 !important;
   font-size: 2rem !important;
-  color: #00175d;
+  color: var(--nairuz-primary);
   font-style: italic;
   margin-bottom: 30px !important;
 }
@@ -47,11 +51,11 @@ p {
 }
 
 .progress-bar {
-  background-color: #00175d;
+  background-color: var(--nairuz-primary);
 }
 
 .bg-nairuzPrimary {
-  background-color: #00175d;
+  background-color: var(--nairuz-primary);
   color: #fff;
 }
 
@@ -64,11 +68,9 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* TABELA DE VALORES */
-#tabela-valores div, #tabela-valores td,
-mat-paginator span, mat-option span,
-.mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-label {
+#tabela-valores div, #tabela-valores td, #tabela-valores th, mat-paginator span, mat-option span, .mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-label {
   font-size: 14px !important;
-  color: #00175d;
+  color: var(--nairuz-primary);
 }
 
 .mdc-tooltip__surface.mdc-tooltip__surface-animation {
@@ -136,7 +138,7 @@ mat-paginator .mat-mdc-select-arrow svg {
 }
 
 .mat-mdc-icon-button svg {
-  fill: #00175d;
+  fill: var(--nairuz-primary);
 }
 
 /* CÁLCULO DE COMISSÃO */
@@ -185,4 +187,7 @@ mat-paginator .mat-mdc-select-arrow svg {
 }
 .escopo-html * + * {
   margin-top: 4px !important;
+}
+.mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: var(--nairuz-secondary) !important;
 }

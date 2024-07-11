@@ -19,7 +19,7 @@ module.exports.UpdateCommissionController = async (req, res) => {
 
     const idComissao = req.params.id;
 
-    const updateCommissionService = UpdateCommissionService({ 
+    const updateCommissionService = await UpdateCommissionService({ 
       dataVenda,
       mes,
       vendedor,

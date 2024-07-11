@@ -13,7 +13,9 @@ export class MenuLateralComponent implements OnInit {
   showUsuariosLink = false;
   showComercialLink = false;
   showTabelaPrecos = false;
+  showMixProdutos = false;
   showTabelaDeValores = false;
+  showTabelaDeMetas = false;
   showCalculoComissao = false;
   showSubmenu: boolean = false
   showAdicionarOportunidade = false;
@@ -40,14 +42,6 @@ export class MenuLateralComponent implements OnInit {
       accessLevel === 'Administrador'
     ;
 
-    this.showTabelaPrecos =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial' ||
-      team === 'Customer Success' ||
-      name === 'Adriany Oliveira' ||
-      name === 'Beatriz Cruz Alves'
-    ;
-
     this.showComercialLink =
       accessLevel === 'Administrador' ||
       accessLevel === 'Líder de Equipe' ||
@@ -57,7 +51,27 @@ export class MenuLateralComponent implements OnInit {
       name === 'Beatriz Almeida'
     ;
 
+    this.showTabelaPrecos =
+      accessLevel === 'Administrador' ||
+      team === 'Comercial' ||
+      team === 'Customer Success' ||
+      name === 'Adriany Oliveira' ||
+      name === 'Beatriz Cruz Alves'
+    ;
+
+    this.showMixProdutos =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      name === 'Adriany Oliveira'
+    ;
+
     this.showTabelaDeValores =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      name === 'Adriany Oliveira'
+    ;
+
+    this.showTabelaDeMetas =
       accessLevel === 'Administrador' ||
       // team === 'Comercial' ||
       name === 'Adriany Oliveira'
@@ -66,7 +80,6 @@ export class MenuLateralComponent implements OnInit {
     this.showCalculoComissao =
       accessLevel === 'Administrador' ||
       // team === 'Comercial' ||
-      team === 'Tecnologia'
       name === 'Adriany Oliveira'
     ;
       
