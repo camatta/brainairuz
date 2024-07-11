@@ -288,6 +288,8 @@ export class ContratoFormComponent {
   }
 
   onConfirmCreate() {
+    this.isGeneratingPdf = true; // Ativar estado de carregamento,
+    
     this.contratoCriado = false;
     let generatedId = nanoid();
     generatedId = generatedId.toLowerCase();
@@ -395,8 +397,6 @@ export class ContratoFormComponent {
   }
 
   async generatePdf(): Promise<void> {
-    this.isGeneratingPdf = true; // Ativar estado de carregamento,
-
     const contentIds = [
       'page1', 'page2', 'page3', 'page4',
       'page5', 'page6', 'page7', 'page8',
