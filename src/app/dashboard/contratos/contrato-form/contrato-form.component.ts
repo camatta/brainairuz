@@ -331,6 +331,19 @@ export class ContratoFormComponent {
               this.clientAlreadyExist = true;
             }
           }
+        );
+
+        const authorEmail = JSON.parse(localStorage.getItem('user')).email;
+        this.contractsService.getAuthorByEmail(authorEmail).subscribe(
+          (authorResponse) => {
+            const newAuthor = {
+              name: newContrato.contratoAutor,
+              email: authorEmail
+            }
+            if(authorResponse.author === null) {
+              this.contractsService.createAuthor(newAuthor).subscribe();
+            }
+          }
         )
 
         await this.generatePdf();
