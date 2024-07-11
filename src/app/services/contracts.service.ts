@@ -2,8 +2,9 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
-import { Contract } from "../dashboard/contratos/contract.model";
 import { environment } from "src/environments/environment";
+import { type Contract } from "../dashboard/contratos/contract.model";
+import { type Author } from "../dashboard/contratos/author.model";
 
 const API_URL = environment.URL_API;
 
@@ -35,5 +36,17 @@ export class ContractsService {
 
   editContractStatus(_id: string, newStatus: string): Observable<{ updatedContract: Contract, message: string } | { message: string, error: any }> {
     return this.http.patch<{ updatedContract: Contract, message: string } | { message: string, error: any }>(`${API_URL}/api/contracts/${_id}/status`, {status: newStatus});
+  }
+
+  createAuthor(newAuthor: Author): Observable<Author> {
+    return this.http.post<Author>(`${API_URL}/api/authors`, { author: newAuthor });
+  }
+
+  getAuthors(): Observable<{ authors: Author[] }> {
+    return this.http.get<{ authors: Author[] }>(`${API_URL}/api/authors`);
+  }
+
+  getAuthorByEmail(email: string): Observable<{ author: Author }> {
+    return this.http.get<{ author: Author }>(`${API_URL}/api/authors/${email}`);
   }
 }
