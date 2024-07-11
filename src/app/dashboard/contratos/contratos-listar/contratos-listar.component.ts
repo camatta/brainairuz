@@ -142,10 +142,15 @@ export class ContratosListarComponent {
     });
   }
 
-  returnPreviousStatus() {
-    this.contractsService.getContracts().subscribe({
-      next: ({ contracts }) => {
-        this.CONTRATOS = contracts;
+  returnPreviousStatus(id: string) {
+    const contractIndex = this.CONTRATOS.findIndex(({ _id }) => _id === id);
+    
+    this.contractsService.getContractById( id ).subscribe({
+      next: ({ contract }) => {
+        this.CONTRATOS[contractIndex] = contract;
+      },
+      error: (err) => {
+        alert(`Algo deu errado ao desfazer alteração!\n${JSON.stringify(err)}`);
       }
     });
   }
@@ -166,7 +171,7 @@ export class ContratosListarComponent {
       `Deseja alterar o status de “${actualStatus}” para “${newStatus}”?`,
       `Alteração realizada com sucesso!`,
       () => this.onChangeContractStatus(id, newStatus),
-      () => this.returnPreviousStatus()
+      () => this.returnPreviousStatus(id)
     )
   }
 
