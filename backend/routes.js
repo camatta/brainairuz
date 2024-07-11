@@ -37,6 +37,10 @@ const { DeleteContractController } = require('./controllers/contracts/DeleteCont
 const { UpdateContractStatusController } = require('./controllers/contracts/UpdateContractStatusController');
 const { DeleteClientController } = require('./controllers/clients/DeleteClientController');
 
+// Authors controllers
+const { CreateAuthorController } = require('./controllers/authors/CreateAuthorController');
+const { ListAuthorsController } = require('./controllers/authors/ListAuthorsController');
+const { GetAuthorController } = require('./controllers/authors/GetAuthorController');
 
 // *** USUÁRIO ***
 // Rota de Cadastro
@@ -99,6 +103,16 @@ router.patch('/api/contracts/:id/status', authMiddleware, UpdateContractStatusCo
 
 // Rota para excluir um contrato
 router.delete('/api/contracts/:id', authMiddleware, DeleteContractController)
+
+/**
+ * Rotas para Autores de contratos
+ */
+// Rota para salvar autor de contrato
+router.post('/api/authors', authMiddleware, CreateAuthorController);
+// Rota para consultar autores de contratos
+router.get('/api/authors', authMiddleware, ListAuthorsController);
+// Rota para consultar autor de contrato por email
+router.get('/api/authors/:email', authMiddleware, GetAuthorController);
 
 /**
  * Rotas para Clientes
