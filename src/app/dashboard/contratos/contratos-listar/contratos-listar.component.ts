@@ -4,17 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { type User, UserService } from 'src/app/services/user.service';
 import { ContractsService } from '../../../services/contracts.service';
 import { ConfirmModalService } from 'src/app/services/confirm-modal.service';
 import { PdfGeneratorService } from 'src/app/services/pdf-generator.service';
 
-import { Contract } from '../contract.model';
 import { AdvancedFilterPipe } from './advanced-filter.pipe';
 import { ContratoArquivoComponent } from '../contrato-arquivo/contrato-arquivo.component';
 import { ContratoProgressoComponent } from '../contrato-progresso/contrato-progresso.component';
 import { ContratoModalpdfComponent } from '../contrato-modal-pdf/contrato-modal-pdf.component';
 import { SpinnerComponent } from 'src/app/ui/loader/spinner.component';
+
+import { type Contract } from '../contract.model';
+import { type Author } from '../author.model';
 
 @Component({
   selector: 'app-contratos-listar',
@@ -35,7 +36,7 @@ import { SpinnerComponent } from 'src/app/ui/loader/spinner.component';
 export class ContratosListarComponent {
   isFetching: boolean = true;
   CONTRATOS: Contract[] = [];
-  AUTHORS: User[] = [];
+  AUTHORS: Author[] = [];
   
   progress: number = 0;
   private progressSubscription: Subscription | undefined;
@@ -52,8 +53,7 @@ export class ContratosListarComponent {
     private contractsService: ContractsService,
     private confirmModalService: ConfirmModalService,
     private router: Router,
-    private pdfGeneratorService: PdfGeneratorService,
-    private userService: UserService
+    private pdfGeneratorService: PdfGeneratorService
   ) {}
 
   ngOnInit() {
@@ -72,13 +72,11 @@ export class ContratosListarComponent {
       this.progress = progress;
     });
 
-    this.userService.getUsers().subscribe({
-      next: ({ users }) => {
-        if(users) {
-          users.map(user => {
-            if(user.team === "Comercial") {
-              this.AUTHORS.push(user);
-            }
+    this.contractsService.getAuthors().subscribe({
+      next: ({ authors }) => {
+        if(authors) {
+          authors.map(author => {
+            this.AUTHORS.push(author);
           });
         }
       },
