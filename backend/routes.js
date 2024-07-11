@@ -63,7 +63,7 @@ router.post('/api/auth/cadastro', CreateUserController);
 router.post('/api/auth/login', AuthUserController);
 
 // Rota para obter todos os usuários
-router.get('/api/users', ListUsersController);
+router.get('/api/users', authMiddleware,ListUsersController);
 
 // Rota para obter informações do usuário logado
 router.get('/api/users/me', authMiddleware, DetailUserController);
@@ -71,58 +71,58 @@ router.get('/api/users/me', authMiddleware, DetailUserController);
 
 // *** PRODUTOS ***
 // Rota para obter todos os produtos
-router.get('/api/products', ListProductsController);
+router.get('/api/products', authMiddleware, ListProductsController);
 
 // Rota para inserir novos produtos
-router.post('/api/products', CreateProductController);
+router.post('/api/products', authMiddleware, CreateProductController);
 
 // Rota para apagar um produto
-router.delete('/api/products/:id', DeleteProductController);
+router.delete('/api/products/:id', authMiddleware, DeleteProductController);
 
 // Rota para editar um produto
-router.put('/api/products/:id', UpdateProductController);
+router.put('/api/products/:id', authMiddleware, UpdateProductController);
 
 
 // *** MIX DE PRODUTOS ***
 // Rota para obter todos os mixes de produtos
-router.get('/api/mix-produtos', ListMixProductsController);
+router.get('/api/mix-produtos', authMiddleware, ListMixProductsController);
 
 // Rota para criar mix de produtos
-router.post('/api/mix-produtos', CreateMixProductController);
+router.post('/api/mix-produtos', authMiddleware, CreateMixProductController);
 
 // Rota para editar mix de produtos
-router.put('/api/mix-produtos/:id', UpdateMixProductController);
+router.put('/api/mix-produtos/:id', authMiddleware, UpdateMixProductController);
 
 // Rota para remover mix de produtos
-router.delete('/api/mix-produtos/:id', DeleteMixProductController);
+router.delete('/api/mix-produtos/:id', authMiddleware, DeleteMixProductController);
 
 
 // *** METAS ***
 // Rota para listar todas as metas
-router.get('/api/metas', ListGoalsController);
+router.get('/api/metas', authMiddleware, ListGoalsController);
 
 // Rota para criar metas
-router.post('/api/metas', CreateGoalController);
+router.post('/api/metas', authMiddleware, CreateGoalController);
 
 // Rota para editar uma meta
-router.put('/api/metas/:id', UpdateGoalController);
+router.put('/api/metas/:id', authMiddleware, UpdateGoalController);
 
 // Rota para remover uma meta
-router.delete('/api/metas/:id', DeleteGoalController);
+router.delete('/api/metas/:id', authMiddleware, DeleteGoalController);
 
 
 // *** COMISSÕES ***
 // Rota para obter todas as comissões
-router.get('/api/comissoes', ListCommissionsController);
+router.get('/api/comissoes', authMiddleware, ListCommissionsController);
 
 // Rota para inserir novas comissões
-router.post('/api/comissao', CreateCommissionController);
+router.post('/api/comissao', authMiddleware, CreateCommissionController);
 
 // Rota para apagar uma comissão
-router.delete('/api/comissoes/:id', DeleteCommissionController);
+router.delete('/api/comissoes/:id', authMiddleware, DeleteCommissionController);
 
 // Rota para editar uma comissão
-router.put('/api/comissoes/:id', UpdateCommissionController);
+router.put('/api/comissoes/:id', authMiddleware, UpdateCommissionController);
 
 /**
  * Rotas para Contratos
