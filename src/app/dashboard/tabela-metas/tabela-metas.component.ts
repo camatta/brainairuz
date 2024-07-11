@@ -90,7 +90,7 @@ export class TabelaMetasComponent implements OnInit {
     // Carrega vendedores do time Comercial
     this.usersService.getUsers().subscribe(
       async(data: any) => {
-        data.message.map((user: any) => {
+        data.users.map((user: any) => {
           if(user.team == "Comercial") {
             this.vendedores.push(user.name);
           }
