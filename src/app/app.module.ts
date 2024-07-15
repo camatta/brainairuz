@@ -18,12 +18,15 @@ import { PerfilComponent } from './dashboard/perfil/perfil.component';
 import { ComercialComponent } from './dashboard/comercial/comercial.component';
 import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.component';
 import { IcpComponent } from './dashboard/icp/icp.component';
+<<<<<<< Updated upstream
 import { ContratosComponent } from './dashboard/contratos/contratos.component';
 import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 import localePt from '@angular/common/locales/pt';
 registerLocaleData(localePt, 'pt-BR');
+=======
+>>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
@@ -36,9 +39,13 @@ registerLocaleData(localePt, 'pt-BR');
     PerfilComponent,
     ComercialComponent,
     RedefinirSenhaComponent,
+<<<<<<< Updated upstream
     IcpComponent,
     ContratosComponent,
     AdicionarOportunidadeComponent,
+=======
+    IcpComponent
+>>>>>>> Stashed changes
   ],
   imports: [
     BrowserModule,
