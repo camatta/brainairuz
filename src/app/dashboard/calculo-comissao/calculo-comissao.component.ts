@@ -10,22 +10,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 
 import { Produtos } from '../tabela-valores/interfaceProdutos';
-import { Comissao } from './interfaceComissao';
+import { Comissao } from 'src/app/types/comissao';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { MixProdutosService } from 'src/app/services/mixProdutos.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { ComissoesService } from 'src/app/services/comissoes.service';
 import { MetasService } from 'src/app/services/metas.service';
-
-type Meta = {
-  _id: string;
-  mes: string;
-  metaEmpresa: number;
-  metaRealizadaEmpresa: number;
-  metaIndividual: number;
-  metaRealizadaIndividual: number;
-}
 
 @Component({
   selector: 'app-calculo-comissao',

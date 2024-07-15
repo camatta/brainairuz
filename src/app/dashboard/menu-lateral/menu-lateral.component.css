@@ -10,7 +10,7 @@
 }
 
 .menu-lateral ul li {
-  margin-bottom: 1rem;
+  margin-bottom: 30px;
 }
 
 .menu-lateral ul li button {
@@ -30,6 +30,47 @@
 .menu-lateral ul li button i {
   width: 20px;
   transition: all .3s ease-in-out;
+}
+
+.menu-lateral ul li .collapsed {
+  position: relative;
+  font-size: 14px;
+  font-weight: 400 !important;
+  line-height: 1;
+  color: #fff;
+  text-align: left;
+  text-decoration: unset;
+  background: unset;
+  border: unset;
+  margin-bottom: 1rem;
+  padding: 0 7px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.menu-lateral ul li .collapsed .fa-chevron-down {
+  position: absolute;
+  right: 0;
+  font-size: 12px;
+  transition: ease-in-out .3s;
+}
+
+.menu-lateral ul li .collapsed i:not(.fa-chevron-down) {
+  margin-right: 8px;
+}
+
+.menu-lateral ul li .collapse  {
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+.menu-lateral ul li .collapse li {
+  margin-bottom: 1rem;
+}
+
+.menu-lateral ul li .collapse button {
+  margin-bottom: 16px;
+  font-size: 13px;
 }
 
 .link-ativo, 

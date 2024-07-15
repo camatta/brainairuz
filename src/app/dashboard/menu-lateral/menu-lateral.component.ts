@@ -19,6 +19,7 @@ export class MenuLateralComponent implements OnInit {
   showCalculoComissao = false;
   showSubmenu: boolean = false
   showAdicionarOportunidade = false;
+  showControleGeral = false;
   linkAtivo: string;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
@@ -32,6 +33,11 @@ export class MenuLateralComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const elementos = Array.from(document.querySelectorAll(".collapse"));
+    elementos.forEach((elemento) => {
+      elemento.classList.remove("show");
+    })
+
     const user = this.authService.getUser();
     const accessLevel = user ? user.accessLevel : '';
     const team = user ? user.team : '';
@@ -88,6 +94,25 @@ export class MenuLateralComponent implements OnInit {
       // team === 'Comercial' ||
       name === 'Adriany Oliveira'
     ;
+
+    this.showControleGeral =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      name === 'Adriany Oliveira'
+    ;
+  }
+
+  collapseMenu(element: any) {
+    const elemento = element.target.parentElement.querySelector(".collapse");
+    const arrow = element.target.querySelector(".fa-chevron-down");
+
+    if(elemento.classList.contains("show")) {
+      elemento.classList.remove("show");
+      arrow.style.transform = "rotate(0deg)";
+    } else {
+      elemento.classList.add("show");
+      arrow.style.transform = "rotate(180deg)";
+    }
   }
 
   isLinkAtivo(link: string): boolean {

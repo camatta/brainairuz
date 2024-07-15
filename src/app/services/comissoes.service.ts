@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Comissao } from '../dashboard/calculo-comissao/interfaceComissao';
+import { Comissao } from '../types/comissao'; 
 
 @Injectable({
   providedIn: 'root'

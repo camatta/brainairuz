@@ -19,6 +19,7 @@ import { ContratosIndexComponent } from './dashboard/contratos/contratos-index/c
 import { ContratoArquivoComponent } from './dashboard/contratos/contrato-arquivo/contrato-arquivo.component';
 import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
 import { MixProdutosComponent } from './dashboard/mix-produtos/mix-produtos.component';
+import { ControleGeralComponent } from './dashboard/controle-geral/controle-geral.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -40,6 +41,7 @@ const routes: Routes = [
     { path: 'tabela-metas', component: TabelaMetasComponent },
     { path: 'calculo-comissao', component: CalculoComissaoComponent },
     { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
+    { path: 'controle-geral', component: ControleGeralComponent },
   ]},
   { path: 'cadastro', component: CadastroComponent },
   { path: 'redefinir-senha', component: RedefinirSenhaComponent },

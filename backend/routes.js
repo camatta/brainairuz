@@ -54,6 +54,11 @@ const { CreateGoalController } = require('./controllers/goals/CreateGoalControll
 const { UpdateGoalController } = require('./controllers/goals/UpdateGoalController');
 const { DeleteGoalController } = require('./controllers/goals/DeleteGoalController');
 
+// Oportunidades Controllers
+const { ListOpportunitiesController } = require('./controllers/opportunities/ListOpportunitiesController');
+const { CreateOpportunityController } = require('./controllers/opportunities/CreateOpportunityController');
+const { UpdateOpportunityController } = require('./controllers/opportunities/UpdateOpportunityController');
+
 
 // *** USUÁRIO ***
 // Rota de Cadastro
@@ -170,5 +175,16 @@ router.get('/api/clients/:cnpj', authMiddleware, GetClientController);
 
 // Rota para deletar cliente via CNPJ
 router.delete('/api/clients/:cnpj', authMiddleware, DeleteClientController); 
+
+
+// *** OPORTUNIDADES ***
+// Rota para listar todas as oportunidades
+router.get('/api/oportunidades', ListOpportunitiesController);
+
+// Rota para criar uma oportunidade
+router.post('/api/oportunidades', CreateOpportunityController);
+
+// Rota para editar uma oportunidade
+router.put('/api/oportunidades/:id', UpdateOpportunityController);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-export interface Comissao {
+export type Comissao = {
   dataVenda: string;
   mes: string;
   ano: string;

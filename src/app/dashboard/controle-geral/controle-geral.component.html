@@ -1,0 +1,393 @@
+<main class="mb-5">
+    <div class="d-flex justify-content-between">
+        <h1 class="titlePage">Cálculo de comissão</h1>
+        <form>
+            <input type="text" placeholder="Insira o termo da busca" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </form>
+    </div>
+  
+    <!-- AÇÕES DO USUÁRIO -->
+    <div class="topo d-flex justify-content-between mt-5 mb-2">
+      <form class="d-flex gap-5">
+        <div class="filter-commissions">
+          <label for="statusFilter" class="me-3">Status</label>
+          <select (change)="submitFormFilter()" id="statusFilter" class="select-nairuz h-100">
+            <option value="sem filtro">Selecione</option>
+            <option selected value="Exploratória">Exploratória</option>
+            <option value="Não é uma oportunidade">Não é uma oportunidade</option>
+            <option value="Não consegui qualificar">Não consegui qualificar</option>
+            <option value="Fora do ICP">Fora do ICP</option>
+            <option value="Dentro do ICP">Dentro do ICP</option>
+            <option value="Vendido">Vendido</option>
+          </select>
+        </div>
+        <div class="filter-commissions">
+          <label for="years" class="me-3">Filtrar por Ano:</label>
+          <select *ngIf="yearsSelectFilter.length > 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
+            <option *ngFor="let year of yearsSelectFilter" [value]="year" [selected]="year === currentYear">
+              {{ year }}
+            </option>
+          </select>
+          <select *ngIf="yearsSelectFilter.length <= 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
+            <option selected value="{{ currentYear }}">{{currentYear}}</option>
+          </select>
+        </div>
+        <div class="filter-commissions">
+          <label for="months" class="me-3">Filtrar por mês:</label>
+          <select (change)="submitFormFilter()" id="months" class="select-nairuz h-100">
+            <option selected value="Janeiro">Janeiro</option>
+            <option value="Fevereiro">Fevereiro</option>
+            <option value="Março">Março</option>
+            <option value="Abril">Abril</option>
+            <option value="Maio">Maio</option>
+            <option value="Junho">Junho</option>
+            <option value="Julho">Julho</option>
+            <option value="Agosto">Agosto</option>
+            <option value="Setembro">Setembro</option>
+            <option value="Outubro">Outubro</option>
+            <option value="Novembro">Novembro</option>
+            <option value="Dezembro">Dezembro</option>
+          </select>
+        </div>
+      </form>
+  
+    </div>
+  
+    <!-- COLUNAS DA TABELA -->
+    <div class="mat-elevation-z8">
+      <div class="sectionTable">
+        <table id="tabela-valores" mat-table [dataSource]="tabela" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+            <!-- Suspect Column -->
+            <ng-container matColumnDef="suspect" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by suspect">
+                    Nome do Suspect
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarOportunidade(element)">edit</mat-icon>
+                    {{ element.suspect }}
+                </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by status">
+                    Status
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.status }}
+                </td>
+            </ng-container>
+
+            <!-- Data Column -->
+            <ng-container matColumnDef="data">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by data">
+                    Data
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.data | date: "dd/MM/yyyy" }}
+                </td>
+            </ng-container>
+
+            <!-- Ano Column -->
+            <ng-container matColumnDef="ano">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ano">
+                    Ano
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.ano }}
+                </td>
+            </ng-container>
+
+            <!-- Mês Column - VERIFICAR FILTRO -->
+            <ng-container matColumnDef="mes">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mes">
+                    Mês
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.mes }}
+                </td>
+            </ng-container>
+
+            <!-- Origem Column -->
+            <ng-container matColumnDef="origem">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by origem">
+                    Origem
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.origem }}
+                </td>
+            </ng-container>
+
+            <!-- Fonte Column -->
+            <ng-container matColumnDef="fonte">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fonte">
+                    Fonte
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.fonte }}
+                </td>
+            </ng-container>
+
+            <!-- Responsável Column -->
+            <ng-container matColumnDef="responsavel">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by responsavel">
+                    Responsável
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.responsavel }}
+                </td>
+            </ng-container>
+
+            <!-- Primeiro Contato Column -->
+            <ng-container matColumnDef="primeiro_contato">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by primeiro_contato">
+                    1º Contato
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.primeiro_contato ? (element.primeiro_contato | date: "dd/MM/yyyy") : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Reunião Agendada Column -->
+            <ng-container matColumnDef="reuniao_agendada">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by reuniao_agendada">
+                    Reunião Agendada
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.reuniao_agendada ? (element.reuniao_agendada | date: "dd/MM/yyyy") : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- SLA Atendimento Column -->
+            <ng-container matColumnDef="sla_atendimento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by sla_atendimento">
+                    SLA de Atend.
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.sla_atendimento ? element.sla_atendimento : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Percentual de Fit Column -->
+            <ng-container matColumnDef="percentual_fit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by percentual_fit">
+                    % de Fit
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.percentual_fit ? element.percentual_fit : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Perfil de Cliente Column -->
+            <ng-container matColumnDef="perfil_cliente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by perfil_cliente">
+                    Perfil do Cliente
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.perfil_cliente ? element.perfil_cliente : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Etapa Column -->
+            <ng-container matColumnDef="etapa">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by etapa">
+                    Etapa
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.etapa ? element.etapa : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Produto Column -->
+            <ng-container matColumnDef="produto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by produto">
+                    Produto
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.produto ? element.produto : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Detalhes do Produto Column -->
+            <ng-container matColumnDef="detalhes_produto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by detalhes_produto">
+                    Detalhes do Produto
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.detalhes_produto ? element.detalhes_produto : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Valor da Proposta Column -->
+            <ng-container matColumnDef="valor_proposta">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by valor_proposta">
+                    Valor da Proposta
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.valor_proposta ? (element.valor_proposta | currency: 'BRL':'symbol') : "R$ 0,00" }}
+                </td>
+            </ng-container>
+
+            <!-- Motivo da Perda Column -->
+            <ng-container matColumnDef="motivo_perda">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by motivo_perda">
+                    Motivo da Perda
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.motivo_perda ? element.motivo_perda : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Valor Vendido Column FAZER CÁLCULO -->
+            <ng-container matColumnDef="valor_vendido">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by valor_vendido">
+                    Valor Vendido
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.valor_vendido ? (element.valor_vendido | currency: 'BRL':'symbal') : "R$ 0,00" }}
+                </td>
+            </ng-container>
+
+            <!-- Markup Column -->
+            <ng-container matColumnDef="markup">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by markup">
+                    Markup
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.markup ? element.markup : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- MRR Column -->
+            <ng-container matColumnDef="mrr">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mrr">
+                    MRR
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.mrr ? element.mrr : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Data do Aceite Column -->
+            <ng-container matColumnDef="data_aceite">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by data_aceite">
+                    Data do Aceite
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.data_aceite ? (element.data_aceite | date: 'dd/MM/yyyy') : "-" }}
+                </td>
+            </ng-container>
+
+            <!-- Ciclo de Venda Column -->
+            <ng-container matColumnDef="ciclo_venda">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ciclo_venda">
+                    Ciclo de Venda
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.ciclo_venda ? element.ciclo_venda : '-' }}
+                </td>
+            </ng-container>
+
+            <!-- Mês de Encerramento Column -->
+            <ng-container matColumnDef="mes_encerramento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mes_encerramento">
+                    Mês de Encerramento
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.mes_encerramento ? element.mes_encerramento : '-' }}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+  
+      <mat-paginator
+        [pageSizeOptions]="[10, 20, 30]"
+        showFirstLastButtons aria-label="Select page of periodic elements"
+      ></mat-paginator>
+    </div>
+  
+    <!-- MODAIS -->
+    <div id="bg-modal"></div>
+  
+    <!-- Modal para EDITAR venda-->
+    <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarVenda" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header mb-5">
+            <h2 class="modal-title text-black fs-5" id="modalEditarVenda">Editar Venda</h2>
+            <button type="button" (click)="closeModalEditarOportunidade()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+  
+          <form id="formCalculoComissao" [formGroup]="formEditarOportunidade" class="container">
+            <div class="col-12 d-flex flex-column align-items-start mb-3">
+              <label class="form-label">Status:</label>
+  
+              <select formControlName="status" id="status" class="selectForm form-select">
+                <option value="Aguardando Aprovação">Aguardando Aprovação</option>
+                <option value="Aprovado">Aprovado</option>
+                <option value="Reprovado">Reprovado</option>
+                <option value="Pagamento Efetuado">Pagamento Efetuado</option>
+              </select>
+            </div>
+  
+            <div class="col-12 mb-3">
+              <label for="dataVenda" class="form-label">Data da Venda:</label>
+              <input type="date" id="dataVenda" class="form-control col-12" formControlName="dataVenda" required />
+            </div>
+  
+            <div class="col-12 mb-3">
+              <label for="nomeCliente" class="form-label">Nome do cliente:</label>
+              <input type="text" id="nomeCliente" class="form-control col-12" formControlName="nomeCliente" required />
+            </div>
+        
+            <div class="col-12 mb-3">
+              <label for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
+              <input
+                type="number"
+                formControlName="multiplicador"
+                step="1"
+                id="multiplicador"
+                class="form-control form-floating col-12"
+                required
+              />
+            </div>
+          
+            <div class="col-12 mb-3">
+              <label for="markup-editar" class="form-label">Qualidade = Markup:</label>
+              <input
+                type="number"
+                formControlName="markup"
+                step="0.1"
+                min="1.6"
+                class="form-control form-floating col-12"
+                id="markup-editar"
+                required
+              />
+            </div>
+          
+  
+            <div class="col-12 mb-3">
+              <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
+              <input
+                type="text"
+                prefix="R$ "
+                mask="separator.2"
+                thousandSeparator="."
+                decimalMarker=","
+                class="form-control"
+                id="vendaAvulsa"
+                formControlName="vendaAvulsa"
+                required
+              >
+            </div>
+  
+            <button type="submit" (click)="onSubmitEditarOportunidade()" [disabled]="!formEditarOportunidade.valid" class="col-12 btn-calcular">Editar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</main>

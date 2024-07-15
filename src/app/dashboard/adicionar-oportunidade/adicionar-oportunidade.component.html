@@ -1,9 +1,78 @@
 <main class="mb-5">
-    <div class="container d-flex justify-content-between">
+    <div class="container d-flex flex-column">
         <h1 class="titlePage">Adicionar Oportunidade</h1>
-        
+
+        <form class="row" [formGroup]="formAdicionarOportunidade" (submit)="adicionarOportunidade()">
+            <div class="col-4 d-flex flex-column">
+                <label for="data" class="form-label">Data</label>
+                <input formControlName="data" class="input-nairuz" type="datetime-local" name="data" id="data" required>
+            </div>
+            <div class="col-4 d-flex flex-column">
+                <label for="suspect" class="form-label">Nome do Suspect</label>
+                <input formControlName="suspect" class="input-nairuz" placeholder="Exemplo" type="text" name="suspect" id="suspect" required>
+            </div>
+            <div class="col-4 d-flex flex-column">
+                <label for="origem" class="form-label">Origem</label>
+                <select formControlName="origem" class="input-nairuz" name="origem" id="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="Parceiros">Parceiros</option>
+                </select>
+            </div>
+            <div class="col-4 d-flex flex-column mt-4">
+                <label for="fonte" class="form-label">Fonte</label>
+                <select formControlName="fonte" class="input-nairuz" name="fonte" id="fonte" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="AGV">AGV</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
+                    <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
+                    <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Linx">Linx</option>
+                    <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital</option>
+                    <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
+                    <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="RD Station">RD Station</option>
+                    <option class="options-nairuz" value="Site">Site</option>
+                    <option class="options-nairuz" value="VTEX">VTEX</option>
+                    <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                </select>
+            </div>
+            <div class="col-4 d-flex flex-column mt-4">
+                <label for="responsavel" class="form-label">Responsável</label>
+                <select formControlName="responsavel" class="input-nairuz" name="responsavel" id="responsavel" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option *ngFor="let vendedor of vendedores" class="options-nairuz" [value]="vendedor">
+                        {{ vendedor }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-12">
+                <button class="submit-nairuz" type="submit" [disabled]="!formAdicionarOportunidade.valid">Criar Oportunidade</button>
+            </div>
+        </form>
+
+        <!-- MODAIS -->
+        <div id="bg-modal"></div>
+
+        <!-- Modal cadastro nova oportunidade com sucesso -->
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content d-flex flex-column align-items-center">
+                    <button type="button" (click)="closeModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h2 class="modal-title">Oportunidade criada com sucesso.</h2>
+                    <p class="text-modal">Você já pode visualizá-la na página de Controle.</p>
+                    <button class="btn-redirect" (click)="redirectControle()">Ir para o Controle</button>
+                </div>
+            </div>
+        </div>
     </div>
-
-
-
 </main>
