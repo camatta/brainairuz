@@ -15,6 +15,10 @@ export class ProductsService {
     return this.http.get<any[]>(environment.URL_API + '/api/products');
   }
 
+  getGroupProducts(): Observable<any[]> {
+    return this.http.get<any[]>(environment.URL_API + '/api/group-products');
+  }
+
   setProduct(newProduct: Produtos) {
     return this.http.post<Produtos>(environment.URL_API + '/api/products', newProduct);
   }

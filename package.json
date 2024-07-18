@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "dev:server": "nodemon server.js",
+    "server": "nodemon server.js",
     "client": "ng serve"
   },
   "private": true,

@@ -2,9 +2,9 @@ const { CreateProductService } = require("../../services/product/CreateProductSe
 
 module.exports.CreateProductController = async (req, res) => {
   try {
-    const { id, produto, tecnologia, valor_venda, observacao } = req.body;
+    const { produto, tecnologia, valor_venda, observacao } = req.body;
 
-    const createProductService = await CreateProductService({ id, produto, tecnologia, valor_venda, observacao });
+    const createProductService = await CreateProductService({ produto, tecnologia, valor_venda, observacao });
 
     res.status(201).json({ message: 'Produto criado com sucesso!', createProductService });
 

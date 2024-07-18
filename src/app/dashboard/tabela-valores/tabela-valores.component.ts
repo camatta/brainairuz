@@ -1,10 +1,13 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+
+import { Table } from 'primeng/table';
 
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 
@@ -12,20 +15,42 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Produtos } from './interfaceProdutos';
 import { ProductsService } from 'src/app/services/products.service';
 
+interface DadosTransformados {
+  produto: string;
+  tecnologias: {
+    tecnologia: string;
+    variantes: {
+      _id: string;
+      valorVenda: number;
+      observacao: string;
+    }[];
+  }[];
+}
+
 
 @Component({
   selector: 'app-tabela-valores',
   templateUrl: './tabela-valores.component.html',
   styleUrls: ['./tabela-valores.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
   standalone: true,
   imports: [ SharedModule ]
 })
 
 export class TabelaDeValores implements OnInit {
   displayedColumns: string[] = ['id', 'produto', 'tecnologia', 'valor_venda', 'observacao'];
-  produtos: MatTableDataSource<Produtos> = new MatTableDataSource<Produtos>([]);
+  // produtos: MatTableDataSource<Produtos> = new MatTableDataSource<Produtos>([]);
+  produtos = [];
   msgActions: string;
-  ultimoId: number = 0;
+  columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
+  expandedElement: Produtos | null;
+  termoBusca: any;
 
   // validação de usuários
   showAdmin = false;
@@ -44,7 +69,7 @@ export class TabelaDeValores implements OnInit {
     const user = this.authService.getUser();
     const accessLevel = user ? user.accessLevel : '';
 
-    this.showAdmin = accessLevel === 'Administrador';
+    this.showAdmin = accessLevel === 'Administrador' || user.name === 'Adriany Oliveira';
 
     if(this.showAdmin) {
       this.displayedColumns = ['id', 'produto', 'tecnologia', 'valor_venda', 'observacao', 'actions'];
@@ -54,52 +79,72 @@ export class TabelaDeValores implements OnInit {
 
     // Carrega todos os produtos
     this.loadMatTable();
-
-    // Tradução do Paginator
-    this.paginator._intl.itemsPerPageLabel="Itens por página";
-    this.paginator._intl.nextPageLabel="Próxima";
-    this.paginator._intl.previousPageLabel="Anterior";
-    this.paginator._intl.firstPageLabel="Primeira Página";
-    this.paginator._intl.lastPageLabel="Última Página";
-    this.paginator._intl.getRangeLabel = (page, pageSize, length) => {
-      const startIndex = page * pageSize;
-      const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
-      return `${startIndex + 1} - ${endIndex} de ${length}`;
-    };
   }
 
   loadMatTable() {
     this.productService.getProducts().subscribe(
       (data) => { 
-        this.produtos = new MatTableDataSource<Produtos>(data);
-        this.produtos.paginator = this.paginator;
-        this.produtos.sort = this.sort;
-        this.ultimoId = this.produtos.data[this.produtos.data.length - 1].id;
+        this.produtos = this.transformarDados(data);
+        console.log(this.produtos);
       },
       (err) => { console.error(err) }
     );
   }
+
+  transformarDados(dados: any[]): DadosTransformados[] {
+    const dadosTransformados: DadosTransformados[] = [];
   
-  // Função para fazer a busca
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.produtos.filter = filterValue.trim().toLowerCase();
+    dados.forEach(item => {
+      const indiceProduto = dadosTransformados.findIndex(
+        itemTransformado => itemTransformado.produto === item.produto
+      );
+  
+      if (indiceProduto === -1) {
+        dadosTransformados.push({
+          produto: item.produto,
+          tecnologias: [
+            {
+              tecnologia: item.tecnologia,
+              variantes: [{ _id: item._id, valorVenda: item.valor_venda, observacao: item.observacao }]
+            }
+          ]
+        });
+      } else {
+        const indiceTecnologia = dadosTransformados[indiceProduto].tecnologias.findIndex(
+          itemTecnologia => itemTecnologia.tecnologia === item.tecnologia
+        );
+  
+        if (indiceTecnologia === -1) {
+          dadosTransformados[indiceProduto].tecnologias.push({
+            tecnologia: item.tecnologia,
+            variantes: [{ _id: item._id, valorVenda: item.valor_venda, observacao: item.observacao }]
+          });
+        } else {
+          dadosTransformados[indiceProduto].tecnologias[indiceTecnologia].variantes.push({
+            _id: item._id,
+            valorVenda: item.valor_venda,
+            observacao: item.observacao
+          });
+        }
+      }
+    });
+  
+    return dadosTransformados;
   }
 
-  /** Announce the change in sort state for assistive technology. */
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
+  // Função para fazer a busca
+  inputBusca(el: any, table: Table) {
+    table.filterGlobal(el.target.value, 'contains');
+  }
+
+  // Função para limpar os filtros
+  clear(table: Table) {
+    table.clear();
   }
 
   /* *** Modais de ações *** */
-
-  // CRIAR Produto
+  // Criar Produto
   formNovoProduto = this.formBuilder.group({
-    id: this.ultimoId + 1,
     produto: ['', Validators.required],
     tecnologia: ['', Validators.required],
     valor_venda: [0, Validators.required],
@@ -107,10 +152,6 @@ export class TabelaDeValores implements OnInit {
   })
 
   openModalNovoProduto() {
-    this.formNovoProduto.patchValue({
-      id: this.ultimoId + 1
-    });
-
     const modal = document.getElementById("modalNew");
     const bgModal = document.getElementById("bg-modal");
 
@@ -137,7 +178,6 @@ export class TabelaDeValores implements OnInit {
 
     if(formNovoProdutoStatus !== "INVALID") {
       const novoProduto: Produtos = {
-        id: this.formNovoProduto.get('id').value,
         produto: this.formNovoProduto.get('produto').value,
         tecnologia: this.formNovoProduto.get('tecnologia').value,
         valor_venda: Number(this.formNovoProduto.get('valor_venda').value),
@@ -148,21 +188,18 @@ export class TabelaDeValores implements OnInit {
         (res) => {
           this.showMessageAction('Produto criado com sucesso');
           this.loadMatTable();
-          this.produtos._updateChangeSubscription();
           this.closeModalNovoProduto();
         },
         (error) => {
           console.error(`Erro ao criar o produto: ${error}`);
           this.showMessageAction('ERRO ao criar o produto');
           this.loadMatTable();
-          this.produtos._updateChangeSubscription();
           this.closeModalNovoProduto();
         }
       );
     }
 
     this.formNovoProduto = this.formBuilder.group({
-      id: this.ultimoId + 1,
       produto: ['', Validators.required],
       tecnologia: ['', Validators.required],
       valor_venda: [0, Validators.required],
@@ -174,25 +211,23 @@ export class TabelaDeValores implements OnInit {
   // EDITAR produto
   formEditarProduto = this.formBuilder.group({
     _id: [],
-    id: [],
     produto: ['', Validators.required],
     tecnologia: ['', Validators.required],
     valor_venda: [0, Validators.required],
     observacao: ['']
   })
 
-  openModalEditarProduto(element: any) {
+  openModalEditarProduto(produto: any, tecnologia: any, variante: any) {
     const modal = document.getElementById("modalEdit");
     const bgModal = document.getElementById("bg-modal");
 
     // Busca os valores da linha e insere nos inputs
     this.formEditarProduto.patchValue({
-      _id: element._id,
-      id: element.id,
-      produto: element.produto,
-      tecnologia: element.tecnologia,
-      valor_venda: element.valor_venda,
-      observacao: element.observacao
+      _id: produto._id,
+      produto: produto.produto,
+      tecnologia: tecnologia.tecnologia,
+      valor_venda: variante.valorVenda,
+      observacao: variante.observacao
     })
 
     if(modal != null){
@@ -219,7 +254,6 @@ export class TabelaDeValores implements OnInit {
     if(formEditarProdutoStatus !== "INVALID") {
       const id: string = this.formEditarProduto.get('_id').value;
       const produto: Produtos = {
-        id: this.formEditarProduto.get('id').value,
         produto: this.formEditarProduto.get('produto').value,
         tecnologia: this.formEditarProduto.get('tecnologia').value,
         valor_venda: Number(this.formEditarProduto.get('valor_venda').value),
@@ -230,7 +264,6 @@ export class TabelaDeValores implements OnInit {
         (res) => {
           this.showMessageAction('Produto alterado com sucesso');
           this.loadMatTable();
-          this.produtos._updateChangeSubscription();
           this.closeModalEditarProduto();
         },
         (error) => {
@@ -243,10 +276,11 @@ export class TabelaDeValores implements OnInit {
   // DELETAR Produto
   formDeletarProduto = this.formBuilder.group({
     id: [],
-    produto: ['']
+    produto: [''],
+    tecnologia: ['']
   })
   
-  openModalDeletarProduto(element: any) {
+  openModalDeletarProduto(produto: any, tecnologia: any) {
     const modal = document.getElementById("modalDeletar");
     const bgModal = document.getElementById("bg-modal");
     if(modal != null){
@@ -257,8 +291,9 @@ export class TabelaDeValores implements OnInit {
 
     // Busca os valores da linha
     this.formDeletarProduto.patchValue({
-      id: element._id,
-      produto: element.produto
+      id: produto._id,
+      produto: produto.produto,
+      tecnologia: tecnologia.tecnologia
     })
   }
 
@@ -278,7 +313,6 @@ export class TabelaDeValores implements OnInit {
       (res) => {
         this.showMessageAction('Produto excluído com sucesso');
         this.loadMatTable();
-        this.produtos._updateChangeSubscription();
         this.closeModalDeletarProduto();
       },
       (error) => {

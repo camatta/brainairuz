@@ -4,7 +4,6 @@ const authMiddleware = (req, res, next) => {
   try {
     // Verifique se o cabeçalho "Authorization" está presente na requisição
     const token = req.headers.authorization;
-    console.log('Token:', token);
 
     if (!token) {
       return res.status(401).json({ message: 'Token de autenticação não fornecido.' });

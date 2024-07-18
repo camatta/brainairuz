@@ -39,7 +39,7 @@ export class AdicionarOportunidadeComponent implements OnInit {
     // Carrega vendedores do time Comercial
     this.users.getUsers().subscribe(
       async(data: any) => {
-        data.message.map((user: any) => {
+        data.users.map((user: any) => {
           if(user.team == "Comercial") {
             this.vendedores.push(user.name);
           }

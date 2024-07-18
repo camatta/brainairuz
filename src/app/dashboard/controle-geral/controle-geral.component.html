@@ -1,6 +1,6 @@
 <main class="mb-5">
     <div class="d-flex justify-content-between">
-        <h1 class="titlePage">Cálculo de comissão</h1>
+        <h1 class="titlePage">Controle de Oportunidades</h1>
         <form>
             <input type="text" placeholder="Insira o termo da busca" />
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -99,7 +99,7 @@
                 </td>
             </ng-container>
 
-            <!-- Mês Column - VERIFICAR FILTRO -->
+            <!-- Mês Column -->
             <ng-container matColumnDef="mes">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mes">
                     Mês
@@ -314,16 +314,86 @@
     <div id="bg-modal"></div>
   
     <!-- Modal para EDITAR venda-->
-    <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarVenda" aria-hidden="true">
-      <div class="modal-dialog">
+    <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarOportunidade" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
         <div class="modal-content">
-          <div class="modal-header mb-5">
-            <h2 class="modal-title text-black fs-5" id="modalEditarVenda">Editar Venda</h2>
+          <div class="modal-header flex-wrap mb-5">
+            <h2 class="modal-title text-black fs-5" id="modalEditarOportunidade">Informações do Suspect</h2>
             <button type="button" (click)="closeModalEditarOportunidade()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <ul class="tabs col-12 d-flex">
+                <li class="active">
+                    <button class="active">Etapa 1</button>
+                </li>
+                <li>
+                    <button>Etapa 2</button>
+                </li>
+                <li>
+                    <button>Etapa 3</button>
+                </li>
+            </ul>
           </div>
-  
-          <form id="formCalculoComissao" [formGroup]="formEditarOportunidade" class="container">
-            <div class="col-12 d-flex flex-column align-items-start mb-3">
+
+          <form id="etapa-1" [formGroup]="formEditarOportunidade" class="row container">
+            <div class="col-4 mb-3">
+                <label for="dataEdit" class="form-label">Data</label>
+                <input type="datetime-local" id="dataEdit" class="form-control col-12" formControlName="data" required />
+            </div>
+            <div class="col-4 mb-3">
+                <label for="suspectEdit" class="form-label">Nome do Suspect</label>
+                <input type="text" id="suspectEdit" class="form-control col-12" formControlName="suspect" required />
+            </div>
+            <div class="col-4 mb-3">
+                <label for="origemEdit" class="form-label">Origem</label>
+                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="Parceiros">Parceiros</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="fonteEdit" class="form-label">Fonte</label>
+                <select id="fonteEdit" class="selectForm form-select" name="fonte" formControlName="fonte" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="AGV">AGV</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
+                    <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
+                    <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Linx">Linx</option>
+                    <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital</option>
+                    <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
+                    <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="RD Station">RD Station</option>
+                    <option class="options-nairuz" value="Site">Site</option>
+                    <option class="options-nairuz" value="VTEX">VTEX</option>
+                    <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="responsavel" class="form-label">Responsável</label>
+                <select formControlName="responsavel" class="selectForm form-select" name="responsavel" id="responsavel" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option *ngFor="let vendedor of vendedores" class="options-nairuz" [value]="vendedor">
+                        {{ vendedor }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-12 mb-5 text-end">
+                <button class="salvar-nairuz" type="submit" [disabled]="!formEditarOportunidade.valid">Avançar</button>
+            </div>
+
+
+
+
+            <!-- <div class="col-12 d-flex flex-column align-items-start mb-3">
               <label class="form-label">Status:</label>
   
               <select formControlName="status" id="status" class="selectForm form-select">
@@ -332,16 +402,6 @@
                 <option value="Reprovado">Reprovado</option>
                 <option value="Pagamento Efetuado">Pagamento Efetuado</option>
               </select>
-            </div>
-  
-            <div class="col-12 mb-3">
-              <label for="dataVenda" class="form-label">Data da Venda:</label>
-              <input type="date" id="dataVenda" class="form-control col-12" formControlName="dataVenda" required />
-            </div>
-  
-            <div class="col-12 mb-3">
-              <label for="nomeCliente" class="form-label">Nome do cliente:</label>
-              <input type="text" id="nomeCliente" class="form-control col-12" formControlName="nomeCliente" required />
             </div>
         
             <div class="col-12 mb-3">
@@ -383,9 +443,9 @@
                 formControlName="vendaAvulsa"
                 required
               >
-            </div>
+            </div> -->
   
-            <button type="submit" (click)="onSubmitEditarOportunidade()" [disabled]="!formEditarOportunidade.valid" class="col-12 btn-calcular">Editar</button>
+            <!-- <button type="submit" (click)="onSubmitEditarOportunidade()" [disabled]="!formEditarOportunidade.valid" class="col-12 btn-calcular">Editar</button> -->
           </form>
         </div>
       </div>

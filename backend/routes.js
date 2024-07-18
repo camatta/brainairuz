@@ -68,7 +68,7 @@ router.post('/api/auth/cadastro', CreateUserController);
 router.post('/api/auth/login', AuthUserController);
 
 // Rota para obter todos os usuários
-router.get('/api/users', authMiddleware,ListUsersController);
+router.get('/api/users', authMiddleware, ListUsersController);
 
 // Rota para obter informações do usuário logado
 router.get('/api/users/me', authMiddleware, DetailUserController);

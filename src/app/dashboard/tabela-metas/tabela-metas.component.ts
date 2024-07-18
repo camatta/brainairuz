@@ -45,7 +45,7 @@ export class TabelaMetasComponent implements OnInit {
   meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
   userPermission(): boolean {
-    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"){
+    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"  || this.currentUser.name === 'Adriany Oliveira'){
       return true;
     }
     return false;

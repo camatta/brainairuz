@@ -68,6 +68,35 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* TABELA DE VALORES */
+.main-tabela .p-datatable .p-sortable-column .p-sortable-column-icon {
+  color: var(--nairuz-primary) !important;
+}
+
+.main-tabela .p-datatable .p-sortable-column:not(.p-highlight):hover {
+  color: var(--nairuz-primary) !important;
+}
+
+.main-tabela .p-button.p-button-text.p-button-plain {
+  font-size: 10px;
+  color: var(--nairuz-secondary);
+}
+
+.main-tabela .pi-plus, .main-tabela .pi-minus, .main-tabela .pi-plus:before, .main-tabela .pi-minus:before {
+  font-size: 10px !important;
+}
+
+.main-tabela .p-datatable .p-datatable-tbody > tr > td {
+  font-size: 14px;
+  color: var(--nairuz-primary);
+}
+
+.main-tabela .p-paginator .p-paginator-current, .main-tabela .p-paginator .p-paginator-pages .p-paginator-page, .p-paginator .p-dropdown .p-dropdown-label, .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled) {
+  font-size: 14px;
+  color: var(--nairuz-primary);
+}
+
+
+/*Revisar estilos - tabela alterada*/
 #tabela-valores div, #tabela-valores td, #tabela-valores th, mat-paginator span, mat-option span, .mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-label {
   font-size: 14px !important;
   color: var(--nairuz-primary);

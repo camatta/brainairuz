@@ -2,76 +2,6 @@
     padding-bottom: 60px;
 }
 
-.main-tabela .topo {
-    max-height: 40px;
-    display: flex;
-    justify-content: space-between;
-}
-
-/* verificar */
-.mat-mdc-form-field-flex {
-    height: 40px;
-}
-/* verificar */
-
-.main-tabela .topo .mat-mdc-form-field {
-    width: 40%;
-}
-
-.main-tabela .topo .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input,
-.main-tabela .topo mat-label {
-    color: #000;
-}
-
-.main-tabela .topo .mat-icon {
-    fill: #000;
-    font-size: 20px;
-}
-
-.main-tabela .topo mat-form-field.fullWidth {
-    width: 100%;
-}
-
-.mat-mdc-header-cell {
-    color: #00175d;
-    text-align: center;
-}
-
-#tabela-valores {
-    background-color: transparent;
-    box-shadow: none;
-}
-
-#tabela-valores th {
-    font-weight: 700;
-}
-
-#tabela-valores td {
-    font-size: 14px;
-    color: #00175d;
-}
-
-#tabela-valores .mat-mdc-cell.acoes {
-    text-align: center;
-}
-
-#tabela-valores .acoes mat-icon.editar {
-    color: #61dcab;
-    margin-right: 12px;
-    transition: all .4s;
-    cursor: pointer;
-}
-
-#tabela-valores .acoes mat-icon.delete {
-    color: #f51c1c;
-    transition: all .4s;
-    cursor: pointer;
-}
-
-#tabela-valores .acoes mat-icon:hover{
-    opacity: .7;
-}
-
 .main-tabela .btn-addProduto {
     background-color: #61dcab;
     color: #00175d;
@@ -82,6 +12,60 @@
 
 .main-tabela .btn-addProduto:hover {
     opacity: .8;
+}
+
+.main-tabela .link-nairuz {
+    font-size: 14px;
+    color: var(--nairuz-secondary);
+}
+
+.main-tabela .input-busca {
+    width: 20rem;
+    font-size: 14px;
+    padding-left: 2.5rem;
+    border: none;
+    box-shadow: 0 3px 10px #0003;
+    border-radius: 5px;
+}
+
+.main-tabela th {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--nairuz-primary);
+}
+
+.main-tabela .p-button.p-button-text.p-button-plain:enabled:hover {
+    color: var(--nairuz-secondary);
+}
+
+.main-tabela .p-button:focus {
+    box-shadow: none;
+}
+
+.main-tabela .p-button.p-button-icon-only.p-button-rounded {
+    height: 20px;
+}
+
+.main-tabela .p-button.p-button-icon-only {
+    width: 20px;
+    padding: 0;
+}
+
+.main-tabela mat-icon.editar {
+    color: #61dcab;
+    margin-right: 12px;
+    transition: all .4s;
+    cursor: pointer;
+}
+
+.main-tabela mat-icon.delete {
+    color: #f51c1c;
+    transition: all .4s;
+    cursor: pointer;
+}
+
+.main-tabela mat-icon:hover{
+    opacity: .7;
 }
 
 #bg-modal {

@@ -68,7 +68,7 @@ export class CalculoComissaoComponent implements OnInit {
   onLoad: boolean = false;
 
   userPermission(): boolean {
-    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"){
+    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz" || this.currentUser.name === 'Adriany Oliveira'){
       return true;
     }
     return false;
@@ -98,7 +98,6 @@ export class CalculoComissaoComponent implements OnInit {
     this.loadComissoes();
   }
   
-
   mixProdutosValidate: boolean = true;
 
   defineMixProdutosValidate(): boolean {
@@ -108,13 +107,13 @@ export class CalculoComissaoComponent implements OnInit {
     let mixProdutosEditarVenda = this.formEditarVenda.get('mixProdutos').value;
 
     if(modalNew.style.display == "block") {
-      if(mixProdutosNovaVenda == 'help' || mixProdutosNovaVenda == ''){
+      if(mixProdutosNovaVenda == 'Help Suporte A' || mixProdutosNovaVenda == ''){
         return this.mixProdutosValidate = false;
       } else {
         return this.mixProdutosValidate = true;
       }
     } else if(modalEdit.style.display == "block") {
-      if(mixProdutosEditarVenda == 'help' || mixProdutosEditarVenda == ''){
+      if(mixProdutosEditarVenda == 'Help Suporte A' || mixProdutosEditarVenda == ''){
         return this.mixProdutosValidate = false;
       } else {
         return this.mixProdutosValidate = true;
