@@ -17,8 +17,10 @@ import { ProductsService } from 'src/app/services/products.service';
 
 interface DadosTransformados {
   produto: string;
-  tecnologias: {
+  itens: {
+    tipoProduto: string;
     tecnologia: string;
+    meses: number;
     variantes: {
       _id: string;
       valorVenda: number;
@@ -44,13 +46,12 @@ interface DadosTransformados {
 })
 
 export class TabelaDeValores implements OnInit {
-  displayedColumns: string[] = ['id', 'produto', 'tecnologia', 'valor_venda', 'observacao'];
-  // produtos: MatTableDataSource<Produtos> = new MatTableDataSource<Produtos>([]);
+  displayedColumns: string[] = ['id', 'produto', 'tecnologia', 'mrr', 'valor_venda', 'observacao'];
   produtos = [];
   msgActions: string;
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   expandedElement: Produtos | null;
-  termoBusca: any;
+  tipoProduto: string = 'Projeto';
 
   // validação de usuários
   showAdmin = false;
@@ -85,7 +86,8 @@ export class TabelaDeValores implements OnInit {
     this.productService.getProducts().subscribe(
       (data) => { 
         this.produtos = this.transformarDados(data);
-        console.log(this.produtos);
+        console.log(data);
+        console.log(this.produtos)
       },
       (err) => { console.error(err) }
     );
@@ -102,25 +104,29 @@ export class TabelaDeValores implements OnInit {
       if (indiceProduto === -1) {
         dadosTransformados.push({
           produto: item.produto,
-          tecnologias: [
+          itens: [
             {
-              tecnologia: item.tecnologia,
+              tipoProduto: item.tipoProduto,
+              tecnologia: item.tecnologia ? item.tecnologia : 'N/A',
+              meses: item.meses ? item.meses : 'N/A',
               variantes: [{ _id: item._id, valorVenda: item.valor_venda, observacao: item.observacao }]
             }
           ]
         });
       } else {
-        const indiceTecnologia = dadosTransformados[indiceProduto].tecnologias.findIndex(
+        const indiceTecnologia = dadosTransformados[indiceProduto].itens.findIndex(
           itemTecnologia => itemTecnologia.tecnologia === item.tecnologia
         );
   
         if (indiceTecnologia === -1) {
-          dadosTransformados[indiceProduto].tecnologias.push({
-            tecnologia: item.tecnologia,
+          dadosTransformados[indiceProduto].itens.push({
+            tipoProduto: item.tipoProduto,
+            tecnologia: item.tecnologia ? item.tecnologia : 'N/A',
+            meses: item.meses ? item.meses : 'N/A',
             variantes: [{ _id: item._id, valorVenda: item.valor_venda, observacao: item.observacao }]
           });
         } else {
-          dadosTransformados[indiceProduto].tecnologias[indiceTecnologia].variantes.push({
+          dadosTransformados[indiceProduto].itens[indiceTecnologia].variantes.push({
             _id: item._id,
             valorVenda: item.valor_venda,
             observacao: item.observacao
@@ -142,11 +148,18 @@ export class TabelaDeValores implements OnInit {
     table.clear();
   }
 
+  // Recupera o valor do select e passa para a variável, para mostrar a tecnologia do produto ou meses (mrr)
+  verificaTipoProduto(el: any) {
+    this.tipoProduto = el.target.value;
+  }
+
   /* *** Modais de ações *** */
   // Criar Produto
   formNovoProduto = this.formBuilder.group({
     produto: ['', Validators.required],
-    tecnologia: ['', Validators.required],
+    tipoProduto: ['', Validators.required],
+    tecnologia: ['', this.tipoProduto == "Projeto" ? Validators.required : Validators.nullValidator],
+    meses: [0, this.tipoProduto == "Recorrência" ? Validators.required : Validators.nullValidator],
     valor_venda: [0, Validators.required],
     observacao: ['']
   })
@@ -179,7 +192,9 @@ export class TabelaDeValores implements OnInit {
     if(formNovoProdutoStatus !== "INVALID") {
       const novoProduto: Produtos = {
         produto: this.formNovoProduto.get('produto').value,
+        tipoProduto: this.formNovoProduto.get('tipoProduto').value,
         tecnologia: this.formNovoProduto.get('tecnologia').value,
+        meses: this.formNovoProduto.get('meses').value,
         valor_venda: Number(this.formNovoProduto.get('valor_venda').value),
         observacao: this.formNovoProduto.get('observacao').value
       }
@@ -201,7 +216,9 @@ export class TabelaDeValores implements OnInit {
 
     this.formNovoProduto = this.formBuilder.group({
       produto: ['', Validators.required],
-      tecnologia: ['', Validators.required],
+      tipoProduto: ['', Validators.required],
+      tecnologia: ['', this.tipoProduto == "Projeto" ? Validators.required : Validators.nullValidator],
+      meses: [0, this.tipoProduto == "Recorrência" ? Validators.required : Validators.nullValidator],
       valor_venda: [0, Validators.required],
       observacao: ['']
     })
@@ -212,20 +229,24 @@ export class TabelaDeValores implements OnInit {
   formEditarProduto = this.formBuilder.group({
     _id: [],
     produto: ['', Validators.required],
+    tipoProduto: ['', Validators.required],
     tecnologia: ['', Validators.required],
+    meses: [0, Validators.required],
     valor_venda: [0, Validators.required],
     observacao: ['']
   })
 
-  openModalEditarProduto(produto: any, tecnologia: any, variante: any) {
+  openModalEditarProduto(produto: any, item: any, variante: any) {
     const modal = document.getElementById("modalEdit");
     const bgModal = document.getElementById("bg-modal");
 
     // Busca os valores da linha e insere nos inputs
     this.formEditarProduto.patchValue({
-      _id: produto._id,
+      _id: variante._id,
       produto: produto.produto,
-      tecnologia: tecnologia.tecnologia,
+      tipoProduto: item.tipoProduto,
+      tecnologia: item.tecnologia,
+      meses: item.meses == 'N/A' ? 0 : item.meses,
       valor_venda: variante.valorVenda,
       observacao: variante.observacao
     })
@@ -255,7 +276,9 @@ export class TabelaDeValores implements OnInit {
       const id: string = this.formEditarProduto.get('_id').value;
       const produto: Produtos = {
         produto: this.formEditarProduto.get('produto').value,
+        tipoProduto: this.formEditarProduto.get('tipoProduto').value,
         tecnologia: this.formEditarProduto.get('tecnologia').value,
+        meses: this.formEditarProduto.get('meses').value,
         valor_venda: Number(this.formEditarProduto.get('valor_venda').value),
         observacao: this.formEditarProduto.get('observacao').value
       }
@@ -277,10 +300,12 @@ export class TabelaDeValores implements OnInit {
   formDeletarProduto = this.formBuilder.group({
     id: [],
     produto: [''],
-    tecnologia: ['']
+    tipoProduto: [''],
+    tecnologia: [''],
+    meses: ['']
   })
   
-  openModalDeletarProduto(produto: any, tecnologia: any) {
+  openModalDeletarProduto(produto: any, item: any, variante: any) {
     const modal = document.getElementById("modalDeletar");
     const bgModal = document.getElementById("bg-modal");
     if(modal != null){
@@ -291,9 +316,11 @@ export class TabelaDeValores implements OnInit {
 
     // Busca os valores da linha
     this.formDeletarProduto.patchValue({
-      id: produto._id,
+      id: variante._id,
       produto: produto.produto,
-      tecnologia: tecnologia.tecnologia
+      tipoProduto: item.tipoProduto,
+      tecnologia: item.tecnologia,
+      meses: item.meses
     })
   }
 

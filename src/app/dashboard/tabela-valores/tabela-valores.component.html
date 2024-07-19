@@ -40,6 +40,7 @@
           <th>No.</th>
           <th pSortableColumn="produto">Produto <p-sortIcon field="produto"></p-sortIcon></th>
           <th>Tecnologia</th>
+          <th>Recorrência (Meses)</th>
           <th>Preço de Vendas</th>
           <th>Observações</th>
           <th class="d-flex justify-content-center">Ações</th>
@@ -54,20 +55,22 @@
           </td>
           <td>*Diversas</td>
           <td>*Diversos</td>
+          <td>*Diversos</td>
           <td></td>
           <td></td>
         </tr>
       </ng-template>
       <ng-template pTemplate="rowexpansion" let-produto>
-        <tr *ngFor="let tecnologia of produto.tecnologias">
+        <tr *ngFor="let item of produto.itens">
           <td></td>
           <td></td>
-          <td>{{ tecnologia.tecnologia }}</td>
-          <td *ngFor="let variante of tecnologia.variantes">{{ variante.valorVenda | currency: 'BRL' }}</td>
-          <td *ngFor="let variante of tecnologia.variantes">{{ variante.observacao }}</td>
-          <td class="d-flex justify-content-center" *ngFor="let variante of tecnologia.variantes">
-            <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarProduto(produto, tecnologia, variante)">edit</mat-icon>
-            <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarProduto(produto, tecnologia)">delete</mat-icon>
+          <td>{{ item.tecnologia }}</td>
+          <td>{{ item.meses }}</td>
+          <td *ngFor="let variante of item.variantes">{{ variante.valorVenda | currency: 'BRL' }}</td>
+          <td *ngFor="let variante of item.variantes">{{ variante.observacao }}</td>
+          <td class="d-flex justify-content-center" *ngFor="let variante of item.variantes">
+            <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarProduto(produto, item, variante)">edit</mat-icon>
+            <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarProduto(produto, item, variante)">delete</mat-icon>
           </td>
         </tr>
       </ng-template>
@@ -100,14 +103,31 @@
                 required
               >
             </div>
-            <div class="mb-3">
+            <div class="mb-3 d-flex flex-column">
+              <label class="form-label">Tipo do produto:</label>
+              <select (change)="verificaTipoProduto($event)" formControlName="tipoProduto" id="meses" class="selectForm form-select">
+                <option value="Projeto">Projeto</option>
+                <option value="Recorrência">Recorrência</option>
+              </select>
+            </div>
+            <div class="mb-3" *ngIf="tipoProduto == 'Projeto'">
               <label for="tecnologia-edit" class="form-label text-black">Tecnologia:</label>
               <input
                 type="text"
                 class="form-control"
-                [class.is-invalid]="formNovoProduto.get('tecnologia')?.errors?.['required'] && formNovoProduto.get('tecnologia')?.touched"
                 id="tecnologia-edit"
                 formControlName="tecnologia"
+              >
+            </div>
+            <div class="mb-3" *ngIf="tipoProduto == 'Recorrência'">
+              <label for="meses-edit" class="form-label text-black">MRR:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="meses-edit"
+                min="1"
+                step="1"
+                formControlName="meses"
               >
             </div>
             <div class="mb-3">
@@ -156,9 +176,32 @@
               <label for="produto-edit" class="form-label text-black">Produto:</label>
               <input type="text" class="form-control" id="produto-edit" formControlName="produto">
             </div>
-            <div class="mb-3">
+            <div class="mb-3 d-flex flex-column">
+              <label class="form-label">Tipo do produto:</label>
+              <select (change)="verificaTipoProduto($event)" formControlName="tipoProduto" id="meses-edit" class="selectForm form-select">
+                <option value="Projeto">Projeto</option>
+                <option value="Recorrência">Recorrência</option>
+              </select>
+            </div>
+            <div class="mb-3" *ngIf="formEditarProduto.get('tipoProduto').value == 'Projeto'">
               <label for="tecnologia-edit" class="form-label text-black">Tecnologia:</label>
-              <input type="text" class="form-control" id="tecnologia-edit" formControlName="tecnologia">
+              <input
+                type="text"
+                class="form-control"
+                id="tecnologia-edit"
+                formControlName="tecnologia"
+              >
+            </div>
+            <div class="mb-3" *ngIf="formEditarProduto.get('tipoProduto').value == 'Recorrência'">
+              <label for="meses-edit" class="form-label text-black">MRR:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="meses-edit"
+                min="1"
+                step="1"
+                formControlName="meses"
+              >
             </div>
             <div class="mb-3">
               <label for="valor-venda-edit" class="form-label text-black">Preço de vendas:</label>
@@ -170,7 +213,6 @@
             </div>
           </div>
           <div class="modal-footer d-flex justify-content-center">
-            <!-- Criar validação, se algo foi alterado nos inputs, ativar botão SALVAR -->
             <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="!formEditarProduto.valid">
               Salvar
             </button>
@@ -197,7 +239,8 @@
               <div class="form-label mt-1">
                 <p class="text-black">Deseja realmente <strong class="text-danger">EXCLUIR</strong> o produto:<br/>
                   <strong class="text-dark-emphasis">
-                    {{ formDeletarProduto.get('produto').value }} - {{ formDeletarProduto.get('tecnologia').value }}
+                    <span *ngIf="formDeletarProduto.get('tipoProduto').value == 'Projeto' || formDeletarProduto.get('tipoProduto').value == undefined">{{ formDeletarProduto.get('produto').value }} - {{ formDeletarProduto.get('tecnologia').value }}</span>
+                    <span *ngIf="formDeletarProduto.get('tipoProduto').value == 'Recorrência'">{{ formDeletarProduto.get('produto').value }} - {{ formDeletarProduto.get('meses').value }} meses</span>
                   </strong>
                 </p>
               </div>

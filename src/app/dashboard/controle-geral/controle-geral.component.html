@@ -333,7 +333,7 @@
             </ul>
           </div>
 
-          <form id="etapa-1" [formGroup]="formEditarOportunidade" class="row container">
+          <form id="etapa-1" [formGroup]="formEditarOportunidadeEtapa1" class="row container">
             <div class="col-4 mb-3">
                 <label for="dataEdit" class="form-label">Data</label>
                 <input type="datetime-local" id="dataEdit" class="form-control col-12" formControlName="data" required />
@@ -387,7 +387,7 @@
                 </select>
             </div>
             <div class="col-12 mb-5 text-end">
-                <button class="salvar-nairuz" type="submit" [disabled]="!formEditarOportunidade.valid">Avançar</button>
+                <button class="salvar-nairuz" type="submit" [disabled]="!formEditarOportunidadeEtapa1.valid">Avançar</button>
             </div>
 
 
@@ -446,6 +446,188 @@
             </div> -->
   
             <!-- <button type="submit" (click)="onSubmitEditarOportunidade()" [disabled]="!formEditarOportunidade.valid" class="col-12 btn-calcular">Editar</button> -->
+          </form>
+
+          <form id="etapa-2" [formGroup]="formEditarOportunidadeEtapa2" class="row container hidden">
+            <div class="col-4 mb-3">
+                <label for="dataEdit" class="form-label">1º Contato</label>
+                <input type="datetime-local" id="dataEdit" class="form-control col-12" formControlName="data" required />
+            </div>
+            <div class="col-4 mb-3">
+                <label for="origemEdit" class="form-label">Status</label>
+                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="Exploratória">Exploratória</option>
+                    <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
+                    <option class="options-nairuz" value="Não consegui qualificar">Não consegui qualificar</option>
+                    <option class="options-nairuz" value="Não é uma oportunidade">Não é uma oportunidade</option>
+                    <option class="options-nairuz" value="Dentro do ICP">Dentro do ICP</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="dataEdit" class="form-label">Reunião Agendada</label>
+                <input type="datetime-local" id="dataEdit" class="form-control col-12" formControlName="data" required />
+            </div>
+            <div class="col-4 mb-3">
+                <label for="suspectEdit" class="form-label">SLA de Atendimento</label>
+                <input type="text" id="suspectEdit" class="form-control col-12" formControlName="suspect" required />
+            </div>
+            <div class="col-4 mb-3">
+                <label for="suspectEdit" class="form-label">% de Fit</label>
+                <input type="text" id="suspectEdit" class="form-control col-12" formControlName="suspect" required />
+            </div>
+            <div class="col-4 mb-3">
+                <label for="origemEdit" class="form-label">Perfil do Cliente</label>
+                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="A">A</option>
+                    <option class="options-nairuz" value="B">B</option>
+                    <option class="options-nairuz" value="C">C</option>
+                    <option class="options-nairuz" value="Enterprise">Enterprise</option>
+                    <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="origemEdit" class="form-label">Etapa</label>
+                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="Contrato">Contrato</option>
+                    <option class="options-nairuz" value="Follow">Follow</option>
+                    <option class="options-nairuz" value="Perdido">Perdido</option>
+                    <option class="options-nairuz" value="Proposta">Proposta</option>
+                    <option class="options-nairuz" value="Vendido">Vendido</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3"> <!-- Trazer os tipos de produto do banco (Mix De Produtos) -->
+                <label for="origemEdit" class="form-label">Produto</label>
+                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="Help A">Help A</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="Projeto">Projeto</option>
+                    <option class="options-nairuz" value="Sustentação">Sustentação</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="origemEdit" class="form-label">Detalhes do Produto</label>
+                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="Help A">Help A</option>
+                    <option class="options-nairuz" value="Layout Personalizado">Layout Personalizado</option>
+                    <option class="options-nairuz" value="MKT Full">MKT Full</option>
+                    <option class="options-nairuz" value="MKT Parcial">MKT Parcial</option>
+                    <option class="options-nairuz" value="Sustentação">Sustentação</option>
+                    <option class="options-nairuz" value="Tema">Tema</option>
+                    <option class="options-nairuz" value="Website">Website</option>
+                </select>
+            </div>
+
+
+            <div class="col-4 mb-3">
+                <label for="origemEdit" class="form-label">Origem</label>
+                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="Parceiros">Parceiros</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="fonteEdit" class="form-label">Fonte</label>
+                <select id="fonteEdit" class="selectForm form-select" name="fonte" formControlName="fonte" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="AGV">AGV</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
+                    <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
+                    <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Linx">Linx</option>
+                    <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital</option>
+                    <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
+                    <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="RD Station">RD Station</option>
+                    <option class="options-nairuz" value="Site">Site</option>
+                    <option class="options-nairuz" value="VTEX">VTEX</option>
+                    <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="responsavel" class="form-label">Responsável</label>
+                <select formControlName="responsavel" class="selectForm form-select" name="responsavel" id="responsavel" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option *ngFor="let vendedor of vendedores" class="options-nairuz" [value]="vendedor">
+                        {{ vendedor }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-12 mb-5 text-end">
+                <button class="salvar-nairuz" type="submit" [disabled]="!formEditarOportunidadeEtapa1.valid || !formEditarOportunidadeEtapa2.valid">Avançar</button>
+            </div>
+          </form>
+
+          <form id="etapa-3" [formGroup]="formEditarOportunidadeEtapa3" class="row container hidden">
+            <div class="col-4 mb-3">
+                <label for="dataEdit" class="form-label">Data</label>
+                <input type="datetime-local" id="dataEdit" class="form-control col-12" formControlName="data" required />
+            </div>
+            <div class="col-4 mb-3">
+                <label for="suspectEdit" class="form-label">Nome do Suspect</label>
+                <input type="text" id="suspectEdit" class="form-control col-12" formControlName="suspect" required />
+            </div>
+            <div class="col-4 mb-3">
+                <label for="origemEdit" class="form-label">Origem</label>
+                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="Parceiros">Parceiros</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="fonteEdit" class="form-label">Fonte</label>
+                <select id="fonteEdit" class="selectForm form-select" name="fonte" formControlName="fonte" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="AGV">AGV</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
+                    <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
+                    <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Linx">Linx</option>
+                    <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital</option>
+                    <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
+                    <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="RD Station">RD Station</option>
+                    <option class="options-nairuz" value="Site">Site</option>
+                    <option class="options-nairuz" value="VTEX">VTEX</option>
+                    <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                </select>
+            </div>
+            <div class="col-4 mb-3">
+                <label for="responsavel" class="form-label">Responsável</label>
+                <select formControlName="responsavel" class="selectForm form-select" name="responsavel" id="responsavel" required>
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option *ngFor="let vendedor of vendedores" class="options-nairuz" [value]="vendedor">
+                        {{ vendedor }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-12 mb-5 text-end">
+                <button class="salvar-nairuz" type="submit" [disabled]="!formEditarOportunidadeEtapa1.valid || !formEditarOportunidadeEtapa2.valid || !formEditarOportunidadeEtapa3.valid">Avançar</button>
+            </div>
           </form>
         </div>
       </div>
