@@ -1,11 +1,11 @@
-const { DeleteGoalService } = require("../../services/goals/DeleteGoalService");
+const { DeleteEnterpriseGoalService } = require("../../services/enterpriseGoals/DeleteEnterpriseGoalService");
 
-module.exports.DeleteGoalController = async (req, res) => {
+module.exports.DeleteEnterpriseGoalController = async (req, res) => {
   try {
     const idMeta = req.params.id;
-    const deleteGoalService = await DeleteGoalService(idMeta);
+    const deleteEnterpriseGoalService = await DeleteEnterpriseGoalService(idMeta);
 
-    if(deleteGoalService) {
+    if(deleteEnterpriseGoalService) {
       console.log(`Meta removida com sucesso`);
       res.status(200).json({ message: `Meta removida com sucesso` });
     } else {

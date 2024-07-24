@@ -1,21 +1,18 @@
-const { UpdateGoalService } = require('../../services/goals/UpdateGoalService');
+const { UpdateSellerGoalService } = require('../../services/sellerGoals/UpdateSellerGoalService');
 
-module.exports.UpdateGoalController = async (req, res) => {
+module.exports.UpdateSellerGoalController = async (req, res) => {
     try {
-        const { vendedor, mes, ano, metaEmpresa, metaRealizadaEmpresa, metaIndividual, metaRealizadaIndividual } = req.body;
+        const { vendedor, mes, ano, metaIndividual } = req.body;
         const idMeta = req.params.id;
 
-        const updateGoalService = await UpdateGoalService({
+        const updateSellerGoalService = await UpdateSellerGoalService({
             vendedor,
             mes,
             ano,
-            metaEmpresa,
-            metaRealizadaEmpresa,
-            metaIndividual,
-            metaRealizadaIndividual
+            metaIndividual
         }, idMeta);
 
-        if(updateGoalService) {
+        if(updateSellerGoalService) {
             console.log(`Meta alterada com sucesso!`);
             res.status(200).json({ message: `Meta ${idMeta} alterada com sucesso` });
         } else {

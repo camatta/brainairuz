@@ -18,28 +18,49 @@
         <i class="fa-solid fa-file-image"></i>Gerador de Imagem
       </button>
     </li>
-    <li *ngIf="showComercialLink" class="has-children" [ngClass]="{'submenu-open': showSubmenu}">
+
+    <li>
+      <span class="collapsed d-block" (click)="collapseMenu($event)">
+        <i class="fa-solid fa-store"></i> Propostas <i class="fa-solid fa-chevron-down"></i>
+      </span>
+      <ul class="collapse">
+        <li *ngIf="showTabelaPrecos">
+          <button>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <a target="_blank" href="https://drive.google.com/drive/folders/10QZpq7W0RcuwvVNaioEYjOZiZHI5y24p">Template de Contratos</a>
+          </button>
+        </li>
+      </ul>
+    </li>
+
+    <li class="has-children" [ngClass]="{'submenu-open': showSubmenu}">
       <button type="button" (click)="handleSubmenu()">
         <i class="fa-solid fa-file-contract"></i>
         <span>Contratos<i class="fa-solid fa-chevron-down"></i></span>
       </button>
       <ul class="submenu">
-        <li>
+        <li *ngIf="showTabelaPrecos">
+          <button>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <a target="_blank" href="https://drive.google.com/drive/folders/1-OeanOV1CU5o5YvG7n16o2Uo7GXzrAjj">Template de Contratos</a>
+          </button>
+        </li>
+        <li *ngIf="showContratos">
           <button type="button" routerLink="/dashboard/contratos" [class.link-ativo]="isLinkAtivo('/dashboard/contratos')">
             <i class="fas fa-home"></i>Página Inicial
           </button>
         </li>
-        <li>
+        <li *ngIf="showContratos">
           <button type="button" routerLink="/dashboard/contratos/criar" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/criar')">
             <i class="fa-solid fa-pen"></i>Criar Contratos
           </button>
         </li>
-        <li>
+        <li *ngIf="showContratos">
           <button type="button" routerLink="/dashboard/contratos/listar" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/listar')">
             <i class="fa-solid fa-folder"></i>Contratos Criados
           </button>
         </li>
-        <li>
+        <li *ngIf="showContratos">
           <button type="button" routerLink="/dashboard/contratos/arquivo" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/arquivo')">
             <i class="fa-solid fa-file-contract"></i>Ver Modelo
           </button>
@@ -81,6 +102,11 @@
         <i class="fa-solid fa-wallet"></i>Comissões <i class="fa-solid fa-chevron-down"></i>
       </span>
       <ul class="collapse">
+        <li *ngIf="showMetaEmpresa">
+          <button routerLink="/dashboard/meta-empresa" [class.link-ativo]="isLinkAtivo('/dashboard/meta-empresa')">
+            <i class="fa-solid fa-building"></i>Meta Empresa
+          </button>
+        </li>
         <li *ngIf="showTabelaDeMetas">
           <button routerLink="/dashboard/tabela-metas" [class.link-ativo]="isLinkAtivo('/dashboard/tabela-metas')">
             <i class="fa-solid fa-bullseye"></i>Tabela de Metas

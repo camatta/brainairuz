@@ -12,10 +12,12 @@ import { AuthService } from 'src/app/services/auth.service';
 export class MenuLateralComponent implements OnInit {
   showUsuariosLink = false;
   showComercialLink = false;
+  showContratos = false;
   showTabelaPrecos = false;
   showMixProdutos = false;
   showTabelaDeValores = false;
   showTabelaDeMetas = false;
+  showMetaEmpresa = false;
   showCalculoComissao = false;
   showSubmenu: boolean = false
   showAdicionarOportunidade = false;
@@ -57,48 +59,60 @@ export class MenuLateralComponent implements OnInit {
       name === 'Beatriz Almeida'
     ;
 
+    this.showContratos =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial' ||
+      name === 'Valeria Queiroz'
+    ;
+
     this.showTabelaPrecos =
       accessLevel === 'Administrador' ||
       team === 'Comercial' ||
       team === 'Customer Success' ||
-      name === 'Adriany Oliveira' ||
-      name === 'Beatriz Cruz Alves'
+      name === 'Beatriz Cruz Alves' ||
+      name === 'Kyrsten Júnior'
     ;
 
     this.showMixProdutos =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial' ||
-      name === 'Adriany Oliveira'
+      // team === 'Comercial'
+      name === 'Valeria Queiroz'
     ;
 
     this.showTabelaDeValores =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial' ||
-      name === 'Adriany Oliveira'
+      // team === 'Comercial'
+      name === 'Valeria Queiroz'
     ;
 
     this.showTabelaDeMetas =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial' ||
-      name === 'Adriany Oliveira'
+      // team === 'Comercial'
+      name === 'Valeria Queiroz'
+    ;
+
+    this.showMetaEmpresa =
+      accessLevel === 'Administrador' ||
+      // team === 'Comercial'
+      name === 'Valeria Queiroz'
     ;
 
     this.showCalculoComissao =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial' ||
-      name === 'Adriany Oliveira'
+      // team === 'Comercial'
+      name === 'Valeria Queiroz'
     ;
       
     this.showAdicionarOportunidade =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial' ||
-      name === 'Adriany Oliveira'
+      // team === 'Comercial'
+      name === 'Valeria Queiroz'
     ;
 
     this.showControleGeral =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial' ||
-      name === 'Adriany Oliveira'
+      // team === 'Comercial'
+      name === 'Valeria Queiroz'
     ;
   }
 

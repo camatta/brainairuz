@@ -48,11 +48,17 @@ const { CreateMixProductController } = require('./controllers/mixProducts/Create
 const { UpdateMixProductController } = require('./controllers/mixProducts/UpdateMixProductController');
 const { DeleteMixProductController } = require('./controllers/mixProducts/DeleteMixProductController');
 
-// Metas Controllers
-const { ListGoalsController } = require('./controllers/goals/ListGoalsController');
-const { CreateGoalController } = require('./controllers/goals/CreateGoalController');
-const { UpdateGoalController } = require('./controllers/goals/UpdateGoalController');
-const { DeleteGoalController } = require('./controllers/goals/DeleteGoalController');
+// Metas Vendedores Controllers
+const { ListSellerGoalsController } = require('./controllers/sellerGoals/ListSellerGoalsController');
+const { CreateSellerGoalController } = require('./controllers/sellerGoals/CreateSellerGoalController');
+const { UpdateSellerGoalController } = require('./controllers/sellerGoals/UpdateSellerGoalController');
+const { DeleteSellerGoalController } = require('./controllers/sellerGoals/DeleteSellerGoalController');
+
+// Metas Vendedores Controllers
+const { ListEnterpriseGoalsController } = require('./controllers/enterpriseGoals/ListEnterpriseGoalsController');
+const { CreateEnterpriseGoalController } = require('./controllers/enterpriseGoals/CreateEnterpriseGoalController');
+const { UpdateEnterpriseGoalController } = require('./controllers/enterpriseGoals/UpdateEnterpriseGoalController');
+const { DeleteEnterpriseGoalController } = require('./controllers/enterpriseGoals/DeleteEnterpriseGoalController');
 
 // Oportunidades Controllers
 const { ListOpportunitiesController } = require('./controllers/opportunities/ListOpportunitiesController');
@@ -102,18 +108,32 @@ router.put('/api/mix-produtos/:id', authMiddleware, UpdateMixProductController);
 router.delete('/api/mix-produtos/:id', authMiddleware, DeleteMixProductController);
 
 
-// *** METAS ***
+// *** METAS VENDEDORES ***
 // Rota para listar todas as metas
-router.get('/api/metas', authMiddleware, ListGoalsController);
+router.get('/api/metas-vendedores', authMiddleware, ListSellerGoalsController);
 
 // Rota para criar metas
-router.post('/api/metas', authMiddleware, CreateGoalController);
+router.post('/api/metas-vendedores', authMiddleware, CreateSellerGoalController);
 
 // Rota para editar uma meta
-router.put('/api/metas/:id', authMiddleware, UpdateGoalController);
+router.put('/api/metas-vendedores/:id', authMiddleware, UpdateSellerGoalController);
 
 // Rota para remover uma meta
-router.delete('/api/metas/:id', authMiddleware, DeleteGoalController);
+router.delete('/api/metas-vendedores/:id', authMiddleware, DeleteSellerGoalController);
+
+
+// *** METAS EMPRESA ***
+// Rota para listar todas as metas
+router.get('/api/metas-empresa', authMiddleware, ListEnterpriseGoalsController);
+
+// Rota para criar metas
+router.post('/api/metas-empresa', authMiddleware, CreateEnterpriseGoalController);
+
+// Rota para editar uma meta
+router.put('/api/metas-empresa/:id', authMiddleware, UpdateEnterpriseGoalController);
+
+// Rota para remover uma meta
+router.delete('/api/metas-empresa/:id', authMiddleware, DeleteEnterpriseGoalController);
 
 
 // *** COMISSÕES ***

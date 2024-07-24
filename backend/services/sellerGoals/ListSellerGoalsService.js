@@ -1,11 +1,11 @@
-const Metas = require('../../models/Goals');
+const MetaVendedor = require('../../models/SellerGoals');
 
-module.exports.ListGoalsService = async ({ usuario, ano, mes, vendedor }) => {
+module.exports.ListSellerGoalsService = async ({ usuario, ano, mes, vendedor }) => {
   // Objeto de consulta vazio
   const query = {};
 
   // Traz só as metas do vendedor logado
-  if(usuario !== undefined){
+  if(usuario){
     query.vendedor = usuario;
   }
 
@@ -22,6 +22,7 @@ module.exports.ListGoalsService = async ({ usuario, ano, mes, vendedor }) => {
     query.ano = ano;
   }
 
-  const metas = await Metas.find(query);
+  const metas = await MetaVendedor.find(query);
+
   return metas;
 }

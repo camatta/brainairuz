@@ -151,6 +151,8 @@ export class TabelaDeValores implements OnInit {
   // Recupera o valor do select e passa para a variável, para mostrar a tecnologia do produto ou meses (mrr)
   verificaTipoProduto(el: any) {
     this.tipoProduto = el.target.value;
+    console.log(this.formNovoProduto.get("tecnologia").value);
+    console.log(this.formNovoProduto.get("meses").value);
   }
 
   /* *** Modais de ações *** */
@@ -158,8 +160,8 @@ export class TabelaDeValores implements OnInit {
   formNovoProduto = this.formBuilder.group({
     produto: ['', Validators.required],
     tipoProduto: ['', Validators.required],
-    tecnologia: ['', this.tipoProduto == "Projeto" ? Validators.required : Validators.nullValidator],
-    meses: [0, this.tipoProduto == "Recorrência" ? Validators.required : Validators.nullValidator],
+    tecnologia: [''], // Revisar o validador
+    meses: [0], // Revisar o validador
     valor_venda: [0, Validators.required],
     observacao: ['']
   })

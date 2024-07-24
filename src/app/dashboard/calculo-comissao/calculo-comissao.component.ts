@@ -16,7 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MixProdutosService } from 'src/app/services/mixProdutos.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { ComissoesService } from 'src/app/services/comissoes.service';
-import { MetasService } from 'src/app/services/metas.service';
+import { MetasVendedoresService } from 'src/app/services/metasVendedores.service';
 
 @Component({
   selector: 'app-calculo-comissao',
@@ -142,7 +142,7 @@ export class CalculoComissaoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private comissoesService: ComissoesService,
     private productService: ProductsService,
-    private metasService: MetasService,
+    private metasVendedoresService: MetasVendedoresService,
     private router: Router,
   ){}
 
@@ -334,7 +334,7 @@ export class CalculoComissaoComponent implements OnInit {
   loadMetas(vendedor: string, filterMonth: string, zerar?: boolean) {
     // Carrega as metas do mês selecionado
     if(vendedor !== "sem filtro") {
-      this.metasService.getMetas(vendedor, this.currentYear).subscribe(
+      this.metasVendedoresService.getMetas(vendedor, filterMonth, this.currentYear).subscribe(
         async (data) => {
           if(data.length > 0) {
             if(!zerar) {

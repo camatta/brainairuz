@@ -20,6 +20,7 @@ import { ContratoArquivoComponent } from './dashboard/contratos/contrato-arquivo
 import { AdicionarOportunidadeComponent } from './dashboard/adicionar-oportunidade/adicionar-oportunidade.component';
 import { MixProdutosComponent } from './dashboard/mix-produtos/mix-produtos.component';
 import { ControleGeralComponent } from './dashboard/controle-geral/controle-geral.component';
+import { MetaEmpresaComponent } from './dashboard/meta-empresa/meta-empresa.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -39,6 +40,7 @@ const routes: Routes = [
     { path: 'mix-produtos', component: MixProdutosComponent },
     { path: 'tabela-valores', component: TabelaDeValores },
     { path: 'tabela-metas', component: TabelaMetasComponent },
+    { path: 'meta-empresa', component: MetaEmpresaComponent },
     { path: 'calculo-comissao', component: CalculoComissaoComponent },
     { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
     { path: 'controle-geral', component: ControleGeralComponent },

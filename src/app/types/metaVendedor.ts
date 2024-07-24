@@ -1,5 +1,6 @@
-export type Meta = {
+export type MetaVendedor = {
     _id: string;
+    ano: string;
     mes: string;
     metaEmpresa: number;
     metaRealizadaEmpresa: number;
