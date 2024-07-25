@@ -16,8 +16,8 @@
       <form class="d-flex gap-5">
         <div *ngIf="userPermission()" class="filter-commissions">
           <label for="seller" class="me-3">Filtrar por Vendedor:</label>
-          <select (change)="submitFormFilter()" id="filtroVendedor" class="select-nairuz h-100">
-            <option value="sem filtro">Todos</option>
+          <select (change)="applyFilter($event.target)" id="filtroVendedor" class="select-nairuz h-100">
+            <option value="">Todos</option>
             <option value="Kyrsten Júnior">Kyrsten Júnior</option>
             <option value="Dev Nairuz">Dev Nairuz</option> 
             <!-- <option *ngFor="let vendedor of vendedores; let i = index" [value]="vendedor" [selected]="i === 0"> -->
@@ -28,8 +28,8 @@
         </div>
         <div class="filter-commissions">
           <label for="filtroMes" class="me-3">Filtrar por mês:</label>
-          <select (change)="submitFormFilter()" id="filtroMes" class="select-nairuz h-100">
-            <option [selected]="true" value="sem filtro">Todos</option>
+          <select (change)="applyFilter($event.target)" id="filtroMes" class="select-nairuz h-100">
+            <option [selected]="true" value="">Todos</option>
             <option value="Janeiro">Janeiro</option>
             <option value="Fevereiro">Fevereiro</option>
             <option value="Março">Março</option>
@@ -46,7 +46,7 @@
         </div>
         <div class="filter-commissions">
           <label for="filtroAno" class="me-3">Filtrar por Ano:</label>
-          <select (change)="submitFormFilter()" id="filtroAno" class="select-nairuz h-100">
+          <select (change)="applyFilter($event.target)" id="filtroAno" class="select-nairuz h-100">
             <option *ngFor="let year of filterYears, let i = index" [value]="year" [selected]="i == 0">
               {{ year }}
             </option>
@@ -113,8 +113,8 @@
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef>Ações</th>
                     <td class="acoes" mat-cell *matCellDef="let element">
-                        <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarMeta(element)">edit</mat-icon>
-                        <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarMeta(element)">delete</mat-icon>
+                      <mat-icon *ngIf="element.vendedor" class="editar" aria-label="Editar produto" (click)="openModalEditarMeta(element)">edit</mat-icon>
+                      <mat-icon *ngIf="element.vendedor" class="delete" aria-label="Remover produto" (click)="openModalDeletarMeta(element)">delete</mat-icon>
                     </td>
                 </ng-container>
     

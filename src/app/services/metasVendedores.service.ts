@@ -11,29 +11,28 @@ export class MetasVendedoresService {
 
   constructor(private http: HttpClient) { }
 
-  getMetas(currentUser: string, filterMonth: string, filterYear: string, vendedor?: string,): Observable<any[]> {
+  getMetas(currentUser: string, filterMonth: string, filterYear: string, vendedor?: string): Observable<any[]> {
     let url = environment.URL_API + '/api/metas-vendedores';
 
     if (currentUser === 'adm') {
-      if(filterYear !== 'sem filtro'){
+      if(filterYear !== ''){
         url += `?year=${filterYear}`
       }
-      if (filterMonth !== 'sem filtro') {
-        url += (filterYear !== 'sem filtro') ? `&month=${filterMonth}` : `?month=${filterMonth}`;
+      if (filterMonth !== '') {
+        url += (filterYear !== '') ? `&month=${filterMonth}` : `?month=${filterMonth}`;
       }
-      if(vendedor !== 'sem filtro') {
-        url += (filterMonth !== 'sem filtro') || (filterYear !== 'sem filtro') ? `&vendedor=${vendedor}` : `?vendedor=${vendedor}`;
+      if(vendedor !== '') {
+        url += (filterMonth !== '') || (filterYear !== '') ? `&vendedor=${vendedor}` : `?vendedor=${vendedor}`;
       }
     } else {
       url += `?user=${currentUser}`;
-      if (filterYear !== 'sem filtro') {
+      if (filterYear !== '') {
         url += `&year=${filterYear}`;
       }
-      if (filterMonth !== 'sem filtro') {
-        url += (filterYear !== 'sem filtro') ? `&month=${filterMonth}` : `&month=${filterMonth}`;
+      if (filterMonth !== '') {
+        url += (filterYear !== '') ? `&month=${filterMonth}` : `&month=${filterMonth}`;
       }
     }
-
     return this.http.get<any[]>(url);
   }
 

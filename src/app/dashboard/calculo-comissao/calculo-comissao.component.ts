@@ -468,7 +468,7 @@ export class CalculoComissaoComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.produtosFiltrados = this.produtos.filter(item => item.produto.toLowerCase().includes(filterValue.toLowerCase()));
     if(this.produtosFiltrados.length == 0) {
-      this.produtosFiltrados = this.produtos.filter(item => item.tecnologia.toLowerCase().includes(filterValue.toLowerCase()));
+      this.produtosFiltrados = this.produtos.filter(item => item.tecnologia_servico.toLowerCase().includes(filterValue.toLowerCase()));
     };
   }
 

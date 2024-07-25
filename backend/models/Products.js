@@ -11,24 +11,28 @@ const ProductsSchema = new mongoose.Schema({
         enum: ['Projeto', 'Recorrência'],
         required: true
     },
-    tecnologia: {
+    tecnologia_servico: {
         type: String,
-        validate: {
-            validator: function(value) {
-                // Neste caso, o this se refere ao documento atual
-                this.tipoProduto === 'Projeto' ? value != null && value !== '' : true; // true: Não necessário se não for 'Projeto'
-            },
-            message: 'Tecnologia é obrigatória quando o produto é um Projeto.'
-        }
+        required: true,
     },
-    meses: {
+    mrr: {
         type: Number,
         validate: {
             validator: function(value) {
                 // Neste caso, o this se refere ao documento atual
                 this.tipoProduto === 'Recorrência' ? value != null && value > 0 : true; // true: Não necessário se não for 'Recorrência'
             },
-            message: 'Meses é obrigatório e deve ser maior que 0 quando o produto é Recorrência.'
+            message: 'MRR é obrigatório e deve ser maior que 0 quando o produto é Recorrência.'
+        }
+    },
+    tipo_mrr: {
+        type: String,
+        validate: {
+            validator: function(value) {
+                // Neste caso, o this se refere ao documento atual
+                this.tipoProduto === 'Recorrência' ? value != null && value > 0 : true; // true: Não necessário se não for 'Recorrência'
+            },
+            message: 'Tipo MRR é obrigatório e deve ser maior que 0 quando o produto é Recorrência.'
         }
     },
     valor_venda: {

@@ -2,15 +2,16 @@ const { UpdateProductService } = require('../../services/product/UpdateProductSe
 
 exports.UpdateProductController = async (req, res) => {
   try {
-    const { produto, tipoProduto, tecnologia, meses, valor_venda, observacao } = req.body;
+    const { produto, tipoProduto, tecnologia_servico, mrr, tipo_mrr, valor_venda, observacao } = req.body;
     const productId = req.params.id;
 
     const updateProductService = await UpdateProductService(
       {
         produto,
         tipoProduto,
-        tecnologia,
-        meses,
+        tecnologia_servico,
+        mrr,
+        tipo_mrr,
         valor_venda,
         observacao
       },

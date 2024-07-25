@@ -13,7 +13,7 @@ import { MetaEmpresa } from 'src/app/types/metaEmpresa';
 import { MetaVendedor } from 'src/app/types/metaVendedor';
 
 type Meta = {
-  _id: number;
+  _id: string;
   vendedor: string;
   ano: string;
   mes: string;
@@ -63,6 +63,10 @@ export class TabelaMetasComponent implements OnInit {
   tabela: Meta[] = [];
   onLoad: boolean = false;
 
+  filtroVendedor: string = "";
+  filtroMes: string = "";
+  filtroAno: string = "";
+
   // Verifica a permissão do usuário
   userPermission(): boolean {
     if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"  || this.currentUser.name === 'Adriany Oliveira'){
@@ -71,28 +75,15 @@ export class TabelaMetasComponent implements OnInit {
     return false;
   }
 
-  // Método para o filtro
-  submitFormFilter() {
-    let vendedorSelect: HTMLSelectElement = document.querySelector("#filtroVendedor");
-    let selectMes: HTMLSelectElement = document.querySelector("#filtroMes");
-    let selectAno: HTMLSelectElement = document.querySelector("#filtroAno");
-    let vendedor: string = this.currentUser.name;
-    let mes: string = "sem filtro";
-    let ano: string = "sem filtro";
-
-    if(selectMes) {
-      mes = selectMes.selectedOptions[0].value;
+  applyFilter(el: any){
+    if(el.id == "filtroVendedor") {
+      this.filtroVendedor = el.value;
+    } else if(el.id == "filtroMes") {
+      this.filtroMes = el.value;
+    } else if(el.id == "filtroAno") {
+      this.filtroAno = el.value;
     }
-
-    if(selectAno) {
-      ano = selectAno.selectedOptions[0].value;
-    }
-
-    if(vendedorSelect){
-      vendedor = vendedorSelect.selectedOptions[0].value;
-    }
-
-    this.loadMetas(mes, ano, vendedor);
+    this.objetoTabela(this.metasEmpresa, this.metasIndividuais, this.filtroMes, this.filtroAno, this.filtroVendedor);
   }
 
   ngOnInit(): void {
@@ -135,7 +126,7 @@ export class TabelaMetasComponent implements OnInit {
   }
 
   // Método para carregar as metas da empresa
-  loadMetasEmpresa(ano: string, vendedor?: string, mes?: string){
+  loadMetasEmpresa(ano: string, vendedor?: string, mes?: string) {
     this.metasEmpresaService.getMetas(ano).subscribe(
       (data) => {
         this.metasEmpresa = data;
@@ -146,7 +137,7 @@ export class TabelaMetasComponent implements OnInit {
   }
 
   loadAnosMetas() {
-    this.metasVendedoresService.getMetas("adm", "sem filtro", "sem filtro", "sem filtro").subscribe(
+    this.metasVendedoresService.getMetas("adm", "", "", "").subscribe(
       async (data) => {
         data.forEach((meta) => {
           const ano: string = meta.ano;
@@ -175,31 +166,56 @@ export class TabelaMetasComponent implements OnInit {
     );
   }
 
-  objetoTabela(metasEmpresas: any[], metasIndividuais: any[]) {
-  
+  objetoTabela(metasEmpresas: any[], metasIndividuais: any[], filtroMes: string, filtroAno: string, filtroVendedor: string) {
+    this.tabela = [];
+    
     // Crie um mapa para metas individuais
-    const mapaMetasIndividuais = new Map<string, MetaVendedor>();
-    metasIndividuais.forEach((metaVendedor: MetaVendedor) => {
+    const mapaMetasIndividuais = new Map();
+    metasIndividuais.forEach((metaVendedor) => {
       const chave = `${metaVendedor.ano}-${metaVendedor.mes}`;
-      mapaMetasIndividuais.set(chave, metaVendedor);
+      if(!mapaMetasIndividuais.has(chave)) {
+        mapaMetasIndividuais.set(chave, []);
+      }
+      mapaMetasIndividuais.get(chave).push(metaVendedor);
     });
 
     metasEmpresas.forEach((metaEmpresa: MetaEmpresa) => {
       const chave = `${metaEmpresa.ano}-${metaEmpresa.mes}`;
-      const metaVendedor = mapaMetasIndividuais.get(chave);
+      const metasVendedores = mapaMetasIndividuais.get(chave) || [];
 
+      if(metasVendedores.length > 0) {
+        metasVendedores.forEach((metaVendedor: any) => {
+          if((!filtroVendedor || metaVendedor.vendedor === filtroVendedor) &&
+          (!filtroMes || metaVendedor.mes === filtroMes) &&
+          (!filtroAno || metaVendedor.ano === filtroAno)) {
+            const novaLinha = {
+              _id: metaVendedor._id,
+              vendedor: metaVendedor.vendedor,
+              ano: metaEmpresa.ano,
+              mes: metaEmpresa.mes,
+              metaEmpresa: metaEmpresa.metaEmpresa,
+              metaIndividual: metaVendedor.metaIndividual,
+              metaIndividualRealizada: this.metaIndividualRealizada,
+              metaEmpresaRealizada: this.metaEmpresaRealizada
+            };
+            this.tabela.push(novaLinha);
+          }
+        });
+      } else {
         const novaLinha = {
-          _id: this.tabela.length,
-          vendedor: "teste",
+          _id: metaEmpresa._id,
+          vendedor: '', // Sem vendedor
           ano: metaEmpresa.ano,
           mes: metaEmpresa.mes,
           metaEmpresa: metaEmpresa.metaEmpresa,
-          metaIndividual: metaEmpresa.ano == metaVendedor.ano && metaEmpresa.mes == metaVendedor.mes ? metaVendedor.metaIndividual : 0,
-          metaIndividualRealizada: metaEmpresa.ano == metaVendedor.ano && metaEmpresa.mes == metaVendedor.mes ? this.metaIndividualRealizada : 0,
-          metaEmpresaRealizada: metaEmpresa.ano == metaVendedor.ano && metaEmpresa.mes == metaVendedor.mes ? this.metaEmpresaRealizada : 0
+          metaIndividual: 0,
+          metaIndividualRealizada: this.metaIndividualRealizada,
+          metaEmpresaRealizada: this.metaEmpresaRealizada
         };
-
-        this.tabela.push(novaLinha);
+        if ((!filtroMes || metaEmpresa.mes === filtroMes) && (!filtroAno || metaEmpresa.ano === filtroAno)) {
+          this.tabela.push(novaLinha);
+        }
+      }
     });
 
     this.tabela.sort((a, b) => {
@@ -220,7 +236,7 @@ export class TabelaMetasComponent implements OnInit {
     )
   }
 
-  loadMetas(mes: string = "sem filtro", ano: string = "sem filtro", vendedor: string = "sem filtro") {
+  loadMetas(mes: string = "", ano: string = "", vendedor: string = "") {
     if(this.userPermission()){
       let usuario: string = "adm";
 
@@ -230,11 +246,12 @@ export class TabelaMetasComponent implements OnInit {
       // Carrega as metas dos vendedores
       this.loadMetasVendedores(usuario, mes, ano, vendedor);
 
+      // Tempo para alterar os atributos metasEmpresa e metasIndividuais
       this.onLoad = true;
       setTimeout(() => {
-        this.objetoTabela(this.metasEmpresa, this.metasIndividuais);
+        this.objetoTabela(this.metasEmpresa, this.metasIndividuais, mes, ano, vendedor);
         this.onLoad = false;
-      }, 3000);
+      }, 2000);
 
     } else {
       let vendedor: string = this.currentUser.name;
@@ -244,6 +261,13 @@ export class TabelaMetasComponent implements OnInit {
 
       // Carrega as metas dos vendedores
       this.loadMetasVendedores(vendedor, mes, ano);
+
+      // Tempo para alterar os atributos metasEmpresa e metasIndividuais
+      this.onLoad = true;
+      setTimeout(() => {
+        this.objetoTabela(this.metasEmpresa, this.metasIndividuais, vendedor, mes, ano);
+        this.onLoad = false;
+      }, 2000);
     }
 
   }
@@ -314,7 +338,7 @@ export class TabelaMetasComponent implements OnInit {
         async (res) => {
           this.showMessageAction('Meta adicionada com sucesso');
           console.log(novaMeta);
-          await this.submitFormFilter();
+          await this.loadMetas("", novaMeta.ano);
           this.tabelaMetas._updateChangeSubscription();
           this.closeModalNovaMeta();
         },
@@ -322,7 +346,6 @@ export class TabelaMetasComponent implements OnInit {
           console.log(novaMeta);
           console.error(`Erro ao inserir a meta: ${error}`);
           this.showMessageAction('ERRO ao criar a meta');
-          await this.submitFormFilter();
           this.tabelaMetas._updateChangeSubscription();
           this.closeModalNovaMeta();
         }
@@ -393,15 +416,13 @@ export class TabelaMetasComponent implements OnInit {
         async (res) => {
           this.showMessageAction('Meta editada com sucesso');
           console.log(metaEditada);
-          await this.submitFormFilter();
+          await this.loadMetas("", metaEditada.ano);
           this.tabelaMetas._updateChangeSubscription();
           this.closeModalEditarMeta();
         },
         async (error) => {
-          console.log(metaEditada);
           console.error(`Erro ao editar a meta: ${error}`);
           this.showMessageAction('ERRO ao editar a meta');
-          await this.submitFormFilter();
           this.tabelaMetas._updateChangeSubscription();
           this.closeModalEditarMeta();
         }
@@ -451,14 +472,13 @@ export class TabelaMetasComponent implements OnInit {
     this.metasVendedoresService.deleteMeta(id).subscribe(
       async (res) => {
         this.showMessageAction('Meta excluída com sucesso');
-        await this.submitFormFilter();
+        await this.loadMetas("", this.formDeletarMeta.get('ano').value);
         this.tabelaMetas._updateChangeSubscription();
         this.closeModalDeletarMeta();
       },
       async (error) => {
         console.error(`Erro ao excluir a meta selecionada: ${error}`);
         this.showMessageAction('ERRO ao excluir a meta selecionada');
-        await this.submitFormFilter();
         this.tabelaMetas._updateChangeSubscription();
         this.closeModalDeletarMeta();
       }

@@ -1,11 +1,7 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 import { Table } from 'primeng/table';
 
@@ -19,8 +15,9 @@ interface DadosTransformados {
   produto: string;
   itens: {
     tipoProduto: string;
-    tecnologia: string;
-    meses: number;
+    tecnologia_servico: string;
+    mrr: number;
+    tipo_mrr: string;
     variantes: {
       _id: string;
       valorVenda: number;
@@ -46,7 +43,13 @@ interface DadosTransformados {
 })
 
 export class TabelaDeValores implements OnInit {
-  displayedColumns: string[] = ['id', 'produto', 'tecnologia', 'mrr', 'valor_venda', 'observacao'];
+  constructor(
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private productService: ProductsService
+  ) {}
+
+  displayedColumns: string[] = ['id', 'produto', 'tecnologia_servico', 'mrr', 'valor_venda', 'observacao'];
   produtos = [];
   msgActions: string;
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
@@ -56,16 +59,6 @@ export class TabelaDeValores implements OnInit {
   // validação de usuários
   showAdmin = false;
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  constructor(
-    private authService: AuthService,
-    private _liveAnnouncer: LiveAnnouncer,
-    private formBuilder: FormBuilder,
-    private productService: ProductsService
-  ) {}
-
   ngOnInit(): void {
     const user = this.authService.getUser();
     const accessLevel = user ? user.accessLevel : '';
@@ -73,9 +66,9 @@ export class TabelaDeValores implements OnInit {
     this.showAdmin = accessLevel === 'Administrador' || user.name === 'Adriany Oliveira';
 
     if(this.showAdmin) {
-      this.displayedColumns = ['id', 'produto', 'tecnologia', 'valor_venda', 'observacao', 'actions'];
+      this.displayedColumns = ['id', 'produto', 'tecnologia_servico', 'valor_venda', 'observacao', 'actions'];
     } else {
-      this.displayedColumns = ['id', 'produto', 'tecnologia', 'valor_venda', 'observacao'];
+      this.displayedColumns = ['id', 'produto', 'tecnologia_servico', 'valor_venda', 'observacao'];
     }
 
     // Carrega todos os produtos
@@ -87,7 +80,6 @@ export class TabelaDeValores implements OnInit {
       (data) => { 
         this.produtos = this.transformarDados(data);
         console.log(data);
-        console.log(this.produtos)
       },
       (err) => { console.error(err) }
     );
@@ -107,22 +99,24 @@ export class TabelaDeValores implements OnInit {
           itens: [
             {
               tipoProduto: item.tipoProduto,
-              tecnologia: item.tecnologia ? item.tecnologia : 'N/A',
-              meses: item.meses ? item.meses : 'N/A',
+              tecnologia_servico: item.tecnologia_servico ? item.tecnologia_servico : 'N/A',
+              mrr: item.mrr ? item.mrr : 'N/A',
+              tipo_mrr: item.tipo_mrr ? item.tipo_mrr : '',
               variantes: [{ _id: item._id, valorVenda: item.valor_venda, observacao: item.observacao }]
             }
           ]
         });
       } else {
         const indiceTecnologia = dadosTransformados[indiceProduto].itens.findIndex(
-          itemTecnologia => itemTecnologia.tecnologia === item.tecnologia
+          itemTecnologia => itemTecnologia.tecnologia_servico === item.tecnologia_servico
         );
   
         if (indiceTecnologia === -1) {
           dadosTransformados[indiceProduto].itens.push({
             tipoProduto: item.tipoProduto,
-            tecnologia: item.tecnologia ? item.tecnologia : 'N/A',
-            meses: item.meses ? item.meses : 'N/A',
+            tecnologia_servico: item.tecnologia_servico ? item.tecnologia_servico : 'N/A',
+            mrr: item.mrr ? item.mrr : 'N/A',
+            tipo_mrr: item.tipo_mrr ? item.tipo_mrr : '',
             variantes: [{ _id: item._id, valorVenda: item.valor_venda, observacao: item.observacao }]
           });
         } else {
@@ -160,8 +154,9 @@ export class TabelaDeValores implements OnInit {
   formNovoProduto = this.formBuilder.group({
     produto: ['', Validators.required],
     tipoProduto: ['', Validators.required],
-    tecnologia: [''], // Revisar o validador
-    meses: [0], // Revisar o validador
+    tecnologia_servico: ['', Validators.required],
+    mrr: [0], // Revisar o validador
+    tipo_mrr: [''], // Revisar o validador
     valor_venda: [0, Validators.required],
     observacao: ['']
   })
@@ -185,6 +180,16 @@ export class TabelaDeValores implements OnInit {
       bgModal.style.display = "none";
       modal.classList.remove("show");
     }
+
+    this.formNovoProduto = this.formBuilder.group({
+      produto: ['', Validators.required],
+      tipoProduto: ['', Validators.required],
+      tecnologia_servico: ['', Validators.required],
+      mrr: [0], // Verificar validação
+      tipo_mrr: [''], // Revisar o validador
+      valor_venda: [0, Validators.required],
+      observacao: ['']
+    })
   }
   
   onSubmitNovoProduto() {
@@ -195,8 +200,9 @@ export class TabelaDeValores implements OnInit {
       const novoProduto: Produtos = {
         produto: this.formNovoProduto.get('produto').value,
         tipoProduto: this.formNovoProduto.get('tipoProduto').value,
-        tecnologia: this.formNovoProduto.get('tecnologia').value,
-        meses: this.formNovoProduto.get('meses').value,
+        tecnologia_servico: this.formNovoProduto.get('tecnologia_servico').value,
+        mrr: this.formNovoProduto.get('mrr').value,
+        tipo_mrr: this.formNovoProduto.get('tipo_mrr').value,
         valor_venda: Number(this.formNovoProduto.get('valor_venda').value),
         observacao: this.formNovoProduto.get('observacao').value
       }
@@ -219,8 +225,9 @@ export class TabelaDeValores implements OnInit {
     this.formNovoProduto = this.formBuilder.group({
       produto: ['', Validators.required],
       tipoProduto: ['', Validators.required],
-      tecnologia: ['', this.tipoProduto == "Projeto" ? Validators.required : Validators.nullValidator],
-      meses: [0, this.tipoProduto == "Recorrência" ? Validators.required : Validators.nullValidator],
+      tecnologia_servico: ['', Validators.required],
+      mrr: [0], // Revisar o validador
+      tipo_mrr: [''], // Revisar o validador
       valor_venda: [0, Validators.required],
       observacao: ['']
     })
@@ -232,8 +239,9 @@ export class TabelaDeValores implements OnInit {
     _id: [],
     produto: ['', Validators.required],
     tipoProduto: ['', Validators.required],
-    tecnologia: ['', Validators.required],
-    meses: [0, Validators.required],
+    tecnologia_servico: ['', Validators.required],
+    mrr: [0], // Revisar o validador
+    tipo_mrr: [''], // Revisar o validador
     valor_venda: [0, Validators.required],
     observacao: ['']
   })
@@ -247,8 +255,9 @@ export class TabelaDeValores implements OnInit {
       _id: variante._id,
       produto: produto.produto,
       tipoProduto: item.tipoProduto,
-      tecnologia: item.tecnologia,
-      meses: item.meses == 'N/A' ? 0 : item.meses,
+      tecnologia_servico: item.tecnologia_servico,
+      mrr: item.mrr == 'N/A' ? 0 : item.mrr,
+      tipo_mrr: item.tipo_mrr == '' ? '' : item.tipo_mrr,
       valor_venda: variante.valorVenda,
       observacao: variante.observacao
     })
@@ -279,8 +288,9 @@ export class TabelaDeValores implements OnInit {
       const produto: Produtos = {
         produto: this.formEditarProduto.get('produto').value,
         tipoProduto: this.formEditarProduto.get('tipoProduto').value,
-        tecnologia: this.formEditarProduto.get('tecnologia').value,
-        meses: this.formEditarProduto.get('meses').value,
+        tecnologia_servico: this.formEditarProduto.get('tecnologia_servico').value,
+        mrr: this.formEditarProduto.get('mrr').value,
+        tipo_mrr: this.formEditarProduto.get('tipo_mrr').value,
         valor_venda: Number(this.formEditarProduto.get('valor_venda').value),
         observacao: this.formEditarProduto.get('observacao').value
       }
@@ -303,8 +313,9 @@ export class TabelaDeValores implements OnInit {
     id: [],
     produto: [''],
     tipoProduto: [''],
-    tecnologia: [''],
-    meses: ['']
+    tecnologia_servico: [''],
+    mrr: [0],
+    tipo_mrr: [''],
   })
   
   openModalDeletarProduto(produto: any, item: any, variante: any) {
@@ -321,8 +332,9 @@ export class TabelaDeValores implements OnInit {
       id: variante._id,
       produto: produto.produto,
       tipoProduto: item.tipoProduto,
-      tecnologia: item.tecnologia,
-      meses: item.meses
+      tecnologia_servico: item.tecnologia_servico,
+      mrr: item.mrr,
+      tipo_mrr: item.tipo_mrr
     })
   }
 

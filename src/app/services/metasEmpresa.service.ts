@@ -12,7 +12,7 @@ export class MetasEmpresaService {
   constructor(private http: HttpClient) { }
 
   getMetas(filterYear: string): Observable<any[]> {
-    if(filterYear == "sem filtro"){
+    if(filterYear == ""){
       return this.http.get<any[]>(`${environment.URL_API}/api/metas-empresa`);
     }
     return this.http.get<any[]>(`${environment.URL_API}/api/metas-empresa?year=${filterYear}`);

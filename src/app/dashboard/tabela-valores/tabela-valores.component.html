@@ -39,8 +39,8 @@
         <tr>
           <th>No.</th>
           <th pSortableColumn="produto">Produto <p-sortIcon field="produto"></p-sortIcon></th>
-          <th>Tecnologia</th>
-          <th>Recorrência (Meses)</th>
+          <th>Tecnologia/Serviço</th>
+          <th>Recorrência</th>
           <th>Preço de Vendas</th>
           <th>Observações</th>
           <th class="d-flex justify-content-center">Ações</th>
@@ -64,8 +64,8 @@
         <tr *ngFor="let item of produto.itens">
           <td></td>
           <td></td>
-          <td>{{ item.tecnologia }}</td>
-          <td>{{ item.meses }}</td>
+          <td>{{ item.tecnologia_servico }}</td>
+          <td>{{ item.mrr }} {{ item.tipo_mrr }}</td>
           <td *ngFor="let variante of item.variantes">{{ variante.valorVenda | currency: 'BRL' }}</td>
           <td *ngFor="let variante of item.variantes">{{ variante.observacao }}</td>
           <td class="d-flex justify-content-center" *ngFor="let variante of item.variantes">
@@ -105,30 +105,37 @@
             </div>
             <div class="mb-3 d-flex flex-column">
               <label class="form-label">Tipo do produto:</label>
-              <select (change)="verificaTipoProduto($event)" formControlName="tipoProduto" id="meses" class="selectForm form-select">
+              <select (change)="verificaTipoProduto($event)" formControlName="tipoProduto" id="mrr" class="selectForm form-select">
                 <option value="Projeto">Projeto</option>
                 <option value="Recorrência">Recorrência</option>
               </select>
             </div>
-            <div class="mb-3" *ngIf="tipoProduto == 'Projeto'">
-              <label for="tecnologia-edit" class="form-label text-black">Tecnologia:</label>
+            <div class="mb-3">
+              <label for="tecnologia-edit" class="form-label text-black">Tecnologia/Serviço:</label>
               <input
                 type="text"
                 class="form-control"
                 id="tecnologia-edit"
-                formControlName="tecnologia"
+                formControlName="tecnologia_servico"
               >
             </div>
             <div class="mb-3" *ngIf="tipoProduto == 'Recorrência'">
-              <label for="meses-edit" class="form-label text-black">MRR:</label>
-              <input
-                type="number"
-                class="form-control"
-                id="meses-edit"
-                min="1"
-                step="1"
-                formControlName="meses"
-              >
+              <label for="mrr-edit" class="form-label text-black">MRR:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="mrr-edit"
+                  min="1"
+                  step="1"
+                  formControlName="mrr"
+                >
+            </div>
+            <div class="mb-3" *ngIf="tipoProduto == 'Recorrência'">
+              <label class="form-label">Tipo da Recorrência:</label>
+              <select formControlName="tipo_mrr" id="tipo_mrr-edit" class="selectForm form-select">
+                <option value="Horas">Horas</option>
+                <option value="Meses">Meses</option>
+              </select>
             </div>
             <div class="mb-3">
               <label for="valor-venda-edit" class="form-label text-black">Preço de vendas:</label>
@@ -178,30 +185,37 @@
             </div>
             <div class="mb-3 d-flex flex-column">
               <label class="form-label">Tipo do produto:</label>
-              <select (change)="verificaTipoProduto($event)" formControlName="tipoProduto" id="meses-edit" class="selectForm form-select">
+              <select (change)="verificaTipoProduto($event)" formControlName="tipoProduto" id="mrr-edit" class="selectForm form-select">
                 <option value="Projeto">Projeto</option>
                 <option value="Recorrência">Recorrência</option>
               </select>
             </div>
-            <div class="mb-3" *ngIf="formEditarProduto.get('tipoProduto').value == 'Projeto'">
-              <label for="tecnologia-edit" class="form-label text-black">Tecnologia:</label>
+            <div class="mb-3">
+              <label for="tecnologia-edit" class="form-label text-black">Tecnologia/Serviço:</label>
               <input
                 type="text"
                 class="form-control"
                 id="tecnologia-edit"
-                formControlName="tecnologia"
+                formControlName="tecnologia_servico"
               >
             </div>
             <div class="mb-3" *ngIf="formEditarProduto.get('tipoProduto').value == 'Recorrência'">
-              <label for="meses-edit" class="form-label text-black">MRR:</label>
-              <input
-                type="number"
-                class="form-control"
-                id="meses-edit"
-                min="1"
-                step="1"
-                formControlName="meses"
-              >
+              <label for="mrr-edit" class="form-label text-black">MRR:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="mrr-edit"
+                  min="1"
+                  step="1"
+                  formControlName="mrr"
+                >
+            </div>
+            <div class="mb-3" *ngIf="formEditarProduto.get('tipoProduto').value == 'Recorrência'">
+              <label class="form-label">Tipo da Recorrência:</label>
+              <select formControlName="tipo_mrr" id="tipo_mrr-edit" class="selectForm form-select">
+                <option value="Horas">Horas</option>
+                <option value="Meses">Meses</option>
+              </select>
             </div>
             <div class="mb-3">
               <label for="valor-venda-edit" class="form-label text-black">Preço de vendas:</label>
@@ -239,8 +253,12 @@
               <div class="form-label mt-1">
                 <p class="text-black">Deseja realmente <strong class="text-danger">EXCLUIR</strong> o produto:<br/>
                   <strong class="text-dark-emphasis">
-                    <span *ngIf="formDeletarProduto.get('tipoProduto').value == 'Projeto' || formDeletarProduto.get('tipoProduto').value == undefined">{{ formDeletarProduto.get('produto').value }} - {{ formDeletarProduto.get('tecnologia').value }}</span>
-                    <span *ngIf="formDeletarProduto.get('tipoProduto').value == 'Recorrência'">{{ formDeletarProduto.get('produto').value }} - {{ formDeletarProduto.get('meses').value }} meses</span>
+                    <span *ngIf="formDeletarProduto.get('tipoProduto').value == 'Projeto' || formDeletarProduto.get('tipoProduto').value == undefined">
+                      {{ formDeletarProduto.get('produto').value }} - {{ formDeletarProduto.get('tecnologia_servico').value }}
+                    </span>
+                    <span *ngIf="formDeletarProduto.get('tipoProduto').value == 'Recorrência'">
+                      {{ formDeletarProduto.get('produto').value }} - {{ formDeletarProduto.get('mrr').value }} {{ formDeletarProduto.get('tipo_mrr').value }}
+                    </span>
                   </strong>
                 </p>
               </div>
