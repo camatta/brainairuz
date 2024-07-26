@@ -166,7 +166,7 @@ export class CalculoComissaoComponent implements OnInit {
       ]
     }
 
-    // Carrega todos os mix de produtos
+    // Carrega todos os mix de produtos e insere nos modais de nova/edição de comissão
     this.loadMixesDeProdutos();
 
     // Carrega todos os produtos
@@ -226,7 +226,7 @@ export class CalculoComissaoComponent implements OnInit {
     )
   }
 
-  // Carrega todos os mix de produtos
+  // Carrega todos os mix de produtos e insere nos modais de nova/edição de comissão
   loadMixesDeProdutos() {
     this.mixProdutosService.getMixProdutos().subscribe(
       async (data) => {
@@ -299,9 +299,10 @@ export class CalculoComissaoComponent implements OnInit {
   }
 
   // Carrega as comissões de acordo com o filtro
-  loadComissoes(filterMonth: string = "Janeiro", filterYear: string = this.currentYear, vendedor: string = "Kyrsten Júnior") {
+  loadComissoes(filterMonth: string = "Janeiro", filterYear: string = this.currentYear, vendedor: string = "sem filtro") {
     if(this.userPermission()) {
       let usuario: string = "adm";
+
       // Carrega as comissões
       this.comissoesService.getComissoes(usuario, filterMonth, filterYear, vendedor).subscribe(
         async (data) => {
@@ -540,8 +541,8 @@ export class CalculoComissaoComponent implements OnInit {
     status: ['Aguardando Aprovação', Validators.required],
     nomeCliente: ['', Validators.required],
     mixProdutos: ['', Validators.required],
-    produtoVendido: ['', Validators.required],
-    multiplicador: ['', Validators.required],
+    produtoVendido: [''], // Verificar validação
+    multiplicador: [''], // Verificar validação
     markup: [0, Validators.required],
     vendaAvulsa: [0, Validators.required],
     valorBase: ['']

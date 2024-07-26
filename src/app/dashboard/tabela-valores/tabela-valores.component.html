@@ -66,7 +66,7 @@
           <td></td>
           <td>{{ item.tecnologia_servico }}</td>
           <td>{{ item.mrr }} {{ item.tipo_mrr }}</td>
-          <td *ngFor="let variante of item.variantes">{{ variante.valorVenda | currency: 'BRL' }}</td>
+          <td *ngFor="let variante of item.variantes">{{ variante.valorVenda == 0 ? "Sob consulta" : variante.valorVenda | currency: 'BRL' }}</td>
           <td *ngFor="let variante of item.variantes">{{ variante.observacao }}</td>
           <td class="d-flex justify-content-center" *ngFor="let variante of item.variantes">
             <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarProduto(produto, item, variante)">edit</mat-icon>

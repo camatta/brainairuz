@@ -119,3 +119,11 @@ mat-spinner {
     --mdc-circular-progress-size: 60px !important;
     --mdc-circular-progress-active-indicator-width: 60px !important;
 }
+
+.texto-soma {
+    font-size: 14px;
+    color: var(--nairuz-primary);
+    padding-right: 5px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}

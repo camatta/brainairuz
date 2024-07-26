@@ -62,10 +62,14 @@ export class TabelaMetasComponent implements OnInit {
   metaEmpresaRealizada: number = 0;
   tabela: Meta[] = [];
   onLoad: boolean = false;
+  totalAnualEmpresa: number = 0;
+  totalAnualIndividual: number = 0;
+  comissoes = [];
+  metasIndividuaisRealizadas = {};
 
   filtroVendedor: string = "";
   filtroMes: string = "";
-  filtroAno: string = "";
+  filtroAno: string = this.currentYear;
 
   // Verifica a permissão do usuário
   userPermission(): boolean {
@@ -75,6 +79,7 @@ export class TabelaMetasComponent implements OnInit {
     return false;
   }
 
+  // Método para realizar o filtro dos dados na tabela
   applyFilter(el: any){
     if(el.id == "filtroVendedor") {
       this.filtroVendedor = el.value;
@@ -83,7 +88,14 @@ export class TabelaMetasComponent implements OnInit {
     } else if(el.id == "filtroAno") {
       this.filtroAno = el.value;
     }
+    
     this.objetoTabela(this.metasEmpresa, this.metasIndividuais, this.filtroMes, this.filtroAno, this.filtroVendedor);
+
+    this.onLoad = true;
+    setTimeout(() => {
+      this.gerenciarComissoes(this.comissoes, this.filtroAno, this.filtroVendedor, this.filtroMes);
+      this.onLoad = false;
+    }, 2000)
   }
 
   ngOnInit(): void {
@@ -117,7 +129,7 @@ export class TabelaMetasComponent implements OnInit {
     this.loadAnosMetas();
   }
 
-  // MODAL de ação dos produtos
+  // MODAL de ação das metas
   showMessageAction(message: string) {
     const toast: HTMLElement = document.querySelector("#alert-actions");
     this.msgActions = message;
@@ -125,17 +137,7 @@ export class TabelaMetasComponent implements OnInit {
     setTimeout(() => toast.classList.remove('show'), 4000);
   }
 
-  // Método para carregar as metas da empresa
-  loadMetasEmpresa(ano: string, vendedor?: string, mes?: string) {
-    this.metasEmpresaService.getMetas(ano).subscribe(
-      (data) => {
-        this.metasEmpresa = data;
-      }, (err) => {
-        console.error(err);
-      }
-    )
-  }
-
+  // Método para carregar os anos e inserir no select de filtros
   loadAnosMetas() {
     this.metasVendedoresService.getMetas("adm", "", "", "").subscribe(
       async (data) => {
@@ -152,6 +154,7 @@ export class TabelaMetasComponent implements OnInit {
     )
   }
 
+  // Método para carregar os anos e inserir no select de filtros
   loadVendedores() {
     this.usersService.getUsers().subscribe(
       async(data: any) => {
@@ -166,8 +169,10 @@ export class TabelaMetasComponent implements OnInit {
     );
   }
 
+  // Mesclar objetos de metasEmpresas e metasIndividuais (Os filtros são realizados aqui também)
   objetoTabela(metasEmpresas: any[], metasIndividuais: any[], filtroMes: string, filtroAno: string, filtroVendedor: string) {
     this.tabela = [];
+    this.totalAnualIndividual = 0;
     
     // Crie um mapa para metas individuais
     const mapaMetasIndividuais = new Map();
@@ -188,6 +193,7 @@ export class TabelaMetasComponent implements OnInit {
           if((!filtroVendedor || metaVendedor.vendedor === filtroVendedor) &&
           (!filtroMes || metaVendedor.mes === filtroMes) &&
           (!filtroAno || metaVendedor.ano === filtroAno)) {
+            this.totalAnualIndividual += metaVendedor.metaIndividual;
             const novaLinha = {
               _id: metaVendedor._id,
               vendedor: metaVendedor.vendedor,
@@ -195,7 +201,7 @@ export class TabelaMetasComponent implements OnInit {
               mes: metaEmpresa.mes,
               metaEmpresa: metaEmpresa.metaEmpresa,
               metaIndividual: metaVendedor.metaIndividual,
-              metaIndividualRealizada: this.metaIndividualRealizada,
+              metaIndividualRealizada: this.metasIndividuaisRealizadas[metaVendedor.vendedor],
               metaEmpresaRealizada: this.metaEmpresaRealizada
             };
             this.tabela.push(novaLinha);
@@ -209,7 +215,7 @@ export class TabelaMetasComponent implements OnInit {
           mes: metaEmpresa.mes,
           metaEmpresa: metaEmpresa.metaEmpresa,
           metaIndividual: 0,
-          metaIndividualRealizada: this.metaIndividualRealizada,
+          metaIndividualRealizada: 0,
           metaEmpresaRealizada: this.metaEmpresaRealizada
         };
         if ((!filtroMes || metaEmpresa.mes === filtroMes) && (!filtroAno || metaEmpresa.ano === filtroAno)) {
@@ -225,6 +231,21 @@ export class TabelaMetasComponent implements OnInit {
     this.tabelaMetas = new MatTableDataSource(this.tabela);
   }
 
+  // Método para carregar as metas da empresa
+  loadMetasEmpresa(ano: string, vendedor?: string, mes?: string) {
+    this.metasEmpresaService.getMetas(ano).subscribe(
+      (data) => {
+        this.metasEmpresa = data;
+        data.forEach((meta: MetaEmpresa) => {
+          this.totalAnualEmpresa += meta.metaEmpresa;
+        });
+      }, (err) => {
+        console.error(err);
+      }
+    )
+  }
+
+  // Método para carregar as metas dos vendedores
   loadMetasVendedores(usuario: string, mes: string, ano: string, vendedor?: string) {
     this.metasVendedoresService.getMetas(usuario, mes, ano, vendedor).subscribe(
       async (data) => {
@@ -236,6 +257,7 @@ export class TabelaMetasComponent implements OnInit {
     )
   }
 
+  // Método que chama os métodos loadMetasEmpresa, loadMetasVendedores e objetoTabela
   loadMetas(mes: string = "", ano: string = "", vendedor: string = "") {
     if(this.userPermission()){
       let usuario: string = "adm";
@@ -272,17 +294,66 @@ export class TabelaMetasComponent implements OnInit {
 
   }
 
+  // Método para carregar as comissões
   loadComissoes(usuario: string, mes: string, ano: string, vendedor?: string) {
     this.commissionsService.getComissoes(usuario, mes, ano, vendedor).subscribe(
       async (data) => {
-        data.forEach((comissao) => {
-          this.metaIndividualRealizada += comissao.valorVendido;
-        })
+        this.comissoes = data;
+        this.gerenciarComissoes(this.comissoes, ano);
       },
       async (error) => {
         console.error(error);
       }
     )
+  }
+
+  // Método para gerenciar as comissões carregadas
+  gerenciarComissoes(comissoes: any[], ano: string, vendedor?: string, mes?: string) {
+    this.metaIndividualRealizada = 0;
+
+    // Cria um objeto para armazenar o total de vendas por vendedor
+    const vendedorComissoesMensais = {};
+
+    // Definido o array com as metas realizadas pelos vendedores (this.metasIndividuaisRealizadas)
+    comissoes.forEach((comissao) => {
+      const { vendedor, valorVendido, mes } = comissao;
+      const chaveVendedorMes = `${vendedor}-${mes}-${ano}`;
+      
+      if(!vendedorComissoesMensais[chaveVendedorMes]) {
+        vendedorComissoesMensais[chaveVendedorMes] = {
+          ano,
+          mes,
+          valorVendido: 0
+        };
+      }
+      vendedorComissoesMensais[chaveVendedorMes].valorVendido += valorVendido;
+    });
+
+    // Converte o objeto em um array com a estrutura desejada
+    const resultado = Object.values(vendedorComissoesMensais).map(dados => ({
+      // [dados.vendedor]: dados,
+    }));
+
+    this.metasIndividuaisRealizadas = resultado;
+
+    console.log(this.metasIndividuaisRealizadas);
+
+    // Filtro
+    if(!vendedor && !mes) {
+      comissoes.forEach(comissao => this.metaIndividualRealizada += comissao.valorVendido);
+    } else {
+      comissoes.forEach((comissao) => {
+        if(vendedor === comissao.vendedor) {
+          this.metaIndividualRealizada += comissao.valorVendido;
+        }
+        if(mes === comissao.mes) {
+          this.metaIndividualRealizada += comissao.valorVendido;
+        }
+        if(ano === comissao.ano) {
+          this.metaIndividualRealizada += comissao.valorVendido;
+        }
+      })
+    }
   }
 
 
