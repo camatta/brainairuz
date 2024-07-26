@@ -631,8 +631,8 @@ export class CalculoComissaoComponent implements OnInit {
       status: ['Aguardando Aprovação', Validators.required],
       nomeCliente: ['', Validators.required],
       mixProdutos: ['', Validators.required],
-      produtoVendido: ['', Validators.required],
-      multiplicador: ['', Validators.required],
+      produtoVendido: [''], // Verificar validação
+      multiplicador: [''], // Verificar validação
       markup: [0, Validators.required],
       vendaAvulsa: [0, Validators.required],
       valorBase: ['']

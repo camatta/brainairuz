@@ -32,7 +32,7 @@ const CommissionsSchema = new mongoose.Schema({
     },
     tipoProduto: {
       type: String,
-      required: true
+      required: false
     },
     multiplicador: {
       type: Number,
