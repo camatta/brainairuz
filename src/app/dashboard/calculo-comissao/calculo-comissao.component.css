@@ -214,7 +214,7 @@
   top: 2.4rem;
   right: 5rem;
   transition: ease-in-out .4s;
-  z-index: 999;
+  z-index: 1056;
 }
 
 mat-spinner {

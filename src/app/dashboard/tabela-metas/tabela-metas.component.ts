@@ -58,14 +58,15 @@ export class TabelaMetasComponent implements OnInit {
   meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
   metasEmpresa: any[] = [];
   metasIndividuais: any[] = [];
-  metaIndividualRealizada: number = 0;
-  metaEmpresaRealizada: number = 0;
+  metaEmpresaRealizada: any[] = [];
   tabela: Meta[] = [];
   onLoad: boolean = false;
   totalAnualEmpresa: number = 0;
   totalAnualIndividual: number = 0;
+  totalAnualIndividualRealizado: number = 0;
+  totalAnualEmpresaRealizado: number = 0;
   comissoes = [];
-  metasIndividuaisRealizadas = {};
+  metasIndividuaisRealizadas = [];
 
   filtroVendedor: string = "";
   filtroMes: string = "";
@@ -98,7 +99,7 @@ export class TabelaMetasComponent implements OnInit {
     }, 2000)
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     // Carrega colunas para administradores
     if(this.userPermission()){
       this.displayedColumns = [
@@ -110,13 +111,6 @@ export class TabelaMetasComponent implements OnInit {
         'vendedor',
         'actions'
       ];
-
-      let usuario: string = "adm";
-      this.loadComissoes(usuario, "sem filtro", this.currentYear, "sem filtro");
-
-    } else {
-      let vendedor: string = this.currentUser.name;
-      this.loadComissoes(vendedor, "sem filtro", this.currentYear);
     }
     
     // Carrega vendedores do time Comercial
@@ -127,6 +121,15 @@ export class TabelaMetasComponent implements OnInit {
 
     // Carrega os anos para inserir no input do filtro
     this.loadAnosMetas();
+
+    // Carrega as comissões dos vendedores
+    if(this.userPermission()){
+      let usuario: string = "adm";
+      this.loadComissoes(usuario, "sem filtro", this.currentYear, "sem filtro");
+    } else {
+      let vendedor: string = this.currentUser.name;
+      this.loadComissoes(vendedor, "sem filtro", this.currentYear);
+    }
   }
 
   // MODAL de ação das metas
@@ -170,9 +173,42 @@ export class TabelaMetasComponent implements OnInit {
   }
 
   // Mesclar objetos de metasEmpresas e metasIndividuais (Os filtros são realizados aqui também)
-  objetoTabela(metasEmpresas: any[], metasIndividuais: any[], filtroMes: string, filtroAno: string, filtroVendedor: string) {
+  objetoTabela(
+    metasEmpresas: any[],
+    metasIndividuais: any[],
+    filtroMes: string,
+    filtroAno: string,
+    filtroVendedor: string
+  ){
     this.tabela = [];
     this.totalAnualIndividual = 0;
+    this.totalAnualEmpresaRealizado = 0;
+    this.totalAnualIndividualRealizado = 0;
+    this.metaEmpresaRealizada = []; // Array para loop abaixo inserir somar todas das vendas realizadas no mês
+
+    this.metasIndividuaisRealizadas.forEach((meta) => {
+      if(!this.metaEmpresaRealizada.some(venda => venda.mes === meta.mes)) {
+        let mes = 0;
+        
+        this.metasIndividuaisRealizadas.map((res) => {
+          if(meta.mes === res.mes && meta.ano === res.ano) {
+            mes += res.valorTotalVendido;
+          }
+        })
+
+        const obj = {
+          mes: meta.mes,
+          ano: meta.ano,
+          totalMes: mes
+        }
+
+        this.metaEmpresaRealizada.push(obj);
+      }
+    });
+
+    this.metaEmpresaRealizada.forEach((meta) => {
+      this.totalAnualEmpresaRealizado += meta.totalMes;
+    });
     
     // Crie um mapa para metas individuais
     const mapaMetasIndividuais = new Map();
@@ -187,13 +223,31 @@ export class TabelaMetasComponent implements OnInit {
     metasEmpresas.forEach((metaEmpresa: MetaEmpresa) => {
       const chave = `${metaEmpresa.ano}-${metaEmpresa.mes}`;
       const metasVendedores = mapaMetasIndividuais.get(chave) || [];
+      const metasVendedoresRealizadas = this.metasIndividuaisRealizadas;
 
       if(metasVendedores.length > 0) {
         metasVendedores.forEach((metaVendedor: any) => {
           if((!filtroVendedor || metaVendedor.vendedor === filtroVendedor) &&
           (!filtroMes || metaVendedor.mes === filtroMes) &&
           (!filtroAno || metaVendedor.ano === filtroAno)) {
+            let individualRealizada = null;
+            let empresaRealizada = null;
+
             this.totalAnualIndividual += metaVendedor.metaIndividual;
+
+            metasVendedoresRealizadas.forEach((meta) => {
+              if(meta.vendedor === metaVendedor.vendedor && meta.mes === metaVendedor.mes && meta.ano === metaVendedor.ano) {
+                individualRealizada = meta.valorTotalVendido;
+                this.totalAnualIndividualRealizado += individualRealizada;
+              }
+            })
+
+            this.metaEmpresaRealizada.forEach((meta) => {
+              if(meta.mes === metaEmpresa.mes && meta.ano === metaEmpresa.ano) {
+                empresaRealizada = meta.totalMes;
+              }
+            })
+
             const novaLinha = {
               _id: metaVendedor._id,
               vendedor: metaVendedor.vendedor,
@@ -201,8 +255,8 @@ export class TabelaMetasComponent implements OnInit {
               mes: metaEmpresa.mes,
               metaEmpresa: metaEmpresa.metaEmpresa,
               metaIndividual: metaVendedor.metaIndividual,
-              metaIndividualRealizada: this.metasIndividuaisRealizadas[metaVendedor.vendedor],
-              metaEmpresaRealizada: this.metaEmpresaRealizada
+              metaIndividualRealizada: individualRealizada,
+              metaEmpresaRealizada: empresaRealizada
             };
             this.tabela.push(novaLinha);
           }
@@ -216,7 +270,7 @@ export class TabelaMetasComponent implements OnInit {
           metaEmpresa: metaEmpresa.metaEmpresa,
           metaIndividual: 0,
           metaIndividualRealizada: 0,
-          metaEmpresaRealizada: this.metaEmpresaRealizada
+          metaEmpresaRealizada: 0
         };
         if ((!filtroMes || metaEmpresa.mes === filtroMes) && (!filtroAno || metaEmpresa.ano === filtroAno)) {
           this.tabela.push(novaLinha);
@@ -233,6 +287,8 @@ export class TabelaMetasComponent implements OnInit {
 
   // Método para carregar as metas da empresa
   loadMetasEmpresa(ano: string, vendedor?: string, mes?: string) {
+    this.totalAnualEmpresa = 0;
+
     this.metasEmpresaService.getMetas(ano).subscribe(
       (data) => {
         this.metasEmpresa = data;
@@ -309,7 +365,7 @@ export class TabelaMetasComponent implements OnInit {
 
   // Método para gerenciar as comissões carregadas
   gerenciarComissoes(comissoes: any[], ano: string, vendedor?: string, mes?: string) {
-    this.metaIndividualRealizada = 0;
+    this.totalAnualIndividualRealizado = 0;
 
     // Cria um objeto para armazenar o total de vendas por vendedor
     const vendedorComissoesMensais = {};
@@ -330,27 +386,32 @@ export class TabelaMetasComponent implements OnInit {
     });
 
     // Converte o objeto em um array com a estrutura desejada
-    const resultado = Object.values(vendedorComissoesMensais).map(dados => ({
-      // [dados.vendedor]: dados,
-    }));
+    const resultado = Object.keys(vendedorComissoesMensais).map(key => {
+      const [vendedor] = key.split('-');
+      const { ano, mes, valorVendido } = vendedorComissoesMensais[key];
+      return {
+        vendedor,
+        ano,
+        mes,
+        valorTotalVendido: valorVendido
+      };
+    });
 
     this.metasIndividuaisRealizadas = resultado;
 
-    console.log(this.metasIndividuaisRealizadas);
-
     // Filtro
     if(!vendedor && !mes) {
-      comissoes.forEach(comissao => this.metaIndividualRealizada += comissao.valorVendido);
+      comissoes.forEach(comissao => this.totalAnualIndividualRealizado += comissao.valorVendido);
     } else {
       comissoes.forEach((comissao) => {
         if(vendedor === comissao.vendedor) {
-          this.metaIndividualRealizada += comissao.valorVendido;
+          this.totalAnualIndividualRealizado += comissao.valorVendido;
         }
         if(mes === comissao.mes) {
-          this.metaIndividualRealizada += comissao.valorVendido;
+          this.totalAnualIndividualRealizado += comissao.valorVendido;
         }
         if(ano === comissao.ano) {
-          this.metaIndividualRealizada += comissao.valorVendido;
+          this.totalAnualIndividualRealizado += comissao.valorVendido;
         }
       })
     }

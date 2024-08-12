@@ -38,7 +38,7 @@
       <ng-template pTemplate="header">
         <tr>
           <th>No.</th>
-          <th pSortableColumn="produto">Produto <p-sortIcon field="produto"></p-sortIcon></th>
+          <th pSortableColumn="produto" aria-sort="ascending">Produto <p-sortIcon field="produto"></p-sortIcon></th>
           <th>Tecnologia/Serviço</th>
           <th>Recorrência</th>
           <th>Preço de Vendas</th>
@@ -65,7 +65,7 @@
           <td></td>
           <td></td>
           <td>{{ item.tecnologia_servico }}</td>
-          <td>{{ item.mrr }} {{ item.tipo_mrr }}</td>
+          <td>{{ item.mrr == 'N/A' ? '' : item.mrr }} {{ item.tipo_mrr }}</td>
           <td *ngFor="let variante of item.variantes">{{ variante.valorVenda == 0 ? "Sob consulta" : variante.valorVenda | currency: 'BRL' }}</td>
           <td *ngFor="let variante of item.variantes">{{ variante.observacao }}</td>
           <td class="d-flex justify-content-center" *ngFor="let variante of item.variantes">
@@ -125,7 +125,7 @@
                   type="number"
                   class="form-control"
                   id="mrr-edit"
-                  min="1"
+                  min="0"
                   step="1"
                   formControlName="mrr"
                 >
@@ -133,6 +133,7 @@
             <div class="mb-3" *ngIf="tipoProduto == 'Recorrência'">
               <label class="form-label">Tipo da Recorrência:</label>
               <select formControlName="tipo_mrr" id="tipo_mrr-edit" class="selectForm form-select">
+                <option value=""></option>
                 <option value="Horas">Horas</option>
                 <option value="Meses">Meses</option>
               </select>
@@ -205,7 +206,7 @@
                   type="number"
                   class="form-control"
                   id="mrr-edit"
-                  min="1"
+                  min="0"
                   step="1"
                   formControlName="mrr"
                 >
@@ -213,6 +214,7 @@
             <div class="mb-3" *ngIf="formEditarProduto.get('tipoProduto').value == 'Recorrência'">
               <label class="form-label">Tipo da Recorrência:</label>
               <select formControlName="tipo_mrr" id="tipo_mrr-edit" class="selectForm form-select">
+                <option value=""></option>
                 <option value="Horas">Horas</option>
                 <option value="Meses">Meses</option>
               </select>

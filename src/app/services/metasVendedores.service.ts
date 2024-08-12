@@ -21,8 +21,10 @@ export class MetasVendedoresService {
       if (filterMonth !== '') {
         url += (filterYear !== '') ? `&month=${filterMonth}` : `?month=${filterMonth}`;
       }
-      if(vendedor !== '') {
-        url += (filterMonth !== '') || (filterYear !== '') ? `&vendedor=${vendedor}` : `?vendedor=${vendedor}`;
+      if(vendedor !== undefined) {
+        if(vendedor !== '') {
+          url += (filterMonth !== '') || (filterYear !== '') ? `&vendedor=${vendedor}` : `?vendedor=${vendedor}`;
+        }
       }
     } else {
       url += `?user=${currentUser}`;

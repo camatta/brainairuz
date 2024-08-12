@@ -79,7 +79,6 @@ export class TabelaDeValores implements OnInit {
     this.productService.getProducts().subscribe(
       (data) => { 
         this.produtos = this.transformarDados(data);
-        console.log(data);
       },
       (err) => { console.error(err) }
     );
@@ -145,8 +144,6 @@ export class TabelaDeValores implements OnInit {
   // Recupera o valor do select e passa para a variável, para mostrar a tecnologia do produto ou meses (mrr)
   verificaTipoProduto(el: any) {
     this.tipoProduto = el.target.value;
-    console.log(this.formNovoProduto.get("tecnologia").value);
-    console.log(this.formNovoProduto.get("meses").value);
   }
 
   /* *** Modais de ações *** */
@@ -157,7 +154,7 @@ export class TabelaDeValores implements OnInit {
     tecnologia_servico: ['', Validators.required],
     mrr: [0], // Revisar o validador
     tipo_mrr: [''], // Revisar o validador
-    valor_venda: [0, Validators.required],
+    valor_venda: [0], // Revisar o validador
     observacao: ['']
   })
 
@@ -242,7 +239,7 @@ export class TabelaDeValores implements OnInit {
     tecnologia_servico: ['', Validators.required],
     mrr: [0], // Revisar o validador
     tipo_mrr: [''], // Revisar o validador
-    valor_venda: [0, Validators.required],
+    valor_venda: [0], // Revisar o validador
     observacao: ['']
   })
 

@@ -11,11 +11,17 @@ export class MetasEmpresaService {
 
   constructor(private http: HttpClient) { }
 
-  getMetas(filterYear: string): Observable<any[]> {
-    if(filterYear == ""){
-      return this.http.get<any[]>(`${environment.URL_API}/api/metas-empresa`);
+  getMetas(filterYear: string, filterMonth?: string): Observable<any[]> {
+    let url = `${environment.URL_API}/api/metas-empresa`;
+
+    if(filterYear !== ""){
+      url += `?year=${filterYear}`;
     }
-    return this.http.get<any[]>(`${environment.URL_API}/api/metas-empresa?year=${filterYear}`);
+
+    if (filterMonth !== '') {
+      url += (filterYear !== '') ? `&month=${filterMonth}` : `?month=${filterMonth}`;
+    }
+    return this.http.get<any[]>(url);
   }
 
   setMeta(novaMeta: any) {

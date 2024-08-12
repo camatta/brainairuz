@@ -23,7 +23,9 @@ export class ComissoesService {
         url += (filterYear !== 'sem filtro') ? `&month=${filterMonth}` : `?month=${filterMonth}`;
       }
       if(vendedor !== 'sem filtro') {
-        url += (filterMonth !== 'sem filtro') || (filterYear !== 'sem filtro') ? `&vendedor=${vendedor}` : `?vendedor=${vendedor}`;
+        if(vendedor !== undefined) {
+          url += (filterMonth !== 'sem filtro') || (filterYear !== 'sem filtro') ? `&vendedor=${vendedor}` : `?vendedor=${vendedor}`;
+        }
       }
     } else {
       url += `?user=${currentUser}`;
@@ -34,7 +36,6 @@ export class ComissoesService {
         url += (filterYear !== 'sem filtro') ? `&month=${filterMonth}` : `&month=${filterMonth}`;
       }
     }
-  
     return this.http.get<any[]>(url);
   }
 
