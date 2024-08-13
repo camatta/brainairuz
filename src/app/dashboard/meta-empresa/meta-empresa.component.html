@@ -59,7 +59,7 @@
     </div>
 
     <div class="row mt-3">
-        <div class="col-5 text-end">
+        <div [ngClass]="userPermission() ? 'col-5 text-end' : 'col-7 text-end'">
             <p class="texto-soma">Meta total anual: {{ metaAnual | currency: 'BRL' }}</p>
         </div>
     </div>

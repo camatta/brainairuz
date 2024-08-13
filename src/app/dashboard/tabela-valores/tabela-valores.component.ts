@@ -50,6 +50,7 @@ export class TabelaDeValores implements OnInit {
   ) {}
 
   displayedColumns: string[] = ['id', 'produto', 'tecnologia_servico', 'mrr', 'valor_venda', 'observacao'];
+  currentUser = this.authService.getUser();  // Traz os dados do usuário
   produtos = [];
   msgActions: string;
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
@@ -58,6 +59,13 @@ export class TabelaDeValores implements OnInit {
 
   // validação de usuários
   showAdmin = false;
+
+  userPermission(): boolean {
+    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"  || this.currentUser.name === 'Adriany Oliveira'){
+      return true;
+    }
+    return false;
+  }
 
   ngOnInit(): void {
     const user = this.authService.getUser();

@@ -120,3 +120,7 @@
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
 }
+
+.col-7.text-end .texto-soma {
+    padding-right: 50px;
+}

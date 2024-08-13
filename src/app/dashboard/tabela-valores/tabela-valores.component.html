@@ -43,7 +43,7 @@
           <th>Recorrência</th>
           <th>Preço de Vendas</th>
           <th>Observações</th>
-          <th class="d-flex justify-content-center">Ações</th>
+          <th *ngIf="userPermission()" class="d-flex justify-content-center">Ações</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-produto let-i="rowIndex" let-expanded="expanded">
@@ -68,16 +68,18 @@
           <td>{{ item.mrr == 'N/A' ? '' : item.mrr }} {{ item.tipo_mrr }}</td>
           <td *ngFor="let variante of item.variantes">{{ variante.valorVenda == 0 ? "Sob consulta" : variante.valorVenda | currency: 'BRL' }}</td>
           <td *ngFor="let variante of item.variantes">{{ variante.observacao }}</td>
-          <td class="d-flex justify-content-center" *ngFor="let variante of item.variantes">
-            <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarProduto(produto, item, variante)">edit</mat-icon>
-            <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarProduto(produto, item, variante)">delete</mat-icon>
-          </td>
+          <ng-container *ngIf="userPermission()">
+            <td class="d-flex justify-content-center" *ngFor="let variante of item.variantes">
+              <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarProduto(produto, item, variante)">edit</mat-icon>
+              <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarProduto(produto, item, variante)">delete</mat-icon>
+            </td>
+          </ng-container>
+
         </tr>
       </ng-template>
     </p-table>
  
   </div>
-
   
   <!-- MODAIS -->
   <div id="bg-modal"></div>

@@ -439,6 +439,7 @@ export class CalculoComissaoComponent implements OnInit {
 
       let somaVendas: number = 0;
       let somaValoresBase: number = 0;
+      this.valorBaseTotal = 0;
   
       data.map((venda) => {
         // VENDAS TOTAL
@@ -449,9 +450,11 @@ export class CalculoComissaoComponent implements OnInit {
   
         // VALOR BASE
         if(venda.valorBase) {
-          somaValoresBase += venda.valorBase;
-          this.valorBaseTotal < somaValoresBase ? this.valorBaseTotal = somaValoresBase : this.valorBaseTotal;
+          this.valorBaseTotal += venda.valorBase;
         }
+        // this.valorBaseTotal < somaValoresBase ? this.valorBaseTotal = somaValoresBase : this.valorBaseTotal;
+
+        console.log(this.valorBaseTotal);
   
         // QUALIDADE
         if(this.vendasTotal == 0) {
@@ -788,7 +791,7 @@ export class CalculoComissaoComponent implements OnInit {
     let multiplicador = Number(this.formEditarVenda.get("multiplicador").value);
     let markup = Number(this.formEditarVenda.get("markup").value);
     let vendaAvulsa = Number(this.formEditarVenda.get("vendaAvulsa").value);
-    let valorBase = parseFloat((this.formEditarVenda.get('valorBase').value).replace(",", "."));
+    let valorBase: number = Number(this.formEditarVenda.get('valorBase').value);
     let valorVendido: number = 0;
 
     // Formatando data

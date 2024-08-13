@@ -25,11 +25,7 @@ export class MetaEmpresaComponent implements OnInit {
     private formBuilder: FormBuilder,
   ) {}
 
-  displayedColumns: string[] = [
-    'mes',
-    'metaEmpresa',
-    'actions'
-  ];
+  displayedColumns: string[] = ['mes', 'metaEmpresa'];
   tabelaMetas: MatTableDataSource<MetaEmpresa> = new MatTableDataSource<MetaEmpresa>([]);
   currentUser = this.authService.getUser();  // Traz os dados do usuário
   msgActions: string;
@@ -56,6 +52,13 @@ export class MetaEmpresaComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if(this.userPermission()) {
+      this.displayedColumns = [
+        'mes',
+        'metaEmpresa',
+        'actions'
+      ];
+    }
     // Carrega as metas do vendedor
     this.loadMetas();
 
@@ -89,8 +92,9 @@ export class MetaEmpresaComponent implements OnInit {
   }
 
   loadAnosMetas() {
-      this.metasEmpresaService.getMetas("sem filtro").subscribe(
+      this.metasEmpresaService.getMetas("").subscribe(
         async (data) => {
+          console.log(data)
           data.forEach((meta) => {
             const ano: string = meta.ano;
             if(!this.filterYears.includes(ano)){

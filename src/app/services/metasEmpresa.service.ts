@@ -14,11 +14,11 @@ export class MetasEmpresaService {
   getMetas(filterYear: string, filterMonth?: string): Observable<any[]> {
     let url = `${environment.URL_API}/api/metas-empresa`;
 
-    if(filterYear !== ""){
+    if(filterYear !== "" && filterYear !== undefined){
       url += `?year=${filterYear}`;
     }
 
-    if (filterMonth !== '') {
+    if (filterMonth !== '' && filterMonth !== undefined) {
       url += (filterYear !== '') ? `&month=${filterMonth}` : `?month=${filterMonth}`;
     }
     return this.http.get<any[]>(url);
