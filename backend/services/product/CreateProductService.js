@@ -1,6 +1,15 @@
 const Product = require('../../models/Products');
 
-module.exports.CreateProductService = async ({ produto, tipoProduto, tecnologia_servico, mrr, tipo_mrr, valor_venda, observacao }) => {
+module.exports.CreateProductService = async ({
+  produto,
+  tipoProduto,
+  tecnologia_servico,
+  mrr,
+  tipo_mrr,
+  valor_venda,
+  grupo_markup,
+  observacao
+}) => {
   // Criando um novo produto utilizando o modelo importado
   const novoProduto = new Product({
     produto: produto,
@@ -9,6 +18,7 @@ module.exports.CreateProductService = async ({ produto, tipoProduto, tecnologia_
     mrr: mrr,
     tipo_mrr: tipo_mrr,
     valor_venda: valor_venda,
+    grupo_markup: grupo_markup,
     observacao: observacao
   })
 

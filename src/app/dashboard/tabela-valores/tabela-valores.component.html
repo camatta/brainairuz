@@ -26,7 +26,6 @@
         <div class="d-flex justify-content-between">
           <button button type="button" *ngIf="showAdmin" class="btn btn-addProduto" (click)="openModalNovoProduto()" data-bs-dismiss="modal">Novo produto</button>
           <div class="d-flex gap-2">
-            <button type="button"(click)="clear(dt1)" class="btn btn-link link-nairuz">Limpar filtros</button>
             <span class="p-input-icon-left ml-auto">
                 <i class="pi pi-search"></i>
                 <input class="input-busca h-100" pInputText type="text" (input)="inputBusca($event, dt1)" placeholder="O que está procurando?" />
@@ -37,7 +36,7 @@
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th>No.</th>
+          <th>Grupo Markup</th>
           <th pSortableColumn="produto" aria-sort="ascending">Produto <p-sortIcon field="produto"></p-sortIcon></th>
           <th>Tecnologia/Serviço</th>
           <th>Recorrência</th>
@@ -46,9 +45,9 @@
           <th *ngIf="userPermission()" class="d-flex justify-content-center">Ações</th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-produto let-i="rowIndex" let-expanded="expanded">
+      <ng-template pTemplate="body" let-produto let-expanded="expanded">
         <tr>
-          <td>{{ i + 1 }}</td>
+          <td></td>
           <td>
             <button type="button" pButton pRipple [pRowToggler]="produto" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-minus' : 'pi pi-plus'"></button>
             {{ produto.produto }}
@@ -62,7 +61,7 @@
       </ng-template>
       <ng-template pTemplate="rowexpansion" let-produto>
         <tr *ngFor="let item of produto.itens">
-          <td></td>
+          <td>{{ item.variantes[0].grupo_markup }}</td>
           <td></td>
           <td>{{ item.tecnologia_servico }}</td>
           <td>{{ item.mrr == 'N/A' ? '' : item.mrr }} {{ item.tipo_mrr }}</td>
@@ -154,6 +153,17 @@
                 formControlName="valor_venda"
               >
             </div>
+            <div class="mb-3 d-flex flex-column">
+              <label class="form-label">Grupo Markup:</label>
+              <select formControlName="grupo_markup" id="grupo_markup" class="selectForm form-select">
+                <option value="1">Grupo 1 - (2 a 1.8)</option>
+                <option value="2">Grupo 2 - (2)</option>
+                <option value="3">Grupo 3 - (2.5 a 2)</option>
+                <option value="4">Grupo 4 - (3 a 2)</option>
+                <option value="5">Grupo 5 - (3.5 a 2)</option>
+                <option value="6">Grupo 6 - (3.8 a 2)</option>
+              </select>
+            </div>
             <div class="mb-3">
               <label for="observacao-edit" class="form-label text-black">Observações:</label>
               <textarea style="resize: vertical;" class="form-control" id="observacao-edit" formControlName="observacao"></textarea>
@@ -224,6 +234,17 @@
             <div class="mb-3">
               <label for="valor-venda-edit" class="form-label text-black">Preço de vendas:</label>
               <input type="text" prefix="R$ " mask="separator.2" thousandSeparator="." decimalMarker="," class="form-control" id="valor-venda-edit" formControlName="valor_venda">
+            </div>
+            <div class="mb-3 d-flex flex-column">
+              <label class="form-label">Grupo Markup:</label>
+              <select formControlName="grupo_markup" id="grupo_markup" class="selectForm form-select">
+                <option value="1">Grupo 1 - (2 a 1.8)</option>
+                <option value="2">Grupo 2 - (2)</option>
+                <option value="3">Grupo 3 - (2.5 a 2)</option>
+                <option value="4">Grupo 4 - (3 a 2)</option>
+                <option value="5">Grupo 5 - (3.5 a 2)</option>
+                <option value="6">Grupo 6 - (3.8 a 2)</option>
+              </select>
             </div>
             <div class="mb-3">
               <label for="observacao-edit" class="form-label text-black">Observações:</label>

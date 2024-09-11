@@ -8,6 +8,7 @@ export type Comissao = {
   mixProdutos: string;
   tipoProduto: string;
   multiplicador: number;
+  grupo_markup: number;
   markup: number;
   vendaAvulsa: number;
   valorBase: number;

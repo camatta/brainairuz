@@ -39,6 +39,10 @@ const ProductsSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    grupo_markup: {
+        type: Number,
+        required: true
+    },
     observacao: {
         type: String,
         required: false

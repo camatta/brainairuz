@@ -87,6 +87,9 @@ export class CalculoComissaoComponent implements OnInit {
 
   /* Variáveis e métodos de controle de front */
   onLoad: boolean = false;
+  grupoMarkup: number;
+  maxMarkup: number;
+  minMarkup: number;
 
   userPermission(): boolean {
     if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz" || this.currentUser.name === 'Adriany Oliveira'){
@@ -252,7 +255,7 @@ export class CalculoComissaoComponent implements OnInit {
   loadProdutos() {
     this.productService.getProducts().subscribe(
       async (data) => {
-        this.produtos = data
+        this.produtos = data;
         this.produtosFiltrados = this.produtos;
       }, (err) => {
         console.error(err)
@@ -271,21 +274,13 @@ export class CalculoComissaoComponent implements OnInit {
   verifyValueMarkup(element: any) {
     let valueInput = element.target.value;
     let input: HTMLInputElement = document.querySelector(`#${element.target.id}`);
-    let message: HTMLDivElement = input.parentElement.querySelector(".invalid-feedback");
-    message.style.display = "none";
-    input.style.border = "none";
-
-    if(!this.userPermission()){
-      if(valueInput < 1.6) {
-        message.style.display = "block";
-        input.style.border = "1px solid red";
-      }
-    } else {
-      if(valueInput < 1.4) {
-        message.style.display = "block";
-        input.style.border = "1px solid red";
-      }
+    
+    if(valueInput > this.maxMarkup || valueInput < this.minMarkup) {
+      input.classList.add("markup-invalid");
+      return;
     }
+
+    input.classList.remove("markup-invalid");
   }
 
   // Função para filtrar comissões por vendedor, mês e/ou ano
@@ -453,8 +448,6 @@ export class CalculoComissaoComponent implements OnInit {
           this.valorBaseTotal += venda.valorBase;
         }
         // this.valorBaseTotal < somaValoresBase ? this.valorBaseTotal = somaValoresBase : this.valorBaseTotal;
-
-        console.log(this.valorBaseTotal);
   
         // QUALIDADE
         if(this.vendasTotal == 0) {
@@ -589,6 +582,19 @@ export class CalculoComissaoComponent implements OnInit {
       bgModal.style.display = "none";
       modal.classList.remove("show");
     }
+
+    this.formNovaVenda = this.formBuilder.group({
+      dataVenda: ['', Validators.required],
+      status: ['Aguardando Aprovação', Validators.required],
+      vendedor: [this.currentUser, Validators.required],
+      nomeCliente: ['', Validators.required],
+      mixProdutos: ['', Validators.required],
+      produtoVendido: [''], // Verificar validação
+      multiplicador: [''], // Verificar validação
+      markup: [0, Validators.required],
+      vendaAvulsa: [0, Validators.required],
+      valorBase: ['']
+    });
   }
 
   formNovaVenda = this.formBuilder.group({
@@ -604,6 +610,43 @@ export class CalculoComissaoComponent implements OnInit {
     valorBase: ['']
   });
 
+  // Grupos de markup
+  defineMarkup(grupo_markup: number) {
+    this.grupoMarkup = grupo_markup;
+
+    switch (grupo_markup) {
+      case 1:
+        this.maxMarkup = 2;
+        this.minMarkup = 1.8;
+        break;
+      case 2:
+        this.maxMarkup = 2;
+        this.minMarkup = 2;
+        break;
+      case 3:
+        this.maxMarkup = 2.5;
+        this.minMarkup = 2;
+        break;
+      case 4:
+        this.maxMarkup = 3;
+        this.minMarkup = 2;
+        break;
+      case 5:
+        this.maxMarkup = 3.5;
+        this.minMarkup = 2;
+        break;
+      case 4:
+        this.maxMarkup = 3.8;
+        this.minMarkup = 2;
+        break;
+      default:
+        break;
+    }
+    console.log(this.minMarkup);
+    console.log(this.maxMarkup);
+    console.log(this.grupoMarkup);
+  }
+
   // Busca o valor do produto selecionado no input "Produto Vendido" e insere no input "Valor Base"
   setInputsValoresNovaVenda(element: any) {
     const el = element.target.innerText.split("-");
@@ -613,8 +656,10 @@ export class CalculoComissaoComponent implements OnInit {
     this.produtos.forEach((item) => {
       if(item.produto.trim() === produtoSelecionado && item.tecnologia_servico.trim() === tecnologia) {
         this.formNovaVenda.get('valorBase').setValue(`${item.valor_venda},00`);
+        this.defineMarkup(item.grupo_markup);
+        this.formNovaVenda.get('markup').setValue(this.minMarkup);
       }
-    })
+    });
   }
 
   onSubmitNovaVenda() {
@@ -629,6 +674,7 @@ export class CalculoComissaoComponent implements OnInit {
         let mixProdutos = this.formNovaVenda.get("mixProdutos").value;
         let tipoProduto = this.formNovaVenda.get('produtoVendido').value;
         let multiplicador = Number(this.formNovaVenda.get("multiplicador").value);
+        let grupo_markup: number = this.grupoMarkup;
         let markup = Number(this.formNovaVenda.get("markup").value);
         let vendaAvulsa = Number(this.formNovaVenda.get("vendaAvulsa").value);
         let valorBase = parseFloat((this.formNovaVenda.get('valorBase').value).replace(",", "."));
@@ -663,6 +709,7 @@ export class CalculoComissaoComponent implements OnInit {
           mixProdutos: mixProdutos,
           tipoProduto: tipoProduto,
           multiplicador: multiplicador,
+          grupo_markup: grupo_markup,
           markup: markup,
           vendaAvulsa: vendaAvulsa,
           valorBase: valorBase,
@@ -752,6 +799,8 @@ export class CalculoComissaoComponent implements OnInit {
       valorBase: element.valorBase
     })
 
+    this.defineMarkup(element.grupo_markup);
+
     if(modal != null){
       modal.style.display = "block";
       bgModal.style.display = "block";
@@ -777,6 +826,8 @@ export class CalculoComissaoComponent implements OnInit {
     this.produtos.forEach((item) => {
       if(item.produto.trim() === produtoSelecionado && item.tecnologia_servico.trim() === tecnologia) {
         this.formEditarVenda.get('valorBase').setValue(`${item.valor_venda},00`);
+        this.defineMarkup(item.grupo_markup);
+        this.formNovaVenda.get('markup').setValue(this.minMarkup);
       }
     })
   }
@@ -793,6 +844,7 @@ export class CalculoComissaoComponent implements OnInit {
     let vendaAvulsa = Number(this.formEditarVenda.get("vendaAvulsa").value);
     let valorBase: number = Number(this.formEditarVenda.get('valorBase').value);
     let valorVendido: number = 0;
+    let grupo_markup: number = this.grupoMarkup;
 
     // Formatando data
     let data = dataVenda.split("-");
@@ -820,6 +872,7 @@ export class CalculoComissaoComponent implements OnInit {
       mixProdutos: mixProdutos,
       tipoProduto: tipoProduto,
       multiplicador: multiplicador,
+      grupo_markup: grupo_markup,
       markup: markup,
       vendaAvulsa: vendaAvulsa,
       valorBase: valorBase,

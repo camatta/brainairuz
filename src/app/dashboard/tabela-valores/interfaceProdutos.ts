@@ -5,5 +5,6 @@ export interface Produtos {
     mrr: number;
     tipo_mrr: string;
     valor_venda: number;
+    grupo_markup: number;
     observacao: string;
 }

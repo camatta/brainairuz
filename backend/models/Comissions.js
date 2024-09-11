@@ -38,6 +38,10 @@ const CommissionsSchema = new mongoose.Schema({
       type: Number,
       required: true
     },
+    grupo_markup: {
+      type: Number,
+      required: true
+    },
     markup: {
       type: Number,
       required: true

@@ -21,6 +21,7 @@ interface DadosTransformados {
     variantes: {
       _id: string;
       valorVenda: number;
+      grupo_markup: number;
       observacao: string;
     }[];
   }[];
@@ -109,7 +110,7 @@ export class TabelaDeValores implements OnInit {
               tecnologia_servico: item.tecnologia_servico ? item.tecnologia_servico : 'N/A',
               mrr: item.mrr ? item.mrr : 'N/A',
               tipo_mrr: item.tipo_mrr ? item.tipo_mrr : '',
-              variantes: [{ _id: item._id, valorVenda: item.valor_venda, observacao: item.observacao }]
+              variantes: [{ _id: item._id, valorVenda: item.valor_venda, grupo_markup: item.grupo_markup, observacao: item.observacao }]
             }
           ]
         });
@@ -124,12 +125,13 @@ export class TabelaDeValores implements OnInit {
             tecnologia_servico: item.tecnologia_servico ? item.tecnologia_servico : 'N/A',
             mrr: item.mrr ? item.mrr : 'N/A',
             tipo_mrr: item.tipo_mrr ? item.tipo_mrr : '',
-            variantes: [{ _id: item._id, valorVenda: item.valor_venda, observacao: item.observacao }]
+            variantes: [{ _id: item._id, valorVenda: item.valor_venda, grupo_markup: item.grupo_markup, observacao: item.observacao }]
           });
         } else {
           dadosTransformados[indiceProduto].itens[indiceTecnologia].variantes.push({
             _id: item._id,
             valorVenda: item.valor_venda,
+            grupo_markup: item.grupo_markup,
             observacao: item.observacao
           });
         }
@@ -142,11 +144,6 @@ export class TabelaDeValores implements OnInit {
   // Função para fazer a busca
   inputBusca(el: any, table: Table) {
     table.filterGlobal(el.target.value, 'contains');
-  }
-
-  // Função para limpar os filtros
-  clear(table: Table) {
-    table.clear();
   }
 
   // Recupera o valor do select e passa para a variável, para mostrar a tecnologia do produto ou meses (mrr)
@@ -163,6 +160,7 @@ export class TabelaDeValores implements OnInit {
     mrr: [0], // Revisar o validador
     tipo_mrr: [''], // Revisar o validador
     valor_venda: [0], // Revisar o validador
+    grupo_markup: [Validators.required],
     observacao: ['']
   })
 
@@ -193,6 +191,7 @@ export class TabelaDeValores implements OnInit {
       mrr: [0], // Verificar validação
       tipo_mrr: [''], // Revisar o validador
       valor_venda: [0, Validators.required],
+      grupo_markup: [Validators.required],
       observacao: ['']
     })
   }
@@ -209,6 +208,7 @@ export class TabelaDeValores implements OnInit {
         mrr: this.formNovoProduto.get('mrr').value,
         tipo_mrr: this.formNovoProduto.get('tipo_mrr').value,
         valor_venda: Number(this.formNovoProduto.get('valor_venda').value),
+        grupo_markup: Number(this.formNovoProduto.get('grupo_markup').value),
         observacao: this.formNovoProduto.get('observacao').value
       }
       
@@ -234,6 +234,7 @@ export class TabelaDeValores implements OnInit {
       mrr: [0], // Revisar o validador
       tipo_mrr: [''], // Revisar o validador
       valor_venda: [0, Validators.required],
+      grupo_markup: [Validators.required],
       observacao: ['']
     })
 
@@ -248,6 +249,7 @@ export class TabelaDeValores implements OnInit {
     mrr: [0], // Revisar o validador
     tipo_mrr: [''], // Revisar o validador
     valor_venda: [0], // Revisar o validador
+    grupo_markup: [Validators.required],
     observacao: ['']
   })
 
@@ -264,6 +266,7 @@ export class TabelaDeValores implements OnInit {
       mrr: item.mrr == 'N/A' ? 0 : item.mrr,
       tipo_mrr: item.tipo_mrr == '' ? '' : item.tipo_mrr,
       valor_venda: variante.valorVenda,
+      grupo_markup: variante.grupo_markup,
       observacao: variante.observacao
     })
 
@@ -297,6 +300,7 @@ export class TabelaDeValores implements OnInit {
         mrr: this.formEditarProduto.get('mrr').value,
         tipo_mrr: this.formEditarProduto.get('tipo_mrr').value,
         valor_venda: Number(this.formEditarProduto.get('valor_venda').value),
+        grupo_markup: Number(this.formEditarProduto.get('grupo_markup').value),
         observacao: this.formEditarProduto.get('observacao').value
       }
 

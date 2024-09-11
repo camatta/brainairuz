@@ -371,32 +371,19 @@
           <div class="col-12 mb-3">
             <label for="markup-novo" class="form-label">Qualidade = Markup:</label>
             <input
-              *ngIf="!userPermission()"
               type="number"
               formControlName="markup"
-              step="0.1"
-              min="1.6"
+              step="0.01"
+              min="{{ minMarkup }}"
+              max="{{ maxMarkup }}"
+              value="{{ minMarkup }}"
               class="form-control form-floating col-12"
               id="markup-novo"
               (change)="verifyValueMarkup($event)"
               required
             />
-            <input
-              *ngIf="userPermission()"
-              type="number"
-              formControlName="markup"
-              step="0.1"
-              min="1.4"
-              class="form-control form-floating col-12"
-              id="markup-novo"
-              (change)="verifyValueMarkup($event)"
-              required
-            />
-            <div *ngIf="!userPermission()" class="invalid-feedback">
-              Para markup abaixo de 1,6 é necessário aprovação.
-            </div>
-            <div *ngIf="userPermission()" class="invalid-feedback">
-              O limite de markup é de 1.4. Para liberação de menor valor, é necessário entrar em contato com o desenvolvedor.
+            <div *ngIf="minMarkup && maxMarkup" class="small text-danger my-2">
+              A faixa de markup para este produto é de {{ minMarkup }} a {{ maxMarkup }}
             </div>
           </div>
         
@@ -500,32 +487,18 @@
           <div class="col-12 mb-3">
             <label for="markup-editar" class="form-label">Qualidade = Markup:</label>
             <input
-              *ngIf="!userPermission()"
               type="number"
               formControlName="markup"
-              step="0.1"
-              min="1.6"
+              step="0.01"
+              min="{{ minMarkup }}"
+              max="{{ maxMarkup }}"
               class="form-control form-floating col-12"
               id="markup-editar"
               (change)="verifyValueMarkup($event)"
               required
             />
-            <input
-              *ngIf="userPermission()"
-              type="number"
-              formControlName="markup"
-              step="0.1"
-              min="1.4"
-              class="form-control form-floating col-12"
-              id="markup-editar"
-              (change)="verifyValueMarkup($event)"
-              required
-            />
-            <div *ngIf="!userPermission()" class="invalid-feedback">
-              Para markup abaixo de 1,6 é necessário aprovação.
-            </div>
-            <div *ngIf="userPermission()" class="invalid-feedback">
-              O limite de markup é de 1.4. Para liberação de menor valor, é necessário entrar em contato com o desenvolvedor.
+            <div *ngIf="minMarkup && maxMarkup" class="small text-danger my-2">
+              A faixa de markup para este produto é de {{ minMarkup }} a {{ maxMarkup }}
             </div>
           </div>
         
