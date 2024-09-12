@@ -19,6 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 
 // Biblioteca: NGX Mask
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
@@ -47,6 +48,7 @@ import { ProductsService } from 'src/app/services/products.service';
     TableModule,
     ToastModule,
     ButtonModule,
+    TooltipModule,
     MatProgressSpinnerModule
   ],
   providers: [ LiveAnnouncer, ProductsService, AuthService ],
@@ -67,6 +69,7 @@ import { ProductsService } from 'src/app/services/products.service';
     TableModule,
     ToastModule,
     ButtonModule,
+    TooltipModule,
     MatProgressSpinnerModule
   ]
 })

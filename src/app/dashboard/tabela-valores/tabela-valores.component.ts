@@ -151,6 +151,26 @@ export class TabelaDeValores implements OnInit {
     this.tipoProduto = el.target.value;
   }
 
+  // Grupos de markup
+  defineMarkup(grupo_markup: number) {
+    switch (grupo_markup) {
+      case 1:
+        return {maxMarkup: 2, minMarkup: 1.8}
+      case 2:
+        return {maxMarkup: 2, minMarkup: 2}
+      case 3:
+        return {maxMarkup: 2.5, minMarkup: 2}
+      case 4:
+        return {maxMarkup: 3, minMarkup: 2}
+      case 5:
+        return {maxMarkup: 3.5, minMarkup: 2}
+      case 4:
+        return {maxMarkup: 3.8, minMarkup: 2}
+      default:
+        return {maxMarkup: null, minMarkup: null};
+    }
+  }
+
   /* *** Modais de ações *** */
   // Criar Produto
   formNovoProduto = this.formBuilder.group({

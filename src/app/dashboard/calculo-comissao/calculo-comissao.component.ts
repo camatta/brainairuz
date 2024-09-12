@@ -642,9 +642,6 @@ export class CalculoComissaoComponent implements OnInit {
       default:
         break;
     }
-    console.log(this.minMarkup);
-    console.log(this.maxMarkup);
-    console.log(this.grupoMarkup);
   }
 
   // Busca o valor do produto selecionado no input "Produto Vendido" e insere no input "Valor Base"

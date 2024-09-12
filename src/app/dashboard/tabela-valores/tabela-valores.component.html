@@ -61,11 +61,18 @@
       </ng-template>
       <ng-template pTemplate="rowexpansion" let-produto>
         <tr *ngFor="let item of produto.itens">
-          <td>{{ item.variantes[0].grupo_markup }}</td>
+          <td class="text-center">{{ item.variantes[0].grupo_markup }}</td>
           <td></td>
           <td>{{ item.tecnologia_servico }}</td>
           <td>{{ item.mrr == 'N/A' ? '' : item.mrr }} {{ item.tipo_mrr }}</td>
-          <td *ngFor="let variante of item.variantes">{{ variante.valorVenda == 0 ? "Sob consulta" : variante.valorVenda | currency: 'BRL' }}</td>
+          <td *ngFor="let variante of item.variantes">
+            {{ variante.valorVenda == 0 ? "Sob consulta" : variante.valorVenda | currency: 'BRL' }}
+            <i
+              class="fa-solid fa-circle-info ms-1"
+              pTooltip="Markup aplicado: {{ defineMarkup(item.variantes[0].grupo_markup).maxMarkup }} Markup permitido: {{ defineMarkup(item.variantes[0].grupo_markup).minMarkup }}"
+              tooltipPosition="right"
+            ></i>
+          </td>
           <td *ngFor="let variante of item.variantes">{{ variante.observacao }}</td>
           <ng-container *ngIf="userPermission()">
             <td class="d-flex justify-content-center" *ngFor="let variante of item.variantes">
