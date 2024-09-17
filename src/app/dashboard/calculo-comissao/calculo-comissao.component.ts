@@ -21,6 +21,23 @@ import { MetasVendedoresService } from 'src/app/services/metasVendedores.service
 import { MetasEmpresaService } from 'src/app/services/metasEmpresa.service';
 import { DataService } from 'src/app/services/dataService.service';
 
+interface vendaType {
+  ano: string;
+  dataCriacaoComissao: Date;
+  dataVenda: string;
+  grupo_markup: number;
+  markup: number;
+  mes: string;
+  mixProdutos: string;
+  multiplicador: number;
+  status: string;
+  tipoProduto: string;
+  valorBase: number;
+  valorVendido: number;
+  vendaAvulsa: number;
+  vendedor: string;
+}
+
 @Component({
   selector: 'app-calculo-comissao',
   templateUrl: './calculo-comissao.component.html',
@@ -433,10 +450,9 @@ export class CalculoComissaoComponent implements OnInit {
       this.tabelaVendas = new MatTableDataSource<Comissao>(data);
 
       let somaVendas: number = 0;
-      let somaValoresBase: number = 0;
       this.valorBaseTotal = 0;
   
-      data.map((venda) => {
+      data.map((venda: vendaType) => {
         // VENDAS TOTAL
         if(venda.valorVendido) {
           somaVendas += Number(venda.valorVendido);
@@ -878,6 +894,7 @@ export class CalculoComissaoComponent implements OnInit {
     
     this.comissoesService.updateComissao(id, editarVenda).subscribe(
       async (res) => {
+        console.log(editarVenda);
         this.showMessageAction('Comissão alterada com sucesso');
         await this.submitFormFilter();
         this.tabelaVendas._updateChangeSubscription();

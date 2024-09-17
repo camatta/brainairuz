@@ -75,31 +75,31 @@ export class MenuLateralComponent implements OnInit {
 
     this.showMixProdutos =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial'
+      team === 'Comercial'
       name === 'Valeria Queiroz'
     ;
 
     this.showTabelaDeValores =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial'
+      team === 'Comercial'
       name === 'Valeria Queiroz'
     ;
 
     this.showTabelaDeMetas =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial'
+      team === 'Comercial'
       name === 'Valeria Queiroz'
     ;
 
     this.showMetaEmpresa =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial'
+      team === 'Comercial'
       name === 'Valeria Queiroz'
     ;
 
     this.showCalculoComissao =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial'
+      team === 'Comercial'
       name === 'Valeria Queiroz'
     ;
       
