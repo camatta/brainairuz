@@ -155,17 +155,27 @@ export class TabelaDeValores implements OnInit {
   defineMarkup(grupo_markup: number) {
     switch (grupo_markup) {
       case 1:
-        return {maxMarkup: 2, minMarkup: 1.8}
+        return {maxMarkup: 2, minMarkup: 1.6}
       case 2:
-        return {maxMarkup: 2, minMarkup: 2}
+        return {maxMarkup: 2, minMarkup: 1.7}
       case 3:
-        return {maxMarkup: 2.5, minMarkup: 2}
+        return {maxMarkup: 2, minMarkup: 1.8}
       case 4:
-        return {maxMarkup: 3, minMarkup: 2}
+        return {maxMarkup: 2.5, minMarkup: 1.7}
       case 5:
+        return {maxMarkup: 3, minMarkup: 1.7}
+      case 6:
+        return {maxMarkup: 3.5, minMarkup: 1.7}
+      case 7:
+        return {maxMarkup: 2, minMarkup: 2}
+      case 8:
+        return {maxMarkup: 3, minMarkup: 2}
+      case 9:
         return {maxMarkup: 3.5, minMarkup: 2}
-      case 4:
-        return {maxMarkup: 3.8, minMarkup: 2}
+      case 10:
+        return {maxMarkup: 6.15, minMarkup: 3.5}
+      case 11:
+        return {maxMarkup: 1.9, minMarkup: 1.9}
       default:
         return {maxMarkup: null, minMarkup: null};
     }
