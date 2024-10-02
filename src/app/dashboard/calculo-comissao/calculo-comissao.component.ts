@@ -633,27 +633,47 @@ export class CalculoComissaoComponent implements OnInit {
     switch (grupo_markup) {
       case 1:
         this.maxMarkup = 2;
-        this.minMarkup = 1.8;
+        this.minMarkup = 1.6;
         break;
       case 2:
         this.maxMarkup = 2;
-        this.minMarkup = 2;
+        this.minMarkup = 1.7;
         break;
       case 3:
-        this.maxMarkup = 2.5;
-        this.minMarkup = 2;
+        this.maxMarkup = 2;
+        this.minMarkup = 1.8;
         break;
       case 4:
+        this.maxMarkup = 2.5;
+        this.minMarkup = 1.7;
+        break;
+      case 5:
+        this.maxMarkup = 3;
+        this.minMarkup = 1.7;
+        break;
+      case 6:
+        this.maxMarkup = 3.5;
+        this.minMarkup = 1.7;
+        break;
+      case 7:
+        this.maxMarkup = 2;
+        this.minMarkup = 2;
+        break;
+      case 8:
         this.maxMarkup = 3;
         this.minMarkup = 2;
         break;
-      case 5:
+      case 9:
         this.maxMarkup = 3.5;
         this.minMarkup = 2;
         break;
-      case 4:
-        this.maxMarkup = 3.8;
-        this.minMarkup = 2;
+      case 10:
+        this.maxMarkup = 6.15;
+        this.minMarkup = 3.5;
+        break;
+      case 11:
+        this.maxMarkup = 1.9;
+        this.minMarkup = 1.9;
         break;
       default:
         break;
@@ -730,44 +750,72 @@ export class CalculoComissaoComponent implements OnInit {
         }
 
         let dataValida = new Date(Number(data[0]), Number(data[1]) - 1, Number(data[2]));
-        if(this.verificaDataVigente(dataValida) || this.userPermission()) {
+        // if(this.verificaDataVigente(dataValida) || this.userPermission()) {
 
-          if(!this.verificaDataVigente(dataValida)){
-            console.warn(`Comissão fora do prazo de lançamento.`);
+        //   if(!this.verificaDataVigente(dataValida)){
+        //     console.warn(`Comissão fora do prazo de lançamento.`);
+        //   }
+
+        //   this.comissoesService.setComissao(novaVenda).subscribe(
+        //     async (res) => {
+        //       this.showMessageAction('Comissão adicionada com sucesso');
+        //       await this.submitFormFilter();
+        //       this.tabelaVendas._updateChangeSubscription();
+
+        //       this.formNovaVenda = this.formBuilder.group({
+        //         dataVenda: ['', Validators.required],
+        //         status: ['Aguardando Aprovação', Validators.required],
+        //         vendedor: [this.currentUser, Validators.required],
+        //         nomeCliente: ['', Validators.required],
+        //         mixProdutos: ['', Validators.required],
+        //         produtoVendido: [''], // Verificar validação
+        //         multiplicador: [''], // Verificar validação
+        //         markup: [0, Validators.required],
+        //         vendaAvulsa: [0, Validators.required],
+        //         valorBase: ['']
+        //       });
+
+        //       this.closeModalNovaVenda();
+        //     },
+        //     async (error) => {
+        //       console.error(`Erro ao inserir a comissão`);
+        //       console.log(error);
+        //       this.showMessageAction('Erro ao criar a comissão');
+        //     }
+        //   );
+
+        // } else {
+        //   console.error(`Comissão fora do prazo de lançamento.`);
+        //   this.showMessageAction('Comissão fora do prazo de lançamento.');
+        // }
+
+        this.comissoesService.setComissao(novaVenda).subscribe(
+          async (res) => {
+            this.showMessageAction('Comissão adicionada com sucesso');
+            await this.submitFormFilter();
+            this.tabelaVendas._updateChangeSubscription();
+
+            this.formNovaVenda = this.formBuilder.group({
+              dataVenda: ['', Validators.required],
+              status: ['Aguardando Aprovação', Validators.required],
+              vendedor: [this.currentUser, Validators.required],
+              nomeCliente: ['', Validators.required],
+              mixProdutos: ['', Validators.required],
+              produtoVendido: [''], // Verificar validação
+              multiplicador: [''], // Verificar validação
+              markup: [0, Validators.required],
+              vendaAvulsa: [0, Validators.required],
+              valorBase: ['']
+            });
+
+            this.closeModalNovaVenda();
+          },
+          async (error) => {
+            console.error(`Erro ao inserir a comissão`);
+            console.log(error);
+            this.showMessageAction('Erro ao criar a comissão');
           }
-
-          this.comissoesService.setComissao(novaVenda).subscribe(
-            async (res) => {
-              this.showMessageAction('Comissão adicionada com sucesso');
-              await this.submitFormFilter();
-              this.tabelaVendas._updateChangeSubscription();
-
-              this.formNovaVenda = this.formBuilder.group({
-                dataVenda: ['', Validators.required],
-                status: ['Aguardando Aprovação', Validators.required],
-                vendedor: [this.currentUser, Validators.required],
-                nomeCliente: ['', Validators.required],
-                mixProdutos: ['', Validators.required],
-                produtoVendido: [''], // Verificar validação
-                multiplicador: [''], // Verificar validação
-                markup: [0, Validators.required],
-                vendaAvulsa: [0, Validators.required],
-                valorBase: ['']
-              });
-
-              this.closeModalNovaVenda();
-            },
-            async (error) => {
-              console.error(`Erro ao inserir a comissão`);
-              console.log(error);
-              this.showMessageAction('Erro ao criar a comissão');
-            }
-          );
-
-        } else {
-          console.error(`Comissão fora do prazo de lançamento.`);
-          this.showMessageAction('Comissão fora do prazo de lançamento.');
-        }
+        );
       }
   }
 
