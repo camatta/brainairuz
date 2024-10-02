@@ -345,6 +345,7 @@ export class CalculoComissaoComponent implements OnInit {
       this.comissoesService.getComissoes(vendedor, filterMonth, filterYear).subscribe(
         async (data) => {
           this.loadMetas(vendedor, filterYear, filterMonth);
+          console.log(data)
           this.generateTableAndCommissions(data);
         }, (err) => {
           console.error(err);
@@ -361,7 +362,7 @@ export class CalculoComissaoComponent implements OnInit {
           this.metaRealizadaEmpresa += venda.valorVendido;
         });
       }, async (error) => {
-        console.log(error);
+        console.error(error);
       }
     )
   }
@@ -568,7 +569,6 @@ export class CalculoComissaoComponent implements OnInit {
   verificaDataVigente(dataInput: Date): boolean {
     // Validação da data de lançamento da comissão
     const { startDate, endDate } = this.dataService.getCommissionRange(this.date);
-    console.log(dataInput);
     
     if (dataInput >= startDate && dataInput <= endDate) {
       return true;
@@ -716,7 +716,7 @@ export class CalculoComissaoComponent implements OnInit {
           dataVenda: dataVenda,
           mes: this.defineMes(data[1]),
           ano: data[0],
-          vendedor: vendedor,
+          vendedor: this.userPermission() ? vendedor : vendedor.name,
           status: status,
           cliente: cliente,
           mixProdutos: mixProdutos,
@@ -739,34 +739,30 @@ export class CalculoComissaoComponent implements OnInit {
           this.comissoesService.setComissao(novaVenda).subscribe(
             async (res) => {
               this.showMessageAction('Comissão adicionada com sucesso');
-              console.log(novaVenda);
               await this.submitFormFilter();
               this.tabelaVendas._updateChangeSubscription();
+
+              this.formNovaVenda = this.formBuilder.group({
+                dataVenda: ['', Validators.required],
+                status: ['Aguardando Aprovação', Validators.required],
+                vendedor: [this.currentUser, Validators.required],
+                nomeCliente: ['', Validators.required],
+                mixProdutos: ['', Validators.required],
+                produtoVendido: [''], // Verificar validação
+                multiplicador: [''], // Verificar validação
+                markup: [0, Validators.required],
+                vendaAvulsa: [0, Validators.required],
+                valorBase: ['']
+              });
+
               this.closeModalNovaVenda();
             },
             async (error) => {
-              console.log(novaVenda);
-              console.log(this.formNovaVenda.get('valorBase').value);
-              console.error(`Erro ao inserir a comissão: ${error}`);
-              this.showMessageAction('ERRO ao criar a comissão');
-              await this.submitFormFilter();
-              this.tabelaVendas._updateChangeSubscription();
-              this.closeModalNovaVenda();
+              console.error(`Erro ao inserir a comissão`);
+              console.log(error);
+              this.showMessageAction('Erro ao criar a comissão');
             }
           );
-
-          this.formNovaVenda = this.formBuilder.group({
-            dataVenda: ['', Validators.required],
-            status: ['Aguardando Aprovação', Validators.required],
-            vendedor: [this.currentUser, Validators.required],
-            nomeCliente: ['', Validators.required],
-            mixProdutos: ['', Validators.required],
-            produtoVendido: [''], // Verificar validação
-            multiplicador: [''], // Verificar validação
-            markup: [0, Validators.required],
-            vendaAvulsa: [0, Validators.required],
-            valorBase: ['']
-          });
 
         } else {
           console.error(`Comissão fora do prazo de lançamento.`);
@@ -894,7 +890,6 @@ export class CalculoComissaoComponent implements OnInit {
     
     this.comissoesService.updateComissao(id, editarVenda).subscribe(
       async (res) => {
-        console.log(editarVenda);
         this.showMessageAction('Comissão alterada com sucesso');
         await this.submitFormFilter();
         this.tabelaVendas._updateChangeSubscription();
