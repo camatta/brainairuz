@@ -27,10 +27,10 @@
       </div>
     </div>
 
-    <!--Vendas Total-->
+    <!--Vendas Individuais-->
     <div class="col-3">
       <div class="bg-nairuzPrimary">
-        <label for="vendaTotal" class="form-label">Vendas Total</label>
+        <label for="vendaTotal" class="form-label">Vendas Individuais</label>
         <p class="fs-6">{{ vendasTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
       </div>
     </div>
@@ -75,8 +75,8 @@
     <!--Meta Empresa Para Comissão-->
     <div class="col-3">
       <div class="bg-nairuzPrimary">
-        <label for="metaEmpresa" class="form-label">Meta Empresa</label>
-        <p class="fs-6">{{ metaEmpresa * 100 }} %</p>
+        <label for="metaEmpresa" class="form-label">Vendas do time</label>
+        <p class="fs-6">{{ metaRealizadaEmpresa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
       </div>
     </div>
 
