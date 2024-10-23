@@ -12,7 +12,7 @@ hr {
 }
 
 .tc-boreal {
-  color: #61DCAB !important;
+  color: #61dcab !important;
 }
 .tc-branco {
   color: #fff;
@@ -43,7 +43,7 @@ hr {
   font-weight: 800;
   line-height: 48px;
   margin-bottom: 42px;
-  color: #61DCAB;
+  color: #61dcab;
 }
 .capa-conteudo h4 {
   max-width: 358px;
@@ -55,6 +55,7 @@ hr {
   font-size: 14px;
   font-weight: 400;
   line-height: 21px;
+  text-transform: uppercase;
 }
 
 .pdf-conteudo {
@@ -69,7 +70,7 @@ hr {
   background: #fff;
 }
 .pdf-copo.gradient {
-  background: linear-gradient(203.44deg, #034C8C 0.32%, #00175D 102.15%);
+  background: linear-gradient(203.44deg, #034c8c 0.32%, #00175d 102.15%);
 }
 
 #page2 h2 {
@@ -83,7 +84,7 @@ hr {
   font-size: 26px;
   font-weight: 800;
   line-height: 39px;
-  color: #61DCAB;
+  color: #61dcab;
   margin: 0 0 32px;
 }
 #page2 .info {
@@ -102,7 +103,7 @@ hr {
   font-size: 16px;
   font-weight: 800;
   line-height: 24px;
-  color: #61DCAB;
+  color: #61dcab;
   margin: 0 0 16px;
 }
 .contrato-partes p {
@@ -152,7 +153,7 @@ hr {
   font-size: 10px;
   font-weight: 400;
   line-height: 15px;
-  color: #61DCAB;
+  color: #61dcab;
   font-style: normal;
 }
 
@@ -194,11 +195,11 @@ hr {
   font-size: 14px;
   font-weight: 800;
   line-height: 32px;
-  color: #00175D;
+  color: #00175d;
   min-width: 32px;
   height: 32px;
   text-align: center;
-  background: #61DCAB;
+  background: #61dcab;
   border-radius: 0 6px;
   padding: 0;
 }
@@ -270,13 +271,13 @@ hr {
   font-weight: 400;
   line-height: 24px;
   margin: 0;
-  color: #1C1C1C;
+  color: #1c1c1c;
 }
 .anexos-conteudo h4 {
   font-size: 14px;
   font-weight: 400;
   line-height: 21px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   margin-bottom: 24px;
 }
 
@@ -291,8 +292,8 @@ hr {
   min-width: 48px;
   height: 48px;
   padding: 0;
-  background: #61DCAB;
-  color: #00175D;
+  background: #61dcab;
+  color: #00175d;
   text-align: center;
   font-size: 18px;
   font-weight: 800;
@@ -304,13 +305,13 @@ hr {
   font-weight: 700;
   line-height: 21px;
   margin-bottom: 2px;
-  color: #1C1C1C;
+  color: #1c1c1c;
 }
 .anexo-desc {
   font-size: 9px;
   font-weight: 400;
   line-height: 13.5px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   margin: 0;
 }
 
@@ -323,7 +324,7 @@ hr {
   gap: 30px;
 }
 .info-box {
-  border: 1px solid #1C1C1C;
+  border: 1px solid #1c1c1c;
   border-radius: 0 8px;
   padding: 16px 20px;
   width: 225px;
@@ -335,14 +336,14 @@ hr {
   font-size: 16px;
   font-weight: 800;
   line-height: 24px;
-  color: #61DCAB;
+  color: #61dcab;
   margin-bottom: 16px;
 }
 .info-box p {
   font-size: 10px;
   font-weight: 400;
   line-height: 15px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   margin: 0;
 }
 .info-box a {
@@ -352,8 +353,8 @@ hr {
   font-size: 9px;
   font-weight: 400;
   line-height: 13.5px;
-  background: #F4F4F4;
-  color: #1C1C1C;
+  background: #f4f4f4;
+  color: #1c1c1c;
   padding: 8px;
   text-decoration: none;
   margin-top: 16px;
@@ -363,7 +364,7 @@ hr {
 }
 
 .escopo-item {
-  border: 1px solid #1C1C1C;
+  border: 1px solid #1c1c1c;
   border-radius: 0 8px;
   padding: 16px 20px;
 }
@@ -376,7 +377,7 @@ hr {
   gap: 12px;
   font-size: 16px;
   line-height: 20px;
-  color: #61DCAB;
+  color: #61dcab;
   margin-bottom: 16px;
 }
 .escopo-item h5 strong {
@@ -386,7 +387,7 @@ hr {
   font-size: 9px;
   font-weight: 400;
   line-height: 13.5px;
-  color: #1C1C1C;
+  color: #1c1c1c;
 }
 .escopo-mark {
   display: flex;
@@ -394,20 +395,20 @@ hr {
   line-height: 13.5px;
   gap: 8px;
   margin: 0;
-  color: #1C1C1C;
+  color: #1c1c1c;
 }
 .escopo-api .escopo-mark + .escopo-mark {
   margin-top: 16px;
 }
 .escopo-mark mark {
   padding: 0;
-  background: #61DCAB;
+  background: #61dcab;
   min-width: 18px;
   height: 18px;
   text-align: center;
   line-height: 18px;
   font-weight: 700;
-  color: #00175D;
+  color: #00175d;
 }
 
 .escopo-mark-list {
@@ -420,7 +421,7 @@ hr {
 }
 
 .table-escopo thead {
-  background: #00175D;
+  background: #00175d;
   color: #fff;
   font-size: 10px;
   font-weight: 800;
@@ -430,22 +431,22 @@ hr {
   padding: 8px 16px;
 }
 .table-escopo tbody {
-  border: 0.4px solid #C8C8C8;
+  border: 0.4px solid #c8c8c8;
   font-size: 9px;
   font-weight: 400;
   line-height: 13.5px;
 }
 .table-escopo tbody td {
   padding: 8px 12px;
-  border: 0.4px solid #C8C8C8;
+  border: 0.4px solid #c8c8c8;
 }
 th.marco {
   width: 170px;
-  border-right: 0.4px solid #FFFFFF;
+  border-right: 0.4px solid #ffffff;
 }
 
 .escopo-note {
-  background: #F3F3F3;
+  background: #f3f3f3;
   padding: 12px 16px;
   font-size: 9px;
   font-weight: 400;

@@ -1,19 +1,19 @@
 export type Contract = {
-  _id?: string,
-  contratoId: string,
-  contratoAutor: string,
-  contratoStatus: string,
-  contratoEmpresa: string,
-  contratoTime: string,
-  contratoCriadoEm: string,
-  contratoAtualizadoEm?: string | null,
+  _id?: string;
+  contratoId: string;
+  contratoAutor: string;
+  contratoStatus: string;
+  contratoEmpresa: string;
+  contratoTime: string;
+  contratoCriadoEm: string;
+  contratoAtualizadoEm?: string | null;
   nzGroup: {
     nzTime: string;
     nzTipoProjeto: string;
     nzProjetoPlataforma?: string;
     nzProjetoHoras?: string;
     nzServico: string;
-  },
+  };
   extEmpresaGroup: {
     extEmpresaCnpj: number;
     extEmpresaNome: string;
@@ -25,7 +25,7 @@ export type Contract = {
     extEmpresaEstado: string;
     extEmpresaCpfRepLegal: number;
     extEmpresaNomeRepLegal: string;
-  },
+  };
   projetoGroup: {
     projetoPrazo: number;
     projetoValor: number;
@@ -35,5 +35,7 @@ export type Contract = {
     projetoData: string;
     projetoCarencia: number;
     projetoInformacoes: string;
-  }
-}
+    projetoMarkupValor: number;
+    projetoMarkupGrupo: number;
+  };
+};

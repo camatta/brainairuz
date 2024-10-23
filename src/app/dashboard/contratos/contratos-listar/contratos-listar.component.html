@@ -2,7 +2,14 @@
   <div class="contratos-listar-header">
     <h1>Contratos Criados</h1>
     <div class="contratos-search" *ngIf="CONTRATOS.length && !isFetching">
-      <input type="text" name="contrato" id="contrato" placeholder="Insira o nome do cliente" [(ngModel)]="searchClient" [value]="searchClient">
+      <input
+        type="text"
+        name="contrato"
+        id="contrato"
+        placeholder="Insira o nome do cliente"
+        [(ngModel)]="searchClient"
+        [value]="searchClient"
+      />
       <i class="fa-solid fa-magnifying-glass"></i>
     </div>
   </div>
@@ -10,13 +17,15 @@
   <div class="loader" *ngIf="isFetching">
     <app-spinner></app-spinner>
   </div>
-  
+
   <div class="toolbar" *ngIf="CONTRATOS.length && !isFetching">
     <div class="filter author">
       <label for="author">Responsável</label>
       <select name="author" id="author" [(ngModel)]="searchAuthor">
         <option value="">Selecione</option>
-        <option *ngFor="let author of AUTHORS" [value]="author.name">{{author.name}}</option>
+        <option *ngFor="let author of AUTHORS" [value]="author.name">
+          {{ author.name }}
+        </option>
       </select>
     </div>
     <div class="filter status">
@@ -33,48 +42,133 @@
 
   <div class="contratos-body">
     <div class="contratos-list" *ngIf="CONTRATOS.length">
-      <div class="contrato-card" *ngFor="let contrato of CONTRATOS | advancedFilter:searchClient:searchAuthor:searchStatus">
+      <div
+        class="contrato-card"
+        *ngFor="
+          let contrato of CONTRATOS
+            | advancedFilter : searchClient : searchAuthor : searchStatus
+        "
+      >
         <div class="contrato-card-header">
           <div class="contrato-name-type">
-            <h2 class="contrato-name">{{ contrato.extEmpresaGroup.extEmpresaNome }}</h2>
+            <h2 class="contrato-name">
+              {{ contrato.extEmpresaGroup.extEmpresaNome }}
+            </h2>
             <div class="contrato-type">
               <span class="label type">{{ contrato.nzGroup.nzServico }}</span>
-              <span class="label tech">{{ contrato.nzGroup.nzProjetoPlataforma }}</span>
+              <span class="label tech">{{
+                contrato.nzGroup.nzProjetoPlataforma
+                  ? contrato.nzGroup.nzProjetoPlataforma
+                  : "Recorrência"
+              }}</span>
             </div>
           </div>
 
           <div class="contrato-actions">
-            <button type="button" title="Ver" class="contrato-action" (click)="onViewContract(contrato)"><i class="fa-solid fa-eye"></i></button>
-            <button type="button" title="Editar" class="contrato-action" *ngIf="contrato.contratoStatus === 'Minuta contratual'" (click)="confirmEdit(contrato)"><i class="fa-solid fa-pen"></i></button>
-            <button type="button" title="Deletar" class="contrato-action" *ngIf="contrato.contratoStatus !== 'Concluído'" (click)="confirmDelete(contrato._id, contrato.extEmpresaGroup.extEmpresaNome)"><i class="fa-solid fa-trash-can"></i></button>
+            <button
+              type="button"
+              title="Ver"
+              class="contrato-action"
+              (click)="onViewContract(contrato)"
+            >
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <button
+              type="button"
+              title="Editar"
+              class="contrato-action"
+              *ngIf="contrato.contratoStatus === 'Minuta contratual'"
+              (click)="confirmEdit(contrato)"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button
+              type="button"
+              title="Deletar"
+              class="contrato-action"
+              *ngIf="contrato.contratoStatus !== 'Concluído'"
+              (click)="
+                confirmDelete(
+                  contrato._id,
+                  contrato.extEmpresaGroup.extEmpresaNome
+                )
+              "
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
           </div>
         </div>
 
         <div class="contrato-card-body">
-          <p class="contrato-value">{{ contrato.projetoGroup.projetoValor | currency:'BRL' }}</p>
-          <select name="contrato-status" id="contrato-status" (change)="confirmStatusChange(contrato._id, $event, contrato.contratoStatus)">
-            <option value="Minuta contratual" [selected]="contrato.contratoStatus === 'Minuta contratual'">Minuta contratual</option>
-            <option value="Aguardando assinatura" [selected]="contrato.contratoStatus === 'Aguardando assinatura'">Aguardando assinatura</option>
-            <option value="Concluído" [selected]="contrato.contratoStatus === 'Concluído'">Concluído</option>
-            <option value="Cancelado" [selected]="contrato.contratoStatus === 'Cancelado'">Cancelado</option>
+          <p class="contrato-value">
+            {{ contrato.projetoGroup.projetoValor | currency : "BRL" }}
+          </p>
+          <select
+            name="contrato-status"
+            id="contrato-status"
+            (change)="
+              confirmStatusChange(contrato._id, $event, contrato.contratoStatus)
+            "
+          >
+            <option
+              value="Minuta contratual"
+              [selected]="contrato.contratoStatus === 'Minuta contratual'"
+            >
+              Minuta contratual
+            </option>
+            <option
+              value="Aguardando assinatura"
+              [selected]="contrato.contratoStatus === 'Aguardando assinatura'"
+            >
+              Aguardando assinatura
+            </option>
+            <option
+              value="Concluído"
+              [selected]="contrato.contratoStatus === 'Concluído'"
+            >
+              Concluído
+            </option>
+            <option
+              value="Cancelado"
+              [selected]="contrato.contratoStatus === 'Cancelado'"
+            >
+              Cancelado
+            </option>
           </select>
         </div>
 
         <div class="contrato-card-footer">
-          <p class="contrato-author"><i class="fa-solid fa-user"></i><span>{{ contrato.contratoAutor }}</span></p>
-          <time>{{ contrato.projetoGroup.projetoData | date:'dd/MM/yyyy' }}</time>
+          <p class="contrato-author">
+            <i class="fa-solid fa-user"></i
+            ><span>{{ contrato.contratoAutor }}</span>
+          </p>
+          <time>{{
+            contrato.projetoGroup.projetoData | date : "dd/MM/yyyy"
+          }}</time>
         </div>
       </div>
     </div>
 
     <div *ngIf="!CONTRATOS.length && !isFetching">
       <p>Nenhum contrato criado até o momento.</p>
-      <p><a routerLink="/dashboard/contratos/criar">Clique aqui para criar um contrato</a></p>
+      <p>
+        <a routerLink="/dashboard/contratos/criar"
+          >Clique aqui para criar um contrato</a
+        >
+      </p>
     </div>
   </div>
 
-  <app-contrato-progresso *ngIf="isLoadingPdf" [isLoadingContract]="isLoadingPdf" [percentage]="progress"></app-contrato-progresso>
-  <app-contrato-modal-pdf *ngIf="isContractReady" [pdfUrl]="pdfUrl" [isContractReadyToView]="isContractReady"></app-contrato-modal-pdf>
+  <app-contrato-progresso
+    *ngIf="isLoadingPdf"
+    [isLoadingContract]="isLoadingPdf"
+    [percentage]="progress"
+  ></app-contrato-progresso>
+  <app-contrato-modal-pdf
+    *ngIf="isContractReady"
+    [pdfUrl]="pdfUrl"
+    [isContractReadyToView]="isContractReady"
+  ></app-contrato-modal-pdf>
 
   <div class="contrato-arquivo" *ngIf="!!contractToView">
     <app-contrato-arquivo [contract]="contractToView"></app-contrato-arquivo>

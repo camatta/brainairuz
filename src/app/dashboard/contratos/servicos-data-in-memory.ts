@@ -4,41 +4,41 @@ export const TEAMS = {
   list: [
     {
       id: '',
-      name: 'Selecione'
+      name: 'Selecione',
     },
     {
       id: 'tech',
-      name: 'Tecnologia'
+      name: 'Tecnologia',
     },
     {
       id: 'mkt',
-      name: 'Marketing'
-    }
-  ]
-}
+      name: 'Marketing',
+    },
+  ],
+};
 
 export const PROJECT_TYPES = {
   id: 'project_types',
-  name: 'Tipo de Site',
+  name: 'Tipo de Projeto',
   list: [
     {
       id: '',
-      name: 'Selecione'
+      name: 'Selecione',
     },
-    {
+    /* {
       id: 'ecommerce',
-      name: 'E-commerce'
+      name: 'E-commerce',
     },
     {
       id: 'institucional',
-      name: 'Institucional'
+      name: 'Institucional',
     },
     {
       id: 'outros',
-      name: 'Outros (CRO, Help A, Marca ou Sustent.)'
-    }
-  ]
-}
+      name: 'Outros (CRO, Help A, Marca ou Sustent.)',
+    }, */
+  ],
+};
 
 export const DEV_COMMERCE_OPTIONS = {
   id: 'service_options',
@@ -46,115 +46,69 @@ export const DEV_COMMERCE_OPTIONS = {
   list: [
     {
       id: '',
-      name: 'Selecione'
+      name: 'Selecione',
     },
-    {
+    /* {
       id: 'biz',
-      name: 'BizCommerce'
+      name: 'BizCommerce',
     },
     {
       id: 'linx',
-      name: 'Linx'
+      name: 'Linx',
     },
     {
       id: 'mageshop',
-      name: 'MageShop'
+      name: 'MageShop',
     },
     {
       id: 'nexxas',
-      name: "Nexxas"
+      name: 'Nexxas',
     },
     {
       id: 'vtex',
-      name: 'VTEX'
+      name: 'VTEX',
     },
     {
       id: 'wake',
-      name: 'Wake'
+      name: 'Wake',
     },
     {
       id: 'woocommerce',
-      name: 'WooCommerce'
+      name: 'WooCommerce',
     },
     {
       id: 'outros',
-      name: 'Outros'
-    }
-  ]
-}
+      name: 'Outros',
+    }, */
+  ],
+};
 
-export const DEV_COMMERCE_SERVICES = {
+export const DEV_SERVICES_LIST = {
   id: 'services',
   name: 'Serviço',
   list: [
     {
       id: '',
-      name: 'Selecione'
+      name: 'Selecione',
     },
-    {
+    /* {
       id: 'migracao',
-      name: 'Migração'
+      name: 'Migração',
     },
     {
       id: 'layout_personalizado',
-      name: 'Personalizado'
+      name: 'Personalizado',
     },
     {
       id: 'tema',
-      name: 'Tema'
+      name: 'Tema',
     },
     {
       id: 'tema_customizado',
-      name: 'Tema Customizado'
-    }
-  ]
-}
-
-export const DEV_INST_OPTIONS = {
-  id: 'service_options',
-  name: 'Plataforma',
-  list: [
-    {
-      id: '',
-      name: 'Selecione'
-    },
-    {
-      id: 'wordpress',
-      name: 'WordPress'
-    },
-    {
-      id: 'outros',
-      name: 'Outros'
-    },
-  ]
-}
-
-export const DEV_INST_SERVICES = {
-  id: 'services',
-  name: 'Serviço',
-  list: [
-    {
-      id: '',
-      name: 'Selecione'
-    },
-    {
-      id: 'blog',
-      name: 'Blog'
-    },
-    {
-      id: 'multipage',
-      name: 'Multipage'
-    },
-    {
-      id: 'onepage',
-      name: 'One Page'
-    },
-    {
-      id: 'outros',
-      name: 'Outros'
-    },
-  ]
-}
+      name: 'Tema Customizado',
+    }, */
+  ],
+};
 
 export const HELP_SERVICES = {
   id: 'services',
@@ -162,31 +116,31 @@ export const HELP_SERVICES = {
   list: [
     {
       id: '',
-      name: 'Selecione'
+      name: 'Selecione',
     },
-    {
+    /* {
       id: 'sustentacao',
-      name: 'Sustentação'
+      name: 'Sustentação',
     },
     {
       id: 'help_a',
-      name: 'Help A'
+      name: 'Help A',
     },
     {
       id: 'marca',
-      name: 'Marca'
+      name: 'Marca',
     },
     {
       id: 'cro',
-      name: 'CRO'
+      name: 'CRO',
     },
     {
       id: 'api',
-      name: 'API de Integração'
+      name: 'API de Integração',
     },
     {
       id: 'outros',
-      name: 'Outros'
-    }
-  ]
-}
+      name: 'Outros',
+    }, */
+  ],
+};

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const ContractSchema = new mongoose.Schema({
   contratoId: { type: String, require: true, unique: true },
@@ -13,7 +13,7 @@ const ContractSchema = new mongoose.Schema({
     nzTipoProjeto: { type: String, require: true },
     nzProjetoPlataforma: { type: String },
     nzProjetoHoras: { type: String },
-    nzServico: { type: String, require: true }
+    nzServico: { type: String, require: true },
   },
   extEmpresaGroup: {
     extEmpresaCnpj: { type: String, require: true },
@@ -35,10 +35,12 @@ const ContractSchema = new mongoose.Schema({
     projetoMulta: { type: String, require: true },
     projetoData: { type: String, require: true },
     projetoCarencia: { type: String, require: true },
-    projetoInformacoes: { type: String, require: true }
-  }
+    projetoInformacoes: { type: String, require: true },
+    projetoMarkupValor: { type: String, require: true },
+    projetoMarkupGrupo: { type: String, require: true },
+  },
 });
 
-const Contracts = mongoose.model('Contracts', ContractSchema);
+const Contracts = mongoose.model("Contracts", ContractSchema);
 
 module.exports = Contracts;

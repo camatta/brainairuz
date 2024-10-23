@@ -29,15 +29,15 @@ import { type Author } from '../author.model';
     ContratoArquivoComponent,
     ContratoProgressoComponent,
     ContratoModalpdfComponent,
-    SpinnerComponent
+    SpinnerComponent,
   ],
-  standalone: true
+  standalone: true,
 })
 export class ContratosListarComponent {
   isFetching: boolean = true;
   CONTRATOS: Contract[] = [];
   AUTHORS: Author[] = [];
-  
+
   progress: number = 0;
   private progressSubscription: Subscription | undefined;
   pdfUrl: string | null = null;
@@ -45,9 +45,9 @@ export class ContratosListarComponent {
   isContractReady: boolean;
   contractToView: Contract;
 
-  searchClient:string = '';
-  searchAuthor:string = '';
-  searchStatus:string= '';
+  searchClient: string = '';
+  searchAuthor: string = '';
+  searchStatus: string = '';
 
   constructor(
     private contractsService: ContractsService,
@@ -62,27 +62,29 @@ export class ContratosListarComponent {
         this.CONTRATOS = contracts;
         this.isFetching = false;
       },
-      error: err => {
+      error: (err) => {
         alert(`Algo deu errado ao carregar os contratos!\n${err}`);
         this.isFetching = false;
-      }
+      },
     });
 
-    this.progressSubscription = this.pdfGeneratorService.progress$.subscribe(progress => {
-      this.progress = progress;
-    });
+    this.progressSubscription = this.pdfGeneratorService.progress$.subscribe(
+      (progress) => {
+        this.progress = progress;
+      }
+    );
 
     this.contractsService.getAuthors().subscribe({
       next: ({ authors }) => {
-        if(authors) {
-          authors.map(author => {
+        if (authors) {
+          authors.map((author) => {
             this.AUTHORS.push(author);
           });
         }
       },
-      error: err => {
+      error: (err) => {
         alert(`Algo deu errado ao carregar usuários!\n${err}`);
-      }
+      },
     });
   }
 
@@ -104,16 +106,16 @@ export class ContratosListarComponent {
 
     // Send the delete request to the server
     this.contractsService.deleteContract(id).subscribe({
-      next: response => {
+      next: (response) => {
         //console.log('Item deleted successfully', response);
       },
-      error: error => {
+      error: (error) => {
         // Rollback the UI change
         this.CONTRATOS.splice(contractIndex, 0, contractToDelete);
 
         // Optionally, notify the user
         alert(`Algo deu errado ao excluir o contrato!.\n${error}`);
-      }
+      },
     });
   }
 
@@ -128,30 +130,31 @@ export class ContratosListarComponent {
     // Store the item for rollback
     const contractOldStatus = this.CONTRATOS[contractIndex].contratoStatus;
     this.CONTRATOS[contractIndex].contratoStatus = newStatus;
-    
+
     this.contractsService.editContractStatus(id, newStatus).subscribe({
-      next: response => {
+      next: (response) => {
         //console.log(response);
       },
-      error: error => {
+      error: (error) => {
         // Rollback the UI change
         this.CONTRATOS[contractIndex].contratoStatus = contractOldStatus;
-         // Optionally, notify the user
-         alert(`Algo deu errado ao atualizar o status do contrato!.\n${error}`);
-      }
+        // Optionally, notify the user
+        alert(`Algo deu errado ao atualizar o status do contrato!.\n${error}`);
+      },
     });
   }
 
   returnPreviousStatus(id: string) {
     const contractIndex = this.CONTRATOS.findIndex(({ _id }) => _id === id);
-    
-    this.contractsService.getContractById( id ).subscribe({
+
+    this.contractsService.getContractById(id).subscribe({
       next: ({ contract }) => {
         this.CONTRATOS[contractIndex] = contract;
+        this.CONTRATOS = [...this.CONTRATOS]; // Cria uma nova referência para forçar a atualização no Angular
       },
       error: (err) => {
         alert(`Algo deu errado ao desfazer alteração!\n${JSON.stringify(err)}`);
-      }
+      },
     });
   }
 
@@ -160,7 +163,7 @@ export class ContratosListarComponent {
       `Deseja prosseguir com a edição do contrato “${contrato.extEmpresaGroup.extEmpresaNome}”?`,
       '',
       () => this.onEdit(contrato._id)
-    )
+    );
   }
 
   confirmStatusChange(id: string, event: Event, actualStatus: string) {
@@ -172,7 +175,7 @@ export class ContratosListarComponent {
       `Alteração realizada com sucesso!`,
       () => this.onChangeContractStatus(id, newStatus),
       () => this.returnPreviousStatus(id)
-    )
+    );
   }
 
   confirmDelete(id: string, clientName: string) {
@@ -180,7 +183,7 @@ export class ContratosListarComponent {
       `Prosseguir para a exclusão do contrato “${clientName}”?`,
       'Exclusão realizada com sucesso!',
       () => this.onDelete(id)
-    )
+    );
   }
 
   async onViewContract(contract: Contract) {
@@ -189,21 +192,161 @@ export class ContratosListarComponent {
     this.isLoadingPdf = true; // Ativar estado de carregamento,
     this.contractToView = contract;
 
-    setTimeout( async () => {
+    setTimeout(async () => {
       try {
-        const contentIds = [
-          'page1', 'page2', 'page3', 'page4',
-          'page5', 'page6', 'page7', 'page8',
-          'page9', 'page10', 'page11', 'page12',
-          'page13', 'page14', 'page15', 'page16',
-          'page17', 'page18', 'page19', 'page20',
-          'page21', 'page22', 'page23', 'page24'
+        const contractDefaultPagesIds = [
+          'page1',
+          'page2',
+          'page3',
+          'page4',
+          'page5',
+          'page6',
+          'page7',
+          'page8',
+          'page9',
+          'page10',
+          'page11',
+          'page12',
+          'page13',
+          'page14',
         ];
-  
-        const pdfBlob = await this.pdfGeneratorService.generatePdf(contentIds);
+        let contractAddPagesIds = [];
+
+        const nzTipoProjeto = this.contractToView.nzGroup.nzTipoProjeto;
+        const nzServico = this.contractToView.nzGroup.nzServico;
+
+        if (
+          nzTipoProjeto === 'Projeto' &&
+          nzServico.toLowerCase().includes('personalizado')
+        ) {
+          contractAddPagesIds = [
+            'page16',
+            'page17',
+            'page18',
+            'page19',
+            'page20',
+            'page21',
+            'page22',
+            'page23',
+            'page24',
+          ];
+        }
+
+        if (
+          nzTipoProjeto === 'Recorrência' &&
+          nzServico.toLowerCase().includes('help a')
+        ) {
+          contractAddPagesIds = ['page25'];
+        }
+
+        if (
+          nzTipoProjeto === 'Projeto' &&
+          nzServico.toLowerCase().includes('api')
+        ) {
+          contractAddPagesIds = [
+            'page26',
+            'page27',
+            'page28',
+            'page29',
+            'page30',
+            'page31',
+            'page32',
+            'page33',
+            'page34',
+            'page35',
+            'page36',
+            'page37',
+          ];
+        }
+
+        if (
+          nzTipoProjeto === 'Projeto' &&
+          nzServico.toLowerCase().includes('blog')
+        ) {
+          contractAddPagesIds = [
+            'page38',
+            'page40',
+            'page41',
+            'page42',
+            'page43',
+          ];
+        }
+
+        if (
+          nzTipoProjeto === 'Projeto' &&
+          nzServico.toLowerCase().includes('marca')
+        ) {
+          contractAddPagesIds = ['page44', 'page45', 'page46'];
+        }
+
+        if (
+          nzTipoProjeto === 'Projeto' &&
+          nzServico.toLowerCase().includes('onepage')
+        ) {
+          contractAddPagesIds = [
+            'page51',
+            'page52',
+            'page53',
+            'page54',
+            'page55',
+            'page56',
+          ];
+        }
+
+        if (
+          nzTipoProjeto === 'Recorrência' &&
+          nzServico.toLowerCase().includes('horas')
+        ) {
+          contractAddPagesIds = [
+            'page57',
+            'page58',
+            'page59',
+            'page60',
+            'page61',
+          ];
+        }
+
+        if (
+          nzTipoProjeto === 'Projeto' &&
+          nzServico.toLowerCase().includes('tema')
+        ) {
+          contractAddPagesIds = [
+            'page62',
+            'page63',
+            'page64',
+            'page65',
+            'page66',
+            'page67',
+            'page68',
+            'page69',
+            'page70',
+          ];
+        }
+
+        if (
+          nzTipoProjeto === 'Projeto' &&
+          nzServico.toLowerCase().includes('website')
+        ) {
+          contractAddPagesIds = [
+            'page71',
+            'page72',
+            'page73',
+            'page74',
+            'page75',
+            'page76',
+          ];
+        }
+        contractAddPagesIds.push('page15'); //página Demais informações, inserida ao final de todos contratos
+
+        const contractPagesIds =
+          contractDefaultPagesIds.concat(contractAddPagesIds);
+
+        const pdfBlob = await this.pdfGeneratorService.generatePdf(
+          contractPagesIds
+        );
         if (pdfBlob) {
           this.pdfUrl = URL.createObjectURL(pdfBlob);
-          this.isContractReady = true
+          this.isContractReady = true;
         }
       } catch (error) {
         console.error('Erro ao gerar PDF:', error);

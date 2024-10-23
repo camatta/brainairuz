@@ -1,5 +1,5 @@
 h1 {
-  color: #00175D;
+  color: #00175d;
   margin: 0 !important;
 }
 
@@ -16,10 +16,10 @@ h1 {
   gap: 27px;
   padding: 8px 16px;
   border-radius: 76px;
-  color: #3F3F3F;
-  box-shadow: inset 0px 0px 0px 0.5px rgba(162,162,162,1);
-  -webkit-box-shadow: inset 0px 0px 0px 0.5px rgba(162,162,162,1);
-  -moz-box-shadow: inset 0px 0px 0px 0.5px rgba(162,162,162,1);
+  color: #3f3f3f;
+  box-shadow: inset 0px 0px 0px 0.5px rgba(162, 162, 162, 1);
+  -webkit-box-shadow: inset 0px 0px 0px 0.5px rgba(162, 162, 162, 1);
+  -moz-box-shadow: inset 0px 0px 0px 0.5px rgba(162, 162, 162, 1);
 }
 .contratos-search input {
   border: 0;
@@ -45,9 +45,9 @@ h1 {
   color: #666666;
   margin-left: 8px;
   border: 0;
-  box-shadow: inset 0 0 0 0.7px #ECECEC;
-  -webkit-box-shadow: inset 0 0 0 0.7px #ECECEC;
-  -moz-box-shadow: inset 0 0 0 0.7px #ECECEC;
+  box-shadow: inset 0 0 0 0.7px #ececec;
+  -webkit-box-shadow: inset 0 0 0 0.7px #ececec;
+  -moz-box-shadow: inset 0 0 0 0.7px #ececec;
   padding: 6px 28px 6px 12px;
   border-radius: 101px;
   min-width: 149px;
@@ -68,9 +68,10 @@ h1 {
   grid-row-gap: 24px;
 }
 .contrato-card {
+  background: #fff;
   box-shadow: 0px 2px 4px 0px #00000026;
-  -webkit-box-shadow: inset 0 0 0 0.7px #ECECEC;
-  -moz-box-shadow: inset 0 0 0 0.7px #ECECEC;
+  -webkit-box-shadow: inset 0 0 0 0.7px #ececec;
+  -moz-box-shadow: inset 0 0 0 0.7px #ececec;
   padding: 16px;
   border-radius: 6px;
 }
@@ -98,11 +99,22 @@ h1 {
   line-height: 18px;
   padding: 2px 16px;
   border-radius: 92px;
-  background: #61DCAB;
-  color: #00175D;
+  background: #61dcab;
+  color: #00175d;
+  font-size: 12px;
+  line-height: 18px;
+  padding: 2px 16px;
+  border-radius: 92px;
+  background: #61dcab;
+  color: #00175d;
+  max-width: 115px;
+  height: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .contrato-type .label.tech {
-  background: #ECECEC;
+  background: #ececec;
   color: #000000;
 }
 .contrato-action {
@@ -111,7 +123,7 @@ h1 {
   padding: 0;
   width: 32px;
   height: 32px;
-  color: #A2A2A2;
+  color: #a2a2a2;
 }
 .contrato-action i {
   line-height: 32px;
@@ -132,9 +144,9 @@ h1 {
 #contrato-status {
   border: 0;
   outline: none;
-  box-shadow: inset 0 0 0 1px #ECECEC;
-  -webkit-box-shadow: inset 0 0 0 0.7px #ECECEC;
-  -moz-box-shadow: inset 0 0 0 0.7px #ECECEC;
+  box-shadow: inset 0 0 0 1px #ececec;
+  -webkit-box-shadow: inset 0 0 0 0.7px #ececec;
+  -moz-box-shadow: inset 0 0 0 0.7px #ececec;
   border-radius: 58px;
   min-width: 184px;
   font-size: 12px;
@@ -164,16 +176,16 @@ h1 {
   color: #000000;
 }
 .contrato-author i {
-  color: #61DCAB;
+  color: #61dcab;
   border-radius: 100%;
   overflow: hidden;
   width: 15px;
   height: 15px;
   text-align: center;
   line-height: 18px;
-  box-shadow: inset 0 0 0 1px #61DCAB;
-  -webkit-box-shadow: inset 0 0 0 1px #61DCAB;
-  -moz-box-shadow: inset 0 0 0 1px #61DCAB;
+  box-shadow: inset 0 0 0 1px #61dcab;
+  -webkit-box-shadow: inset 0 0 0 1px #61dcab;
+  -moz-box-shadow: inset 0 0 0 1px #61dcab;
 }
 .contrato-card-footer time {
   color: #666666;
