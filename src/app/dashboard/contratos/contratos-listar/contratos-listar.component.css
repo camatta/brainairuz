@@ -88,6 +88,11 @@ h1 {
   font-weight: 700;
   line-height: 27px;
   margin-bottom: 6px;
+  max-width: 300px;
+  height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .contrato-type {
   display: flex;
