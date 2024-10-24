@@ -11,7 +11,7 @@ export type Contract = {
     nzTime: string;
     nzTipoProjeto: string;
     nzProjetoPlataforma?: string;
-    nzProjetoHoras?: string;
+    nzProjetoHoras?: number;
     nzServico: string;
   };
   extEmpresaGroup: {

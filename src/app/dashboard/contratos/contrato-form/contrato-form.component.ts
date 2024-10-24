@@ -638,10 +638,7 @@ export class ContratoFormComponent {
       ];
     }
 
-    if (
-      nzTipoProjeto === 'Recorrência' &&
-      nzServico.toLowerCase().includes('help a')
-    ) {
+    if (nzServico.toLowerCase().includes('help a')) {
       contractAddPagesIds = ['page25'];
     }
 

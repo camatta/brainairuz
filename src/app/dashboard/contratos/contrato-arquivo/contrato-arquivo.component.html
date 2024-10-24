@@ -260,7 +260,11 @@
           <div class="clausula-let">
             <h3 class="tc-boreal">a.</h3>
             <p class="tc-branco">
-              Layout:
+              {{
+                contract?.nzGroup?.nzServico
+                  ? contract?.nzGroup?.nzServico
+                  : "Layout"
+              }}:
               <strong>{{
                 contract?.projetoGroup?.projetoValor
                   ? (contract?.projetoGroup?.projetoValor | currency : "BRL")
@@ -1837,8 +1841,20 @@
                   <p class="anexo-desc">
                     <strong>1.4.</strong> A contratante enviou as suas
                     solicitações e o time da contratada fez a análise prévia,
-                    estimando XX horas que serão gastas para execução dos
-                    serviços, considerando o valor hora de R$XX,00;
+                    estimando
+                    {{
+                      contract?.nzGroup?.nzProjetoHoras
+                        ? contract?.nzGroup?.nzProjetoHoras
+                        : "XX"
+                    }}
+                    horas que serão gastas para execução dos serviços,
+                    considerando o valor hora de
+                    {{
+                      contract?.nzGroup?.nzProjetoHoras
+                        ? (contract.projetoGroup.projetoValor /
+                            contract.nzGroup.nzProjetoHoras | currency : "BRL")
+                        : "R$XX,00"
+                    }};
                   </p>
                   <p class="anexo-desc">
                     **Importante: Por se tratar de horas estimadas, após a
@@ -4209,9 +4225,14 @@
                 </h5>
                 <p class="escopo-mark">
                   <mark>a.</mark>
-                  A presente contratação refere-se ao plano de 15 horas mensais,
-                  não cumulativas para execução das atividades descritas no item
-                  1 deste anexo;
+                  A presente contratação refere-se ao plano de
+                  {{
+                    contract?.nzGroup?.nzProjetoHoras
+                      ? contract?.nzGroup?.nzProjetoHoras
+                      : "15"
+                  }}
+                  horas mensais, não cumulativas para execução das atividades
+                  descritas no item 1 deste anexo;
                 </p>
                 <p class="escopo-note mt-16">
                   <strong>Não cumulativas:</strong> Não serão contabilizadas as
