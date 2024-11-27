@@ -347,8 +347,9 @@
             </mat-form-field>
           </div>
       
-          <div *ngIf="formNovaVenda.get('mixProdutos').value !== 'Marketing'" class="col-12 mb-3">
-            <label for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
+          <div class="col-12 mb-3">
+            <label *ngIf="formNovaVenda.get('mixProdutos').value !== 'Marketing'" for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
+            <label *ngIf="formNovaVenda.get('mixProdutos').value === 'Marketing'" class="form-label">Número de meses:</label>
             <input
               type="number"
               formControlName="multiplicador"
@@ -359,14 +360,6 @@
               required
             />
           </div>
-
-          <div *ngIf="formNovaVenda.get('mixProdutos').value === 'Marketing'" class="col-12 mb-3">
-            <label class="form-label">MRR:</label>
-            <select formControlName="multiplicador" id="multiplicador" class="selectForm form-select">
-              <option value="6">6</option>
-              <option value="13">13</option>
-            </select>
-          </div>
         
           <div class="col-12 mb-3">
             <label for="markup-novo" class="form-label">Qualidade = Markup:</label>
@@ -374,8 +367,6 @@
               type="number"
               formControlName="markup"
               step="0.01"
-              min="{{ minMarkup }}"
-              max="{{ maxMarkup }}"
               value="{{ minMarkup }}"
               class="form-control form-floating col-12"
               id="markup-novo"
@@ -463,8 +454,9 @@
             </mat-form-field>
           </div>
       
-          <div *ngIf="formEditarVenda.get('mixProdutos').value !== 'Marketing'" class="col-12 mb-3">
-            <label for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
+          <div class="col-12 mb-3">
+            <label *ngIf="formEditarVenda.get('mixProdutos').value !== 'Marketing'" for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
+            <label *ngIf="formEditarVenda.get('mixProdutos').value === 'Marketing'" class="form-label">Número de meses:</label>
             <input
               type="number"
               formControlName="multiplicador"
@@ -475,14 +467,6 @@
               required
             />
           </div>
-
-          <div *ngIf="formEditarVenda.get('mixProdutos').value === 'Marketing'" class="col-12 mb-3">
-            <label class="form-label">MRR:</label>
-            <select formControlName="multiplicador" id="multiplicador" class="selectForm form-select">
-              <option value="6">6</option>
-              <option value="13">13</option>
-            </select>
-          </div>
         
           <div class="col-12 mb-3">
             <label for="markup-editar" class="form-label">Qualidade = Markup:</label>
@@ -490,8 +474,6 @@
               type="number"
               formControlName="markup"
               step="0.01"
-              min="{{ minMarkup }}"
-              max="{{ maxMarkup }}"
               class="form-control form-floating col-12"
               id="markup-editar"
               (change)="verifyValueMarkup($event)"

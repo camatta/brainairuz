@@ -607,6 +607,7 @@ export class CalculoComissaoComponent implements OnInit {
       mixProdutos: ['', Validators.required],
       produtoVendido: [''], // Verificar validação
       multiplicador: [''], // Verificar validação
+      tecnologia_servico: [''], // Verificar validação
       markup: [0, Validators.required],
       vendaAvulsa: [0, Validators.required],
       valorBase: ['']
@@ -620,6 +621,7 @@ export class CalculoComissaoComponent implements OnInit {
     nomeCliente: ['', Validators.required],
     mixProdutos: ['', Validators.required],
     produtoVendido: [''], // Verificar validação
+    tecnologia_servico: [''], // Verificar validação
     multiplicador: [''], // Verificar validação
     markup: [0, Validators.required],
     vendaAvulsa: [0, Validators.required],
@@ -688,6 +690,7 @@ export class CalculoComissaoComponent implements OnInit {
 
     this.produtos.forEach((item) => {
       if(item.produto.trim() === produtoSelecionado && item.tecnologia_servico.trim() === tecnologia) {
+        this.formNovaVenda.get("tecnologia_servico").setValue(tecnologia);
         this.formNovaVenda.get('valorBase').setValue(`${item.valor_venda},00`);
         this.defineMarkup(item.grupo_markup);
         this.formNovaVenda.get('markup').setValue(this.minMarkup);
@@ -706,6 +709,7 @@ export class CalculoComissaoComponent implements OnInit {
         let cliente = this.formNovaVenda.get('nomeCliente').value;
         let mixProdutos = this.formNovaVenda.get("mixProdutos").value;
         let tipoProduto = this.formNovaVenda.get('produtoVendido').value;
+        let tecnologia_servico = this.formNovaVenda.get("tecnologia_servico").value;
         let multiplicador = Number(this.formNovaVenda.get("multiplicador").value);
         let grupo_markup: number = this.grupoMarkup;
         let markup = Number(this.formNovaVenda.get("markup").value);
@@ -740,7 +744,7 @@ export class CalculoComissaoComponent implements OnInit {
           status: status,
           cliente: cliente,
           mixProdutos: mixProdutos,
-          tipoProduto: tipoProduto,
+          tipoProduto: `${tipoProduto} - ${tecnologia_servico}`,
           multiplicador: multiplicador,
           grupo_markup: grupo_markup,
           markup: markup,
@@ -802,6 +806,7 @@ export class CalculoComissaoComponent implements OnInit {
               nomeCliente: ['', Validators.required],
               mixProdutos: ['', Validators.required],
               produtoVendido: [''], // Verificar validação
+              tecnologia_servico: [''], // Verificar validação
               multiplicador: [''], // Verificar validação
               markup: [0, Validators.required],
               vendaAvulsa: [0, Validators.required],
@@ -827,6 +832,7 @@ export class CalculoComissaoComponent implements OnInit {
     nomeCliente: ['', Validators.required],
     mixProdutos: ['', Validators.required],
     produtoVendido: ['', Validators.required],
+    tecnologia_servico: ['', Validators.required],
     multiplicador: ['', Validators.required],
     markup: [0, Validators.required],
     vendaAvulsa: [0, Validators.required],
@@ -842,6 +848,23 @@ export class CalculoComissaoComponent implements OnInit {
     let data = dataVenda.split("/");
     dataVenda = `${data[2]}-${data[1]}-${data[0]}`;
 
+    // Definindo valorBase e markup do produto aberto
+    let el = element.tipoProduto.split("-");
+    let produtoSelecionado: string;
+    let tecnologia: string;
+    let valorBaseAtual: string;
+
+    if(el && element.tipoProduto !== "") {
+      produtoSelecionado = el[0].trim();
+      tecnologia = el[2] ? `${el[1].trim()} - ${el[2].trim()}` : el[1].trim();
+    }
+
+    this.produtos.forEach((item) => {
+      if(item.produto.trim() === produtoSelecionado && item.tecnologia_servico.trim() === tecnologia) {
+        valorBaseAtual = `${item.valor_venda}`;
+      }
+    });
+
     // Busca os valores da linha e insere nos inputs
     this.formEditarVenda.patchValue({
       _id: element._id,
@@ -849,12 +872,13 @@ export class CalculoComissaoComponent implements OnInit {
       status: element.status,
       nomeCliente: element.cliente,
       mixProdutos: element.mixProdutos,
-      produtoVendido: element.tipoProduto,
+      produtoVendido: produtoSelecionado,
+      tecnologia_servico: tecnologia,
       multiplicador: element.multiplicador,
       markup: element.markup,
       vendaAvulsa: element.vendaAvulsa,
-      valorBase: element.valorBase
-    })
+      valorBase: valorBaseAtual
+    });
 
     this.defineMarkup(element.grupo_markup);
 
@@ -882,11 +906,13 @@ export class CalculoComissaoComponent implements OnInit {
 
     this.produtos.forEach((item) => {
       if(item.produto.trim() === produtoSelecionado && item.tecnologia_servico.trim() === tecnologia) {
-        this.formEditarVenda.get('valorBase').setValue(`${item.valor_venda},00`);
+        this.formEditarVenda.get("produtoVendido").setValue(produtoSelecionado);
+        this.formEditarVenda.get("tecnologia_servico").setValue(tecnologia);
+        this.formEditarVenda.get('valorBase').setValue(`${item.valor_venda}`);
         this.defineMarkup(item.grupo_markup);
         this.formNovaVenda.get('markup').setValue(this.minMarkup);
       }
-    })
+    });
   }
 
   onSubmitEditarVenda() {
@@ -896,6 +922,7 @@ export class CalculoComissaoComponent implements OnInit {
     let cliente = this.formEditarVenda.get('nomeCliente').value;
     let mixProdutos = this.formEditarVenda.get("mixProdutos").value;
     let tipoProduto = this.formEditarVenda.get('produtoVendido').value;
+    let tecnologia_servico =  this.formEditarVenda.get('tecnologia_servico').value;
     let multiplicador = Number(this.formEditarVenda.get("multiplicador").value);
     let markup = Number(this.formEditarVenda.get("markup").value);
     let vendaAvulsa = Number(this.formEditarVenda.get("vendaAvulsa").value);
@@ -927,7 +954,7 @@ export class CalculoComissaoComponent implements OnInit {
       status: status,
       cliente: cliente,
       mixProdutos: mixProdutos,
-      tipoProduto: tipoProduto,
+      tipoProduto: `${tipoProduto} - ${tecnologia_servico}`,
       multiplicador: multiplicador,
       grupo_markup: grupo_markup,
       markup: markup,
