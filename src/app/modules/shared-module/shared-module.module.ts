@@ -20,6 +20,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { ImageModule } from 'primeng/image';
 
 // Biblioteca: NGX Mask
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
@@ -49,6 +50,7 @@ import { ProductsService } from 'src/app/services/products.service';
     ToastModule,
     ButtonModule,
     TooltipModule,
+    ImageModule,
     MatProgressSpinnerModule
   ],
   providers: [ LiveAnnouncer, ProductsService, AuthService ],
@@ -70,6 +72,7 @@ import { ProductsService } from 'src/app/services/products.service';
     ToastModule,
     ButtonModule,
     TooltipModule,
+    ImageModule,
     MatProgressSpinnerModule
   ]
 })

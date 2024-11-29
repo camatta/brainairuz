@@ -93,6 +93,27 @@ export class ControleGeralComponent implements OnInit {
     }
   }
 
+  // Método para alterar as tabs e trazer o respectivo formulário
+  changeTab(event: any) {
+    let tabs: any = document.querySelectorAll(".tabs li");
+    Array.from(tabs).map((tab: HTMLElement) => {
+      tab.classList.remove("active");
+      tab.querySelector("button").classList.remove("active");
+    });
+
+    event.target.classList.add("active");
+    event.target.parentElement.classList.add("active");
+
+    let formularios: any = document.querySelectorAll("#modalEdit form");
+    Array.from(formularios).map((formulario: HTMLElement) => {
+      formulario.classList.add("hidden");
+
+      if(formulario.id == event.target.parentElement.classList[0]){
+        formulario.classList.remove("hidden");
+      }
+    });
+  }
+
   submitFormFilter() {
     // Realizar regra para filtros
   }
@@ -113,6 +134,7 @@ export class ControleGeralComponent implements OnInit {
     )
   }
 
+  // Carrega as oportunidades lançadas no banco e insere na tabela
   loadOportunidades() {
     this.oportunidades.getOportunidades().subscribe(
       async (response) => {
@@ -123,51 +145,20 @@ export class ControleGeralComponent implements OnInit {
     )
   }
 
-  formEditarOportunidadeEtapa1 = this.formBuilder.group({
-    data: ['', Validators.required],
-    mes: ['', Validators.required],
-    ano: ['', Validators.required],
-    suspect: ['', Validators.required],
-    origem: ['', Validators.required],
-    fonte: ['', Validators.required],
-    responsavel: ['', Validators.required]
-  });
-
-  formEditarOportunidadeEtapa2 = this.formBuilder.group({
-    primeiro_contato: [new Date(), Validators.required],
-    status: ['', Validators.required],
-    reuniao_agendada: [new Date(), Validators.required],
-    sla_atendimento: [0, Validators.required],
-    percentual_fit: ['', Validators.required],
-    perfil_cliente: ['', Validators.required],
-    etapa: ['', Validators.required],
-    produto: ['', Validators.required],
-    detalhes_produto: ['', Validators.required],
-    valor_proposta: [0, Validators.required],
-  });
-
-  formEditarOportunidadeEtapa3 = this.formBuilder.group({
-    motivo_perda: ['', Validators.required],
-    valor_vendido: [0, Validators.required],
-    markup: [0, Validators.required],
-    mrr: [0, Validators.required],
-    data_aceite: [new Date(), Validators.required],
-    ciclo_venda: [0, Validators.required],
-    mes_encerramento: ['', Validators.required]
-  });
-
-  // formEditarOportunidade = this.formBuilder.group({
+  // formEditarOportunidadeEtapa1 = this.formBuilder.group({
   //   data: ['', Validators.required],
   //   mes: ['', Validators.required],
   //   ano: ['', Validators.required],
   //   suspect: ['', Validators.required],
   //   origem: ['', Validators.required],
   //   fonte: ['', Validators.required],
-  //   responsavel: ['', Validators.required],
+  //   responsavel: ['', Validators.required]
+  // });
 
+  // formEditarOportunidadeEtapa2 = this.formBuilder.group({
   //   primeiro_contato: [new Date(), Validators.required],
   //   status: ['', Validators.required],
-  //   reuniao_agendada: ['', Validators.required],
+  //   reuniao_agendada: [new Date(), Validators.required],
   //   sla_atendimento: [0, Validators.required],
   //   percentual_fit: ['', Validators.required],
   //   perfil_cliente: ['', Validators.required],
@@ -175,7 +166,9 @@ export class ControleGeralComponent implements OnInit {
   //   produto: ['', Validators.required],
   //   detalhes_produto: ['', Validators.required],
   //   valor_proposta: [0, Validators.required],
+  // });
 
+  // formEditarOportunidadeEtapa3 = this.formBuilder.group({
   //   motivo_perda: ['', Validators.required],
   //   valor_vendido: [0, Validators.required],
   //   markup: [0, Validators.required],
@@ -183,9 +176,41 @@ export class ControleGeralComponent implements OnInit {
   //   data_aceite: [new Date(), Validators.required],
   //   ciclo_venda: [0, Validators.required],
   //   mes_encerramento: ['', Validators.required]
-  // })
+  // });
 
-  openModalEditarOportunidade(element: Oportunidade){
+  formEditarOportunidade = this.formBuilder.group({
+    // primeiro form
+    data: ['', Validators.required],
+    mes: ['', Validators.required],
+    ano: ['', Validators.required],
+    suspect: ['', Validators.required],
+    origem: ['', Validators.required],
+    fonte: ['', Validators.required],
+    responsavel: ['', Validators.required],
+
+    // segundo form
+    primeiro_contato: [new Date(), Validators.required],
+    status: ['', Validators.required],
+    reuniao_agendada: ['', Validators.required],
+    sla_atendimento: [0, Validators.required],
+    percentual_fit: ['', Validators.required],
+    perfil_cliente: ['', Validators.required],
+    etapa: ['', Validators.required],
+    produto: ['', Validators.required],
+    detalhes_produto: ['', Validators.required],
+    valor_proposta: [0, Validators.required],
+
+    // terceiro form
+    motivo_perda: ['', Validators.required],
+    valor_vendido: [0, Validators.required],
+    markup: [0, Validators.required],
+    mrr: [0, Validators.required],
+    data_aceite: [new Date(), Validators.required],
+    ciclo_venda: [0, Validators.required],
+    mes_encerramento: ['', Validators.required]
+  })
+
+  openModalEditarOportunidade(element: Oportunidade) {
     const modal = document.getElementById("modalEdit");
     const bgModal = document.getElementById("bg-modal");
 
@@ -201,65 +226,65 @@ export class ControleGeralComponent implements OnInit {
     const dataGerada = new Date(ano, mes, dia, hora, minuto);
     const dataFormatada = dataGerada.toISOString().slice(0, 16);
 
-    this.formEditarOportunidadeEtapa1.patchValue({
-      data: dataFormatada,
-      mes: element.mes,
-      ano: element.ano,
-      suspect: element.suspect,
-      origem: element.origem,
-      fonte: element.fonte,
-      responsavel: element.responsavel
-    })
-
-    this.formEditarOportunidadeEtapa2.patchValue({
-      primeiro_contato: element.primeiro_contato,
-      status: element.status,
-      reuniao_agendada: element.reuniao_agendada,
-      sla_atendimento: element.sla_atendimento,
-      percentual_fit: element.percentual_fit,
-      perfil_cliente: element.perfil_cliente,
-      etapa: element.etapa,
-      produto: element.produto,
-      detalhes_produto: element.detalhes_produto,
-      valor_proposta: element.valor_proposta
-    });
-
-    this.formEditarOportunidadeEtapa3.patchValue({
-      motivo_perda: element.motivo_perda,
-      valor_vendido: element.valor_vendido,
-      markup: element.markup,
-      mrr: element.mrr,
-      data_aceite: element.data_aceite,
-      ciclo_venda: element.ciclo_venda,
-      mes_encerramento: element.mes_encerramento
-    });
-
-    // this.formEditarOportunidade.patchValue({
+    // this.formEditarOportunidadeEtapa1.patchValue({
     //   data: dataFormatada,
     //   mes: element.mes,
     //   ano: element.ano,
     //   suspect: element.suspect,
     //   origem: element.origem,
     //   fonte: element.fonte,
-    //   responsavel: element.responsavel,
-    //   primeiro_contato: new Date(),
-    //   status: '',
-    //   reuniao_agendada: '',
-    //   sla_atendimento: 0,
-    //   percentual_fit: '',
-    //   perfil_cliente: '',
-    //   etapa: '',
-    //   produto: '',
-    //   detalhes_produto: '',
-    //   valor_proposta: 0,
-    //   motivo_perda: '',
-    //   valor_vendido: 0,
-    //   markup: 0,
-    //   mrr: 0,
-    //   data_aceite: new Date(),
-    //   ciclo_venda: 0,
-    //   mes_encerramento: ''
+    //   responsavel: element.responsavel
     // })
+
+    // this.formEditarOportunidadeEtapa2.patchValue({
+    //   primeiro_contato: element.primeiro_contato,
+    //   status: element.status,
+    //   reuniao_agendada: element.reuniao_agendada,
+    //   sla_atendimento: element.sla_atendimento,
+    //   percentual_fit: element.percentual_fit,
+    //   perfil_cliente: element.perfil_cliente,
+    //   etapa: element.etapa,
+    //   produto: element.produto,
+    //   detalhes_produto: element.detalhes_produto,
+    //   valor_proposta: element.valor_proposta
+    // });
+
+    // this.formEditarOportunidadeEtapa3.patchValue({
+    //   motivo_perda: element.motivo_perda,
+    //   valor_vendido: element.valor_vendido,
+    //   markup: element.markup,
+    //   mrr: element.mrr,
+    //   data_aceite: element.data_aceite,
+    //   ciclo_venda: element.ciclo_venda,
+    //   mes_encerramento: element.mes_encerramento
+    // });
+
+    this.formEditarOportunidade.patchValue({
+      data: dataFormatada,
+      mes: element.mes,
+      ano: element.ano,
+      suspect: element.suspect,
+      origem: element.origem,
+      fonte: element.fonte,
+      responsavel: element.responsavel,
+      primeiro_contato: new Date(),
+      status: '',
+      reuniao_agendada: '',
+      sla_atendimento: 0,
+      percentual_fit: '',
+      perfil_cliente: '',
+      etapa: '',
+      produto: '',
+      detalhes_produto: '',
+      valor_proposta: 0,
+      motivo_perda: '',
+      valor_vendido: 0,
+      markup: 0,
+      mrr: 0,
+      data_aceite: new Date(),
+      ciclo_venda: 0,
+      mes_encerramento: ''
+    })
 
     if(modal != null){
       modal.style.display = "block";

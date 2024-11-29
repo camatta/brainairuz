@@ -333,7 +333,7 @@
             </select>
           </div>
         
-          <div *ngIf="mixProdutosValidate" class="col-12 mb-3">
+          <div class="col-12 mb-3">
             <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
             <mat-form-field class="selectForm form-control">
               <mat-select formControlName="produtoVendido" id="produtoVendido">
@@ -392,6 +392,16 @@
               required
             >
           </div>
+
+          <input
+            *ngIf="formNovaVenda.get('markup').value < minMarkup"
+            type="file"
+            (change)="onUploadImageEmailMarkupApproval($event)"
+            name=""
+            id=""
+            accept="image/png, image/jpg, image/jpeg"
+            required
+          >
 
           <button type="submit" (click)="onSubmitNovaVenda()" [disabled]="!formNovaVenda.valid" class="col-12 btn-calcular">Inserir</button>
         </form>
@@ -498,6 +508,28 @@
               formControlName="vendaAvulsa"
               required
             >
+          </div>
+
+          <div *ngIf="formEditarVenda.get('imageEmailMarkupApproval').value" class="d-flex flex-column">
+            <p-image
+              width="100"
+              [preview]="true"
+              src="{{ formEditarVenda.get('imageEmailMarkupApproval').value }}"
+              alt="markup-aprovado"
+            ></p-image>
+
+            <button (click)="handleEditarImagemModalEditarComissao()">Alterar imagem</button>
+
+            <input
+              *ngIf="formNovaVenda.get('markup').value < minMarkup && editarImagemModalEditarComissao"
+              type="file"
+              (change)="onUploadImageEmailMarkupApproval($event)"
+              name=""
+              id=""
+              accept="image/png, image/jpg, image/jpeg"
+              required
+            >
+
           </div>
 
           <button type="submit" (click)="onSubmitEditarVenda()" [disabled]="!formEditarVenda.valid" class="col-12 btn-calcular">Editar</button>

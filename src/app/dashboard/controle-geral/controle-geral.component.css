@@ -67,3 +67,7 @@
   .salvar-nairuz:disabled {
     opacity: .5;
   }
+
+  #modalEdit .hidden {
+    display: none;
+  }

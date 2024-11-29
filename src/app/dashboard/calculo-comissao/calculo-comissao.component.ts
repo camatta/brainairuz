@@ -38,6 +38,10 @@ interface vendaType {
   vendedor: string;
 }
 
+interface UploadEvent extends Event {
+  file: File;
+}
+
 @Component({
   selector: 'app-calculo-comissao',
   templateUrl: './calculo-comissao.component.html',
@@ -107,6 +111,7 @@ export class CalculoComissaoComponent implements OnInit {
   grupoMarkup: number;
   maxMarkup: number;
   minMarkup: number;
+  editarImagemModalEditarComissao: boolean = false;
 
   userPermission(): boolean {
     if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz" || this.currentUser.name === 'Adriany Oliveira'){
@@ -576,8 +581,17 @@ export class CalculoComissaoComponent implements OnInit {
       return false;
     }
   }
-
+  
   // CRIAR Comissão
+  imageEmailMarkupApproval: File;
+  onUploadImageEmailMarkupApproval(e: any){
+    if(e.target.files && e.target.files[0]) {
+      this.imageEmailMarkupApproval = e.target.files[0];
+    } else {
+      console.log("Erro ao subir a imagem");
+    }
+  }
+
   openModalNovaVenda(){
     const modal = document.getElementById("modalNew");
     const bgModal = document.getElementById("bg-modal");
@@ -716,6 +730,7 @@ export class CalculoComissaoComponent implements OnInit {
         let vendaAvulsa = Number(this.formNovaVenda.get("vendaAvulsa").value);
         let valorBase = parseFloat((this.formNovaVenda.get('valorBase').value).replace(",", "."));
         let valorVendido: number = 0;
+        let imageEmailMarkupApproval: File = this.imageEmailMarkupApproval;
     
         // CALCULAR
   
@@ -735,23 +750,25 @@ export class CalculoComissaoComponent implements OnInit {
           valorBase = valorBase * multiplicador;
           valorVendido = (valorBase / 2) * markup;
         }
-  
-        const novaVenda = {
-          dataVenda: dataVenda,
-          mes: this.defineMes(data[1]),
-          ano: data[0],
-          vendedor: this.userPermission() ? vendedor : vendedor.name,
-          status: status,
-          cliente: cliente,
-          mixProdutos: mixProdutos,
-          tipoProduto: `${tipoProduto} - ${tecnologia_servico}`,
-          multiplicador: multiplicador,
-          grupo_markup: grupo_markup,
-          markup: markup,
-          vendaAvulsa: vendaAvulsa,
-          valorBase: valorBase,
-          valorVendido: valorVendido
-        }
+
+        let tipoProdutoFormatado = mixProdutos === 'Help Suporte A' ? '' : `${tipoProduto} - ${tecnologia_servico}`;
+
+        const novaVenda2 = new FormData();
+        novaVenda2.append('dataVenda', dataVenda);
+        novaVenda2.append('mes', this.defineMes(data[1]));
+        novaVenda2.append('ano', data[0]);
+        novaVenda2.append('vendedor', this.userPermission() ? vendedor : vendedor.name);
+        novaVenda2.append('status', status);
+        novaVenda2.append('cliente', cliente);
+        novaVenda2.append('mixProdutos', mixProdutos);
+        novaVenda2.append('tipoProduto', tipoProdutoFormatado);
+        novaVenda2.append('multiplicador', String(multiplicador));
+        novaVenda2.append('grupo_markup', String(grupo_markup));
+        novaVenda2.append('markup', String(markup));
+        novaVenda2.append('vendaAvulsa', String(vendaAvulsa));
+        novaVenda2.append('valorBase', String(valorBase));
+        novaVenda2.append('valorVendido', String(valorVendido));
+        novaVenda2.append('imageEmailMarkupApproval', imageEmailMarkupApproval);
 
         let dataValida = new Date(Number(data[0]), Number(data[1]) - 1, Number(data[2]));
         // if(this.verificaDataVigente(dataValida) || this.userPermission()) {
@@ -760,7 +777,7 @@ export class CalculoComissaoComponent implements OnInit {
         //     console.warn(`Comissão fora do prazo de lançamento.`);
         //   }
 
-        //   this.comissoesService.setComissao(novaVenda).subscribe(
+        //   this.comissoesService.setComissao(novaVenda2).subscribe(
         //     async (res) => {
         //       this.showMessageAction('Comissão adicionada com sucesso');
         //       await this.submitFormFilter();
@@ -793,7 +810,7 @@ export class CalculoComissaoComponent implements OnInit {
         //   this.showMessageAction('Comissão fora do prazo de lançamento.');
         // }
 
-        this.comissoesService.setComissao(novaVenda).subscribe(
+        this.comissoesService.setComissao(novaVenda2).subscribe(
           async (res) => {
             this.showMessageAction('Comissão adicionada com sucesso');
             await this.submitFormFilter();
@@ -812,6 +829,9 @@ export class CalculoComissaoComponent implements OnInit {
               vendaAvulsa: [0, Validators.required],
               valorBase: ['']
             });
+
+            this.maxMarkup = 0;
+            this.minMarkup = 0;
 
             this.closeModalNovaVenda();
           },
@@ -836,7 +856,8 @@ export class CalculoComissaoComponent implements OnInit {
     multiplicador: ['', Validators.required],
     markup: [0, Validators.required],
     vendaAvulsa: [0, Validators.required],
-    valorBase: ['']
+    valorBase: [''],
+    imageEmailMarkupApproval: ['']
   })
 
   openModalEditarVenda(element: any) {
@@ -877,7 +898,8 @@ export class CalculoComissaoComponent implements OnInit {
       multiplicador: element.multiplicador,
       markup: element.markup,
       vendaAvulsa: element.vendaAvulsa,
-      valorBase: valorBaseAtual
+      valorBase: valorBaseAtual,
+      imageEmailMarkupApproval: element.imageEmailMarkupApproval
     });
 
     this.defineMarkup(element.grupo_markup);
@@ -889,6 +911,10 @@ export class CalculoComissaoComponent implements OnInit {
     }
   }
 
+  handleEditarImagemModalEditarComissao() {
+    this.editarImagemModalEditarComissao = !this.editarImagemModalEditarComissao;
+  }
+
   closeModalEditarVenda() {
     const modal = document.getElementById("modalEdit");
     const bgModal = document.getElementById("bg-modal");
@@ -897,6 +923,7 @@ export class CalculoComissaoComponent implements OnInit {
       bgModal.style.display = "none";
       modal.classList.remove("show");
     }
+    this.editarImagemModalEditarComissao = false;
   }
 
   // Busca o valor do produto selecionado no input "Produto Vendido" e insere no input "Valor Base"
@@ -947,23 +974,26 @@ export class CalculoComissaoComponent implements OnInit {
       valorVendido = (valorBase / 2) * markup;
     }
 
-    const editarVenda = {
-      dataVenda: dataVenda,
-      mes: this.defineMes(data[1]),
-      ano: data[2],
-      status: status,
-      cliente: cliente,
-      mixProdutos: mixProdutos,
-      tipoProduto: `${tipoProduto} - ${tecnologia_servico}`,
-      multiplicador: multiplicador,
-      grupo_markup: grupo_markup,
-      markup: markup,
-      vendaAvulsa: vendaAvulsa,
-      valorBase: valorBase,
-      valorVendido: valorVendido
+    const editarVenda2 = new FormData();
+    editarVenda2.append('dataVenda', dataVenda);
+    editarVenda2.append('mes', this.defineMes(data[1]));
+    editarVenda2.append('ano', data[0]);
+    editarVenda2.append('status', status);
+    editarVenda2.append('cliente', cliente);
+    editarVenda2.append('mixProdutos', mixProdutos);
+    editarVenda2.append('tipoProduto', `${tipoProduto} - ${tecnologia_servico}`);
+    editarVenda2.append('multiplicador', String(multiplicador));
+    editarVenda2.append('grupo_markup', String(grupo_markup));
+    editarVenda2.append('markup', String(markup));
+    editarVenda2.append('vendaAvulsa', String(vendaAvulsa));
+    editarVenda2.append('valorBase', String(valorBase));
+    editarVenda2.append('valorVendido', String(valorVendido));
+    
+    if(this.formEditarVenda.get('imageEmailMarkupApproval').value) {
+      editarVenda2.append('imageEmailMarkupApproval', this.formEditarVenda.get('imageEmailMarkupApproval').value);
     }
     
-    this.comissoesService.updateComissao(id, editarVenda).subscribe(
+    this.comissoesService.updateComissao(id, editarVenda2).subscribe(
       async (res) => {
         this.showMessageAction('Comissão alterada com sucesso');
         await this.submitFormFilter();

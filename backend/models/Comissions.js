@@ -61,6 +61,10 @@ const CommissionsSchema = new mongoose.Schema({
     dataCriacaoComissao: {
       type: Date,
       default: Date.now
+    },
+    imageEmailMarkupApproval: {
+      type: String,
+      required: false
     }
 })
 

@@ -13,4 +13,5 @@ export type Comissao = {
   vendaAvulsa: number;
   valorBase: number;
   valorVendido: number;
+  imageEmailMarkupApproval: FormData;
 }

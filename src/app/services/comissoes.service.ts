@@ -39,15 +39,15 @@ export class ComissoesService {
     return this.http.get<any[]>(url);
   }
 
-  setComissao(newComissao: Comissao) {
-    return this.http.post<Comissao>(environment.URL_API + '/api/comissao', newComissao);
+  setComissao(newComissao: FormData) {
+    return this.http.post<FormData>(environment.URL_API + '/api/comissao', newComissao);
   }
 
   deleteComissao(idComissao: string) {
     return this.http.delete<any>(environment.URL_API + `/api/comissoes/${idComissao}`);
   }
 
-  updateComissao(idComissao: string, comissao: Comissao) {
+  updateComissao(idComissao: string, comissao: FormData) {
     return this.http.put(environment.URL_API + `/api/comissoes/${idComissao}`, comissao);
   }
 }
