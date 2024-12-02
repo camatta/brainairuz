@@ -1,4 +1,4 @@
-const { CreateOpportunityService } = require("../../services/opportunities/CreateOpportunityService");
+const { UpdateOpportunityService } = require("../../services/opportunities/UpdateOpportunityService");
 
 module.exports.UpdateOpportunityController = async (req, res) => {
     try {
@@ -25,7 +25,7 @@ module.exports.UpdateOpportunityController = async (req, res) => {
             mes_encerramento
         } = req.body;
 
-        const createOpportunityService = await CreateOpportunityService({
+        const updateOpportunityService = await UpdateOpportunityService({
             data,
             suspect,
             origem,
@@ -48,7 +48,7 @@ module.exports.UpdateOpportunityController = async (req, res) => {
             mes_encerramento
         });
 
-        res.status(201).json({ message: 'Oportunidade criada com sucesso!', createOpportunityService });
+        res.status(201).json({ message: 'Oportunidade criada com sucesso!', updateOpportunityService });
         
     } catch (error) {
         res.status(500).json({ message: 'Erro ao criar a oportunidade', error });

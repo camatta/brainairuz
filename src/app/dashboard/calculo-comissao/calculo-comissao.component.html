@@ -336,7 +336,7 @@
           <div class="col-12 mb-3">
             <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
             <mat-form-field class="selectForm form-control">
-              <mat-select formControlName="produtoVendido" id="produtoVendido">
+              <mat-select (valueChange)="defineMixProdutosValidate()" formControlName="produtoVendido" id="produtoVendido">
                 <mat-form-field class="form-search">
                   <input matInput (keyup)="applyFilter($event)" placeholder="O que está procurando?" #input>
                 </mat-form-field>
@@ -450,7 +450,7 @@
             </select>
           </div>
         
-          <div *ngIf="mixProdutosValidate" class="col-12 mb-3">
+          <div class="col-12 mb-3">
             <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
             <mat-form-field class="selectForm form-control">
               <mat-select formControlName="produtoVendido" id="produtoVendido">
@@ -510,7 +510,7 @@
             >
           </div>
 
-          <div *ngIf="formEditarVenda.get('imageEmailMarkupApproval').value" class="d-flex flex-column">
+          <div *ngIf="formNovaVenda.get('markup').value < minMarkup || formEditarVenda.get('imageEmailMarkupApproval').value" class="d-flex flex-column align-items-start">
             <p-image
               width="100"
               [preview]="true"
@@ -518,7 +518,9 @@
               alt="markup-aprovado"
             ></p-image>
 
-            <button (click)="handleEditarImagemModalEditarComissao()">Alterar imagem</button>
+            <button (click)="handleEditarImagemModalEditarComissao()" class="btn btn-link p-0">
+              {{ editarImagemModalEditarComissao ? "Cancelar" : "Alterar imagem" }}
+            </button>
 
             <input
               *ngIf="formNovaVenda.get('markup').value < minMarkup && editarImagemModalEditarComissao"

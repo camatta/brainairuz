@@ -10,7 +10,6 @@ import { SharedModule } from 'src/app/modules/shared-module/shared-module.module
 import { OportunidadesService } from 'src/app/services/oportunidades.service';
 import { UserService } from 'src/app/services/user.service';
 import { Oportunidade } from 'src/app/types/oportunidade';
-import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-controle-geral',

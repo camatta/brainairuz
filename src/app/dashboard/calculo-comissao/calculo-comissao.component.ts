@@ -146,7 +146,7 @@ export class CalculoComissaoComponent implements OnInit {
   
   mixProdutosValidate: boolean = true;
 
-  defineMixProdutosValidate(): boolean {
+  defineMixProdutosValidate() {
     const modalNew = document.getElementById("modalNew");
     const modalEdit = document.getElementById("modalEdit");
     let mixProdutosNovaVenda = this.formNovaVenda.get('mixProdutos').value;
@@ -154,18 +154,18 @@ export class CalculoComissaoComponent implements OnInit {
 
     if(modalNew.style.display == "block") {
       if(mixProdutosNovaVenda == 'Help Suporte A' || mixProdutosNovaVenda == ''){
-        return this.mixProdutosValidate = false;
+        this.mixProdutosValidate = false;
       } else {
-        return this.mixProdutosValidate = true;
+        this.mixProdutosValidate = true;
       }
     } else if(modalEdit.style.display == "block") {
       if(mixProdutosEditarVenda == 'Help Suporte A' || mixProdutosEditarVenda == ''){
-        return this.mixProdutosValidate = false;
+        this.mixProdutosValidate = false;
       } else {
-        return this.mixProdutosValidate = true;
+        this.mixProdutosValidate = true;
       }
     } else {
-      return this.mixProdutosValidate = false;
+      this.mixProdutosValidate = false;
     }
   }
 
@@ -303,6 +303,7 @@ export class CalculoComissaoComponent implements OnInit {
     }
 
     input.classList.remove("markup-invalid");
+    this.formEditarVenda.patchValue({imageEmailMarkupApproval: element.imageEmailMarkupApproval});
   }
 
   // Função para filtrar comissões por vendedor, mês e/ou ano
@@ -701,6 +702,7 @@ export class CalculoComissaoComponent implements OnInit {
     const el = element.target.innerText.split("-");
     const produtoSelecionado = el[0].trim();
     const tecnologia = el[2] ? `${el[1].trim()} - ${el[2].trim()}` : el[1].trim();
+    const mixProduto: HTMLSelectElement = document.querySelector("#modalNew #mixProdutos");
 
     this.produtos.forEach((item) => {
       if(item.produto.trim() === produtoSelecionado && item.tecnologia_servico.trim() === tecnologia) {
@@ -708,6 +710,12 @@ export class CalculoComissaoComponent implements OnInit {
         this.formNovaVenda.get('valorBase').setValue(`${item.valor_venda},00`);
         this.defineMarkup(item.grupo_markup);
         this.formNovaVenda.get('markup').setValue(this.minMarkup);
+
+        if(mixProduto.value === "Help Suporte A" || item.valor_venda === 0) {
+          this.mixProdutosValidate = false;
+        } else {
+          this.mixProdutosValidate = true;
+        }
       }
     });
   }
@@ -740,7 +748,7 @@ export class CalculoComissaoComponent implements OnInit {
     
         // Se Mix de Produtos == HELP então usar vendaAvulsa
         // senão se valor base == "" então valorVendido == 0 senão (valorBase / 2) * markup;
-        if(mixProdutos == "Help Suporte A"){
+        if(mixProdutos == "Help Suporte A" || vendaAvulsa !== 0){
           valorBase = vendaAvulsa;
           valorVendido = vendaAvulsa;
         } else if(tipoProduto == ""){
@@ -963,7 +971,7 @@ export class CalculoComissaoComponent implements OnInit {
 
     // Se Mix de Produtos == HELP então usar vendaAvulsa
     // senão se valor base == "" então valorVendido == 0 senão (valorBase / 2) * markup;
-    if(mixProdutos == "Help Suporte A"){
+    if(mixProdutos == "Help Suporte A" || vendaAvulsa !== 0){
       valorBase = vendaAvulsa;
       valorVendido = vendaAvulsa;
     } else if(tipoProduto == ""){
