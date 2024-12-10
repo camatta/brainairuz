@@ -1,58 +1,90 @@
 <main class="mb-5">
-    <div class="d-flex justify-content-between">
+    <!-- TOAST DE RETORNO DAS REQUISIÇÕES (CRIAR, EDITAR OU DELETAR UM PROTUDO) -->
+    <div id="alert-actions" class="toast text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+        <div class="toast-body"> {{ msgActions }} </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between">
         <h1 class="titlePage">Controle de Oportunidades</h1>
-        <form>
-            <input type="text" placeholder="Insira o termo da busca" />
-            <i class="fa-solid fa-magnifying-glass"></i>
+        <form (submit)="filtrarBarraBusca()" class="formBusca">
+            <input id="inputBusca" type="text" placeholder="Insira o termo da busca" />
+            <button type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
         </form>
     </div>
   
     <!-- AÇÕES DO USUÁRIO -->
-    <div class="topo d-flex justify-content-between mt-5 mb-2">
-      <form class="d-flex gap-5">
-        <div class="filter-commissions">
-          <label for="statusFilter" class="me-3">Status</label>
-          <select (change)="submitFormFilter()" id="statusFilter" class="select-nairuz h-100">
-            <option value="sem filtro">Selecione</option>
-            <option selected value="Exploratória">Exploratória</option>
-            <option value="Não é uma oportunidade">Não é uma oportunidade</option>
-            <option value="Não consegui qualificar">Não consegui qualificar</option>
-            <option value="Fora do ICP">Fora do ICP</option>
-            <option value="Dentro do ICP">Dentro do ICP</option>
-            <option value="Vendido">Vendido</option>
-          </select>
-        </div>
-        <div class="filter-commissions">
-          <label for="years" class="me-3">Filtrar por Ano:</label>
-          <select *ngIf="yearsSelectFilter.length > 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
-            <option *ngFor="let year of yearsSelectFilter" [value]="year" [selected]="year === currentYear">
-              {{ year }}
-            </option>
-          </select>
-          <select *ngIf="yearsSelectFilter.length <= 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
-            <option selected value="{{ currentYear }}">{{currentYear}}</option>
-          </select>
-        </div>
-        <div class="filter-commissions">
-          <label for="months" class="me-3">Filtrar por mês:</label>
-          <select (change)="submitFormFilter()" id="months" class="select-nairuz h-100">
-            <option selected value="Janeiro">Janeiro</option>
-            <option value="Fevereiro">Fevereiro</option>
-            <option value="Março">Março</option>
-            <option value="Abril">Abril</option>
-            <option value="Maio">Maio</option>
-            <option value="Junho">Junho</option>
-            <option value="Julho">Julho</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Setembro">Setembro</option>
-            <option value="Outubro">Outubro</option>
-            <option value="Novembro">Novembro</option>
-            <option value="Dezembro">Dezembro</option>
-          </select>
-        </div>
-      </form>
-  
+    <div class="topo d-flex justify-content-between mt-5">
+        <form (submit)="filtrarColunas()" class="formFiltrarColunas">
+            <button class="d-flex align-items-center justify-content-between" (click)="toggleListaDeColunas()" type="button">
+                <span class="texto">Colunas</span>
+                <span class="icone">+</span>
+            </button>
+
+            <div id="listaDeColunas" class="hidden">
+                <ul>
+                    <li *ngFor="let column of displayedColumns">
+                        <input type="checkbox" name="{{ column }}" id="checkbox-{{ column }}">
+                        <label for="checkbox-{{ column }}">{{ formatarTextoDaLabel(column) }}</label>
+                    </li>
+                </ul>
+
+                <button type="submit">Aplicar</button>
+            </div>
+        </form>
+
+        <form class="d-flex gap-5">
+            <div class="filter-commissions">
+            <label for="statusFilter" class="me-2">Status</label>
+            <select (change)="submitFormFilter()" id="statusFilter" class="h-100">
+                <option selected value="{{ undefined }}">Selecione</option>
+                <option value="Exploratória">Exploratória</option>
+                <option value="Não é uma oportunidade">Não é uma oportunidade</option>
+                <option value="Não consegui qualificar">Não consegui qualificar</option>
+                <option value="Fora do ICP">Fora do ICP</option>
+                <option value="Dentro do ICP">Dentro do ICP</option>
+                <option value="Vendido">Vendido</option>
+            </select>
+            </div>
+            <div class="filter-commissions">
+            <label for="years" class="me-2">Filtrar por Ano</label>
+            <select (change)="submitFormFilter()" id="years" class="h-100">
+                <option selected value="{{ undefined }}">Selecione</option>
+                <option *ngFor="let year of yearsSelectFilter" [value]="year">
+                {{ year }}
+                </option>
+            </select>
+            </div>
+            <div class="filter-commissions">
+            <label for="months" class="me-2">Filtrar por mês</label>
+            <select (change)="submitFormFilter()" id="months" class="h-100">
+                <option selected value="{{ undefined }}">Selecione</option>
+                <option value="Janeiro">Janeiro</option>
+                <option value="Fevereiro">Fevereiro</option>
+                <option value="Março">Março</option>
+                <option value="Abril">Abril</option>
+                <option value="Maio">Maio</option>
+                <option value="Junho">Junho</option>
+                <option value="Julho">Julho</option>
+                <option value="Agosto">Agosto</option>
+                <option value="Setembro">Setembro</option>
+                <option value="Outubro">Outubro</option>
+                <option value="Novembro">Novembro</option>
+                <option value="Dezembro">Dezembro</option>
+            </select>
+            </div>
+        </form>
     </div>
+
+    <!-- TERMO BUSCADO -->
+    <form *ngIf="termoDaBusca !== ''" (submit)="limparTermoDaBusca()">
+        <span>{{ termoDaBusca }}</span>
+        <button type="submit">X</button>
+    </form>
   
     <!-- COLUNAS DA TABELA -->
     <div class="mat-elevation-z8">
@@ -60,7 +92,7 @@
         <table id="tabela-valores" mat-table [dataSource]="tabela" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
             <!-- Suspect Column -->
             <ng-container matColumnDef="suspect" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by suspect">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Nome do Suspect
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -71,7 +103,7 @@
 
             <!-- Status Column -->
             <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Status
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -81,7 +113,7 @@
 
             <!-- Data Column -->
             <ng-container matColumnDef="data">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by data">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Data
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -91,7 +123,7 @@
 
             <!-- Ano Column -->
             <ng-container matColumnDef="ano">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ano">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Ano
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -101,7 +133,7 @@
 
             <!-- Mês Column -->
             <ng-container matColumnDef="mes">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mes">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Mês
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -111,7 +143,7 @@
 
             <!-- Origem Column -->
             <ng-container matColumnDef="origem">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by origem">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Origem
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -121,7 +153,7 @@
 
             <!-- Fonte Column -->
             <ng-container matColumnDef="fonte">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fonte">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Fonte
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -131,7 +163,7 @@
 
             <!-- Responsável Column -->
             <ng-container matColumnDef="responsavel">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by responsavel">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Responsável
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -141,7 +173,7 @@
 
             <!-- Primeiro Contato Column -->
             <ng-container matColumnDef="primeiro_contato">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by primeiro_contato">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     1º Contato
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -151,7 +183,7 @@
 
             <!-- Reunião Agendada Column -->
             <ng-container matColumnDef="reuniao_agendada">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by reuniao_agendada">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Reunião Agendada
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -161,7 +193,7 @@
 
             <!-- SLA Atendimento Column -->
             <ng-container matColumnDef="sla_atendimento">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by sla_atendimento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     SLA de Atend.
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -171,7 +203,7 @@
 
             <!-- Percentual de Fit Column -->
             <ng-container matColumnDef="percentual_fit">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by percentual_fit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     % de Fit
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -181,7 +213,7 @@
 
             <!-- Perfil de Cliente Column -->
             <ng-container matColumnDef="perfil_cliente">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by perfil_cliente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Perfil do Cliente
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -191,7 +223,7 @@
 
             <!-- Etapa Column -->
             <ng-container matColumnDef="etapa">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by etapa">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Etapa
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -201,7 +233,7 @@
 
             <!-- Produto Column -->
             <ng-container matColumnDef="produto">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by produto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Produto
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -211,7 +243,7 @@
 
             <!-- Detalhes do Produto Column -->
             <ng-container matColumnDef="detalhes_produto">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by detalhes_produto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Detalhes do Produto
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -221,7 +253,7 @@
 
             <!-- Valor da Proposta Column -->
             <ng-container matColumnDef="valor_proposta">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by valor_proposta">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Valor da Proposta
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -231,7 +263,7 @@
 
             <!-- Motivo da Perda Column -->
             <ng-container matColumnDef="motivo_perda">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by motivo_perda">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Motivo da Perda
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -241,7 +273,7 @@
 
             <!-- Valor Vendido Column FAZER CÁLCULO -->
             <ng-container matColumnDef="valor_vendido">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by valor_vendido">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Valor Vendido
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -251,7 +283,7 @@
 
             <!-- Markup Column -->
             <ng-container matColumnDef="markup">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by markup">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Markup
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -261,7 +293,7 @@
 
             <!-- MRR Column -->
             <ng-container matColumnDef="mrr">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mrr">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     MRR
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -271,7 +303,7 @@
 
             <!-- Data do Aceite Column -->
             <ng-container matColumnDef="data_aceite">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by data_aceite">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Data do Aceite
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -281,7 +313,7 @@
 
             <!-- Ciclo de Venda Column -->
             <ng-container matColumnDef="ciclo_venda">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ciclo_venda">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Ciclo de Venda
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -291,7 +323,7 @@
 
             <!-- Mês de Encerramento Column -->
             <ng-container matColumnDef="mes_encerramento">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mes_encerramento">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Mês de Encerramento
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -299,15 +331,10 @@
                 </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
         </table>
       </div>
-  
-      <mat-paginator
-        [pageSizeOptions]="[10, 20, 30]"
-        showFirstLastButtons aria-label="Select page of periodic elements"
-      ></mat-paginator>
     </div>
   
     <!-- MODAIS -->
@@ -320,263 +347,204 @@
           <div class="modal-header flex-wrap mb-5">
             <h2 class="modal-title text-black fs-5" id="modalEditarOportunidade">Informações do Suspect</h2>
             <button type="button" (click)="closeModalEditarOportunidade()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            <ul class="tabs col-12 d-flex">
-                <li class="etapa-1 active"><button class="active" (click)="changeTab($event)">Etapa 1</button></li>
-                <li class="etapa-2"><button (click)="changeTab($event)">Etapa 2</button></li>
-                <li class="etapa-3"><button (click)="changeTab($event)">Etapa 3</button></li>
+            <ul id="tabs" class="col-12 d-flex">
+                <li class="etapa-1 active">Etapa 1</li>
+                <li class="etapa-2">Etapa 2</li>
+                <li class="etapa-3">Etapa 3</li>
             </ul>
           </div>
 
-          <form id="etapa-1" [formGroup]="formEditarOportunidade" class="row container">
-            <div class="col-4 mb-3">
-                <label for="dataEdit" class="form-label">Data</label>
-                <input type="datetime-local" id="dataEdit" class="form-control col-12" formControlName="data" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="suspectEdit" class="form-label">Nome do Suspect</label>
-                <input type="text" id="suspectEdit" class="form-control col-12" formControlName="suspect" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="origemEdit" class="form-label">Origem</label>
-                <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="Ativo">Ativo</option>
-                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
-                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
-                    <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
-                    <option class="options-nairuz" value="MKT">MKT</option>
-                    <option class="options-nairuz" value="Parceiros">Parceiros</option>
-                </select>
-            </div>
-            <div class="col-4 mb-3">
-                <label for="fonteEdit" class="form-label">Fonte</label>
-                <select id="fonteEdit" class="selectForm form-select" name="fonte" formControlName="fonte" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="AGV">AGV</option>
-                    <option class="options-nairuz" value="Ativo">Ativo</option>
-                    <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
-                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
-                    <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
-                    <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
-                    <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
-                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
-                    <option class="options-nairuz" value="Linx">Linx</option>
-                    <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital</option>
-                    <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
-                    <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
-                    <option class="options-nairuz" value="MKT">MKT</option>
-                    <option class="options-nairuz" value="RD Station">RD Station</option>
-                    <option class="options-nairuz" value="Site">Site</option>
-                    <option class="options-nairuz" value="VTEX">VTEX</option>
-                    <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
-                </select>
-            </div>
-            <div class="col-4 mb-3">
-                <label for="responsavel" class="form-label">Responsável</label>
-                <select formControlName="responsavel" class="selectForm form-select" name="responsavel" id="responsavel" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option *ngFor="let vendedor of vendedores" class="options-nairuz" [value]="vendedor">
-                        {{ vendedor }}
-                    </option>
-                </select>
-            </div>
-            <div class="col-12 mb-5 text-end">
-                <button class="salvar-nairuz" type="submit" [disabled]="!formEditarOportunidade.valid">Avançar</button>
+          <form id="formEditarOportunidade" (submit)="onSubmitEditarOportunidade()" [formGroup]="formEditarOportunidade" class="row container">
+            <div id="etapa-1" class="formtab row active">
+                <div class="col-4 mb-3">
+                    <label for="dataEdit" class="form-label">Data</label>
+                    <input type="datetime-local" id="dataEdit" class="form-control col-12" formControlName="data" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="suspectEdit" class="form-label">Nome do Suspect</label>
+                    <input type="text" id="suspectEdit" class="form-control col-12" formControlName="suspect" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="origemEdit" class="form-label">Origem</label>
+                    <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="Ativo">Ativo</option>
+                        <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                        <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                        <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
+                        <option class="options-nairuz" value="MKT">MKT</option>
+                        <option class="options-nairuz" value="Parceiros">Parceiros</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="fonteEdit" class="form-label">Fonte</label>
+                    <select id="fonteEdit" class="selectForm form-select" name="fonte" formControlName="fonte" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="AGV">AGV</option>
+                        <option class="options-nairuz" value="Ativo">Ativo</option>
+                        <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
+                        <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                        <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
+                        <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
+                        <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
+                        <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                        <option class="options-nairuz" value="Linx">Linx</option>
+                        <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital</option>
+                        <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
+                        <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
+                        <option class="options-nairuz" value="MKT">MKT</option>
+                        <option class="options-nairuz" value="RD Station">RD Station</option>
+                        <option class="options-nairuz" value="Site">Site</option>
+                        <option class="options-nairuz" value="VTEX">VTEX</option>
+                        <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="responsavel" class="form-label">Responsável</label>
+                    <select formControlName="responsavel" class="selectForm form-select" name="responsavel" id="responsavel" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option *ngFor="let vendedor of vendedores" class="options-nairuz" [value]="vendedor">
+                            {{ vendedor }}
+                        </option>
+                    </select>
+                </div>
             </div>
 
+            <div id="etapa-2" class="formtab row hidden">
+                <div class="col-4 mb-3">
+                    <label for="primeiroContatoEdit" class="form-label">1º Contato</label>
+                    <input type="datetime-local" id="primeiroContatoEdit" class="form-control col-12" formControlName="primeiro_contato" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="statusEdit" class="form-label">Status</label>
+                    <select id="statusEdit" class="selectForm form-select" name="status" formControlName="status" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="Exploratória">Exploratória</option>
+                        <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
+                        <option class="options-nairuz" value="Não consegui qualificar">Não consegui qualificar</option>
+                        <option class="options-nairuz" value="Não é uma oportunidade">Não é uma oportunidade</option>
+                        <option class="options-nairuz" value="Dentro do ICP">Dentro do ICP</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="reuniaoAgendadaEdit" class="form-label">Reunião Agendada</label>
+                    <input type="datetime-local" id="reuniaoAgendadaEdit" class="form-control col-12" formControlName="reuniao_agendada" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="slaAtendimentoEdit" class="form-label">SLA de Atendimento</label>
+                    <input type="text" id="slaAtendimentoEdit" class="form-control col-12" formControlName="sla_atendimento" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="percentualFitEdit" class="form-label">% de Fit</label>
+                    <input type="text" id="percentualFitEdit" class="form-control col-12" formControlName="percentual_fit" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="perfilClienteEdit" class="form-label">Perfil do Cliente</label>
+                    <select id="perfilClienteEdit" class="selectForm form-select" name="perfil_cliente" formControlName="perfil_cliente" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="A">A</option>
+                        <option class="options-nairuz" value="B">B</option>
+                        <option class="options-nairuz" value="C">C</option>
+                        <option class="options-nairuz" value="Enterprise">Enterprise</option>
+                        <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="etapaEdit" class="form-label">Etapa</label>
+                    <select id="etapaEdit" class="selectForm form-select" name="etapa" formControlName="etapa" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="Contrato">Contrato</option>
+                        <option class="options-nairuz" value="Follow">Follow</option>
+                        <option class="options-nairuz" value="Perdido">Perdido</option>
+                        <option class="options-nairuz" value="Proposta">Proposta</option>
+                        <option class="options-nairuz" value="Vendido">Vendido</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-3"> <!-- Trazer os tipos de produto do banco (Mix De Produtos) -->
+                    <label for="productEdit" class="form-label">Produto</label>
+                    <select id="productEdit" class="selectForm form-select" name="produto" formControlName="produto" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="Help A">Help A</option>
+                        <option class="options-nairuz" value="MKT">MKT</option>
+                        <option class="options-nairuz" value="Projeto">Projeto</option>
+                        <option class="options-nairuz" value="Sustentação">Sustentação</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="detalhesProdutoEdit" class="form-label">Detalhes do Produto</label>
+                    <select id="detalhesProdutoEdit" class="selectForm form-select" name="detalhes_produto" formControlName="detalhes_produto" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="Help A">Help A</option>
+                        <option class="options-nairuz" value="Layout Personalizado">Layout Personalizado</option>
+                        <option class="options-nairuz" value="MKT Full">MKT Full</option>
+                        <option class="options-nairuz" value="MKT Parcial">MKT Parcial</option>
+                        <option class="options-nairuz" value="Sustentação">Sustentação</option>
+                        <option class="options-nairuz" value="Tema">Tema</option>
+                        <option class="options-nairuz" value="Website">Website</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="valorPropostaEdit" class="form-label">Valor da Proposta</label>
+                    <input type="text" id="valorPropostaEdit" class="form-control col-12" formControlName="valor_proposta" required />
+                </div>
+            </div>
 
-
-
-            <!-- <div class="col-12 d-flex flex-column align-items-start mb-3">
-              <label class="form-label">Status:</label>
-  
-              <select formControlName="status" id="status" class="selectForm form-select">
-                <option value="Aguardando Aprovação">Aguardando Aprovação</option>
-                <option value="Aprovado">Aprovado</option>
-                <option value="Reprovado">Reprovado</option>
-                <option value="Pagamento Efetuado">Pagamento Efetuado</option>
-              </select>
-            </div>
-        
-            <div class="col-12 mb-3">
-              <label for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
-              <input
-                type="number"
-                formControlName="multiplicador"
-                step="1"
-                id="multiplicador"
-                class="form-control form-floating col-12"
-                required
-              />
-            </div>
-          
-            <div class="col-12 mb-3">
-              <label for="markup-editar" class="form-label">Qualidade = Markup:</label>
-              <input
-                type="number"
-                formControlName="markup"
-                step="0.1"
-                min="1.6"
-                class="form-control form-floating col-12"
-                id="markup-editar"
-                required
-              />
-            </div>
-          
-  
-            <div class="col-12 mb-3">
-              <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
-              <input
-                type="text"
-                prefix="R$ "
-                mask="separator.2"
-                thousandSeparator="."
-                decimalMarker=","
-                class="form-control"
-                id="vendaAvulsa"
-                formControlName="vendaAvulsa"
-                required
-              >
-            </div> -->
-  
-            <!-- <button type="submit" (click)="onSubmitEditarOportunidade()" [disabled]="!formEditarOportunidade.valid" class="col-12 btn-calcular">Editar</button> -->
-          </form>
-
-          <form id="etapa-2" [formGroup]="formEditarOportunidade" class="row container hidden">
-            <div class="col-4 mb-3">
-                <label for="primeiroContatoEdit" class="form-label">1º Contato</label>
-                <input type="datetime-local" id="primeiroContatoEdit" class="form-control col-12" formControlName="primeiro_contato" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="statusEdit" class="form-label">Status</label>
-                <select id="statusEdit" class="selectForm form-select" name="status" formControlName="status" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="Exploratória">Exploratória</option>
-                    <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
-                    <option class="options-nairuz" value="Não consegui qualificar">Não consegui qualificar</option>
-                    <option class="options-nairuz" value="Não é uma oportunidade">Não é uma oportunidade</option>
-                    <option class="options-nairuz" value="Dentro do ICP">Dentro do ICP</option>
-                </select>
-            </div>
-            <div class="col-4 mb-3">
-                <label for="reuniaoAgendadaEdit" class="form-label">Reunião Agendada</label>
-                <input type="datetime-local" id="reuniaoAgendadaEdit" class="form-control col-12" formControlName="reuniao_agendada" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="slaAtendimentoEdit" class="form-label">SLA de Atendimento</label>
-                <input type="text" id="slaAtendimentoEdit" class="form-control col-12" formControlName="sla_atendimento" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="percentualFitEdit" class="form-label">% de Fit</label>
-                <input type="text" id="percentualFitEdit" class="form-control col-12" formControlName="percentual_fit" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="perfilClienteEdit" class="form-label">Perfil do Cliente</label>
-                <select id="perfilClienteEdit" class="selectForm form-select" name="perfil_cliente" formControlName="perfil_cliente" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="A">A</option>
-                    <option class="options-nairuz" value="B">B</option>
-                    <option class="options-nairuz" value="C">C</option>
-                    <option class="options-nairuz" value="Enterprise">Enterprise</option>
-                    <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
-                </select>
-            </div>
-            <div class="col-4 mb-3">
-                <label for="etapaEdit" class="form-label">Etapa</label>
-                <select id="etapaEdit" class="selectForm form-select" name="etapa" formControlName="etapa" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="Contrato">Contrato</option>
-                    <option class="options-nairuz" value="Follow">Follow</option>
-                    <option class="options-nairuz" value="Perdido">Perdido</option>
-                    <option class="options-nairuz" value="Proposta">Proposta</option>
-                    <option class="options-nairuz" value="Vendido">Vendido</option>
-                </select>
-            </div>
-            <div class="col-4 mb-3"> <!-- Trazer os tipos de produto do banco (Mix De Produtos) -->
-                <label for="productEdit" class="form-label">Produto</label>
-                <select id="productEdit" class="selectForm form-select" name="produto" formControlName="produto" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="Help A">Help A</option>
-                    <option class="options-nairuz" value="MKT">MKT</option>
-                    <option class="options-nairuz" value="Projeto">Projeto</option>
-                    <option class="options-nairuz" value="Sustentação">Sustentação</option>
-                </select>
-            </div>
-            <div class="col-4 mb-3">
-                <label for="detalhesProdutoEdit" class="form-label">Detalhes do Produto</label>
-                <select id="detalhesProdutoEdit" class="selectForm form-select" name="detalhes_produto" formControlName="detalhes_produto" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="Help A">Help A</option>
-                    <option class="options-nairuz" value="Layout Personalizado">Layout Personalizado</option>
-                    <option class="options-nairuz" value="MKT Full">MKT Full</option>
-                    <option class="options-nairuz" value="MKT Parcial">MKT Parcial</option>
-                    <option class="options-nairuz" value="Sustentação">Sustentação</option>
-                    <option class="options-nairuz" value="Tema">Tema</option>
-                    <option class="options-nairuz" value="Website">Website</option>
-                </select>
-            </div>
-            <div class="col-4 mb-3">
-                <label for="valorPropostaEdit" class="form-label">Valor da Proposta</label>
-                <input type="text" id="valorPropostaEdit" class="form-control col-12" formControlName="valor_proposta" required />
+            <div id="etapa-3" class="formtab row hidden">
+                <div class="col-4 mb-3">
+                    <label for="motivoPerdaEdit" class="form-label">Motivo da Perda</label>
+                    <select id="motivoPerdaEdit" class="selectForm form-select" name="motivo_perda" formControlName="motivo_perda" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="Contrato">Contrato</option>
+                        <option class="options-nairuz" value="Follow">Follow"</option>
+                        <option class="options-nairuz" value="Perdido">Perdido</option>
+                        <option class="options-nairuz" value="Proposta">Proposta</option>
+                        <option class="options-nairuz" value="Vendido">Vendido</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="valorVendidoEdit" class="form-label">Valor Vendido</label>
+                    <input type="text" id="valorVendidoEdit" class="form-control col-12" formControlName="valor_vendido" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="markupEdit" class="form-label">Markup</label>
+                    <input type="text" id="markupEdit" class="form-control col-12" formControlName="markup" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="mrrEdit" class="form-label">MRR</label>
+                    <input type="text" id="mrrEdit" class="form-control col-12" formControlName="mrr" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="dataAceiteEdit" class="form-label">Data do Aceite</label>
+                    <input type="datetime-local" id="dataAceiteEdit" class="form-control col-12" formControlName="data_aceite" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="cicloVendaEdit" class="form-label">Ciclo de Venda</label>
+                    <input type="text" id="cicloVendaEdit" class="form-control col-12" formControlName="ciclo_venda" required />
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="mesEncerramentoEdit" class="form-label">Mês de Enceramento</label>
+                    <select id="mesEncerramentoEdit" class="selectForm form-select" name="mes_encerramento" formControlName="mes_encerramento" required>
+                        <option class="options-nairuz" value="">Selecione</option>
+                        <option class="options-nairuz" value="Janeiro">Janeiro</option>
+                        <option class="options-nairuz" value="Fevereiro">Fevereiro"</option>
+                        <option class="options-nairuz" value="Março">Março</option>
+                        <option class="options-nairuz" value="Abril">Abril</option>
+                        <option class="options-nairuz" value="Maio">Maio</option>
+                        <option class="options-nairuz" value="Junho">Junho</option>
+                        <option class="options-nairuz" value="Julho">Julho</option>
+                        <option class="options-nairuz" value="Agosto">Agosto</option>
+                        <option class="options-nairuz" value="Setembro">Setembro</option>
+                        <option class="options-nairuz" value="Outubro">Outubro</option>
+                        <option class="options-nairuz" value="Novembro">Novembro</option>
+                        <option class="options-nairuz" value="Dezembro">Dezembro</option>
+                    </select>
+                </div>
             </div>
 
             <div class="col-12 mb-5 text-end">
-                <button class="salvar-nairuz" type="submit" [disabled]="!formEditarOportunidade.valid">Avançar</button>
-            </div>
-          </form>
-
-          <form id="etapa-3" [formGroup]="formEditarOportunidade" class="row container hidden">
-            <div class="col-4 mb-3">
-                <label for="motivoPerdaEdit" class="form-label">Motivo da Perda</label>
-                <select id="motivoPerdaEdit" class="selectForm form-select" name="motivo_perda" formControlName="motivo_perda" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="Contrato">Contrato</option>
-                    <option class="options-nairuz" value="Follow">Follow"</option>
-                    <option class="options-nairuz" value="Perdido">Perdido</option>
-                    <option class="options-nairuz" value="Proposta">Proposta</option>
-                    <option class="options-nairuz" value="Vendido">Vendido</option>
-                </select>
-            </div>
-            <div class="col-4 mb-3">
-                <label for="valorVendidoEdit" class="form-label">Valor Vendido</label>
-                <input type="text" id="valorVendidoEdit" class="form-control col-12" formControlName="valor_vendido" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="markupEdit" class="form-label">Markup</label>
-                <input type="text" id="markupEdit" class="form-control col-12" formControlName="markup" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="mrrEdit" class="form-label">MRR</label>
-                <input type="text" id="mrrEdit" class="form-control col-12" formControlName="mrr" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="dataAceiteEdit" class="form-label">Data do Aceite</label>
-                <input type="datetime-local" id="dataAceiteEdit" class="form-control col-12" formControlName="data_aceite" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="cicloVendaEdit" class="form-label">Ciclo de Venda</label>
-                <input type="text" id="cicloVendaEdit" class="form-control col-12" formControlName="ciclo_venda" required />
-            </div>
-            <div class="col-4 mb-3">
-                <label for="mesEncerramentoEdit" class="form-label">Mês de Enceramento</label>
-                <select id="mesEncerramentoEdit" class="selectForm form-select" name="mes_encerramento" formControlName="mes_encerramento" required>
-                    <option class="options-nairuz" value="">Selecione</option>
-                    <option class="options-nairuz" value="Janeiro">Janeiro</option>
-                    <option class="options-nairuz" value="Fevereiro">Fevereiro"</option>
-                    <option class="options-nairuz" value="Março">Março</option>
-                    <option class="options-nairuz" value="Abril">Abril</option>
-                    <option class="options-nairuz" value="Maio">Maio</option>
-                    <option class="options-nairuz" value="Junho">Junho</option>
-                    <option class="options-nairuz" value="Julho">Julho</option>
-                    <option class="options-nairuz" value="Agosto">Agosto</option>
-                    <option class="options-nairuz" value="Setembro">Setembro</option>
-                    <option class="options-nairuz" value="Outubro">Outubro</option>
-                    <option class="options-nairuz" value="Novembro">Novembro</option>
-                    <option class="options-nairuz" value="Dezembro">Dezembro</option>
-                </select>
-            </div>
-            <div class="col-12 mb-5 text-end">
-                <button class="salvar-nairuz" type="submit" [disabled]="!formEditarOportunidade.valid">Avançar</button>
+                <button (click)="previewTab()" type="button" class="voltar-nairuz hidden">Voltar</button>
+                <button (click)="nextTab()" type="button" class="avancar-nairuz">Avançar</button>
+                <button class="salvar-nairuz" type="submit">Salvar Informações</button>
             </div>
           </form>
         </div>

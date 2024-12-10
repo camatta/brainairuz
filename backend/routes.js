@@ -144,7 +144,7 @@ router.get('/api/comissoes', authMiddleware, ListCommissionsController);
 router.post('/api/comissao', authMiddleware, CreateCommissionController);
 
 // Rota para apagar uma comissão
-router.delete('/api/comissoes/:id', authMiddleware, DeleteCommissionController);
+router.put('/api/comissoes/delete/:id', authMiddleware, DeleteCommissionController);
 
 // Rota para editar uma comissão
 router.put('/api/comissoes/:id', authMiddleware, UpdateCommissionController);

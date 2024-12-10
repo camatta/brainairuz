@@ -220,3 +220,7 @@ mat-paginator .mat-mdc-select-arrow svg {
 .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
   stroke: var(--nairuz-secondary) !important;
 }
+
+.modal .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: var(--nairuz-primary) !important;
+}

@@ -107,11 +107,11 @@ export class CalculoComissaoComponent implements OnInit {
   valorBaseTotal: number = 0; // Valor Base vem da tabela de valores dos produtos
 
   /* Variáveis e métodos de controle de front */
-  onLoad: boolean = false;
+  onLoadComissions: boolean = false;
   grupoMarkup: number;
   maxMarkup: number;
   minMarkup: number;
-  editarImagemModalEditarComissao: boolean = false;
+  onLoadComission: boolean = false;
 
   userPermission(): boolean {
     if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz" || this.currentUser.name === 'Adriany Oliveira'){
@@ -293,17 +293,22 @@ export class CalculoComissaoComponent implements OnInit {
   }
 
   // Verifica o valor digitado no input number do Markup
+  controlMarkupInputForm: boolean = true;
   verifyValueMarkup(element: any) {
     let valueInput = element.target.value;
-    let input: HTMLInputElement = document.querySelector(`#${element.target.id}`);
     
-    if(valueInput > this.maxMarkup || valueInput < this.minMarkup) {
-      input.classList.add("markup-invalid");
+    if(valueInput < this.minMarkup) { 
+      this.controlMarkupInputForm = false;
       return;
     }
 
-    input.classList.remove("markup-invalid");
-    this.formEditarVenda.patchValue({imageEmailMarkupApproval: element.imageEmailMarkupApproval});
+    this.controlMarkupInputForm = true;
+
+    // inserir aqui uma validação para que, quando eu for editar uma comissão, caso eu tenha uma imagem e não seja mais necessária, precisa removê-la de acordo com a validação do markup
+    this.imageEmailMarkupApproval = null;
+    this.urlPreviewImage = null;
+
+    this.formEditarVenda.patchValue({ imageEmailMarkupApproval: element.imageEmailMarkupApproval });
   }
 
   // Função para filtrar comissões por vendedor, mês e/ou ano
@@ -490,7 +495,7 @@ export class CalculoComissaoComponent implements OnInit {
           this.mix == 1 ? this.mix = 0.5 : this.mix = 0.5;
         }
   
-        this.onLoad = true;
+        this.onLoadComissions = true;
         setTimeout(() => { // Usei o timeout por que as metas estavam demorando para retornar e afetando o cálculo da comissão
           // COMISSÃO FINAL
           // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
@@ -500,7 +505,7 @@ export class CalculoComissaoComponent implements OnInit {
   
           // R$ COMISSÃO
           this.valorComissao = Number((((this.vendasTotal * this.comissaoFinal) / 100) - (((this.vendasTotal * this.comissaoFinal) / 100) * 0.16)).toFixed(2));
-          this.onLoad = false;
+          this.onLoadComissions = false;
         }, 5000);
   
       });
@@ -582,12 +587,17 @@ export class CalculoComissaoComponent implements OnInit {
       return false;
     }
   }
+
+  // Método para verificar se o markup usado está dentro do range
   
   // CRIAR Comissão
   imageEmailMarkupApproval: File;
+  urlPreviewImage: string;
   onUploadImageEmailMarkupApproval(e: any){
     if(e.target.files && e.target.files[0]) {
       this.imageEmailMarkupApproval = e.target.files[0];
+      this.urlPreviewImage = URL.createObjectURL(this.imageEmailMarkupApproval);
+      this.controlMarkupInputForm = true;
     } else {
       console.log("Erro ao subir a imagem");
     }
@@ -627,6 +637,10 @@ export class CalculoComissaoComponent implements OnInit {
       vendaAvulsa: [0, Validators.required],
       valorBase: ['']
     });
+
+    this.urlPreviewImage = null;
+    this.minMarkup = null;
+    this.maxMarkup = null;
   }
 
   formNovaVenda = this.formBuilder.group({
@@ -725,6 +739,8 @@ export class CalculoComissaoComponent implements OnInit {
     const formNovaVendaStatus: string = this.formNovaVenda.status;
 
       if(formNovaVendaStatus !== "INVALID") {
+        this.onLoadComission = true;
+
         let dataVenda = this.formNovaVenda.get('dataVenda').value;
         let status = this.formNovaVenda.get('status').value;
         let vendedor = this.formNovaVenda.get('vendedor').value;
@@ -840,10 +856,13 @@ export class CalculoComissaoComponent implements OnInit {
 
             this.maxMarkup = 0;
             this.minMarkup = 0;
+            this.urlPreviewImage = null;
+            this.onLoadComission = false;
 
             this.closeModalNovaVenda();
           },
           async (error) => {
+            this.onLoadComission = false;
             console.error(`Erro ao inserir a comissão`);
             console.log(error);
             this.showMessageAction('Erro ao criar a comissão');
@@ -894,6 +913,8 @@ export class CalculoComissaoComponent implements OnInit {
       }
     });
 
+    this.urlPreviewImage = element.imageEmailMarkupApproval;
+
     // Busca os valores da linha e insere nos inputs
     this.formEditarVenda.patchValue({
       _id: element._id,
@@ -919,10 +940,6 @@ export class CalculoComissaoComponent implements OnInit {
     }
   }
 
-  handleEditarImagemModalEditarComissao() {
-    this.editarImagemModalEditarComissao = !this.editarImagemModalEditarComissao;
-  }
-
   closeModalEditarVenda() {
     const modal = document.getElementById("modalEdit");
     const bgModal = document.getElementById("bg-modal");
@@ -931,7 +948,10 @@ export class CalculoComissaoComponent implements OnInit {
       bgModal.style.display = "none";
       modal.classList.remove("show");
     }
-    this.editarImagemModalEditarComissao = false;
+
+    this.minMarkup = null;
+    this.maxMarkup = null;
+    this.urlPreviewImage = null;
   }
 
   // Busca o valor do produto selecionado no input "Produto Vendido" e insere no input "Valor Base"
@@ -951,6 +971,8 @@ export class CalculoComissaoComponent implements OnInit {
   }
 
   onSubmitEditarVenda() {
+    this.onLoadComission = true;
+
     const id: string = this.formEditarVenda.get('_id').value;
     let dataVenda = this.formEditarVenda.get('dataVenda').value;
     let status = this.formEditarVenda.get('status').value;
@@ -999,16 +1021,20 @@ export class CalculoComissaoComponent implements OnInit {
     
     if(this.formEditarVenda.get('imageEmailMarkupApproval').value) {
       editarVenda2.append('imageEmailMarkupApproval', this.formEditarVenda.get('imageEmailMarkupApproval').value);
+    } else {
+      editarVenda2.append('imageEmailMarkupApproval', this.imageEmailMarkupApproval);
     }
     
     this.comissoesService.updateComissao(id, editarVenda2).subscribe(
       async (res) => {
+        this.onLoadComission = false;
         this.showMessageAction('Comissão alterada com sucesso');
         await this.submitFormFilter();
         this.tabelaVendas._updateChangeSubscription();
         this.closeModalEditarVenda();
       },
       async (error) => {
+        this.onLoadComission = false;
         console.error(`Erro ao editar a comissão: ${error}`);
         this.showMessageAction('ERRO ao editar a comissão');
         await this.submitFormFilter();
@@ -1022,8 +1048,16 @@ export class CalculoComissaoComponent implements OnInit {
   // DELETE Comissão
   formDeletarVenda = this.formBuilder.group({
     _id: [],
-    cliente: ['']
-  })
+    cliente: [''],
+    imageEmailMarkupApproval: ['']
+  });
+
+  extratorDeIdPublico(url: string): string | null {
+    const regex = /([a-zA-Z0-9]+)\.png$/; // Regex para capturar o texto antes de .png
+    const match = url.match(regex);
+
+    return match ? match[1] : null;
+  }
 
   openModalDeletarVenda(element: any){
     const modal = document.getElementById("modalDeletar");
@@ -1037,8 +1071,9 @@ export class CalculoComissaoComponent implements OnInit {
     // Busca os valores da linha
     this.formDeletarVenda.patchValue({
       _id: element._id,
-      cliente: element.cliente
-    })
+      cliente: element.cliente,
+      imageEmailMarkupApproval: element.imageEmailMarkupApproval
+    });
   }
 
   closeModalDeletarVenda() {
@@ -1053,7 +1088,12 @@ export class CalculoComissaoComponent implements OnInit {
 
   onSubmitDeletarVenda() {
     const id: string = this.formDeletarVenda.get('_id').value;
-    this.comissoesService.deleteComissao(id).subscribe(
+    const idPublicoImagemMarkupAprovado = this.extratorDeIdPublico(this.formDeletarVenda.get("imageEmailMarkupApproval").value);
+    const formData = new FormData();
+
+    formData.append("publicIdImage", idPublicoImagemMarkupAprovado);
+
+    this.comissoesService.deleteComissao(id, formData).subscribe(
       async (res) => {
         this.showMessageAction('Comissão excluída com sucesso');
         await this.submitFormFilter();

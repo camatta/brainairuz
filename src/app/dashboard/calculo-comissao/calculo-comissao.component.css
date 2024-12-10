@@ -225,6 +225,6 @@ mat-spinner {
 }
 
 .markup-invalid { 
-  border: 1px solid var(--bs-danger) !important;
-  box-shadow: 0 3px 10px #dc35454a !important;
+  /* border: 1px solid var(--bs-danger) !important;
+  box-shadow: 0 3px 10px #dc35454a !important; */
 }

@@ -1,3 +1,147 @@
+.hidden {
+    display: none;
+}
+
+.titlePage {
+    font-size: 24px !important;
+    line-height: 36px;
+    margin-bottom: 0 !important;
+}
+
+form.formBusca {
+    display: flex;
+    gap: 50px;
+    border: 1px solid #ececec;
+    border-radius: 76px;
+    padding: 8px 32px;
+    background-color: #fff;
+}
+
+form.formBusca input:focus, form.formBusca button:focus {
+    outline: none;
+}
+
+form.formBusca input {
+    border: none;
+    background-color: transparent;
+}
+
+form.formBusca button {
+    height: 20px;
+    font-size: 20px;
+    background-color: transparent;
+    border: none;
+    color: #a2a2a2;
+    padding: 0;
+}
+
+.topo {
+    margin-bottom: 2rem;
+}
+
+form.formFiltrarColunas {
+    position: relative;
+}
+
+form.formFiltrarColunas button {
+    width: 210px;
+    border: 1px solid #ececec;
+    border-radius: 76px;
+    padding: 6px 12px;
+    background-color: #fff;
+}
+
+form.formFiltrarColunas button .texto {
+    font-size: 14px;
+    color: #a2a2a2;
+    font-weight: 400;
+}
+
+form.formFiltrarColunas button .icone {
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    color: #fff;
+    background-color: var(--nairuz-secondary);
+    border-radius: 50%;
+}
+
+form.formFiltrarColunas #listaDeColunas {
+    max-height: 280px;
+    width: 100%;
+    border-radius: 4px;
+    padding-left: 16px;
+    position: absolute;
+    z-index: 999;
+    background-color: #fff;
+    box-shadow: 0px 4px 4px 0px #00000026;
+}
+
+form.formFiltrarColunas #listaDeColunas ul {
+    max-height: 224px;
+    overflow-y: scroll;
+    list-style: none;
+    padding: 0;
+}
+
+form.formFiltrarColunas #listaDeColunas ul::-webkit-scrollbar {
+    width: 6px;
+    border-radius: 12px;
+}
+
+form.formFiltrarColunas #listaDeColunas ul::-webkit-scrollbar-track {
+    background-color: #ccc;
+}
+
+form.formFiltrarColunas #listaDeColunas ul::-webkit-scrollbar-thumb {
+    width: 6px;
+    border-radius: 12px;
+    background-color: #a2a2a2;
+}
+
+form.formFiltrarColunas #listaDeColunas ul  li label {
+    font-size: 14px;
+    font-weight: 400;
+    color: #a2a2a2;
+    margin-left: 5.5px;
+}
+
+form.formFiltrarColunas #listaDeColunas button {
+    max-width: 156px;
+    background-color: var(--nairuz-secondary);
+    border-radius: 32px;
+    color: var(--nairuz-primary);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.filter-commissions label {
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 400;
+}
+
+.filter-commissions select {
+    border: 1px solid #ececec;
+    border-radius: 19px;
+    color: #a2a2a2;
+    padding-inline: 1rem;
+}
+
+.filter-commissions select:focus {
+    outline: none;
+}
+
+
+#alert-actions {
+    position: absolute;
+    top: 2.4rem;
+    right: 5rem;
+    transition: ease-in-out .4s;
+    z-index: 1056;
+}
+
 #tabela-valores {
     overflow-x: scroll;
 }
@@ -26,20 +170,15 @@
     z-index: 1054;
 }
 
-.tabs {
+#tabs {
     list-style: none;
 }
 
-.tabs li {
+#tabs li {
     border-bottom: 1px solid grey;
 }
 
-.tabs button {
-    background-color: transparent;
-    border: none;
-}
-
-.tabs li.active, .tabs button.active {
+#tabs li.active {
     color: var(--nairuz-secondary);
     font-weight: bold;
     border-bottom: 2px solid var(--nairuz-secondary);
@@ -49,7 +188,7 @@
     margin-left: 0;
 }
 
-.salvar-nairuz {
+.avancar-nairuz {
     color: var(--nairuz-primary);
     font-size: 12px;
     border: none;
@@ -60,11 +199,11 @@
     transition: ease-out 300ms;
   }
   
-  .salvar-nairuz:not(:disabled):hover {
+  .avancar-nairuz:not(:disabled):hover {
     filter: brightness(.8);
   }
   
-  .salvar-nairuz:disabled {
+  .avancar-nairuz:disabled {
     opacity: .5;
   }
 

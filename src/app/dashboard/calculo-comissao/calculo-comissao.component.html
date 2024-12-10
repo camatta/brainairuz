@@ -92,8 +92,8 @@
     <div class="col-3">
       <div class="bg-nairuzPrimary">
         <label for="Valor Comissão" class="form-label">Comissão Final</label>
-        <mat-spinner *ngIf="onLoad"></mat-spinner>
-        <p *ngIf="!onLoad" class="fs-6">{{ comissaoFinal }}</p>
+        <mat-spinner *ngIf="onLoadComissions"></mat-spinner>
+        <p *ngIf="!onLoadComissions" class="fs-6">{{ comissaoFinal }}</p>
       </div>
     </div>
 
@@ -101,8 +101,8 @@
     <div class="col-3">
       <div class="bg-nairuzPrimary">
         <label for="Valor Comissão" class="form-label">Valor Comissão</label>
-        <mat-spinner *ngIf="onLoad"></mat-spinner>
-        <p *ngIf="!onLoad" class="fs-6">{{ valorComissao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+        <mat-spinner *ngIf="onLoadComissions"></mat-spinner>
+        <p *ngIf="!onLoadComissions" class="fs-6">{{ valorComissao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
       </div>
     </div>
   </div>
@@ -393,17 +393,36 @@
             >
           </div>
 
-          <input
-            *ngIf="formNovaVenda.get('markup').value < minMarkup"
-            type="file"
-            (change)="onUploadImageEmailMarkupApproval($event)"
-            name=""
-            id=""
-            accept="image/png, image/jpg, image/jpeg"
-            required
-          >
+          <div *ngIf="formNovaVenda.get('markup').value < minMarkup" class="d-flex flex-column align-items-start gap-3">
+            <p-image
+              *ngIf="urlPreviewImage"
+              width="150"
+              [preview]="true"
+              src="{{ urlPreviewImage }}"
+              alt="markup-aprovado"
+            ></p-image>
 
-          <button type="submit" (click)="onSubmitNovaVenda()" [disabled]="!formNovaVenda.valid" class="col-12 btn-calcular">Inserir</button>
+            <label class="btn btn-link p-0" style="color: var(--nairuz-primary);" for="ModalNovaVendaImagemPreviewMarkupAprovado">
+              <span class="small">
+                {{ urlPreviewImage ? 'Alterar imagem' : 'Enviar imagem' }}
+              </span>
+            </label>
+
+            <input
+              type="file"
+              (change)="onUploadImageEmailMarkupApproval($event)"
+              name="ModalNovaVendaImagemPreviewMarkupAprovado"
+              id="ModalNovaVendaImagemPreviewMarkupAprovado"
+              class="d-none"
+              accept="image/png, image/jpg, image/jpeg"
+              required
+            >
+          </div>
+
+          <button type="submit" (click)="onSubmitNovaVenda()" [disabled]="!formNovaVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
+            <mat-spinner class="mx-auto" *ngIf="onLoadComission"></mat-spinner>
+            <span *ngIf="!onLoadComission" class="fs-6">Inserir</span>
+          </button>
         </form>
       </div>
     </div>
@@ -510,31 +529,36 @@
             >
           </div>
 
-          <div *ngIf="formNovaVenda.get('markup').value < minMarkup || formEditarVenda.get('imageEmailMarkupApproval').value" class="d-flex flex-column align-items-start">
+          <div *ngIf="formEditarVenda.get('markup').value < minMarkup || urlPreviewImage" class="d-flex flex-column align-items-start">
             <p-image
-              width="100"
+              *ngIf="urlPreviewImage"
+              width="150"
               [preview]="true"
-              src="{{ formEditarVenda.get('imageEmailMarkupApproval').value }}"
+              src="{{ urlPreviewImage }}"
               alt="markup-aprovado"
             ></p-image>
 
-            <button (click)="handleEditarImagemModalEditarComissao()" class="btn btn-link p-0">
-              {{ editarImagemModalEditarComissao ? "Cancelar" : "Alterar imagem" }}
-            </button>
+            <label class="btn btn-link p-0" style="color: var(--nairuz-primary);" for="ModalEditarVendaImagemPreviewMarkupAprovado">
+              <span class="small">
+                {{ urlPreviewImage ? 'Alterar imagem' : 'Enviar imagem' }}
+              </span>
+            </label>
 
             <input
-              *ngIf="formNovaVenda.get('markup').value < minMarkup && editarImagemModalEditarComissao"
               type="file"
               (change)="onUploadImageEmailMarkupApproval($event)"
-              name=""
-              id=""
+              name="ModalEditarVendaImagemPreviewMarkupAprovado"
+              id="ModalEditarVendaImagemPreviewMarkupAprovado"
+              class="d-none"
               accept="image/png, image/jpg, image/jpeg"
               required
             >
-
           </div>
 
-          <button type="submit" (click)="onSubmitEditarVenda()" [disabled]="!formEditarVenda.valid" class="col-12 btn-calcular">Editar</button>
+          <button type="submit" (click)="onSubmitEditarVenda()" [disabled]="!formEditarVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
+            <mat-spinner class="mx-auto" *ngIf="onLoadComission"></mat-spinner>
+            <span *ngIf="!onLoadComission" class="fs-6">Editar</span>
+          </button>
         </form>
       </div>
     </div>

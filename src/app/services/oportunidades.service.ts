@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Oportunidade } from '../types/oportunidade';
@@ -12,8 +12,20 @@ export class OportunidadesService {
 
   constructor(private http: HttpClient) { }
 
-  getOportunidades(): Observable<any[]> {
-    return this.http.get<Oportunidade[]>(environment.URL_API + '/api/oportunidades');
+  getOportunidades(filterStatus: string, filterMonth: string, filterYear: string): Observable<any[]> {
+    let url = environment.URL_API + '/api/oportunidades';
+
+    if(filterStatus){
+      url += `?status=${filterStatus}`
+    }
+    if (filterMonth) {
+      url += filterStatus ? `&month=${filterMonth}` : `?month=${filterMonth}`;
+    }
+    if(filterYear) {
+      url += filterStatus || filterMonth ? `&year=${filterYear}` : `?year=${filterYear}`;
+    }
+
+    return this.http.get<Oportunidade[]>(url);
   }
 
   setOportunidade(oportunidade: Oportunidade) {
