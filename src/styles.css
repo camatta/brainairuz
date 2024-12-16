@@ -8,6 +8,8 @@
   --nairuz-primary: #00175d;
   --nairuz-secondary: #61dcab;
 
+  --nairuz-default-oportunidades: Poppins, sans-serif;
+
   --mdc-filled-text-field-caret-color: var(--nairuz-primary);
   --mdc-filled-text-field-focus-active-indicator-color: var(--nairuz-secondary);
   --mat-select-focused-arrow-color: var(--nairuz-secondary);
@@ -223,4 +225,13 @@ mat-paginator .mat-mdc-select-arrow svg {
 
 .modal .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
   stroke: var(--nairuz-primary) !important;
+}
+
+/* CONTROLE OPORTUNIDADES */
+#tabela-oportunidades th .mat-sort-header-arrow{
+  color: var(--nairuz-secondary);
+}
+
+#tabela-oportunidades tbody tr:nth-child(even) {
+  background-color: #f3f3f3;
 }

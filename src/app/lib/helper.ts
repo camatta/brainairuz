@@ -37,7 +37,7 @@ export class Helper {
         }
     }
 
-    setFormatarDataParaHtmlInput(data: Date) {
+    setFormatarDataParaHtmlInput(data: Date | string) {
         const dataSplit = String(data).split("-");
         const mes = Number(dataSplit[1]) - 1;
         const ano = Number(dataSplit[0]);

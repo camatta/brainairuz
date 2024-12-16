@@ -5,8 +5,11 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
+import { isWeekend, isSameDay, parseISO, differenceInMinutes } from 'date-fns';
+
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 import { OportunidadesService } from 'src/app/services/oportunidades.service';
+import { FeriadosNacionais } from 'src/app/services/feriadosNacionais.service';
 import { UserService } from 'src/app/services/user.service';
 import { Oportunidade } from 'src/app/types/oportunidade';
 
@@ -65,10 +68,11 @@ export class ControleGeralComponent implements OnInit {
 
   constructor(
     private oportunidades: OportunidadesService,
+    private feriadosNacionais: FeriadosNacionais,
     private users: UserService,
     private _liveAnnouncer: LiveAnnouncer,
     private formBuilder: FormBuilder,
-    private helper: Helper
+    public helper: Helper
   ){}
 
   ngOnInit(): void {
@@ -77,6 +81,8 @@ export class ControleGeralComponent implements OnInit {
 
     // Carrega todos os vendedores
     this.loadVendedores();
+
+    this.calculaSlaDeAtendimento("2024-12-02T09:20:00Z", "2024-12-02T14:00:00Z");
   }
 
   /** Announce the change in sort state for assistive technology. */
@@ -129,6 +135,11 @@ export class ControleGeralComponent implements OnInit {
     labelFormatada = labelFormatada.toLowerCase();
 
     return labelFormatada.charAt(0).toUpperCase() + labelFormatada.slice(1);
+  }
+
+  // Formatar status para inserir no span como classe
+  formatarTextoDaColunaStatus(texto: string) {
+    return texto.replaceAll(" ", "-");
   }
 
   // MODAL de ação dos produtos
@@ -298,6 +309,68 @@ export class ControleGeralComponent implements OnInit {
     this.filtrarBarraBusca();
   }
 
+  // Método para cálculo de dias úteis
+  async calculaDiasUteis(dataInicial: string, dataFinal: string) {
+    // Parse as datas para objetos Date
+    const inicio = parseISO(dataInicial);
+    const fim = parseISO(dataFinal);
+    const apiFeriados = await this.feriadosNacionais.getFeriadosNacionais(2024).toPromise();
+    let feriados: Date[] = [];
+
+    // Insere feriados em um array de datas
+    apiFeriados.map((feriado) => {
+      feriados.push(new Date(feriado.date));
+    })
+
+    // Inicializa o contador de dias úteis
+    let diasUteis = 0;
+
+    // Itera sobre cada dia entre as datas
+    for (let dataAtual = inicio; isSameDay(dataAtual, fim) === false; dataAtual.setDate(dataAtual.getDate() + 1)) {
+      // Verifica se o dia não é fim de semana e não é feriado
+      if (!isWeekend(dataAtual) && !feriados.some(feriado => isSameDay(dataAtual, feriado))) {
+        diasUteis++;
+      }
+    }
+
+    return diasUteis;
+  }
+
+  // Método para cálculo do SLA de Atendimento
+  async calculaSlaDeAtendimento(dataInicial: string, dataFinal: string) {
+    const inicio = parseISO(dataInicial);
+    const fim = parseISO(dataFinal);
+
+    const diasUteis: number = await this.calculaDiasUteis(dataInicial, dataFinal);
+    const horasUteis = diasUteis * 10; // 10 horas trabalhadas por dia
+    const diferencaEntreAsDatasEmHoras: number = differenceInMinutes(fim, inicio);
+
+    const diaEmMinutos = 24 * 60;
+
+    if(!dataInicial) {
+      console.log("Sem data inicial preenchida");
+      return 0;
+    }
+
+    if(!dataFinal) {
+      console.log("Não agendado");
+      return "Não agendado";
+    }
+
+    if(diferencaEntreAsDatasEmHoras === 0) {
+      console.log("Diferença entre as datas em minutos: ", 0);
+      return 0;
+    } else if(diferencaEntreAsDatasEmHoras > 0) {
+      console.log("Diferença entre as datas em minutos: ", diferencaEntreAsDatasEmHoras / diaEmMinutos);
+      return diferencaEntreAsDatasEmHoras / diaEmMinutos;
+    }
+
+    // PRECISO DIVIDIR O RESULTADO POR 24H / 60MIN PARA CHEGAR NO VALOR DECIMAL DA PLANILHA (0,22)
+
+    console.log("Minutos úteis: ", horasUteis);
+    return horasUteis;
+  }
+
   formEditarOportunidade = this.formBuilder.group({
     id: [''],
 
@@ -337,39 +410,6 @@ export class ControleGeralComponent implements OnInit {
     const bgModal = document.getElementById("bg-modal");
 
     const dataInicial = this.helper.setFormatarDataParaHtmlInput(element.data);
-
-    // this.formEditarOportunidadeEtapa1.patchValue({
-    //   data: dataFormatada,
-    //   mes: element.mes,
-    //   ano: element.ano,
-    //   suspect: element.suspect,
-    //   origem: element.origem,
-    //   fonte: element.fonte,
-    //   responsavel: element.responsavel
-    // })
-
-    // this.formEditarOportunidadeEtapa2.patchValue({
-    //   primeiro_contato: element.primeiro_contato,
-    //   status: element.status,
-    //   reuniao_agendada: element.reuniao_agendada,
-    //   sla_atendimento: element.sla_atendimento,
-    //   percentual_fit: element.percentual_fit,
-    //   perfil_cliente: element.perfil_cliente,
-    //   etapa: element.etapa,
-    //   produto: element.produto,
-    //   detalhes_produto: element.detalhes_produto,
-    //   valor_proposta: element.valor_proposta
-    // });
-
-    // this.formEditarOportunidadeEtapa3.patchValue({
-    //   motivo_perda: element.motivo_perda,
-    //   valor_vendido: element.valor_vendido,
-    //   markup: element.markup,
-    //   mrr: element.mrr,
-    //   data_aceite: element.data_aceite,
-    //   ciclo_venda: element.ciclo_venda,
-    //   mes_encerramento: element.mes_encerramento
-    // });
 
     this.formEditarOportunidade.patchValue({
       id: element._id,

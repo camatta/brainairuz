@@ -98,7 +98,7 @@ const OpportunitiesSchema = new mongoose.Schema({
         type: String,
         require: true
     }
-})
+});
 
 // Criação do modelo "Oportunidades" com base no esquema definido
 const Opportunities = mongoose.model('Opportunities', OpportunitiesSchema);

@@ -27,8 +27,11 @@ module.exports.UpdateOpportunityController = async (req, res) => {
 
         const id = req.params.id;
 
+        let dataRecebida = new Date(data);
+        const dataFormatada = dataRecebida.setTime(dataRecebida.getTime() - 3 * 60 * 60 * 1000);
+
         const updateOpportunityService = await UpdateOpportunityService({
-            data: data,
+            data: dataFormatada,
             suspect: suspect,
             origem: origem,
             fonte: fonte,
