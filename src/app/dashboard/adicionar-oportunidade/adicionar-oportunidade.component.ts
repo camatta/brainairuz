@@ -78,6 +78,14 @@ export class AdicionarOportunidadeComponent implements OnInit {
       bgModal.style.display = "none";
       modal.classList.remove("show");
     }
+
+    this.formAdicionarOportunidade = this.formBuilder.group({
+      data: [new Date(), Validators.required],
+      suspect: ['', Validators.required],
+      origem: ['', Validators.required],
+      fonte: ['', Validators.required],
+      responsavel: ['', Validators.required]
+    });
   }
 
   redirectControle() {
@@ -133,7 +141,7 @@ export class AdicionarOportunidadeComponent implements OnInit {
       let ano = dataSeparada[0];
 
       const novaOportunidade: Oportunidade = {
-        data: data,
+        data: new Date(data),
         ano: ano,
         mes: mes,
         suspect: suspect,

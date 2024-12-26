@@ -41,6 +41,29 @@ form.formBusca button {
     padding: 0;
 }
 
+.termo-buscado {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 2rem;
+}
+
+.termo-buscado span {
+    font-family: var(--nairuz-default-oportunidades);
+    font-size: 14px;
+    font-weight: 400 !important;
+    line-height: 21px;
+    color: #666666;
+}
+
+.termo-buscado button {
+    display: flex;
+    border: none;
+    background-color: transparent;
+    color: #A2A2A2;
+    padding: 0;
+}
+
 .topo {
     margin-bottom: 2rem;
 }
@@ -227,7 +250,22 @@ form.formFiltrarColunas #listaDeColunas button {
 }
 
 .sectionTable {
-    overflow-x: scroll;
+    max-height: 332px;
+    overflow: auto;
+}
+
+.sectionTable::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.sectionTable::-webkit-scrollbar-track {
+    background: #eee;
+}
+
+.sectionTable::-webkit-scrollbar-thumb {
+    background-color: var(--nairuz-primary); /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
 }
 
 #bg-modal {
@@ -243,12 +281,57 @@ form.formFiltrarColunas #listaDeColunas button {
     z-index: 1054;
 }
 
+.modal-header h2 {
+    font-family: var(--nairuz-default-oportunidades);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 30px;
+    text-align: center;
+    color: var(--nairuz-primary);
+    margin-bottom: 12px;
+}
+
+.modal-header {
+    border-bottom: none;
+    margin-bottom: 34px;
+}
+
+.modal-header h3 {
+    background-color: #ececec;
+    border-radius: 51px;
+    padding-inline: 40px;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 30px;
+    text-align: center;
+    color: #666666;
+}
+
+.modal-header .btn-close {
+    position: absolute;
+    right: 26px;
+    top: 35px;
+}
+
+.modal-header .btn-close:focus {
+    box-shadow: none;
+    outline: none;
+}
+
 #tabs {
     list-style: none;
 }
 
 #tabs li {
-    border-bottom: 1px solid grey;
+    font-family: var(--nairuz-default-oportunidades);
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 30px;
+    color: #A2A2A2;
+    border-bottom: 1px solid #A2A2A2;
+    padding-inline: 40px;
+    padding-bottom: 1rem;
 }
 
 #tabs li.active {
@@ -257,29 +340,89 @@ form.formFiltrarColunas #listaDeColunas button {
     border-bottom: 2px solid var(--nairuz-secondary);
 }
 
+#formEditarOportunidade {
+    padding-inline: 45px;
+}
+
+#formEditarOportunidade input, #formEditarOportunidade select {
+    border: 1px solid var(--nairuz-primary);
+    font-family: var(--nairuz-default-oportunidades);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #666666;
+}
+
+#formEditarOportunidade input:focus, #formEditarOportunidade select:focus {
+    box-shadow: none;
+}
+
+#formEditarOportunidade .formtab label.form-label {
+    font-family:  var(--nairuz-default-oportunidades);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+}
+
 .row.container {
     margin-left: 0;
 }
 
-.avancar-nairuz {
+.acao-modal-editar {
     color: var(--nairuz-primary);
     font-size: 12px;
-    border: none;
     border-radius: 44px;
-    background-color: var(--nairuz-secondary);
     padding: 8px 22px;
     margin-top: 78px;
     transition: ease-out 300ms;
-  }
-  
-  .avancar-nairuz:not(:disabled):hover {
-    filter: brightness(.8);
-  }
-  
-  .avancar-nairuz:disabled {
-    opacity: .5;
-  }
+}
 
-  #modalEdit .hidden {
+.voltar-nairuz {
+    border: 1px solid var(--nairuz-primary);
+    background-color: #fff;
+}
+
+.salvar-nairuz {
+    color: #fff;
+    border: none;
+    background-color: var(--nairuz-primary);
+}
+
+.avancar-nairuz {
+    border: none;
+    background-color: var(--nairuz-secondary);
+}
+
+.voltar-nairuz:hover, .avancar-nairuz:hover, .salvar-nairuz:hover {
+    filter: brightness(.8);
+}
+
+.avancar-nairuz:disabled {
+    opacity: .5;
+}
+
+#modalEdit .hidden {
     display: none;
-  }
+}
+
+.infos-rodape {
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400 !important;
+    font-family: var(--nairuz-default-oportunidades);
+    color: #a2a2a2;
+}
+
+.btnCopiar {
+    border: none;
+    background-color: transparent;
+    transition: ease-in-out .3s;
+}
+
+.btnCopiar:focus {
+    outline: none;
+}
+
+.btnCopiar:hover {
+    background-color: #efefef;
+}

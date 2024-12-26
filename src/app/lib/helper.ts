@@ -38,6 +38,7 @@ export class Helper {
     }
 
     setFormatarDataParaHtmlInput(data: Date | string) {
+      if(data) {
         const dataSplit = String(data).split("-");
         const mes = Number(dataSplit[1]) - 1;
         const ano = Number(dataSplit[0]);
@@ -49,7 +50,10 @@ export class Helper {
     
         const dataGerada = new Date(ano, mes, dia, hora, minuto);
         const dataFormatada = dataGerada.toISOString().slice(0, 16);
-
+  
         return { dataFormatada, mes, ano, dia, hora, minuto };
+      } 
+      
+      return null;
     }
 }

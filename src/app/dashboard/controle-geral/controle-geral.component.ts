@@ -62,7 +62,10 @@ export class ControleGeralComponent implements OnInit {
   currentDate = new Date();
   currentYear = this.currentDate.getFullYear();
   yearsSelectFilter: string[] = [];
+  feriadosNacionaisCarregados = [];
   currentTab: number;
+  mediaCicloDeVendas: number = 0;
+  mediaProjetosVendidos: number = 0;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -82,7 +85,8 @@ export class ControleGeralComponent implements OnInit {
     // Carrega todos os vendedores
     this.loadVendedores();
 
-    this.calculaSlaDeAtendimento("2024-12-02T09:20:00Z", "2024-12-02T14:00:00Z");
+    // Carrega os feriados nacionais
+    this.carregarFeriados(this.currentYear);
   }
 
   /** Announce the change in sort state for assistive technology. */
@@ -281,6 +285,7 @@ export class ControleGeralComponent implements OnInit {
         // DEFINE OS ITENS DA TABELA
         this.tabela = new MatTableDataSource<Oportunidade>(oportunidades);
         this.tabela.sort = this.sort;
+        this.calculaMediaDoCicloDeVendasEProjetosVendidos(this.tabela);
       }, async (error) => {
         console.error(error);
       }
@@ -295,6 +300,8 @@ export class ControleGeralComponent implements OnInit {
     
     this.tabela.filter = this.termoDaBusca.trim().toLowerCase();
     
+    this.calculaMediaDoCicloDeVendasEProjetosVendidos(this.tabela);
+
     // Função de filtragem personalizada
     this.tabela.filterPredicate = (data: Oportunidade, filter: string) => {
       return data.suspect.toLowerCase().includes(filter);
@@ -309,66 +316,128 @@ export class ControleGeralComponent implements OnInit {
     this.filtrarBarraBusca();
   }
 
-  // Método para cálculo de dias úteis
-  async calculaDiasUteis(dataInicial: string, dataFinal: string) {
-    // Parse as datas para objetos Date
-    const inicio = parseISO(dataInicial);
-    const fim = parseISO(dataFinal);
-    const apiFeriados = await this.feriadosNacionais.getFeriadosNacionais(2024).toPromise();
-    let feriados: Date[] = [];
+  // Método para calcular a média de Ciclo de Vendas
+  calculaMediaDoCicloDeVendasEProjetosVendidos(tabela: MatTableDataSource<Oportunidade>) {
+    let somaDosCiclos: number = 0;
+    let somaProjetosVendidos: number = 0;
+    let mediaDosCiclosDeVenda: number = 0;
+    let mediaDeProjetosVendidos: number = 0;
+
+    tabela.filteredData.forEach((oportunidade) => {
+      if(oportunidade.ciclo_venda) {
+        somaDosCiclos = mediaDosCiclosDeVenda + oportunidade.ciclo_venda;
+        mediaDosCiclosDeVenda = somaDosCiclos / tabela.filteredData.length;
+      }
+
+      if(oportunidade.valor_vendido && oportunidade.valor_vendido > 0) {
+        somaProjetosVendidos += 1;
+        mediaDeProjetosVendidos = somaProjetosVendidos / tabela.filteredData.length;
+      }
+    });
+
+    return this.mediaCicloDeVendas = mediaDosCiclosDeVenda, this.mediaProjetosVendidos = mediaDeProjetosVendidos;
+  }
+
+  // Método para copiar textos para a área de transferência
+  async copiarParaAreaDeTransferencia(texto: number) {
+    try {
+      await navigator.clipboard.writeText(texto.toString());
+      this.showMessageAction('Texto copiado com sucesso!');
+    } catch (err) {
+      this.showMessageAction('Falha ao copiar');
+      console.error('Falha ao copiar:', err);
+    }
+  }
+
+  // Método para carregar os feriados nacionais da API
+  async carregarFeriados(year: number) {
+    const apiFeriados = await this.feriadosNacionais.getFeriadosNacionais(year).toPromise();
 
     // Insere feriados em um array de datas
     apiFeriados.map((feriado) => {
-      feriados.push(new Date(feriado.date));
-    })
+      this.feriadosNacionaisCarregados.push(new Date(feriado.date));
+    });
+  }
+
+  // Método para cálculo de dias úteis
+  calculaDiasUteis(dataInicial: string, dataFinal: string) {
+    // Parse as datas para objetos Date
+    const inicio = parseISO(dataInicial);
+    const fim = parseISO(dataFinal);
+    const feriados = this.feriadosNacionaisCarregados;
+    const margemErro = 1000 * 60 * 60; // 1 hora em milissegundos
 
     // Inicializa o contador de dias úteis
     let diasUteis = 0;
 
-    // Itera sobre cada dia entre as datas
-    for (let dataAtual = inicio; isSameDay(dataAtual, fim) === false; dataAtual.setDate(dataAtual.getDate() + 1)) {
-      // Verifica se o dia não é fim de semana e não é feriado
-      if (!isWeekend(dataAtual) && !feriados.some(feriado => isSameDay(dataAtual, feriado))) {
-        diasUteis++;
+    if(feriados) {
+      // Itera sobre cada dia entre as datas
+      for (let dataAtual = inicio; dataAtual.getTime() <= fim.getTime(); dataAtual.setDate(dataAtual.getDate() + 1)) {
+        // Verifica se o dia não é fim de semana e não é feriado
+        if (!isWeekend(dataAtual) && !this.feriadosNacionaisCarregados.some(feriado => isSameDay(dataAtual, feriado))) {
+          diasUteis++;
+        }
       }
+
+      return diasUteis;
     }
 
-    return diasUteis;
+    return "Feriados não carregados";
   }
 
   // Método para cálculo do SLA de Atendimento
-  async calculaSlaDeAtendimento(dataInicial: string, dataFinal: string) {
+  calculaSlaDeAtendimento(dataInicial: string, dataFinal: string): number {
     const inicio = parseISO(dataInicial);
     const fim = parseISO(dataFinal);
 
-    const diasUteis: number = await this.calculaDiasUteis(dataInicial, dataFinal);
-    const horasUteis = diasUteis * 10; // 10 horas trabalhadas por dia
-    const diferencaEntreAsDatasEmHoras: number = differenceInMinutes(fim, inicio);
+    console.log("Inicio: ", dataInicial);
+    console.log("Fim: ", dataFinal);
+    console.log("Inicio: ", inicio);
+    console.log("Fim: ", fim);
+    
+    const diasUteis = this.calculaDiasUteis(dataInicial, dataFinal);
 
-    const diaEmMinutos = 24 * 60;
+    if(typeof(diasUteis) === "number") {
+      const horasUteis = diasUteis * 10; // 10 horas trabalhadas por dia
+      const diferencaEntreAsDatasEmMinutos: number = differenceInMinutes(fim, inicio);
 
-    if(!dataInicial) {
-      console.log("Sem data inicial preenchida");
-      return 0;
+      const diaEmMinutos = 24 * 60;
+
+      if(!dataInicial) {
+        return 0;
+      }
+
+      if(!dataFinal) {
+        console.log("Não agendado");
+        return null;
+      }
+
+      if(diferencaEntreAsDatasEmMinutos === 0) {
+        return 0;
+      } else if(diferencaEntreAsDatasEmMinutos > 0) {
+        return diferencaEntreAsDatasEmMinutos / diaEmMinutos;
+      }
+
+      return horasUteis;
+    } else {
+      return null;
     }
+  }
+  
+  // Método para cálculo do ciclo de venda
+  calculaCiclodeVendas(dataInicial: string, dataDoAceite: string) {
+    const inicio = parseISO(dataInicial);
+    const fim = parseISO(dataDoAceite);
 
-    if(!dataFinal) {
-      console.log("Não agendado");
-      return "Não agendado";
-    }
+    // Obtendo os timestamps
+    const timestampInicial = inicio.getTime();
+    const timestampFinal = fim.getTime();
 
-    if(diferencaEntreAsDatasEmHoras === 0) {
-      console.log("Diferença entre as datas em minutos: ", 0);
-      return 0;
-    } else if(diferencaEntreAsDatasEmHoras > 0) {
-      console.log("Diferença entre as datas em minutos: ", diferencaEntreAsDatasEmHoras / diaEmMinutos);
-      return diferencaEntreAsDatasEmHoras / diaEmMinutos;
-    }
+    // Calculando a diferença em milissegundos e convertendo para dias
+    const diferencaEmMilissegundos = timestampFinal - timestampInicial;
+    const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
 
-    // PRECISO DIVIDIR O RESULTADO POR 24H / 60MIN PARA CHEGAR NO VALOR DECIMAL DA PLANILHA (0,22)
-
-    console.log("Minutos úteis: ", horasUteis);
-    return horasUteis;
+    return diferencaEmDias;
   }
 
   formEditarOportunidade = this.formBuilder.group({
@@ -384,9 +453,9 @@ export class ControleGeralComponent implements OnInit {
     responsavel: [''],
 
     // segundo form
-    primeiro_contato: [new Date()],
+    primeiro_contato: [''],
     status: [''],
-    reuniao_agendada: [new Date()],
+    reuniao_agendada: [''],
     sla_atendimento: [0],
     percentual_fit: [''],
     perfil_cliente: [''],
@@ -400,30 +469,67 @@ export class ControleGeralComponent implements OnInit {
     valor_vendido: [0],
     markup: [0],
     mrr: [0],
-    data_aceite: [new Date()],
+    data_aceite: [''],
     ciclo_venda: [0],
     mes_encerramento: ['']
   })
+
+  // Método para alterar o SLA sempre que a Data ou o Primeiro Contato for alterado
+  handleChangeDateOrFirstContact() {
+    const dataInicial = this.formEditarOportunidade.get("data").value;
+    const primeiroContato = this.formEditarOportunidade.get("primeiro_contato").value;
+
+    if(dataInicial && primeiroContato) {
+      this.formEditarOportunidade.patchValue({ sla_atendimento: this.calculaSlaDeAtendimento(dataInicial, primeiroContato) })
+    } else {
+      this.formEditarOportunidade.patchValue({ sla_atendimento: null });
+    }
+  }
+
+  // Método para alterar o SLA sempre que a Data ou o Primeiro Contato for alterado
+  handleChangeAcceptanceDate() {
+    const dataInicial = this.formEditarOportunidade.get("data").value;
+    const dataDoAceite = this.formEditarOportunidade.get("data_aceite").value;
+
+    if(dataInicial && dataDoAceite) {
+      this.formEditarOportunidade.patchValue({ sla_atendimento: this.calculaCiclodeVendas(dataInicial, dataDoAceite) })
+    } else {
+      this.formEditarOportunidade.patchValue({ sla_atendimento: null });
+    }
+  }
 
   openModalEditarOportunidade(element: EditarOportunidade) {
     const modal = document.getElementById("modalEdit");
     const bgModal = document.getElementById("bg-modal");
 
     const dataInicial = this.helper.setFormatarDataParaHtmlInput(element.data);
+    const primeiroContato = this.helper.setFormatarDataParaHtmlInput(element.primeiro_contato);
+    const reuniaoAgendada = this.helper.setFormatarDataParaHtmlInput(element.reuniao_agendada);
+    const dataAceite = this.helper.setFormatarDataParaHtmlInput(element.data_aceite);
+    let slaDeAtendimento: number;
+    let cicloDeVenda: number;
+
+    if(dataInicial && primeiroContato) {
+      slaDeAtendimento = this.calculaSlaDeAtendimento(dataInicial.dataFormatada, primeiroContato.dataFormatada);
+    }
+
+    if(dataAceite) {
+      cicloDeVenda = this.calculaCiclodeVendas(dataInicial.dataFormatada, dataAceite.dataFormatada);
+    }
 
     this.formEditarOportunidade.patchValue({
       id: element._id,
-      data: dataInicial.dataFormatada,
+      data: dataInicial ? dataInicial.dataFormatada : null,
       mes: element.mes,
       ano: element.ano,
       suspect: element.suspect,
       origem: element.origem,
       fonte: element.fonte,
       responsavel: element.responsavel,
-      primeiro_contato: element.primeiro_contato,
+      primeiro_contato: primeiroContato ? primeiroContato.dataFormatada : null,
       status: element.status,
-      reuniao_agendada: element.reuniao_agendada,
-      sla_atendimento: element.sla_atendimento,
+      reuniao_agendada: reuniaoAgendada ? reuniaoAgendada.dataFormatada : null,
+      sla_atendimento: slaDeAtendimento,
       percentual_fit: element.percentual_fit,
       perfil_cliente: element.perfil_cliente,
       etapa: element.etapa,
@@ -434,8 +540,8 @@ export class ControleGeralComponent implements OnInit {
       valor_vendido: element.valor_vendido,
       markup: element.markup,
       mrr: element.mrr,
-      data_aceite: element.data_aceite,
-      ciclo_venda: element.ciclo_venda,
+      data_aceite: dataAceite ? dataAceite.dataFormatada : null,
+      ciclo_venda: cicloDeVenda,
       mes_encerramento: element.mes_encerramento
     })
 
@@ -468,9 +574,9 @@ export class ControleGeralComponent implements OnInit {
       responsavel: [''],
   
       // segundo form
-      primeiro_contato: [new Date()],
+      primeiro_contato: [''],
       status: [''],
-      reuniao_agendada: [new Date()],
+      reuniao_agendada: [''],
       sla_atendimento: [0],
       percentual_fit: [''],
       perfil_cliente: [''],
@@ -484,7 +590,7 @@ export class ControleGeralComponent implements OnInit {
       valor_vendido: [0],
       markup: [0],
       mrr: [0],
-      data_aceite: [new Date()],
+      data_aceite: [''],
       ciclo_venda: [0],
       mes_encerramento: ['']
     });
@@ -501,9 +607,9 @@ export class ControleGeralComponent implements OnInit {
     let responsavel: string = this.formEditarOportunidade.get("responsavel").value;
 
     // segundo form
-    let primeiro_contato: Date = this.formEditarOportunidade.get("primeiro_contato").value;
+    let primeiro_contato: string = this.formEditarOportunidade.get("primeiro_contato").value;
     let status: string = this.formEditarOportunidade.get("status").value;
-    let reuniao_agendada: Date = this.formEditarOportunidade.get("reuniao_agendada").value;
+    let reuniao_agendada: string = this.formEditarOportunidade.get("reuniao_agendada").value;
     let sla_atendimento: number = this.formEditarOportunidade.get("sla_atendimento").value;
     let percentual_fit: string = this.formEditarOportunidade.get("percentual_fit").value;
     let perfil_cliente: string = this.formEditarOportunidade.get("perfil_cliente").value;
@@ -517,7 +623,7 @@ export class ControleGeralComponent implements OnInit {
     let valor_vendido: number = this.formEditarOportunidade.get("valor_vendido").value;
     let markup: number = this.formEditarOportunidade.get("markup").value;
     let mrr: number = this.formEditarOportunidade.get("mrr").value;
-    let data_aceite: Date = this.formEditarOportunidade.get("data_aceite").value;
+    let data_aceite: string = this.formEditarOportunidade.get("data_aceite").value;
     let ciclo_venda: number = this.formEditarOportunidade.get("ciclo_venda").value;
     let mes_encerramento: string = this.formEditarOportunidade.get("mes_encerramento").value;
 
@@ -534,9 +640,9 @@ export class ControleGeralComponent implements OnInit {
       origem: origem,
       fonte: fonte,
       responsavel: responsavel,
-      primeiro_contato: primeiro_contato,
+      primeiro_contato: new Date(primeiro_contato),
       status: status,
-      reuniao_agendada: reuniao_agendada,
+      reuniao_agendada: new Date(reuniao_agendada),
       sla_atendimento: sla_atendimento,
       percentual_fit: percentual_fit,
       perfil_cliente: perfil_cliente,
@@ -548,7 +654,7 @@ export class ControleGeralComponent implements OnInit {
       valor_vendido: valor_vendido,
       markup: markup,
       mrr: mrr,
-      data_aceite: data_aceite,
+      data_aceite: new Date(data_aceite),
       ciclo_venda: ciclo_venda,
       mes_encerramento: mes_encerramento
     }
