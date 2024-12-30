@@ -249,6 +249,11 @@ form.formFiltrarColunas #listaDeColunas button {
     background-color: #FF616A;
 }
 
+#tabela-oportunidades .custom-badge.Não-consegui-qualificar {
+    color: #fff;
+    background-color: #ff5a0e;
+}
+
 .sectionTable {
     max-height: 332px;
     overflow: auto;

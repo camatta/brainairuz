@@ -5,7 +5,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { isWeekend, isSameDay, parseISO, differenceInMinutes } from 'date-fns';
+import { isWeekend, isSameDay, parseISO, differenceInMinutes, differenceInHours, isBefore, isAfter, startOfDay, setHours } from 'date-fns';
 
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 import { OportunidadesService } from 'src/app/services/oportunidades.service';
@@ -385,25 +385,51 @@ export class ControleGeralComponent implements OnInit {
     return "Feriados não carregados";
   }
 
+  // Método para validar o horário de atendimento, padronizando para 08h inicio e 18h fim
+  validaHorarioDeAtendimento(inicio: Date, fim: Date) {
+
+    if(isBefore(inicio, setHours(startOfDay(inicio), 8))) {
+      inicio = startOfDay(inicio);
+      inicio = setHours(inicio, 8);
+    };
+
+    if(isAfter(inicio, setHours(startOfDay(inicio), 18))) {
+      inicio = startOfDay(inicio);
+      inicio = setHours(inicio, 18);
+    };
+
+    if(isBefore(fim, setHours(startOfDay(fim), 8))) {
+      fim = startOfDay(fim);
+      fim = setHours(fim, 8);
+    };
+
+    if(isAfter(fim, setHours(startOfDay(fim), 18))) {
+      fim = startOfDay(fim);
+      fim = setHours(fim, 18);
+    };
+
+    return {
+      inicioReal: inicio,
+      fimReal: fim
+    }
+  }
+
   // Método para cálculo do SLA de Atendimento
   calculaSlaDeAtendimento(dataInicial: string, dataFinal: string): number {
     const inicio = parseISO(dataInicial);
     const fim = parseISO(dataFinal);
-
-    console.log("Inicio: ", dataInicial);
-    console.log("Fim: ", dataFinal);
-    console.log("Inicio: ", inicio);
-    console.log("Fim: ", fim);
+    const { inicioReal, fimReal } = this.validaHorarioDeAtendimento(inicio, fim);
     
-    const diasUteis = this.calculaDiasUteis(dataInicial, dataFinal);
+    const diasUteis = this.calculaDiasUteis(dataInicial, dataFinal); // formula DIATRABALHOTOTAL
+
 
     if(typeof(diasUteis) === "number") {
-      const horasUteis = diasUteis * 10; // 10 horas trabalhadas por dia
-      const diferencaEntreAsDatasEmMinutos: number = differenceInMinutes(fim, inicio);
-
-      const diaEmMinutos = 24 * 60;
+      const minutosUteis = diasUteis * 10 * 60; // 10 horas trabalhadas por dia em minutos
+      const diferencaEntreAsDatasEmMinutos: number = differenceInMinutes(fimReal, inicioReal);
+      const diferencaEntreAsDatasEmMinutosTrabalhados = diferencaEntreAsDatasEmMinutos >= 1440 ? ((diferencaEntreAsDatasEmMinutos / 60) / 24) * 10 * 60 : diferencaEntreAsDatasEmMinutos;
 
       if(!dataInicial) {
+        console.log("Não tenho data inicial!");
         return 0;
       }
 
@@ -412,13 +438,9 @@ export class ControleGeralComponent implements OnInit {
         return null;
       }
 
-      if(diferencaEntreAsDatasEmMinutos === 0) {
-        return 0;
-      } else if(diferencaEntreAsDatasEmMinutos > 0) {
-        return diferencaEntreAsDatasEmMinutos / diaEmMinutos;
-      }
+      let resultado = ((minutosUteis - diferencaEntreAsDatasEmMinutosTrabalhados) / (24 * 60)).toFixed(2);
 
-      return horasUteis;
+      return Number(resultado);
     } else {
       return null;
     }
@@ -633,16 +655,16 @@ export class ControleGeralComponent implements OnInit {
     let ano = dataSeparada[0];
 
     const editarOportunindade: Oportunidade = {
-      data: new Date(data),
+      data: data ? new Date(data) : null,
       mes: mes,
       ano: ano,
       suspect: suspect,
       origem: origem,
       fonte: fonte,
       responsavel: responsavel,
-      primeiro_contato: new Date(primeiro_contato),
+      primeiro_contato: primeiro_contato ? new Date(primeiro_contato) : null,
       status: status,
-      reuniao_agendada: new Date(reuniao_agendada),
+      reuniao_agendada: reuniao_agendada ? new Date(reuniao_agendada) : null,
       sla_atendimento: sla_atendimento,
       percentual_fit: percentual_fit,
       perfil_cliente: perfil_cliente,
@@ -654,7 +676,7 @@ export class ControleGeralComponent implements OnInit {
       valor_vendido: valor_vendido,
       markup: markup,
       mrr: mrr,
-      data_aceite: new Date(data_aceite),
+      data_aceite: data_aceite ? new Date(data_aceite) : null,
       ciclo_venda: ciclo_venda,
       mes_encerramento: mes_encerramento
     }
