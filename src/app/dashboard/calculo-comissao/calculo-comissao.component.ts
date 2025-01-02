@@ -240,6 +240,10 @@ export class CalculoComissaoComponent implements OnInit {
             this.yearsSelectFilter.push(ano);
           } 
         })
+
+        if(!this.yearsSelectFilter.includes(this.currentYear)){
+          this.currentYear = this.yearsSelectFilter[0];
+        }
       }
     )
   }
@@ -332,7 +336,7 @@ export class CalculoComissaoComponent implements OnInit {
   }
 
   // Carrega as comissões de acordo com o filtro
-  loadComissoes(filterMonth: string = "Janeiro", filterYear: string = this.currentYear, vendedor: string = "sem filtro") {
+  loadComissoes(filterMonth: string = "Janeiro", filterYear: string = "2024", vendedor: string = "sem filtro") {
     if(this.userPermission()) {
       let usuario: string = "adm";
 
@@ -365,7 +369,7 @@ export class CalculoComissaoComponent implements OnInit {
     }
   }
 
-  loadVendasTotais(filterMonth: string = "Janeiro", filterYear: string = this.currentYear){
+  loadVendasTotais(filterMonth: string = "Janeiro", filterYear: string = "2024"){
     this.comissoesService.getComissoes("adm", filterMonth, filterYear).subscribe(
       async (data) => {
         this.metaRealizadaEmpresa = 0;
@@ -379,7 +383,7 @@ export class CalculoComissaoComponent implements OnInit {
   }
 
   // Carrega as comissões de acordo com o filtro
-  loadMetas(vendedor: string, filterYear: string = this.currentYear, filterMonth: string, zerar?: boolean) {
+  loadMetas(vendedor: string, filterYear: string = "2024", filterMonth: string, zerar?: boolean) {
     // Carrega as metas do mês selecionado
     if(vendedor !== "sem filtro") {
       this.metasVendedoresService.getMetas(vendedor, filterMonth, filterYear).subscribe(
@@ -488,12 +492,17 @@ export class CalculoComissaoComponent implements OnInit {
         }
   
         // MIX
-        this.verifyProductsMix(data);
-        if(this.verifyProductsMix(data)) {
-          this.mix == 0.5 ? this.mix = 1 : this.mix = 1;
+        if(this.currentUser.setorTratado === "CSTec" || this.currentUser.setorTratado === "CS"){
+          this.mix = 1;
         } else {
-          this.mix == 1 ? this.mix = 0.5 : this.mix = 0.5;
+          this.verifyProductsMix(data);
+          if(this.verifyProductsMix(data)) {
+            this.mix == 0.5 ? this.mix = 1 : this.mix = 1;
+          } else {
+            this.mix == 1 ? this.mix = 0.5 : this.mix = 0.5;
+          }
         }
+
   
         this.onLoadComissions = true;
         setTimeout(() => { // Usei o timeout por que as metas estavam demorando para retornar e afetando o cálculo da comissão
@@ -772,7 +781,7 @@ export class CalculoComissaoComponent implements OnInit {
           valorVendido = 0;
         } else {
           valorBase = valorBase * multiplicador;
-          valorVendido = (valorBase / 2) * markup;
+          valorVendido = (valorBase / this.maxMarkup) * markup;
         }
 
         let tipoProdutoFormatado = mixProdutos === 'Help Suporte A' ? '' : `${tipoProduto} - ${tecnologia_servico}`;
@@ -1001,7 +1010,8 @@ export class CalculoComissaoComponent implements OnInit {
       valorVendido = 0;
     } else {
       valorBase = valorBase * multiplicador;
-      valorVendido = (valorBase / 2) * markup;
+      valorVendido = (valorBase / this.maxMarkup) * markup;
+      console.log(this.maxMarkup);
     }
 
     const editarVenda2 = new FormData();
