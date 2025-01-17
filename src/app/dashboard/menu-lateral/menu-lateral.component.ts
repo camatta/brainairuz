@@ -105,13 +105,13 @@ export class MenuLateralComponent implements OnInit {
       
     this.showAdicionarOportunidade =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial'
+      team === 'Comercial'
       name === 'Valeria Queiroz'
     ;
 
     this.showControleGeral =
       accessLevel === 'Administrador' ||
-      // team === 'Comercial'
+      team === 'Comercial'
       name === 'Valeria Queiroz'
     ;
   }

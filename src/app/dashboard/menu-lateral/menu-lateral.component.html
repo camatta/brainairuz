@@ -53,8 +53,7 @@
       *ngIf="showComercialLink"
     >
       <span class="collapsed d-block" (click)="handleSubmenu()">
-        <i class="fa-solid fa-file-contract"></i>
-        Contratos
+        <i class="fa-solid fa-file-contract"></i> Contratos
         <i class="fa-solid fa-chevron-down"></i>
       </span>
       <ul class="submenu">
@@ -107,13 +106,23 @@
       </ul>
     </li>
 
-    <li *ngIf="showComercialLink">
-      <button
-        routerLink="/dashboard/icp"
-        [class.link-ativo]="isLinkAtivo('/dashboard/icp')"
-      >
-        <i class="fa-solid fa-chart-line"></i>Validação ICP
-      </button>
+    <li
+      class="has-children"
+      [ngClass]="{ 'submenu-open': showSubmenu }"
+      *ngIf="showComercialLink"
+    >
+      <ul class="submenu">
+        <li>
+          <button
+            type="button"
+            routerLink="/dashboard/icp"
+            [class.link-ativo]="isLinkAtivo('/dashboard/icp')"
+          >
+            <i class="fa-solid fa-chart-line"></i>Validação ICP
+          </button>
+        </li>
+      </ul>
+
     </li>
 
     <li>
