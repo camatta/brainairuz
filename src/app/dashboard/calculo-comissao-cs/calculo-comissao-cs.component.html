@@ -1,0 +1,595 @@
+<main class="mb-5">
+  <!-- TOAST DE RETORNO DAS REQUISIÇÕES (CRIAR, EDITAR OU DELETAR UM PROTUDO) -->
+  <div id="alert-actions" class="toast text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body"> {{ msgActions }} </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <h1 class="titlePage">Cálculo de comissão</h1>
+
+  <!-- INDICADORES GERAIS -->
+  <div class="baseCalculo row row-gap-3 mt-4 mb-3 justify-content-center">
+    <!--Meta Geral do Mês para a Empresa -->
+    <div class="col-6">
+      <div class="bg-nairuzPrimary">
+        <label for="vendaTotal" class="form-label">Meta Empresa (Total do Mês)</label>
+        <p class="fs-6">{{ ((metaTotalMesEmpresa * 100).toFixed(2)).replace(".", ",") }} %</p>
+      </div>
+    </div>
+
+    <!--Meta Geral do Mês para o Vendedor -->
+    <div class="col-6">
+      <div class="bg-nairuzPrimary">
+        <label for="vendaTotal" class="form-label">Meta Vendedor (Total do Mês)</label>
+        <p class="fs-6">{{ ((metaTotalMesVendedor * 100).toFixed(2)).replace(".", ",") }} %</p>
+      </div>
+    </div>
+
+    <!--Vendas Individuais-->
+    <div class="col-3">
+      <div class="bg-nairuzPrimary">
+        <label for="vendaTotal" class="form-label">Vendas Individuais</label>
+        <p class="fs-6">{{ vendasTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+      </div>
+    </div>
+
+    <!--Fator Multiplicador-->
+    <div class="col-3">
+      <div class="bg-nairuzPrimary position-relative d-flex flex-column">
+        <label for="fatorMultiplicador" class="form-label">Fator Multiplicador</label>
+        <form [formGroup]="formFatorMultiplicador" id="formFatorMultiplicador" class="d-flex justify-content-center">
+            <input
+              type="number"
+              formControlName="fatorMultiplicador"
+              class="inputFatorMultiplicador w-50"
+              id="fatorMultiplicador"
+            />
+            <button *ngIf="mostrarBotaoEditar && userPermission()" (click)="editarFator()" mat-icon-button aria-label="Editar Fator" class="position-absolute p-0">
+              <mat-icon class="editar" aria-label="Editar fatorMultiplicador">edit</mat-icon>
+            </button>
+            <button *ngIf="mostrarBotaoEnviar && userPermission()" (click)="enviarFator()" mat-icon-button aria-label="Enviar Fator" class="position-absolute p-0" type="submit">
+              <mat-icon class="editar" aria-label="Editar fatorMultiplicador">check</mat-icon>
+            </button>
+        </form>
+      </div>
+    </div>
+
+    <!--Meta Vendedor Para Comissão-->
+    <div class="col-3">
+      <div class="bg-nairuzPrimary">
+        <label for="metaVendedor" class="form-label">Meta Vendedor</label>
+        <p class="fs-6">{{ ((metaVendedor * 100).toFixed(2)).replace(".", ",") }} %</p>
+      </div>
+    </div>
+
+    <!--Qualidade-->
+    <div class="col-3">
+      <div class="bg-nairuzPrimary">
+        <label for="qualidade" class="form-label">Qualidade</label>
+        <p class="fs-6">{{ qualidade }}</p>
+      </div>
+    </div>
+
+    <!--Meta Empresa Para Comissão-->
+    <div class="col-3">
+      <div class="bg-nairuzPrimary">
+        <label for="metaEmpresa" class="form-label">Vendas do time</label>
+        <p class="fs-6">{{ metaRealizadaEmpresa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+      </div>
+    </div>
+
+    <!--Mix-->
+    <div class="col-3">
+      <div class="bg-nairuzPrimary">
+        <label for="mix" class="form-label">Mix</label>
+        <p class="fs-6">{{ mix }}</p>
+      </div>
+    </div>
+
+    <!--Comissão Final-->
+    <div class="col-3">
+      <div class="bg-nairuzPrimary">
+        <label for="Valor Comissão" class="form-label">Comissão Final</label>
+        <mat-spinner *ngIf="onLoadComissions"></mat-spinner>
+        <p *ngIf="!onLoadComissions" class="fs-6">{{ comissaoFinal }}</p>
+      </div>
+    </div>
+
+    <!--Valor Comissão-->
+    <div class="col-3">
+      <div class="bg-nairuzPrimary">
+        <label for="Valor Comissão" class="form-label">Valor Comissão</label>
+        <mat-spinner *ngIf="onLoadComissions"></mat-spinner>
+        <p *ngIf="!onLoadComissions" class="fs-6">{{ valorComissao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AÇÕES DO USUÁRIO -->
+  <div class="topo d-flex justify-content-between mt-5 mb-2">
+    <button button type="button" class="btn btn-addVenda" (click)="openModalNovaVenda()" data-bs-dismiss="modal">Cadastrar Venda</button>
+
+    <form class="d-flex gap-5">
+      <div *ngIf="userPermission()" class="filter-commissions">
+        <label for="vendedor" class="me-3">Filtrar por Vendedor:</label>
+        <select (change)="submitFormFilter()" id="vendedor" class="select-nairuz h-100">
+          <option value="sem filtro">Todos</option>
+          <option value="Kyrsten Júnior">Kyrsten Júnior</option>
+          <option value="Dev Nairuz">Dev Nairuz</option>
+          <option *ngFor="let vendedor of vendedores" [value]="vendedor">
+            {{ vendedor }}
+          </option>
+        </select>
+      </div>
+      <div class="filter-commissions">
+        <label for="years" class="me-3">Filtrar por Ano:</label>
+        <select *ngIf="yearsSelectFilter.length > 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
+          <option *ngFor="let year of yearsSelectFilter" [value]="year" [selected]="year === currentYear">
+            {{ year }}
+          </option>
+        </select>
+        <select *ngIf="yearsSelectFilter.length <= 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
+          <option selected value="{{ currentYear }}">{{currentYear}}</option>
+        </select>
+      </div>
+      <div class="filter-commissions">
+        <label for="months" class="me-3">Filtrar por mês:</label>
+        <select (change)="submitFormFilter()" id="months" class="select-nairuz h-100">
+          <option selected value="Janeiro">Janeiro</option>
+          <option value="Fevereiro">Fevereiro</option>
+          <option value="Março">Março</option>
+          <option value="Abril">Abril</option>
+          <option value="Maio">Maio</option>
+          <option value="Junho">Junho</option>
+          <option value="Julho">Julho</option>
+          <option value="Agosto">Agosto</option>
+          <option value="Setembro">Setembro</option>
+          <option value="Outubro">Outubro</option>
+          <option value="Novembro">Novembro</option>
+          <option value="Dezembro">Dezembro</option>
+        </select>
+      </div>
+    </form>
+
+  </div>
+
+  <!-- COLUNAS DA TABELA -->
+  <div class="mat-elevation-z8">
+    <div class="sectionTable">
+      <table id="tabela-valores" mat-table [dataSource]="tabelaVendas" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+        <!-- Cliente Column -->
+        <ng-container matColumnDef="cliente" sticky>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cliente">
+            Cliente
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by status">
+            Status
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+        </ng-container>
+
+        <!-- Vendedor Column -->
+        <ng-container *ngIf="userPermission()" matColumnDef="vendedor">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by vendedor">
+            Vendedor
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.vendedor }} </td>
+        </ng-container>
+
+        <!-- Data da Venda Column -->
+        <ng-container matColumnDef="dataVenda">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dataVenda">
+            Venda em
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.dataVenda }} </td>
+        </ng-container>
+
+        <!-- Mix Produtos Column -->
+        <ng-container matColumnDef="mixProdutos">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by mixProdutos">
+            Mix Produtos
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.mixProdutos }} </td>
+        </ng-container>
+
+        <!-- Tipo Produto Column -->
+        <ng-container matColumnDef="tipoProduto">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by tipoProduto">
+            Tipo de Produto
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.tipoProduto }} </td>
+        </ng-container>
+
+        <!-- Multiplicador Column -->
+        <ng-container matColumnDef="multiplicador">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by multiplicador">
+            Multiplicador
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.multiplicador }} </td>
+        </ng-container>
+
+        <!-- Qualidade=Markup Column -->
+        <ng-container matColumnDef="markup">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by markup">
+            Qualidade=Markup
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.markup }} </td>
+        </ng-container>
+
+        <!-- Venda Avulsa Column -->
+        <ng-container matColumnDef="vendaAvulsa">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by vendaAvulsa">
+            Venda Avulsa
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.vendaAvulsa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+          </td>
+        </ng-container>
+
+        <!-- Valor Base Column -->
+        <ng-container matColumnDef="valorBase">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by valorBase">
+            Valor Base
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.valorBase | currency: 'BRL' }}
+          </td>
+        </ng-container>
+
+        <!-- Valor Vendido Column -->
+        <ng-container matColumnDef="valorVendido">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by valorVendido">
+            Valor Vendido
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.valorVendido | currency: 'BRL' }}
+          </td>
+        </ng-container>
+
+        <!-- Ações Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            Ações
+          </th>
+          <td class="acoes" mat-cell *matCellDef="let element">
+            <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarVenda(element)">edit</mat-icon>
+            <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarVenda(element)">delete</mat-icon>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [pageSizeOptions]="[10, 20, 30]"
+      showFirstLastButtons aria-label="Select page of periodic elements"
+    ></mat-paginator>
+  </div>
+
+  <!-- MODAIS -->
+  <div id="bg-modal"></div>
+
+  <!-- Modal para NOVA venda-->
+  <div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="modalNovaVenda" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-black fs-5" id="modalNovaVenda">Nova Venda</h2>
+          <button type="button" (click)="closeModalNovaVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form id="formCalculoComissao" [formGroup]="formNovaVenda" class="container">
+          <div class="col-10 mt-5 mb-3">
+            <strong>Preencha os campos abaixo:</strong>
+          </div>
+
+          <div class="row">
+            <div *ngIf="userPermission()" class="col-6 d-flex flex-column align-items-start mb-3">
+              <label class="form-label">Status:</label>
+              <select formControlName="status" id="status" class="selectForm form-select">
+                <option value="Aguardando Aprovação">Aguardando Aprovação</option>
+                <option value="Aprovado">Aprovado</option>
+                <option value="Reprovado">Reprovado</option>
+                <option value="Pagamento Efetuado">Pagamento Efetuado</option>
+              </select>
+            </div>
+
+            <div *ngIf="userPermission()" class="col-6 d-flex flex-column align-items-start mb-3">
+              <label class="form-label">Vendedor:</label>
+              <select formControlName="vendedor" id="status" class="selectForm form-select">
+                <option value="Dev Nairuz">Dev Nairuz</option>
+                <option *ngFor="let vendedor of vendedores" [value]="vendedor">{{ vendedor }}</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="col-12 mb-3">
+            <label for="dataVenda" class="form-label">Data da Venda:</label>
+            <input type="date" id="dataVenda" class="form-control col-12" formControlName="dataVenda" required />
+          </div>
+        
+          <div class="col-12 mb-3">
+            <label for="nomeCliente" class="form-label">Nome do cliente:</label>
+            <input type="text" id="nomeCliente" class="form-control col-12" formControlName="nomeCliente" required />
+          </div>
+        
+          <div class="col-12 mb-3">
+            <div class="d-flex gap-3">
+              <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
+              <button (click)="redirectToMixProdutos()" class="btn btn-primary btn-mix-produto mb-2">Gerenciar mix de produtos</button>
+            </div>
+            <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
+              <option *ngFor="let item of mixProdutos" value="{{ item.mixProduto }}">{{ item.mixProduto }}</option>
+            </select>
+          </div>
+        
+          <div class="col-12 mb-3">
+            <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
+            <mat-form-field class="selectForm form-control">
+              <mat-select (valueChange)="defineMixProdutosValidate()" formControlName="produtoVendido" id="produtoVendido">
+                <mat-form-field class="form-search">
+                  <input matInput (keyup)="applyFilter($event)" placeholder="O que está procurando?" #input>
+                </mat-form-field>
+                <mat-option (click)="setInputsValoresNovaVenda($event)" *ngFor="let item of produtosFiltrados" [value]="item.produto">
+                  {{ item.produto }} - {{ item.tecnologia_servico }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+      
+          <div class="col-12 mb-3">
+            <label *ngIf="formNovaVenda.get('mixProdutos').value !== 'Marketing'" for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
+            <label *ngIf="formNovaVenda.get('mixProdutos').value === 'Marketing'" class="form-label">Número de meses:</label>
+            <input
+              type="number"
+              formControlName="multiplicador"
+              step="1"
+              min="1"
+              id="multiplicador"
+              class="form-control form-floating col-12"
+              required
+            />
+          </div>
+        
+          <div class="col-12 mb-3">
+            <label for="markup-novo" class="form-label">Qualidade = Markup:</label>
+            <input
+              type="number"
+              formControlName="markup"
+              step="0.01"
+              value="{{ minMarkup }}"
+              class="form-control form-floating col-12"
+              id="markup-novo"
+              (change)="verifyValueMarkup($event)"
+              required
+            />
+            <div *ngIf="minMarkup && maxMarkup" class="small text-danger my-2">
+              A faixa de markup para este produto é de {{ minMarkup }} a {{ maxMarkup }}
+            </div>
+          </div>
+        
+          <div *ngIf="!mixProdutosValidate" class="col-12 mb-3">
+            <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
+            <input
+              type="text"
+              prefix="R$ "
+              mask="separator.2"
+              thousandSeparator="."
+              decimalMarker=","
+              class="form-control"
+              id="vendaAvulsa"
+              formControlName="vendaAvulsa"
+              required
+            >
+          </div>
+
+          <div *ngIf="formNovaVenda.get('markup').value < minMarkup" class="d-flex flex-column align-items-start gap-3">
+            <p-image
+              *ngIf="urlPreviewImage"
+              width="150"
+              [preview]="true"
+              src="{{ urlPreviewImage }}"
+              alt="markup-aprovado"
+            ></p-image>
+
+            <label class="btn btn-link p-0" style="color: var(--nairuz-primary);" for="ModalNovaVendaImagemPreviewMarkupAprovado">
+              <span class="small">
+                {{ urlPreviewImage ? 'Alterar imagem' : 'Enviar imagem' }}
+              </span>
+            </label>
+
+            <input
+              type="file"
+              (change)="onUploadImageEmailMarkupApproval($event)"
+              name="ModalNovaVendaImagemPreviewMarkupAprovado"
+              id="ModalNovaVendaImagemPreviewMarkupAprovado"
+              class="d-none"
+              accept="image/png, image/jpg, image/jpeg"
+              required
+            >
+          </div>
+
+          <button type="submit" (click)="onSubmitNovaVenda()" [disabled]="!formNovaVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
+            <mat-spinner class="mx-auto" *ngIf="onLoadComission"></mat-spinner>
+            <span *ngIf="!onLoadComission" class="fs-6">Inserir</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para EDITAR venda-->
+  <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarVenda" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header mb-5">
+          <h2 class="modal-title text-black fs-5" id="modalEditarVenda">Editar Venda</h2>
+          <button type="button" (click)="closeModalEditarVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form id="formCalculoComissao" [formGroup]="formEditarVenda" class="container">
+          <div  *ngIf="userPermission()" class="col-12 d-flex flex-column align-items-start mb-3">
+            <label class="form-label">Status:</label>
+
+            <select formControlName="status" id="status" class="selectForm form-select">
+              <option value="Aguardando Aprovação">Aguardando Aprovação</option>
+              <option value="Aprovado">Aprovado</option>
+              <option value="Reprovado">Reprovado</option>
+              <option value="Pagamento Efetuado">Pagamento Efetuado</option>
+            </select>
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="dataVenda" class="form-label">Data da Venda:</label>
+            <input type="date" id="dataVenda" class="form-control col-12" formControlName="dataVenda" required />
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="nomeCliente" class="form-label">Nome do cliente:</label>
+            <input type="text" id="nomeCliente" class="form-control col-12" formControlName="nomeCliente" required />
+          </div>
+        
+          <div class="col-12 mb-3">
+            <div class="d-flex gap-3">
+              <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
+              <button (click)="redirectToMixProdutos()" class="btn btn-primary btn-mix-produto mb-2">Gerenciar mix de produtos</button>
+            </div>
+            <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
+              <option *ngFor="let item of mixProdutos" value="{{ item.mixProduto }}">{{ item.mixProduto }}</option>
+            </select>
+          </div>
+        
+          <div class="col-12 mb-3">
+            <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
+            <mat-form-field class="selectForm form-control">
+              <mat-select formControlName="produtoVendido" id="produtoVendido">
+                <mat-form-field class="form-search">
+                  <input matInput (keyup)="applyFilter($event)" placeholder="O que está procurando?" #input>
+                </mat-form-field>
+                <mat-option (click)="setInputsValoresEditarVenda($event)" *ngFor="let item of produtosFiltrados" [value]="item.produto">
+                  {{ item.produto }} - {{ item.tecnologia_servico }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+      
+          <div class="col-12 mb-3">
+            <label *ngIf="formEditarVenda.get('mixProdutos').value !== 'Marketing'" for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
+            <label *ngIf="formEditarVenda.get('mixProdutos').value === 'Marketing'" class="form-label">Número de meses:</label>
+            <input
+              type="number"
+              formControlName="multiplicador"
+              step="1"
+              min="1"
+              id="multiplicador"
+              class="form-control form-floating col-12"
+              required
+            />
+          </div>
+        
+          <div class="col-12 mb-3">
+            <label for="markup-editar" class="form-label">Qualidade = Markup:</label>
+            <input
+              type="number"
+              formControlName="markup"
+              step="0.01"
+              class="form-control form-floating col-12"
+              id="markup-editar"
+              (change)="verifyValueMarkup($event)"
+              required
+            />
+            <div *ngIf="minMarkup && maxMarkup" class="small text-danger my-2">
+              A faixa de markup para este produto é de {{ minMarkup }} a {{ maxMarkup }}
+            </div>
+          </div>
+        
+
+          <div *ngIf="!mixProdutosValidate" class="col-12 mb-3">
+            <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
+            <input
+              type="text"
+              prefix="R$ "
+              mask="separator.2"
+              thousandSeparator="."
+              decimalMarker=","
+              class="form-control"
+              id="vendaAvulsa"
+              formControlName="vendaAvulsa"
+              required
+            >
+          </div>
+
+          <div *ngIf="formEditarVenda.get('markup').value < minMarkup || urlPreviewImage" class="d-flex flex-column align-items-start">
+            <p-image
+              *ngIf="urlPreviewImage"
+              width="150"
+              [preview]="true"
+              src="{{ urlPreviewImage }}"
+              alt="markup-aprovado"
+            ></p-image>
+
+            <label class="btn btn-link p-0" style="color: var(--nairuz-primary);" for="ModalEditarVendaImagemPreviewMarkupAprovado">
+              <span class="small">
+                {{ urlPreviewImage ? 'Alterar imagem' : 'Enviar imagem' }}
+              </span>
+            </label>
+
+            <input
+              type="file"
+              (change)="onUploadImageEmailMarkupApproval($event)"
+              name="ModalEditarVendaImagemPreviewMarkupAprovado"
+              id="ModalEditarVendaImagemPreviewMarkupAprovado"
+              class="d-none"
+              accept="image/png, image/jpg, image/jpeg"
+              required
+            >
+          </div>
+
+          <button type="submit" (click)="onSubmitEditarVenda()" [disabled]="!formEditarVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
+            <mat-spinner class="mx-auto" *ngIf="onLoadComission"></mat-spinner>
+            <span *ngIf="!onLoadComission" class="fs-6">Editar</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para EXCLUIR venda-->
+  <div class="modal fade" id="modalDeletar" tabindex="-1" aria-labelledby="modalDeletarVenda" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-black fs-5" id="modalDeletarVenda">Excluir Venda</h2>
+          <button type="button" (click)="closeModalDeletarVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form [formGroup]="formDeletarVenda" (ngSubmit)="onSubmitDeletarVenda()">
+          <div class="modal-body">
+            <div class="">
+              <div class="form-label mt-1">
+                <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> a venda: <strong class="text-dark-emphasis">{{ formDeletarVenda.get('cliente').value }}</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="submit" class="btn btn-danger">
+              Excluir
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="closeModalDeletarVenda()" data-bs-dismiss="modal">
+              Fechar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>

@@ -17,11 +17,17 @@ const { CreateProductController } = require('./controllers/product/CreateProduct
 const { DeleteProductController } = require('./controllers/product/DeleteProductController');
 const { UpdateProductController } = require('./controllers/product/UpdateProductController');
 
-// Commissions Controllers
+// Commissions Controllers - Sellers
 const { ListCommissionsController } = require('./controllers/commissions/ListCommissionsController');
 const { CreateCommissionController } = require('./controllers/commissions/CreateCommissionController');
 const { DeleteCommissionController } = require('./controllers/commissions/DeleteCommissionController');
 const { UpdateCommissionController } = require('./controllers/commissions/UpdateCommissionController');
+
+// Commissions Controllers - Customer Success
+const { ListCommissionsCsController } = require('./controllers/commissionsCs/ListCommissionsCsController');
+const { CreateCommissionCsController } = require('./controllers/commissionsCs/CreateCommissionCsController');
+const { DeleteCommissionCsController } = require('./controllers/commissionsCs/DeleteCommissionCsController');
+const { UpdateCommissionCsController } = require('./controllers/commissionsCs/UpdateCommissionCsController');
 
 // Clients controllers
 const { CreateClientController } = require('./controllers/clients/CreateClientController');
@@ -54,7 +60,13 @@ const { CreateSellerGoalController } = require('./controllers/sellerGoals/Create
 const { UpdateSellerGoalController } = require('./controllers/sellerGoals/UpdateSellerGoalController');
 const { DeleteSellerGoalController } = require('./controllers/sellerGoals/DeleteSellerGoalController');
 
-// Metas Vendedores Controllers
+// Metas Customers Success Controllers
+const { ListCustomerSuccessGoalsController } = require('./controllers/customerSuccessGoals/ListCustomerSuccessGoalsController');
+const { CreateCustomerSuccessGoalController } = require('./controllers/customerSuccessGoals/CreateCustomerSuccessGoalController');
+const { UpdateCustomerSuccessGoalController } = require('./controllers/customerSuccessGoals/UpdateCustomerSuccessGoalController');
+const { DeleteCustomerSuccessGoalController } = require('./controllers/customerSuccessGoals/DeleteCustomerSuccessGoalController');
+
+// Metas Empresa Controllers
 const { ListEnterpriseGoalsController } = require('./controllers/enterpriseGoals/ListEnterpriseGoalsController');
 const { CreateEnterpriseGoalController } = require('./controllers/enterpriseGoals/CreateEnterpriseGoalController');
 const { UpdateEnterpriseGoalController } = require('./controllers/enterpriseGoals/UpdateEnterpriseGoalController');
@@ -122,6 +134,20 @@ router.put('/api/metas-vendedores/:id', authMiddleware, UpdateSellerGoalControll
 router.delete('/api/metas-vendedores/:id', authMiddleware, DeleteSellerGoalController);
 
 
+// *** METAS CUSTOMER SUCCESS ***
+// Rota para listar todas as metas
+router.get('/api/metas-cs', authMiddleware, ListCustomerSuccessGoalsController);
+
+// Rota para criar metas
+router.post('/api/metas-cs', authMiddleware, CreateCustomerSuccessGoalController);
+
+// Rota para editar uma meta
+router.put('/api/metas-cs/:id', authMiddleware, UpdateCustomerSuccessGoalController);
+
+// Rota para remover uma meta
+router.delete('/api/metas-cs/:id', authMiddleware, DeleteCustomerSuccessGoalController);
+
+
 // *** METAS EMPRESA ***
 // Rota para listar todas as metas
 router.get('/api/metas-empresa', authMiddleware, ListEnterpriseGoalsController);
@@ -136,18 +162,33 @@ router.put('/api/metas-empresa/:id', authMiddleware, UpdateEnterpriseGoalControl
 router.delete('/api/metas-empresa/:id', authMiddleware, DeleteEnterpriseGoalController);
 
 
-// *** COMISSÕES ***
+// *** COMISSÕES VENDEDORES ***
 // Rota para obter todas as comissões
-router.get('/api/comissoes', authMiddleware, ListCommissionsController);
+router.get('/api/comissoes-vendedores', authMiddleware, ListCommissionsController);
 
 // Rota para inserir novas comissões
-router.post('/api/comissao', authMiddleware, CreateCommissionController);
+router.post('/api/comissao-vendedores', authMiddleware, CreateCommissionController);
 
 // Rota para apagar uma comissão
-router.put('/api/comissoes/delete/:id', authMiddleware, DeleteCommissionController);
+router.put('/api/comissoes-vendedores/delete/:id', authMiddleware, DeleteCommissionController);
 
 // Rota para editar uma comissão
-router.put('/api/comissoes/:id', authMiddleware, UpdateCommissionController);
+router.put('/api/comissoes-vendedores/:id', authMiddleware, UpdateCommissionController);
+
+
+// *** COMISSÕES CUSTOMERS SUCCESS ***
+// Rota para obter todas as comissões
+router.get('/api/comissoes-cs', authMiddleware, ListCommissionsCsController);
+
+// Rota para inserir novas comissões
+router.post('/api/comissao-cs', authMiddleware, CreateCommissionCsController);
+
+// Rota para apagar uma comissão
+router.put('/api/comissoes-cs/delete/:id', authMiddleware, DeleteCommissionCsController);
+
+// Rota para editar uma comissão
+router.put('/api/comissoes-cs/:id', authMiddleware, UpdateCommissionCsController);
+
 
 /**
  * Rotas para Contratos
