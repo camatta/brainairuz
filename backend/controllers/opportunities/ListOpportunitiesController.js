@@ -3,10 +3,11 @@ const { ListOpportunitiesService } = require("../../services/opportunities/ListO
 module.exports.ListOpportunitiesController = async (req, res) => {
     try {
         const status = req.query.status;
+        const bu = req.query.bu;
         const mes = req.query.month;
         const ano = req.query.year;
 
-        const listOpportunitiesService = await ListOpportunitiesService({ status: status, mes: mes, ano: ano });
+        const listOpportunitiesService = await ListOpportunitiesService({ status: status, bu: bu, mes: mes, ano: ano });
 
         res.status(201).json(listOpportunitiesService);
         
