@@ -67,6 +67,8 @@ export class ControleGeralComponent implements OnInit {
   mediaCicloDeVendas: number = 0;
   mediaProjetosVendidos: number = 0;
   mediaDoSlaAtendimento: number = 0;
+  mediaDoTicket: number = 0;
+  mediaDoIcp: number = 0;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -248,13 +250,15 @@ export class ControleGeralComponent implements OnInit {
     const mesSelecionado: HTMLSelectElement = document.querySelector("#months");
     const statusSelecionado: HTMLSelectElement = document.querySelector("#statusFilter")
     const buSelecionado: HTMLSelectElement = document.querySelector("#buFilter");
+    const produtoSelecionado: HTMLSelectElement = document.querySelector("#productFilter");
 
     const ano: string = anoSelecionado.selectedOptions[0].value;
     const mes: string = mesSelecionado.selectedOptions[0].value;
     const status: string = statusSelecionado.selectedOptions[0].value;
     const bu: string = buSelecionado.selectedOptions[0].value;
+    const produto: string = produtoSelecionado.selectedOptions[0].value;
 
-    this.loadOportunidades(status, bu, mes, ano);
+    this.loadOportunidades(status, bu, produto, mes, ano);
   }
 
   // Carrega todos os vendedores
@@ -274,8 +278,8 @@ export class ControleGeralComponent implements OnInit {
   }
 
   // Carrega as oportunidades lançadas no banco e insere na tabela
-  async loadOportunidades(status?: string, esteira?: string, mes?: string, ano?: string) {
-    this.oportunidades.getOportunidades(status, esteira, mes, ano).subscribe(
+  async loadOportunidades(status?: string, esteira?: string, produto?: string, mes?: string, ano?: string) {
+    this.oportunidades.getOportunidades(status, esteira, produto, mes, ano).subscribe(
       async (oportunidades) => {      
         // BUSCA OS ANOS PARA INSERIR NO SELECT DO FRONT
         oportunidades.forEach((oportunidade) => {
@@ -288,11 +292,17 @@ export class ControleGeralComponent implements OnInit {
         this.tabela = new MatTableDataSource<Oportunidade>(oportunidades);
         this.tabela.sort = this.sort;
   
-        // Chama a função para calcular a média do SLA
-        const mediaDoSla = this.calculaMediaDoSlaAtendimento(this.tabela);
-  
         // Chama a função para calcular o ciclo de vendas e projetos vendidos (já existente)
         this.calculaMediaDoCicloDeVendasEProjetosVendidos(this.tabela);
+
+        // Chama a função para calcular a média do SLA
+        this.calculaMediaDoSlaAtendimento(this.tabela);
+
+        // Chama a função para calcular o ticket médio
+        this.calculaTicketMedio(this.tabela);
+
+        // Chama a função para calcular a média do ICP
+        this.calculaMediaIcp(this.tabela);
       }, async (error) => {
         console.error(error);
       }
@@ -301,23 +311,61 @@ export class ControleGeralComponent implements OnInit {
   
 
   // Método para calcular a SLA Atendimento
-calculaMediaDoSlaAtendimento(tabela: MatTableDataSource<Oportunidade>) {
-  let somaDoSla: number = 0;
-  let mediaDoSla: number = 0;
+  calculaMediaDoSlaAtendimento(tabela: MatTableDataSource<Oportunidade>) {
+    let somaDoSla: number = 0;
+    let mediaDoSla: number = 0;
 
-  tabela.filteredData.forEach((oportunidade) => {
-    if(oportunidade.sla_atendimento) {
-      somaDoSla += oportunidade.sla_atendimento;  // Somando o valor de sla_atendimento
+    tabela.filteredData.forEach((oportunidade) => {
+      if(oportunidade.sla_atendimento) {
+        somaDoSla += oportunidade.sla_atendimento;  // Somando o valor de sla_atendimento
+      }
+    });
+
+    // Verifica se há oportunidades para evitar divisão por zero
+    if (tabela.filteredData.length > 0) {
+      mediaDoSla = somaDoSla / tabela.filteredData.length;
     }
-  });
 
-  // Verifica se há oportunidades para evitar divisão por zero
-  if (tabela.filteredData.length > 0) {
-    mediaDoSla = somaDoSla / tabela.filteredData.length;
+    return this.mediaDoSlaAtendimento = mediaDoSla;
   }
 
-  return this.mediaDoSlaAtendimento = mediaDoSla;
-}
+  // Método para calcular o Ticket Médio
+  calculaTicketMedio(tabela: MatTableDataSource<Oportunidade>) {
+    let somaDoTicket: number = 0;
+    let mediaDoTicket: number = 0;
+
+    tabela.filteredData.forEach((oportunidade) => {
+      if(oportunidade.valor_vendido) {
+        somaDoTicket += oportunidade.valor_vendido;  // Somando o valor do ticket
+      }
+    });
+
+    // Verifica se há oportunidades para evitar divisão por zero
+    if (tabela.filteredData.length > 0) {
+      mediaDoTicket = somaDoTicket / tabela.filteredData.length;
+    }
+
+    return this.mediaDoTicket = mediaDoTicket;
+  }
+
+  // Método para calcular a SLA Atendimento
+  calculaMediaIcp(tabela: MatTableDataSource<Oportunidade>) {
+    let somaDoIcp: number = 0;
+    let mediaDoIcp: number = 0;
+
+    tabela.filteredData.forEach((oportunidade) => {
+      if(oportunidade.percentual_fit) {
+        somaDoIcp += Number(oportunidade.percentual_fit);  // Somando o valor do ticket
+      }
+    });
+
+    // Verifica se há oportunidades para evitar divisão por zero
+    if (tabela.filteredData.length > 0) {
+      mediaDoIcp = somaDoIcp / tabela.filteredData.length;
+    }
+
+    return this.mediaDoIcp = mediaDoIcp;
+  }
 
   // Função para fazer a busca dentro do input "Produto vendido"
   termoDaBusca: string = "";

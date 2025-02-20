@@ -1,6 +1,6 @@
 const Opportunities = require("../../models/Opportunities");
 
-module.exports.ListOpportunitiesService = async ({ status, bu, mes, ano }) => {
+module.exports.ListOpportunitiesService = async ({ status, bu, produto, mes, ano }) => {
     const query = {}
 
     // Manipulação eficiente de filtros opcionais mes e ano usando spread syntax
@@ -14,14 +14,15 @@ module.exports.ListOpportunitiesService = async ({ status, bu, mes, ano }) => {
             query.produto = "MKT";
         }
     }
+    if(produto !== undefined) {
+        query.produto = produto;
+    }
     if(mes !== undefined) {
         query.mes = mes;
     }
     if(ano !== undefined) {
         query.ano = ano;
     }
-
-    console.log(query);
 
     const opportunities = await Opportunities.find(query);
     
