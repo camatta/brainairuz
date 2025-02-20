@@ -11,7 +11,9 @@ import { RedefinirSenhaComponent } from './redefinir-senha/redefinir-senha.compo
 import { IcpComponent } from './dashboard/icp/icp.component';
 import { TabelaDeValores } from './dashboard/tabela-valores/tabela-valores.component';
 import { TabelaMetasComponent } from './dashboard/tabela-metas/tabela-metas.component';
+import { TabelaMetasCsComponent } from './dashboard/tabela-metas-cs/tabela-metas-cs.component';
 import { CalculoComissaoComponent } from './dashboard/calculo-comissao/calculo-comissao.component';
+import { CalculoComissaoCsComponent } from './dashboard/calculo-comissao-cs/calculo-comissao-cs.component';
 import { ContratosComponent } from './dashboard/contratos/contratos.component';
 import { ContratoFormComponent } from './dashboard/contratos/contrato-form/contrato-form.component';
 import { ContratosListarComponent } from './dashboard/contratos/contratos-listar/contratos-listar.component';
@@ -40,8 +42,10 @@ const routes: Routes = [
     { path: 'mix-produtos', component: MixProdutosComponent },
     { path: 'tabela-valores', component: TabelaDeValores },
     { path: 'tabela-metas', component: TabelaMetasComponent },
+    { path: 'tabela-metas-cs', component: TabelaMetasCsComponent },
     { path: 'meta-empresa', component: MetaEmpresaComponent },
     { path: 'calculo-comissao', component: CalculoComissaoComponent },
+    { path: 'calculo-comissao-cs', component: CalculoComissaoCsComponent },
     { path: 'adicionar-oportunidade', component: AdicionarOportunidadeComponent },
     { path: 'controle-geral', component: ControleGeralComponent },
   ]},

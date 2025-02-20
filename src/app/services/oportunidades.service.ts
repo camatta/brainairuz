@@ -12,17 +12,20 @@ export class OportunidadesService {
 
   constructor(private http: HttpClient) { }
 
-  getOportunidades(filterStatus: string, filterMonth: string, filterYear: string): Observable<any[]> {
+  getOportunidades(filterStatus: string, filterBu: string, filterMonth: string, filterYear: string): Observable<any[]> {
     let url = environment.URL_API + '/api/oportunidades';
 
     if(filterStatus){
       url += `?status=${filterStatus}`
     }
+    if (filterBu) {
+      url += filterStatus ? `&bu=${filterBu}` : `?bu=${filterBu}`;
+    }
     if (filterMonth) {
-      url += filterStatus ? `&month=${filterMonth}` : `?month=${filterMonth}`;
+      url += filterStatus || filterBu ? `&month=${filterMonth}` : `?month=${filterMonth}`;
     }
     if(filterYear) {
-      url += filterStatus || filterMonth ? `&year=${filterYear}` : `?year=${filterYear}`;
+      url += filterStatus || filterBu || filterMonth ? `&year=${filterYear}` : `?year=${filterYear}`;
     }
 
     return this.http.get<Oportunidade[]>(url);

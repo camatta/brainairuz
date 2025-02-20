@@ -12,7 +12,7 @@ export class ComissoesService {
   constructor(private http: HttpClient) { }
 
   getComissoes(currentUser: string, filterMonth: string, filterYear: string, vendedor?: string): Observable<any[]> {
-    let url = environment.URL_API + '/api/comissoes';
+    let url = environment.URL_API + '/api/comissoes-vendedores';
 
     if (currentUser === 'adm') {
       if(filterYear !== 'sem filtro'){
@@ -39,14 +39,14 @@ export class ComissoesService {
   }
 
   setComissao(newComissao: FormData) {
-    return this.http.post<FormData>(environment.URL_API + '/api/comissao', newComissao);
+    return this.http.post<FormData>(environment.URL_API + '/api/comissao-vendedores', newComissao);
   }
 
   deleteComissao(idComissao: string, idPublicoImagemMarkupAprovado: FormData) {
-    return this.http.put(environment.URL_API + `/api/comissoes/delete/${idComissao}`, idPublicoImagemMarkupAprovado);
+    return this.http.put(environment.URL_API + `/api/comissoes-vendedores/delete/${idComissao}`, idPublicoImagemMarkupAprovado);
   }
 
   updateComissao(idComissao: string, comissao: FormData) {
-    return this.http.put(environment.URL_API + `/api/comissoes/${idComissao}`, comissao);
+    return this.http.put(environment.URL_API + `/api/comissoes-vendedores/${idComissao}`, comissao);
   }
 }

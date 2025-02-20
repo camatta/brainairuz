@@ -247,12 +247,14 @@ export class ControleGeralComponent implements OnInit {
     const anoSelecionado: HTMLSelectElement = document.querySelector("#years");
     const mesSelecionado: HTMLSelectElement = document.querySelector("#months");
     const statusSelecionado: HTMLSelectElement = document.querySelector("#statusFilter")
+    const buSelecionado: HTMLSelectElement = document.querySelector("#buFilter");
 
     const ano: string = anoSelecionado.selectedOptions[0].value;
     const mes: string = mesSelecionado.selectedOptions[0].value;
     const status: string = statusSelecionado.selectedOptions[0].value;
+    const bu: string = buSelecionado.selectedOptions[0].value;
 
-    this.loadOportunidades(status, mes, ano);
+    this.loadOportunidades(status, bu, mes, ano);
   }
 
   // Carrega todos os vendedores
@@ -272,10 +274,9 @@ export class ControleGeralComponent implements OnInit {
   }
 
   // Carrega as oportunidades lançadas no banco e insere na tabela
-  async loadOportunidades(status?: string, mes?: string, ano?: string) {
-    this.oportunidades.getOportunidades(status, mes, ano).subscribe(
-      async (oportunidades) => {
-        console.log(oportunidades);
+  async loadOportunidades(status?: string, esteira?: string, mes?: string, ano?: string) {
+    this.oportunidades.getOportunidades(status, esteira, mes, ano).subscribe(
+      async (oportunidades) => {      
         // BUSCA OS ANOS PARA INSERIR NO SELECT DO FRONT
         oportunidades.forEach((oportunidade) => {
           const ano = oportunidade.ano;
@@ -283,7 +284,6 @@ export class ControleGeralComponent implements OnInit {
             this.yearsSelectFilter.push(ano);
           }
         });
-  
         // DEFINE OS ITENS DA TABELA
         this.tabela = new MatTableDataSource<Oportunidade>(oportunidades);
         this.tabela.sort = this.sort;

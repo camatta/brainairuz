@@ -40,43 +40,51 @@
 
         <form class="d-flex gap-5">
             <div class="filter-commissions">
-            <label for="statusFilter" class="me-2">Status</label>
-            <select (change)="submitFormFilter()" id="statusFilter" class="h-100">
-                <option selected value="{{ undefined }}">Selecione</option>
-                <option value="Exploratória">Exploratória</option>
-                <option value="Não é uma oportunidade">Não é uma oportunidade</option>
-                <option value="Não consegui qualificar">Não consegui qualificar</option>
-                <option value="Fora do ICP">Fora do ICP</option>
-                <option value="Dentro do ICP">Dentro do ICP</option>
-                <option value="Vendido">Vendido</option>
-            </select>
+                <label for="buFilter" class="me-2">BU</label>
+                <select (change)="submitFormFilter()" id="buFilter" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="tecnologia">Tecnologia</option>
+                </select>
             </div>
             <div class="filter-commissions">
-            <label for="years" class="me-2">Filtrar por Ano</label>
-            <select (change)="submitFormFilter()" id="years" class="h-100">
-                <option selected value="{{ undefined }}">Selecione</option>
-                <option *ngFor="let year of yearsSelectFilter" [value]="year">
-                {{ year }}
-                </option>
-            </select>
+                <label for="statusFilter" class="me-2">Status</label>
+                <select (change)="submitFormFilter()" id="statusFilter" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="Exploratória">Exploratória</option>
+                    <option value="Não é uma oportunidade">Não é uma oportunidade</option>
+                    <option value="Não consegui qualificar">Não consegui qualificar</option>
+                    <option value="Fora do ICP">Fora do ICP</option>
+                    <option value="Dentro do ICP">Dentro do ICP</option>
+                    <option value="Vendido">Vendido</option>
+                </select>
             </div>
             <div class="filter-commissions">
-            <label for="months" class="me-2">Filtrar por mês</label>
-            <select (change)="submitFormFilter()" id="months" class="h-100">
-                <option selected value="{{ undefined }}">Selecione</option>
-                <option value="Janeiro">Janeiro</option>
-                <option value="Fevereiro">Fevereiro</option>
-                <option value="Março">Março</option>
-                <option value="Abril">Abril</option>
-                <option value="Maio">Maio</option>
-                <option value="Junho">Junho</option>
-                <option value="Julho">Julho</option>
-                <option value="Agosto">Agosto</option>
-                <option value="Setembro">Setembro</option>
-                <option value="Outubro">Outubro</option>
-                <option value="Novembro">Novembro</option>
-                <option value="Dezembro">Dezembro</option>
-            </select>
+                <label for="years" class="me-2">Filtrar por Ano</label>
+                <select (change)="submitFormFilter()" id="years" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option *ngFor="let year of yearsSelectFilter" [value]="year">
+                    {{ year }}
+                    </option>
+                </select>
+            </div>
+            <div class="filter-commissions">
+                <label for="months" class="me-2">Filtrar por mês</label>
+                <select (change)="submitFormFilter()" id="months" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="Janeiro">Janeiro</option>
+                    <option value="Fevereiro">Fevereiro</option>
+                    <option value="Março">Março</option>
+                    <option value="Abril">Abril</option>
+                    <option value="Maio">Maio</option>
+                    <option value="Junho">Junho</option>
+                    <option value="Julho">Julho</option>
+                    <option value="Agosto">Agosto</option>
+                    <option value="Setembro">Setembro</option>
+                    <option value="Outubro">Outubro</option>
+                    <option value="Novembro">Novembro</option>
+                    <option value="Dezembro">Dezembro</option>
+                </select>
             </div>
         </form>
     </div>
