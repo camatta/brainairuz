@@ -391,6 +391,15 @@
                 </svg>
             </button>
         </div>
+
+        <div class="d-flex gap-2 align-items-center">
+            <span class="infos-rodape">Média do SLA: {{ mediaDoSlaAtendimento  | number:'1.2-2' }}</span>
+            <button class="btnCopiar" type="button" (click)="copiarParaAreaDeTransferencia(mediaDoSlaAtendimento)">
+                <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z" fill="#A2A2A2"/>
+                </svg>
+            </button>
+        </div>
     </div>
   
     <!-- MODAIS -->

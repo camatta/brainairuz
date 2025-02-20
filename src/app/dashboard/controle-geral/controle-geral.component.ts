@@ -66,6 +66,7 @@ export class ControleGeralComponent implements OnInit {
   currentTab: number;
   mediaCicloDeVendas: number = 0;
   mediaProjetosVendidos: number = 0;
+  mediaDoSlaAtendimento: number = 0;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -279,20 +280,44 @@ export class ControleGeralComponent implements OnInit {
         // BUSCA OS ANOS PARA INSERIR NO SELECT DO FRONT
         oportunidades.forEach((oportunidade) => {
           const ano = oportunidade.ano;
-          if(!this.yearsSelectFilter.includes(ano)){
+          if (!this.yearsSelectFilter.includes(ano)) {
             this.yearsSelectFilter.push(ano);
           }
-        })
-
+        });
         // DEFINE OS ITENS DA TABELA
         this.tabela = new MatTableDataSource<Oportunidade>(oportunidades);
         this.tabela.sort = this.sort;
+  
+        // Chama a função para calcular a média do SLA
+        const mediaDoSla = this.calculaMediaDoSlaAtendimento(this.tabela);
+  
+        // Chama a função para calcular o ciclo de vendas e projetos vendidos (já existente)
         this.calculaMediaDoCicloDeVendasEProjetosVendidos(this.tabela);
       }, async (error) => {
         console.error(error);
       }
-    )
+    );
   }
+  
+
+  // Método para calcular a SLA Atendimento
+calculaMediaDoSlaAtendimento(tabela: MatTableDataSource<Oportunidade>) {
+  let somaDoSla: number = 0;
+  let mediaDoSla: number = 0;
+
+  tabela.filteredData.forEach((oportunidade) => {
+    if(oportunidade.sla_atendimento) {
+      somaDoSla += oportunidade.sla_atendimento;  // Somando o valor de sla_atendimento
+    }
+  });
+
+  // Verifica se há oportunidades para evitar divisão por zero
+  if (tabela.filteredData.length > 0) {
+    mediaDoSla = somaDoSla / tabela.filteredData.length;
+  }
+
+  return this.mediaDoSlaAtendimento = mediaDoSla;
+}
 
   // Função para fazer a busca dentro do input "Produto vendido"
   termoDaBusca: string = "";
