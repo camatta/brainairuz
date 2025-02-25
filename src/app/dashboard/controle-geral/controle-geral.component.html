@@ -38,28 +38,49 @@
             </div>
         </form>
 
-        <form class="d-flex gap-5">
-            <div class="filter-commissions">
-                <label for="buFilter" class="me-2">BU</label>
-                <select (change)="submitFormFilter()" id="buFilter" class="h-100">
+
+        <button class="btnFiltrarPor" type="button" (click)="sidebarToggle()">Filtrar por</button>
+
+        <form id="sidebarFilters" class="bg-white d-flex hidden flex-column gap-5 position-absolute end-0 top-0 vh-100 p-4">
+            <button type="button" (click)="sidebarToggle()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Filtrar por ano -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="years" class="mb-2">Filtrar por Ano</label>
+                <select (change)="submitFormFilter()" id="years" name="ano" class="h-100">
                     <option selected value="{{ undefined }}">Selecione</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="tecnologia">Tecnologia</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
                 </select>
             </div>
-            <div class="filter-commissions">
-                <label for="productFilter" class="me-2">Produto</label>
-                <select (change)="submitFormFilter()" id="productFilter" class="h-100">
+
+            <!-- Filtrar por mês -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="months" class="mb-2">Filtrar por mês</label>
+                <select (change)="submitFormFilter()" id="months" name="mes" class="h-100">
                     <option selected value="{{ undefined }}">Selecione</option>
-                    <option value="Help A">Help A</option>
-                    <option value="MKT">MKT</option>
-                    <option value="Projeto">Projeto</option>
-                    <option value="Sustentação">Sustentação</option>
+                    <option value="Janeiro">Janeiro</option>
+                    <option value="Fevereiro">Fevereiro</option>
+                    <option value="Março">Março</option>
+                    <option value="Abril">Abril</option>
+                    <option value="Maio">Maio</option>
+                    <option value="Junho">Junho</option>
+                    <option value="Julho">Julho</option>
+                    <option value="Agosto">Agosto</option>
+                    <option value="Setembro">Setembro</option>
+                    <option value="Outubro">Outubro</option>
+                    <option value="Novembro">Novembro</option>
+                    <option value="Dezembro">Dezembro</option>
                 </select>
             </div>
-            <div class="filter-commissions">
-                <label for="statusFilter" class="me-2">Status</label>
-                <select (change)="submitFormFilter()" id="statusFilter" class="h-100">
+
+            <!-- Filtrar por status -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="statusFilter" class="mb-2">Filtrar por Status</label>
+                <select (change)="submitFormFilter()" id="statusFilter" name="status" class="h-100">
                     <option selected value="{{ undefined }}">Selecione</option>
                     <option value="Exploratória">Exploratória</option>
                     <option value="Não é uma oportunidade">Não é uma oportunidade</option>
@@ -69,18 +90,134 @@
                     <option value="Vendido">Vendido</option>
                 </select>
             </div>
-            <div class="filter-commissions">
-                <label for="years" class="me-2">Filtrar por Ano</label>
-                <select (change)="submitFormFilter()" id="years" class="h-100">
+
+            <!-- Filtrar por origem -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="origemFilter" class="mb-2">Filtrar por Origem</label>
+                <select (change)="submitFormFilter()" id="origemFilter" name="origem" class="h-100">
                     <option selected value="{{ undefined }}">Selecione</option>
-                    <option *ngFor="let year of yearsSelectFilter" [value]="year">
-                    {{ year }}
-                    </option>
+                    <option value="Ativo">Ativo</option>
+                    <option value="Cliente da Base">Cliente da Base</option>
+                    <option value="Funcionairuz">Funcionairuz</option>
+                    <option value="Indicação Cliente">Indicação Cliente</option>
+                    <option value="MKT">MKT</option>
+                    <option value="Parceiros">Parceiros</option>
                 </select>
             </div>
-            <div class="filter-commissions">
-                <label for="months" class="me-2">Filtrar por mês</label>
-                <select (change)="submitFormFilter()" id="months" class="h-100">
+
+            <!-- Filtrar por fonte -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="fonteFilter" class="mb-2">Filtrar por Fonte</label>
+                <select (change)="submitFormFilter()" id="fonteFilter" name="fonte" class="h-100">
+                    <option class="options-nairuz" value="">Selecione</option>
+                    <option class="options-nairuz" value="AGV">AGV</option>
+                    <option class="options-nairuz" value="Agência Paula Conceição">Agência Paula Conceição</option>
+                    <option class="options-nairuz" value="Ativo">Ativo</option>
+                    <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
+                    <option class="options-nairuz" value="Blog">Blog</option>
+                    <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                    <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
+                    <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
+                    <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
+                    <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                    <option class="options-nairuz" value="Linx">Linx</option>
+                    <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital</option>
+                    <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
+                    <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
+                    <option class="options-nairuz" value="MKT">MKT</option>
+                    <option class="options-nairuz" value="Nexell Integrado">Nexell Integrado</option>
+                    <option class="options-nairuz" value="Nivele">Nivele</option>
+                    <option class="options-nairuz" value="RD Station">RD Station</option>
+                    <option class="options-nairuz" value="Site">Site</option>
+                    <option class="options-nairuz" value="VTEX">VTEX</option>
+                    <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                </select>
+            </div>
+
+            <!-- Filtrar por responsável -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="responsavelFilter" class="mb-2">Filtrar por Responsável</label>
+                <select (change)="submitFormFilter()" id="responsavelFilter" name="responsavel" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option *ngFor="let vendedor of vendedores" value="{{ vendedor }}">{{ vendedor }}</option>
+                </select>
+            </div>
+
+            <!-- Filtrar por Perfil do cliente -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="perfilClienteFilter" class="mb-2">Filtrar por Perfil do cliente</label>
+                <select (change)="submitFormFilter()" id="perfilClienteFilter" name="perfil_cliente" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="Enterprise">Enterprise</option>
+                    <option value="Fora do ICP">Fora do ICP</option>
+                </select>
+            </div>
+
+            <!-- Filtrar por Etapa -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="etapaFilter" class="mb-2">Filtrar por Etapa</label>
+                <select (change)="submitFormFilter()" id="etapaFilter" name="etapa" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="Contrato">Contrato</option>
+                    <option value="Follow">Follow</option>
+                    <option value="Perdido">Perdido</option>
+                    <option value="Proposta">Proposta</option>
+                    <option value="Vendido">Vendido</option>
+                </select>
+            </div>
+
+            <!-- Filtrar por produto -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="productFilter" class="mb-2">Filtrar por Produto</label>
+                <select (change)="submitFormFilter()" id="productFilter" name="produto" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="Help A">Help A</option>
+                    <option value="MKT">MKT</option>
+                    <option value="Projeto">Projeto</option>
+                    <option value="Sustentação">Sustentação</option>
+                </select>
+            </div>
+
+            <!-- Filtrar por detalhes do produto -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="detalhesProdutoFilter" class="mb-2">Filtrar por Detalhes do produto</label>
+                <select (change)="submitFormFilter()" id="detalhesProdutoFilter" name="detalhes_produto" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="Help A">Help A</option>
+                    <option value="Layout Personalizado">Layout Personalizado</option>
+                    <option value="MKT Full">MKT Full</option>
+                    <option value="MKT Parcial">MKT Parcial</option>
+                    <option value="Sustentação">Sustentação</option>
+                    <option value="Tema">Tema</option>
+                    <option value="Website">Website</option>
+                </select>
+            </div>
+
+            <!-- Filtrar por Motivo da perda -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="motivoPerdaFilter" class="mb-2">Filtrar por Motivo da perda</label>
+                <select (change)="submitFormFilter()" id="motivoPerdaFilter" name="motivo_perda" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="Adiou o projeto">Adiou o projeto</option>
+                    <option value="Fora do ICP">Fora do ICP</option>
+                    <option value="Internalizou">Internalizou</option>
+                    <option value="Não consegui qualificar">Não consegui qualificar</option>
+                    <option value="Não é momento para o projeto">Não é momento para o projeto</option>
+                    <option value="Não retorna o contato">Não retorna o contato</option>
+                    <option value="Não sentiu confiança técnica">Não sentiu confiança técnica</option>
+                    <option value="Prazo de entrega">Prazo de entrega</option>
+                    <option value="Preço">Preço</option>
+                    <option value="Optou por seguir com outra empresa">Optou por seguir com outra empresa</option>
+                </select>
+            </div>
+
+            <!-- Filtrar por mês de encerramento -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="mesEncerramentoFilter" class="mb-2">Filtrar por Mês de encerramento</label>
+                <select (change)="submitFormFilter()" id="mesEncerramentoFilter" name="mes_encerramento" class="h-100">
                     <option selected value="{{ undefined }}">Selecione</option>
                     <option value="Janeiro">Janeiro</option>
                     <option value="Fevereiro">Fevereiro</option>

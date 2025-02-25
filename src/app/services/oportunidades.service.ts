@@ -12,23 +12,17 @@ export class OportunidadesService {
 
   constructor(private http: HttpClient) { }
 
-  getOportunidades(filterStatus: string, filterBu: string, filterProduct: string, filterMonth: string, filterYear: string): Observable<any[]> {
+  getOportunidades(filters: Partial<Oportunidade>): Observable<any[]> {
     let url = environment.URL_API + '/api/oportunidades';
 
-    if(filterStatus){
-      url += `?status=${filterStatus}`
-    }
-    if (filterBu) {
-      url += filterStatus ? `&bu=${filterBu}` : `?bu=${filterBu}`;
-    }
-    if (filterProduct) {
-      url += filterStatus || filterBu ? `&produto=${filterProduct}` : `?produto=${filterProduct}`;
-    }
-    if (filterMonth) {
-      url += filterStatus || filterBu || filterProduct ? `&month=${filterMonth}` : `?month=${filterMonth}`;
-    }
-    if(filterYear) {
-      url += filterStatus || filterBu || filterProduct || filterMonth ? `&year=${filterYear}` : `?year=${filterYear}`;
+    // Se houver filtros, construir a query string dinamicamente
+    if (filters && Object.keys(filters).length > 0) {
+      const queryParams = Object.entries(filters)
+        .filter(([_, value]) => value !== '' && value !== null && value !== undefined) // Ignora valores vazios ou nulos
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+        .join('&');
+
+      url += `?${queryParams}`;
     }
 
     return this.http.get<Oportunidade[]>(url);

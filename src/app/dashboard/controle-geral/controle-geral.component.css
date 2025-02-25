@@ -68,6 +68,38 @@ form.formBusca button {
     margin-bottom: 2rem;
 }
 
+.topo .btnFiltrarPor {
+    border: 1px solid #ececec;
+    background-color: #fff;
+    padding: 6px 12px;
+    border-radius: 76px;
+    color: #a2a2a2;
+}
+
+#sidebarFilters.hidden {
+    display: none !important;
+}
+
+#sidebarFilters {
+    box-shadow: -10px 0px 16px 0px rgba(0,0,0,0.1);
+    z-index: 999;
+    overflow-y: auto;
+}
+
+#sidebarFilters button {
+    width: fit-content;
+    align-self: flex-end;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #a2a2a2;
+}
+
+.filter-commissions {
+    display: flex;
+    flex-direction: column;
+}
+
 form.formFiltrarColunas {
     position: relative;
 }

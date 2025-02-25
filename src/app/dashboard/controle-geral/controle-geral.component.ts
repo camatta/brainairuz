@@ -61,7 +61,6 @@ export class ControleGeralComponent implements OnInit {
   vendedores: any[] = [];
   currentDate = new Date();
   currentYear = this.currentDate.getFullYear();
-  yearsSelectFilter: string[] = [];
   feriadosNacionaisCarregados = [];
   currentTab: number;
   mediaCicloDeVendas: number = 0;
@@ -92,13 +91,19 @@ export class ControleGeralComponent implements OnInit {
     this.carregarFeriados(this.currentYear);
   }
 
-  /** Announce the change in sort state for assistive technology. */
+  // Announce the change in sort state for assistive technology.
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  // Toggle para mostrar e esconder barra lateral com os filtros
+  sidebarToggle() {
+    const sidebar = document.querySelector("#sidebarFilters");
+    sidebar.classList.toggle("hidden");
   }
 
   // Toggle para mostrar e esconder a lista de colunas
@@ -245,20 +250,38 @@ export class ControleGeralComponent implements OnInit {
   }
 
   submitFormFilter() {
-    // Realizar regra para filtros
-    const anoSelecionado: HTMLSelectElement = document.querySelector("#years");
-    const mesSelecionado: HTMLSelectElement = document.querySelector("#months");
-    const statusSelecionado: HTMLSelectElement = document.querySelector("#statusFilter")
-    const buSelecionado: HTMLSelectElement = document.querySelector("#buFilter");
-    const produtoSelecionado: HTMLSelectElement = document.querySelector("#productFilter");
+    const sidebarFilters: NodeListOf<HTMLSelectElement> = document.querySelectorAll("#sidebarFilters select");
+    const filters: Partial<Oportunidade> = {};
 
-    const ano: string = anoSelecionado.selectedOptions[0].value;
-    const mes: string = mesSelecionado.selectedOptions[0].value;
-    const status: string = statusSelecionado.selectedOptions[0].value;
-    const bu: string = buSelecionado.selectedOptions[0].value;
-    const produto: string = produtoSelecionado.selectedOptions[0].value;
+    sidebarFilters.forEach((select: HTMLSelectElement) => {
+      const filterName = select.name as keyof Oportunidade;
+      const filterValue = select.value;
 
-    this.loadOportunidades(status, bu, produto, mes, ano);
+      if (filterValue) {
+        // Converte o valor com base no tipo esperado pelo campo
+        switch (filterName) {
+          case 'data':
+          case 'primeiro_contato':
+          case 'reuniao_agendada':
+          case 'data_aceite':
+            filters[filterName] = new Date(filterValue); // Converte string para Date
+            break;
+          case 'sla_atendimento':
+          case 'valor_proposta':
+          case 'valor_vendido':
+          case 'markup':
+          case 'mrr':
+          case 'ciclo_venda':
+            filters[filterName] = Number(filterValue); // Converte string para number
+            break;
+          default:
+            filters[filterName] = filterValue; // Mantém como string para os outros campos
+            break;
+        }
+      }
+    });
+
+    this.loadOportunidades(filters);
   }
 
   // Carrega todos os vendedores
@@ -278,16 +301,9 @@ export class ControleGeralComponent implements OnInit {
   }
 
   // Carrega as oportunidades lançadas no banco e insere na tabela
-  async loadOportunidades(status?: string, esteira?: string, produto?: string, mes?: string, ano?: string) {
-    this.oportunidades.getOportunidades(status, esteira, produto, mes, ano).subscribe(
+  async loadOportunidades(filters?: Partial<Oportunidade>) {
+    this.oportunidades.getOportunidades(filters).subscribe(
       async (oportunidades) => {      
-        // BUSCA OS ANOS PARA INSERIR NO SELECT DO FRONT
-        oportunidades.forEach((oportunidade) => {
-          const ano = oportunidade.ano;
-          if (!this.yearsSelectFilter.includes(ano)) {
-            this.yearsSelectFilter.push(ano);
-          }
-        });
         // DEFINE OS ITENS DA TABELA
         this.tabela = new MatTableDataSource<Oportunidade>(oportunidades);
         this.tabela.sort = this.sort;
@@ -399,6 +415,9 @@ export class ControleGeralComponent implements OnInit {
     let mediaDeProjetosVendidos: number = 0;
 
     tabela.filteredData.forEach((oportunidade) => {
+
+      console.log(oportunidade);
+
       if(oportunidade.ciclo_venda) {
         somaDosCiclos = mediaDosCiclosDeVenda + oportunidade.ciclo_venda;
         mediaDosCiclosDeVenda = somaDosCiclos / tabela.filteredData.length;
