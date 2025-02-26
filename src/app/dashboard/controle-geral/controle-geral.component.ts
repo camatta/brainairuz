@@ -82,7 +82,7 @@ export class ControleGeralComponent implements OnInit {
 
   ngOnInit(): void {
     // Carrega as oportunidades do banco
-    this.loadOportunidades();
+    this.loadOportunidades({ano: this.currentYear.toString()});
 
     // Carrega todos os vendedores
     this.loadVendedores();
@@ -151,7 +151,10 @@ export class ControleGeralComponent implements OnInit {
 
   // Formatar status para inserir no span como classe
   formatarTextoDaColunaStatus(texto: string) {
-    return texto.replaceAll(" ", "-");
+    if (texto && texto.includes(" ")) {
+      return texto.replaceAll(" ", "-");
+    }
+    return texto;
   }
 
   // MODAL de ação dos produtos
@@ -302,8 +305,10 @@ export class ControleGeralComponent implements OnInit {
 
   // Carrega as oportunidades lançadas no banco e insere na tabela
   async loadOportunidades(filters?: Partial<Oportunidade>) {
+    this.loading = true;
+
     this.oportunidades.getOportunidades(filters).subscribe(
-      async (oportunidades) => {      
+      async (oportunidades) => {
         // DEFINE OS ITENS DA TABELA
         this.tabela = new MatTableDataSource<Oportunidade>(oportunidades);
         this.tabela.sort = this.sort;
@@ -319,8 +324,14 @@ export class ControleGeralComponent implements OnInit {
 
         // Chama a função para calcular a média do ICP
         this.calculaMediaIcp(this.tabela);
+
+        // Retira o loading
+        this.loading = false;
       }, async (error) => {
         console.error(error);
+
+        // Retira o loading
+        this.loading = false;
       }
     );
   }
@@ -415,8 +426,6 @@ export class ControleGeralComponent implements OnInit {
     let mediaDeProjetosVendidos: number = 0;
 
     tabela.filteredData.forEach((oportunidade) => {
-
-      console.log(oportunidade);
 
       if(oportunidade.ciclo_venda) {
         somaDosCiclos = mediaDosCiclosDeVenda + oportunidade.ciclo_venda;

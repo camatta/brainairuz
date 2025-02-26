@@ -51,8 +51,11 @@
                 <label for="years" class="mb-2">Filtrar por Ano</label>
                 <select (change)="submitFormFilter()" id="years" name="ano" class="h-100">
                     <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
                     <option value="2024">2024</option>
-                    <option value="2025">2025</option>
+                    <option value="2025" selected>2025</option>
                     <option value="2026">2026</option>
                 </select>
             </div>
@@ -245,12 +248,16 @@
     </form>
   
     <!-- COLUNAS DA TABELA -->
-    <div *ngIf="tabela.data.length <= 0" class="w-100">
-        <p class="fs-6 mb-0 text-center">Nenhum dado encontrado...</p>
+    <div *ngIf="loading" class="w-100">
+        <p class="fs-6 mb-0 text-center">Carregando...</p>
     </div>
 
-    <div *ngIf="tabela.data.length > 0" class="mat-elevation-z8">
-        <div class="sectionTable">
+    <div *ngIf="!loading" class="mat-elevation-z8">
+        <div *ngIf="tabela.data.length <= 0" class="w-100">
+            <p class="fs-6 mb-0 text-center">Nenhum dado encontrado...</p>
+        </div>
+
+        <div *ngIf="tabela.data.length > 0" class="sectionTable">
             <table id="tabela-oportunidades" mat-table [dataSource]="tabela" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
                 <!-- Suspect Column -->
                 <ng-container matColumnDef="suspect" sticky>
