@@ -19,12 +19,11 @@
   text-decoration: unset;
   background: unset;
   border: unset;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1;
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 30px;
 }
 
 .menu-lateral ul li button i {
@@ -34,7 +33,7 @@
 
 .menu-lateral ul li .collapsed {
   position: relative;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400 !important;
   line-height: 1;
   color: #fff;
@@ -66,11 +65,6 @@
 
 .menu-lateral ul li .collapse li {
   margin-bottom: 1rem;
-}
-
-.menu-lateral ul li .collapse button {
-  margin-bottom: 16px;
-  font-size: 13px;
 }
 
 .link-ativo, 

@@ -24,6 +24,13 @@ export class MenuLateralComponent implements OnInit {
   showControleGeral = false;
   linkAtivo: string;
 
+
+  master: boolean = false;
+  lider: boolean = false;
+  comercial: boolean = false;
+  cs: boolean = false;
+  todos: boolean = false;
+
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
     this.linkAtivo = this.router.url;
 
@@ -44,76 +51,14 @@ export class MenuLateralComponent implements OnInit {
     const accessLevel = user ? user.accessLevel : '';
     const team = user ? user.team : '';
     const name = user ? user.name : '';
-    
-    this.showUsuariosLink =
-      accessLevel === 'Líder de Equipe' ||
-      accessLevel === 'Administrador'
-    ;
+    const setor = user ? user.setor : '';
 
-    this.showComercialLink =
-      accessLevel === 'Administrador' ||
-      accessLevel === 'Líder de Equipe' ||
-      team === 'Comercial' ||
-      name === 'Luccas Baptista' ||
-      name === 'Beatriz Cruz Alves' ||
-      name === 'Beatriz Almeida'
-    ;
+    this.master = accessLevel === 'Administrador' || name === 'Valeria Queiroz';
+    this.lider = accessLevel === 'Líder de Equipe';
+    this.comercial = team === 'Comercial';
+    this.cs = setor === 'CS' || setor === 'CSTec';
 
-    this.showContratos =
-      accessLevel === 'Administrador' ||
-      // team === 'Comercial' ||
-      name === 'Valeria Queiroz'
-    ;
-
-    this.showTabelaPrecos =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial' ||
-      team === 'Customer Success' ||
-      name === 'Beatriz Cruz Alves' ||
-      name === 'Kyrsten Júnior'
-    ;
-
-    this.showMixProdutos =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial'
-      name === 'Valeria Queiroz'
-    ;
-
-    this.showTabelaDeValores =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial'
-      name === 'Valeria Queiroz'
-    ;
-
-    this.showTabelaDeMetas =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial'
-      name === 'Valeria Queiroz'
-    ;
-
-    this.showMetaEmpresa =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial'
-      name === 'Valeria Queiroz'
-    ;
-
-    this.showCalculoComissao =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial'
-      name === 'Valeria Queiroz'
-    ;
-      
-    this.showAdicionarOportunidade =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial'
-      name === 'Valeria Queiroz'
-    ;
-
-    this.showControleGeral =
-      accessLevel === 'Administrador' ||
-      team === 'Comercial'
-      name === 'Valeria Queiroz'
-    ;
+    this.todos = this.master || this.lider || this.comercial || this.cs;
   }
 
   collapseMenu(element: any) {

@@ -2,232 +2,184 @@
 <div class="menu-lateral">
   <ul>
     <li>
-      <button
-        routerLink="/dashboard"
-        [class.link-ativo]="isLinkAtivo('/dashboard')"
-      >
+      <button routerLink="/dashboard" [class.link-ativo]="isLinkAtivo('/dashboard')">
         <i class="fas fa-home"></i>Home
       </button>
-    </li>
+    </li> <!-- Home -->
 
     <li>
-      <button
-        routerLink="/dashboard/perfil"
-        [class.link-ativo]="isLinkAtivo('/dashboard/perfil')"
-      >
+      <button routerLink="/dashboard/perfil" [class.link-ativo]="isLinkAtivo('/dashboard/perfil')">
         <i class="fas fa-user"></i>Perfil
       </button>
-    </li>
+    </li> <!-- Perfil -->
 
-    <li *ngIf="showComercialLink">
-      <button
-        routerLink="/dashboard/comercial"
-        [class.link-ativo]="isLinkAtivo('/dashboard/comercial')"
-      >
-        <i class="fa-solid fa-file-image"></i>Gerador de Imagem
-      </button>
-    </li>
+    <li *ngIf="todos">
+      <span class="collapsed d-block" (click)="collapseMenu($event)">
+        <i class="fa-solid fa-table-list"></i> Oportunidades
+        <i class="fa-solid fa-chevron-down"></i>
+      </span>
+      <ul class="collapse">
+        <li>
+          <button type="button" routerLink="/dashboard/icp" [class.link-ativo]="isLinkAtivo('/dashboard/icp')">
+            <i class="fa-solid fa-chart-line"></i>Validação ICP
+          </button>
+        </li>
+        <li *ngIf="master || comercial">
+          <button routerLink="/dashboard/adicionar-oportunidade" [class.link-ativo]="isLinkAtivo('/dashboard/adicionar-oportunidade')">
+            <i class="fa-solid fa-circle-plus"></i>Adicionar Oportunidade
+          </button>
+        </li>
+        <li *ngIf="master || comercial">
+          <button routerLink="/dashboard/controle-geral" [class.link-ativo]="isLinkAtivo('/dashboard/controle-geral')">
+            <i class="fa-solid fa-table-cells-large"></i>Controle Geral
+          </button>
+        </li>
+      </ul>
+    </li> <!-- Oportunidades -->
 
-    <li>
+    <li *ngIf="master || comercial || cs">
       <span class="collapsed d-block" (click)="collapseMenu($event)">
         <i class="fa-solid fa-file-pen"></i> Propostas
         <i class="fa-solid fa-chevron-down"></i>
       </span>
       <ul class="collapse">
-        <li *ngIf="showTabelaPrecos">
+        <li>
           <button>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            <a
-              target="_blank"
-              href="https://drive.google.com/drive/folders/10QZpq7W0RcuwvVNaioEYjOZiZHI5y24p"
-              >Template de Contratos</a
-            >
+            <a target="_blank" href="https://drive.google.com/drive/folders/10QZpq7W0RcuwvVNaioEYjOZiZHI5y24p">
+              Template de Contratos
+            </a>
           </button>
         </li>
       </ul>
-    </li>
+    </li> <!-- Propostas -->
 
-    <li
-      class="has-children"
-      [ngClass]="{ 'submenu-open': showSubmenu }"
-      *ngIf="showComercialLink"
-    >
+    <li class="has-children" [ngClass]="{ 'submenu-open': showSubmenu }" *ngIf="master">
       <span class="collapsed d-block" (click)="handleSubmenu()">
         <i class="fa-solid fa-file-contract"></i> Contratos
         <i class="fa-solid fa-chevron-down"></i>
       </span>
       <ul class="submenu">
         <li>
-          <button
-            type="button"
-            routerLink="/dashboard/contratos"
-            [class.link-ativo]="isLinkAtivo('/dashboard/contratos')"
-          >
+          <button type="button" routerLink="/dashboard/contratos" [class.link-ativo]="isLinkAtivo('/dashboard/contratos')">
             <i class="fas fa-home"></i>Página Inicial
           </button>
         </li>
         <li>
-          <button
-            type="button"
-            routerLink="/dashboard/contratos/criar"
-            [class.link-ativo]="isLinkAtivo('/dashboard/contratos/criar')"
-          >
+          <button type="button" routerLink="/dashboard/contratos/criar" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/criar')">
             <i class="fa-solid fa-pen"></i>Criar Contratos
           </button>
         </li>
         <li>
-          <button
-            type="button"
-            routerLink="/dashboard/contratos/listar"
-            [class.link-ativo]="isLinkAtivo('/dashboard/contratos/listar')"
-          >
+          <button type="button" routerLink="/dashboard/contratos/listar" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/listar')">
             <i class="fa-solid fa-folder"></i>Contratos Criados
           </button>
         </li>
         <li>
-          <button
-            type="button"
-            routerLink="/dashboard/contratos/arquivo"
-            [class.link-ativo]="isLinkAtivo('/dashboard/contratos/arquivo')"
-          >
+          <button type="button" routerLink="/dashboard/contratos/arquivo" [class.link-ativo]="isLinkAtivo('/dashboard/contratos/arquivo')">
             <i class="fa-solid fa-file-contract"></i>Ver Modelo
           </button>
         </li>
         <li>
           <button>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            <a
-              target="_blank"
-              href="https://drive.google.com/drive/folders/1-OeanOV1CU5o5YvG7n16o2Uo7GXzrAjj"
-              >Template de Contratos</a
-            >
+            <a target="_blank" href="https://drive.google.com/drive/folders/1-OeanOV1CU5o5YvG7n16o2Uo7GXzrAjj">
+              Template de Contratos
+            </a>
           </button>
         </li>
       </ul>
-    </li>
+    </li> <!-- Contratos (Comercial e Master) -->
 
-    <li
-      class="has-children"
-      [ngClass]="{ 'submenu-open': showSubmenu }"
-      *ngIf="showComercialLink"
-    >
-      <ul class="submenu">
-        <li>
-          <button
-            type="button"
-            routerLink="/dashboard/icp"
-            [class.link-ativo]="isLinkAtivo('/dashboard/icp')"
-          >
-            <i class="fa-solid fa-chart-line"></i>Validação ICP
-          </button>
-        </li>
-      </ul>
+    <li *ngIf="todos">
+      <button routerLink="/dashboard/comercial" [class.link-ativo]="isLinkAtivo('/dashboard/comercial')">
+        <i class="fa-solid fa-file-image"></i>Gerador de Imagem
+      </button>
+    </li> <!-- Gerador de Imagem -->
 
-    </li>
-
-    <li>
+    <li *ngIf="todos">
       <span class="collapsed d-block" (click)="collapseMenu($event)">
         <i class="fa-solid fa-store"></i> Produtos
         <i class="fa-solid fa-chevron-down"></i>
       </span>
       <ul class="collapse">
-        <li *ngIf="showMixProdutos">
-          <button
-            routerLink="/dashboard/mix-produtos"
-            [class.link-ativo]="isLinkAtivo('/dashboard/mix-produtos')"
-          >
+        <li *ngIf="master || comercial">
+          <button routerLink="/dashboard/mix-produtos" [class.link-ativo]="isLinkAtivo('/dashboard/mix-produtos')">
             <i class="fa-solid fa-tags"></i>Mix de Produtos
           </button>
-        </li>
-        <li *ngIf="showTabelaPrecos">
+        </li> <!--Mix de Produtos-->
+        <li *ngIf="master || comercial || cs">
           <button>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
             <a
               target="_blank"
               href="https://nairuzcombr-my.sharepoint.com/:x:/r/personal/contato_nairuz_com_br/_layouts/15/Doc.aspx?sourcedoc=%7BB0B6D418-FDE7-4B34-87CB-28E2B6BAC5A9%7D&file=Tabela%20de%20Pre%C3%A7os.xlsx&action=default&mobileredirect=true"
-              >Tabela de Preços</a
             >
+              Tabela de Preços
+            </a>
           </button>
-        </li>
-        <li *ngIf="showTabelaDeValores">
-          <button
-            routerLink="/dashboard/tabela-valores"
-            [class.link-ativo]="isLinkAtivo('/dashboard/tabela-valores')"
-          >
+        </li> <!--Tabela de Preços-->
+        <li *ngIf="master || comercial || cs">
+          <button routerLink="/dashboard/tabela-valores" [class.link-ativo]="isLinkAtivo('/dashboard/tabela-valores')">
             <i class="fa-solid fa-table-columns"></i>Tabela de Valores
           </button>
-        </li>
+        </li> <!--Tabela de Preços-->
       </ul>
-    </li>
+    </li> <!-- Produtos -->
 
-    <li>
+    <li *ngIf="master || comercial">
       <span class="collapsed d-block" (click)="collapseMenu($event)">
-        <i class="fa-solid fa-wallet"></i>Comissões
+        <i class="fa-solid fa-wallet"></i>Comissões Comercial
         <i class="fa-solid fa-chevron-down"></i>
       </span>
       <ul class="collapse">
-        <li *ngIf="showMetaEmpresa">
-          <button
-            routerLink="/dashboard/meta-empresa"
-            [class.link-ativo]="isLinkAtivo('/dashboard/meta-empresa')"
-          >
+        <li *ngIf="master || comercial">
+          <button routerLink="/dashboard/meta-empresa" [class.link-ativo]="isLinkAtivo('/dashboard/meta-empresa')">
             <i class="fa-solid fa-building"></i>Meta Empresa
           </button>
-        </li>
-        <li *ngIf="showTabelaDeMetas">
-          <button
-            routerLink="/dashboard/tabela-metas"
-            [class.link-ativo]="isLinkAtivo('/dashboard/tabela-metas')"
-          >
+        </li> <!--Meta empresa-->
+        <li *ngIf="master || comercial">
+          <button routerLink="/dashboard/tabela-metas" [class.link-ativo]="isLinkAtivo('/dashboard/tabela-metas')">
             <i class="fa-solid fa-bullseye"></i>Tabela de Metas
           </button>
-        </li>
-        <li *ngIf="showCalculoComissao">
-          <button
-            routerLink="/dashboard/calculo-comissao"
-            [class.link-ativo]="isLinkAtivo('/dashboard/calculo-comissao')"
-          >
+        </li> <!--Meta vendedor comercial-->
+        <li *ngIf="master || comercial">
+          <button routerLink="/dashboard/calculo-comissao" [class.link-ativo]="isLinkAtivo('/dashboard/calculo-comissao')">
             <i class="fa-solid fa-coins"></i>Cálculo de Comissão
           </button>
-        </li>
+        </li> <!--comissão vendedor comercial-->
       </ul>
-    </li>
+    </li> <!-- Comissões Comercial -->
 
-    <li>
+    <li *ngIf="master || cs">
       <span class="collapsed d-block" (click)="collapseMenu($event)">
-        <i class="fa-solid fa-table-list"></i> Oportunidades
+        <i class="fa-solid fa-wallet"></i>Comissões CS
         <i class="fa-solid fa-chevron-down"></i>
       </span>
       <ul class="collapse">
-        <li *ngIf="showAdicionarOportunidade">
-          <button
-            routerLink="/dashboard/adicionar-oportunidade"
-            [class.link-ativo]="
-              isLinkAtivo('/dashboard/adicionar-oportunidade')
-            "
-          >
-            <i class="fa-solid fa-circle-plus"></i>Adicionar Oportunidade
+        <li *ngIf="master || comercial">
+          <button routerLink="/dashboard/meta-empresa" [class.link-ativo]="isLinkAtivo('/dashboard/meta-empresa')">
+            <i class="fa-solid fa-building"></i>Meta Empresa
           </button>
+        </li> <!--Meta empresa-->
+        <li>
+          <button routerLink="/dashboard/calculo-comissao-cs" [class.link-ativo]="isLinkAtivo('/dashboard/calculo-comissao-cs')">
+            <i class="fa-solid fa-wallet"></i>Comissões
+          </button> <!--Comissão CS-->
         </li>
-        <li *ngIf="showControleGeral">
-          <button
-            routerLink="/dashboard/controle-geral"
-            [class.link-ativo]="isLinkAtivo('/dashboard/controle-geral')"
-          >
-            <i class="fa-solid fa-table-cells-large"></i>Controle Geral
+        <li>
+          <button routerLink="/dashboard/tabela-metas-cs" [class.link-ativo]="isLinkAtivo('/dashboard/tabela-metas-cs')">
+            <i class="fa-solid fa-bullseye"></i>Tabela de Metas
           </button>
-        </li>
+        </li> <!--Meta CS-->
       </ul>
-    </li>
+    </li> <!-- Comissões CS -->
 
     <li>
-      <button
-        routerLink="/"
-        [class.link-ativo]="isLinkAtivo('/')"
-        (click)="logout()"
-      >
+      <button routerLink="/" [class.link-ativo]="isLinkAtivo('/')" (click)="logout()">
         <i class="fas fa-sign-out-alt"></i>Sair
       </button>
-    </li>
+    </li> <!-- Sair -->
+
   </ul>
 </div>
