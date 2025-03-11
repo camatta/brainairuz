@@ -56,7 +56,7 @@ export class MenuLateralComponent implements OnInit {
     this.master = accessLevel === 'Administrador' || name === 'Valeria Queiroz';
     this.lider = accessLevel === 'Líder de Equipe';
     this.comercial = team === 'Comercial';
-    this.cs = setor === 'CS' || setor === 'CSTec';
+    this.cs = setor === 'CS' || setor === 'CSTec' || team === 'Customer Success';
 
     this.todos = this.master || this.lider || this.comercial || this.cs;
   }
