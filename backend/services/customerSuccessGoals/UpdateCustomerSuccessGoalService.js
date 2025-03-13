@@ -1,7 +1,7 @@
 const MetaCustomerSuccess = require("../../models/CustomerSuccessGoals");
 
 module.exports.UpdateCustomerSuccessGoalService = async ({
-    cs,
+    vendedor,
     mes,
     ano,
     metaIndividual
@@ -9,7 +9,7 @@ module.exports.UpdateCustomerSuccessGoalService = async ({
 
   // Dados para atualizar a meta
   const editarMeta = {
-    nome: cs,
+    nome: vendedor,
     mes: mes,
     ano: ano,
     metaIndividual: metaIndividual

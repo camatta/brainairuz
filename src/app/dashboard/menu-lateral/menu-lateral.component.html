@@ -26,7 +26,7 @@
         </li>
         <li *ngIf="master || comercial">
           <button routerLink="/dashboard/adicionar-oportunidade" [class.link-ativo]="isLinkAtivo('/dashboard/adicionar-oportunidade')">
-            <i class="fa-solid fa-circle-plus"></i>Adicionar Oportunidade
+            <i class="fa-solid fa-circle-plus"></i>Nova Oportunidade
           </button>
         </li>
         <li *ngIf="master || comercial">
@@ -145,7 +145,7 @@
         </li> <!--Meta vendedor comercial-->
         <li *ngIf="master || comercial">
           <button routerLink="/dashboard/calculo-comissao" [class.link-ativo]="isLinkAtivo('/dashboard/calculo-comissao')">
-            <i class="fa-solid fa-coins"></i>Cálculo de Comissão
+            <i class="fa-solid fa-coins"></i>Comissões
           </button>
         </li> <!--comissão vendedor comercial-->
       </ul>
@@ -164,7 +164,7 @@
         </li> <!--Meta empresa-->
         <li>
           <button routerLink="/dashboard/calculo-comissao-cs" [class.link-ativo]="isLinkAtivo('/dashboard/calculo-comissao-cs')">
-            <i class="fa-solid fa-wallet"></i>Comissões
+            <i class="fa-solid fa-coins"></i>Comissões
           </button> <!--Comissão CS-->
         </li>
         <li>

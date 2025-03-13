@@ -5,9 +5,9 @@ module.exports.ListCommissionsCsController = async (req, res) => {
     const usuario = req.query.user;
     const ano = req.query.year;
     const mes = req.query.month;
-    const cs = req.query.vendedor;
+    const vendedor = req.query.vendedor;
     
-    const listCommissionsCsService = await ListCommissionsCsService({ usuario: usuario, ano: ano, mes: mes, vendedor: cs });
+    const listCommissionsCsService = await ListCommissionsCsService({ usuario: usuario, ano: ano, mes: mes, vendedor: vendedor });
 
     res.status(200).json(listCommissionsCsService);
     

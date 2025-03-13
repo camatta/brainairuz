@@ -2,9 +2,9 @@ const { CreateCustomerSuccessGoalService } = require("../../services/customerSuc
 
 module.exports.CreateCustomerSuccessGoalController = async (req, res) => {
     try {
-        const { cs, mes, ano, metaIndividual } = req.body;
+        const { vendedor, mes, ano, metaIndividual } = req.body;
 
-        const createCustomerSuccessGoalService =  await CreateCustomerSuccessGoalService({ cs, mes, ano, metaIndividual });
+        const createCustomerSuccessGoalService =  await CreateCustomerSuccessGoalService({ vendedor, mes, ano, metaIndividual });
 
         res.status(201).json({ message: 'Meta criada com sucesso!', createCustomerSuccessGoalService });
         console.log('Meta criada com sucesso!', createCustomerSuccessGoalService);

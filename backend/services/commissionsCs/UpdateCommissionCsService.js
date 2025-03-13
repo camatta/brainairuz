@@ -3,7 +3,7 @@ const CommissionsCs = require("../../models/ComissionsCs");
 module.exports.UpdateCommissionCsService = async ({
   dataVenda,
   mes,
-  cs,
+  vendedor,
   status,
   cliente,
   mixProdutos,
@@ -13,14 +13,13 @@ module.exports.UpdateCommissionCsService = async ({
   markup,
   vendaAvulsa,
   valorBase,
-  valorVendido,
-  imagemEmailAprovacaoMarkup
+  valorVendido
  }, commissionId) => {
 
   const comissaoToUpdate = {
     dataVenda: dataVenda,
     mes: mes,
-    vendedor: cs,
+    vendedor: vendedor,
     status: status,
     cliente: cliente,
     mixProdutos: mixProdutos,
@@ -30,8 +29,7 @@ module.exports.UpdateCommissionCsService = async ({
     markup: markup,
     vendaAvulsa: vendaAvulsa,
     valorBase: valorBase,
-    valorVendido: valorVendido,
-    imageEmailMarkupApproval: imagemEmailAprovacaoMarkup
+    valorVendido: valorVendido
   }
 
   const updateComissao = await CommissionsCs.findByIdAndUpdate(commissionId, comissaoToUpdate);

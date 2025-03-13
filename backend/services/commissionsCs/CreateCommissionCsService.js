@@ -4,7 +4,7 @@ module.exports.CreateCommissionCsService = async ({
   dataVenda,
   mes,
   ano,
-  cs,
+  vendedor,
   status,
   cliente,
   mixProdutos,
@@ -14,15 +14,14 @@ module.exports.CreateCommissionCsService = async ({
   grupo_markup,
   vendaAvulsa,
   valorBase,
-  valorVendido,
-  imagemEmailAprovacaoMarkup
+  valorVendido
 }) => {
   // Criando uma nova comissão utilizando o modelo importado
-  const novaComissao = new CommissionCs({
+  const novaComissaoCs = new CommissionCs({
     dataVenda: dataVenda,
     mes: mes,
     ano: ano,
-    vendedor: cs,
+    vendedor: vendedor,
     status: status,
     cliente: cliente,
     mixProdutos: mixProdutos,
@@ -32,10 +31,9 @@ module.exports.CreateCommissionCsService = async ({
     markup: markup,
     vendaAvulsa: vendaAvulsa,
     valorBase: valorBase,
-    valorVendido: valorVendido,
-    imageEmailMarkupApproval: imagemEmailAprovacaoMarkup
-  })
+    valorVendido: valorVendido
+  });
 
-  await novaComissao.save();
-  return novaComissao;
+  await novaComissaoCs.save();
+  return novaComissaoCs;
 }

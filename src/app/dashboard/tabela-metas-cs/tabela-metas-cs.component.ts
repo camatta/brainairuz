@@ -6,11 +6,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
-import { MetasVendedoresService } from 'src/app/services/metasVendedores.service';
+import { MetasCsService } from 'src/app/services/metasCS.service';
 import { MetasEmpresaService } from 'src/app/services/metasEmpresa.service';
-import { ComissoesService } from 'src/app/services/comissoes.service';
+import { ComissoesCsService } from 'src/app/services/comissoesCS.service';
 import { MetaEmpresa } from 'src/app/types/metaEmpresa';
-import { MetaVendedor } from 'src/app/types/metaVendedor';
 
 type Meta = {
   _id: string;
@@ -35,9 +34,9 @@ export class TabelaMetasCsComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private usersService: UserService,
-    private metasVendedoresService: MetasVendedoresService,
+    private metasCsService: MetasCsService,
     private metasEmpresaService: MetasEmpresaService,
-    private commissionsService: ComissoesService,
+    private commissionsCsService: ComissoesCsService,
     private formBuilder: FormBuilder,
   ) {}
 
@@ -142,7 +141,7 @@ export class TabelaMetasCsComponent implements OnInit {
 
   // Método para carregar os anos e inserir no select de filtros
   loadAnosMetas() {
-    this.metasVendedoresService.getMetas("adm", "", "", "").subscribe(
+    this.metasCsService.getMetasCs("adm", "", "", "").subscribe(
       async (data) => {
         data.forEach((meta) => {
           const ano: string = meta.ano;
@@ -162,12 +161,12 @@ export class TabelaMetasCsComponent implements OnInit {
     this.usersService.getUsers().subscribe(
       async(data: any) => {
         data.users.map((user: any) => {
-          if(user.team == "Comercial") {
+          if(user.setor == "CS" && user.status == "Ativo" || user.setor == "CSTec" && user.status == "Ativo") {
             this.vendedores.push(user.name);
           }
         })
       }, (err) => {
-        console.error("Erro ao carregar time comercial: ", err);
+        console.error("Erro ao carregar time Customer Success: ", err);
       }
     );
   }
@@ -246,11 +245,11 @@ export class TabelaMetasCsComponent implements OnInit {
               if(meta.mes === metaEmpresa.mes && meta.ano === metaEmpresa.ano) {
                 empresaRealizada = meta.totalMes;
               }
-            })
+            });
 
             const novaLinha = {
               _id: metaVendedor._id,
-              vendedor: metaVendedor.vendedor,
+              vendedor: metaVendedor.nome,
               ano: metaEmpresa.ano,
               mes: metaEmpresa.mes,
               metaEmpresa: metaEmpresa.metaEmpresa,
@@ -303,7 +302,7 @@ export class TabelaMetasCsComponent implements OnInit {
 
   // Método para carregar as metas dos vendedores
   loadMetasVendedores(usuario: string, mes: string, ano: string, vendedor?: string) {
-    this.metasVendedoresService.getMetas(usuario, mes, ano, vendedor).subscribe(
+    this.metasCsService.getMetasCs(usuario, mes, ano, vendedor).subscribe(
       async (data) => {
         this.metasIndividuais = data;
       },
@@ -352,7 +351,7 @@ export class TabelaMetasCsComponent implements OnInit {
 
   // Método para carregar as comissões
   loadComissoes(usuario: string, mes: string, ano: string, vendedor?: string) {
-    this.commissionsService.getComissoes(usuario, mes, ano, vendedor).subscribe(
+    this.commissionsCsService.getComissoesCs(usuario, mes, ano, vendedor).subscribe(
       async (data) => {
         this.comissoes = data;
         this.gerenciarComissoes(this.comissoes, ano);
@@ -466,7 +465,7 @@ export class TabelaMetasCsComponent implements OnInit {
         metaIndividual: this.formNovaMeta.get('metaIndividual').value,
       }
 
-      this.metasVendedoresService.setMeta(novaMeta).subscribe(
+      this.metasCsService.setMetaCs(novaMeta).subscribe(
         async (res) => {
           this.showMessageAction('Meta adicionada com sucesso');
           console.log(novaMeta);
@@ -544,7 +543,7 @@ export class TabelaMetasCsComponent implements OnInit {
         metaIndividual: this.formEditarMeta.get('metaIndividual').value
       }
 
-      this.metasVendedoresService.updateMeta(idMeta, metaEditada).subscribe(
+      this.metasCsService.updateMetaCs(idMeta, metaEditada).subscribe(
         async (res) => {
           this.showMessageAction('Meta editada com sucesso');
           console.log(metaEditada);
@@ -601,7 +600,7 @@ export class TabelaMetasCsComponent implements OnInit {
   submitDeletarMeta() {
     const id: string = this.formDeletarMeta.get('_id').value;
 
-    this.metasVendedoresService.deleteMeta(id).subscribe(
+    this.metasCsService.deleteMetaCs(id).subscribe(
       async (res) => {
         this.showMessageAction('Meta excluída com sucesso');
         await this.loadMetas("", this.formDeletarMeta.get('ano').value);

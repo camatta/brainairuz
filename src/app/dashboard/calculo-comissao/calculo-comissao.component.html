@@ -116,8 +116,7 @@
         <label for="vendedor" class="me-3">Filtrar por Vendedor:</label>
         <select (change)="submitFormFilter()" id="vendedor" class="select-nairuz h-100">
           <option value="sem filtro">Todos</option>
-          <option value="Kyrsten Júnior">Kyrsten Júnior</option>
-          <option value="Dev Nairuz">Dev Nairuz</option>
+          <!-- <option value="Dev Nairuz">Dev Nairuz</option> -->
           <option *ngFor="let vendedor of vendedores" [value]="vendedor">
             {{ vendedor }}
           </option>
@@ -125,13 +124,9 @@
       </div>
       <div class="filter-commissions">
         <label for="years" class="me-3">Filtrar por Ano:</label>
-        <select *ngIf="yearsSelectFilter.length > 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
-          <option *ngFor="let year of yearsSelectFilter" [value]="year" [selected]="year === currentYear">
-            {{ year }}
-          </option>
-        </select>
-        <select *ngIf="yearsSelectFilter.length <= 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
-          <option selected value="{{ currentYear }}">{{currentYear}}</option>
+        <select (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
         </select>
       </div>
       <div class="filter-commissions">

@@ -1,6 +1,10 @@
 const express = require('express');
 
+const multer = require('multer');
+
 const router = express.Router();
+
+const upload = multer();
 
 // Middlewares
 const authMiddleware = require('./middleware/auth');
@@ -167,13 +171,13 @@ router.delete('/api/metas-empresa/:id', authMiddleware, DeleteEnterpriseGoalCont
 router.get('/api/comissoes-vendedores', authMiddleware, ListCommissionsController);
 
 // Rota para inserir novas comissões
-router.post('/api/comissao-vendedores', authMiddleware, CreateCommissionController);
+router.post('/api/comissao-vendedores', authMiddleware, upload.none(), CreateCommissionController);
 
 // Rota para apagar uma comissão
-router.put('/api/comissoes-vendedores/delete/:id', authMiddleware, DeleteCommissionController);
+router.put('/api/comissoes-vendedores/delete/:id', authMiddleware, upload.none(), DeleteCommissionController);
 
 // Rota para editar uma comissão
-router.put('/api/comissoes-vendedores/:id', authMiddleware, UpdateCommissionController);
+router.put('/api/comissoes-vendedores/:id', authMiddleware, upload.none(), UpdateCommissionController);
 
 
 // *** COMISSÕES CUSTOMERS SUCCESS ***
@@ -181,13 +185,13 @@ router.put('/api/comissoes-vendedores/:id', authMiddleware, UpdateCommissionCont
 router.get('/api/comissoes-cs', authMiddleware, ListCommissionsCsController);
 
 // Rota para inserir novas comissões
-router.post('/api/comissao-cs', authMiddleware, CreateCommissionCsController);
+router.post('/api/comissao-cs', authMiddleware, upload.none(), CreateCommissionCsController);
 
 // Rota para apagar uma comissão
-router.put('/api/comissoes-cs/delete/:id', authMiddleware, DeleteCommissionCsController);
+router.delete('/api/comissoes-cs/delete/:id', authMiddleware, DeleteCommissionCsController);
 
 // Rota para editar uma comissão
-router.put('/api/comissoes-cs/:id', authMiddleware, UpdateCommissionCsController);
+router.put('/api/comissoes-cs/:id', authMiddleware, upload.none(), UpdateCommissionCsController);
 
 
 /**

@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Comissao } from '../types/comissao';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class MetasVendedoresService {
+export class MetasCsService {
 
   constructor(private http: HttpClient) { }
 
-  getMetas(currentUser: string, filterMonth: string, filterYear: string, vendedor?: string): Observable<any[]> {
+  getMetasCs(currentUser: string, filterMonth: string, filterYear: string, vendedor?: string): Observable<any[]> {
     let url = environment.URL_API + '/api/metas-cs';
 
     if (currentUser === 'adm') {
@@ -33,20 +34,20 @@ export class MetasVendedoresService {
       }
       if (filterMonth !== '') {
         url += (filterYear !== '') ? `&month=${filterMonth}` : `&month=${filterMonth}`;
-      }
+    }
     }
     return this.http.get<any[]>(url);
   }
 
-  setMeta(novaMeta: any) {
+  setMetaCs(novaMeta: any) {
     return this.http.post(`${environment.URL_API}/api/metas-cs`, novaMeta);
   }
 
-  updateMeta(idMeta: string, metaEditada: any) {
+  updateMetaCs(idMeta: string, metaEditada: any) {
     return this.http.put(`${environment.URL_API}/api/metas-cs/${idMeta}`, metaEditada);
   }
 
-  deleteMeta(idMeta: string) {
+  deleteMetaCs(idMeta: string) {
     return this.http.delete(`${environment.URL_API}/api/metas-cs/${idMeta}`);
   }
 }

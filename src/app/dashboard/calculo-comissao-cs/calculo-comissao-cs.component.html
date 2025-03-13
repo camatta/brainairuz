@@ -111,11 +111,11 @@
   <div class="topo d-flex justify-content-between mt-5 mb-2">
     <button button type="button" class="btn btn-addVenda" (click)="openModalNovaVenda()" data-bs-dismiss="modal">Cadastrar Venda</button>
 
-    <form class="d-flex gap-5">
+    <form id="formFilters" class="d-flex gap-5">
       <div *ngIf="userPermission()" class="filter-commissions">
         <label for="vendedor" class="me-3">Filtrar por Vendedor:</label>
-        <select (change)="submitFormFilter()" id="vendedor" class="select-nairuz h-100">
-          <option value="sem filtro">Todos</option>
+        <select (change)="submitFormFilter()" id="vendedor" name="vendedor" class="select-nairuz h-100">
+          <option selected value="{{ undefined }}">Selecione</option>
           <option value="Kyrsten Júnior">Kyrsten Júnior</option>
           <option value="Dev Nairuz">Dev Nairuz</option>
           <option *ngFor="let vendedor of vendedores" [value]="vendedor">
@@ -125,18 +125,14 @@
       </div>
       <div class="filter-commissions">
         <label for="years" class="me-3">Filtrar por Ano:</label>
-        <select *ngIf="yearsSelectFilter.length > 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
-          <option *ngFor="let year of yearsSelectFilter" [value]="year" [selected]="year === currentYear">
-            {{ year }}
-          </option>
-        </select>
-        <select *ngIf="yearsSelectFilter.length <= 0" (change)="submitFormFilter()" id="years" class="select-nairuz h-100">
-          <option selected value="{{ currentYear }}">{{currentYear}}</option>
+        <select (change)="submitFormFilter()" id="years" name="ano" class="select-nairuz h-100">
+          <option value="2024" selected>2024</option>
+          <option value="2025">2025</option>
         </select>
       </div>
       <div class="filter-commissions">
         <label for="months" class="me-3">Filtrar por mês:</label>
-        <select (change)="submitFormFilter()" id="months" class="select-nairuz h-100">
+        <select (change)="submitFormFilter()" id="months" name="mes" class="select-nairuz h-100">
           <option selected value="Janeiro">Janeiro</option>
           <option value="Fevereiro">Fevereiro</option>
           <option value="Março">Março</option>
@@ -393,32 +389,6 @@
             >
           </div>
 
-          <div *ngIf="formNovaVenda.get('markup').value < minMarkup" class="d-flex flex-column align-items-start gap-3">
-            <p-image
-              *ngIf="urlPreviewImage"
-              width="150"
-              [preview]="true"
-              src="{{ urlPreviewImage }}"
-              alt="markup-aprovado"
-            ></p-image>
-
-            <label class="btn btn-link p-0" style="color: var(--nairuz-primary);" for="ModalNovaVendaImagemPreviewMarkupAprovado">
-              <span class="small">
-                {{ urlPreviewImage ? 'Alterar imagem' : 'Enviar imagem' }}
-              </span>
-            </label>
-
-            <input
-              type="file"
-              (change)="onUploadImageEmailMarkupApproval($event)"
-              name="ModalNovaVendaImagemPreviewMarkupAprovado"
-              id="ModalNovaVendaImagemPreviewMarkupAprovado"
-              class="d-none"
-              accept="image/png, image/jpg, image/jpeg"
-              required
-            >
-          </div>
-
           <button type="submit" (click)="onSubmitNovaVenda()" [disabled]="!formNovaVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
             <mat-spinner class="mx-auto" *ngIf="onLoadComission"></mat-spinner>
             <span *ngIf="!onLoadComission" class="fs-6">Inserir</span>
@@ -525,32 +495,6 @@
               class="form-control"
               id="vendaAvulsa"
               formControlName="vendaAvulsa"
-              required
-            >
-          </div>
-
-          <div *ngIf="formEditarVenda.get('markup').value < minMarkup || urlPreviewImage" class="d-flex flex-column align-items-start">
-            <p-image
-              *ngIf="urlPreviewImage"
-              width="150"
-              [preview]="true"
-              src="{{ urlPreviewImage }}"
-              alt="markup-aprovado"
-            ></p-image>
-
-            <label class="btn btn-link p-0" style="color: var(--nairuz-primary);" for="ModalEditarVendaImagemPreviewMarkupAprovado">
-              <span class="small">
-                {{ urlPreviewImage ? 'Alterar imagem' : 'Enviar imagem' }}
-              </span>
-            </label>
-
-            <input
-              type="file"
-              (change)="onUploadImageEmailMarkupApproval($event)"
-              name="ModalEditarVendaImagemPreviewMarkupAprovado"
-              id="ModalEditarVendaImagemPreviewMarkupAprovado"
-              class="d-none"
-              accept="image/png, image/jpg, image/jpeg"
               required
             >
           </div>

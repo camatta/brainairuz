@@ -2,8 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const app = express(); 
 const path = require('path');
-const bodyParser = require('body-parser');
-const fileUploader = require('express-fileupload');
 
 const routes = require('./backend/routes');
 
@@ -25,15 +23,8 @@ mongoose.connect(MONGODB_URI, {
   console.error('Erro ao conectar ao banco MongoDB', error);
 });
 
-app.use(fileUploader({
-  limits: { fileSize: 50 * 1024 * 1024 } // Máximo de 50mb
-}));
-
 // Configuração do middleware para permitir o uso de JSON nas requisições
 app.use(express.json());
-
-// Middleware para analisar o corpo das solicitações como JSON
-app.use(bodyParser.json());
 
 // Utilizando o arquivo de rotas
 app.use(routes);

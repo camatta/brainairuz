@@ -1,6 +1,6 @@
 const MetaCustomerSuccess = require("../../models/CustomerSuccessGoals");
 
-module.exports.ListCustomerSuccessGoalsService = async ({ usuario, ano, mes, cs }) => {
+module.exports.ListCustomerSuccessGoalsService = async ({ usuario, ano, mes, vendedor }) => {
   // Objeto de consulta vazio
   const query = {};
 
@@ -10,8 +10,8 @@ module.exports.ListCustomerSuccessGoalsService = async ({ usuario, ano, mes, cs 
   }
 
   // Realiza o filtro por vendedores apenas para administradores
-  if(cs !== undefined){
-    query.nome = cs;
+  if(vendedor !== undefined){
+    query.nome = vendedor;
   }
 
   // Manipulação eficiente de filtros opcionais mes e ano usando spread syntax

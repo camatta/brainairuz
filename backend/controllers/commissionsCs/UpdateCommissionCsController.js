@@ -12,7 +12,7 @@ module.exports.UpdateCommissionCsController = async (req, res) => {
     const {
       dataVenda,
       mes,
-      cs,
+      vendedor,
       status,
       cliente,
       mixProdutos,
@@ -26,77 +26,29 @@ module.exports.UpdateCommissionCsController = async (req, res) => {
      } = req.body;
 
     const idComissao = req.params.id;
-
-    if(!req.files || Object.keys(req.files).length === 0) {
-      console.log("Arquivo não enviado");
-
-      let imagemEmailAprovacaoMarkup = "";
-
-      const updateCommissionCsService = await UpdateCommissionCsService({ 
-        dataVenda,
-        mes,
-        cs,
-        status,
-        cliente,
-        mixProdutos,
-        tipoProduto,
-        multiplicador,
-        grupo_markup,
-        markup,
-        vendaAvulsa,
-        valorBase,
-        valorVendido,
-        imagemEmailAprovacaoMarkup
-       }, idComissao);
-
-       if(updateCommissionCsService){
-        console.log(`Comissão alterada com sucesso`);
-        res.status(200).json({ message: `Comissão alterada com sucesso` });
-      } else {
-        console.log('Comissão não encontrada');
-        res.status(404).json({ message: `Comissão não encontrada` });
-      }
     
+    const updateCommissionCsService = await UpdateCommissionCsService({ 
+      dataVenda,
+      mes,
+      vendedor,
+      status,
+      cliente,
+      mixProdutos,
+      tipoProduto,
+      multiplicador,
+      grupo_markup,
+      markup,
+      vendaAvulsa,
+      valorBase,
+      valorVendido
+     }, idComissao);
+
+     if(updateCommissionCsService){
+      console.log(`Comissão alterada com sucesso`);
+      res.status(200).json({ message: `Comissão alterada com sucesso` });
     } else {
-      const file = req.files['imageEmailMarkupApproval'];
-
-      resultFile = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream((error, result) => {
-          if(error) {
-            reject(error);
-            return;
-          }
-
-          resolve(result);
-        }).end(file.data);
-      });
-      
-      let imagemEmailAprovacaoMarkup = resultFile.url;
-
-      const updateCommissionCsService = await UpdateCommissionCsService({ 
-        dataVenda,
-        mes,
-        cs,
-        status,
-        cliente,
-        mixProdutos,
-        tipoProduto,
-        multiplicador,
-        grupo_markup,
-        markup,
-        vendaAvulsa,
-        valorBase,
-        valorVendido,
-        imagemEmailAprovacaoMarkup
-       }, idComissao);
-
-       if(updateCommissionCsService){
-        console.log(`Comissão alterada com sucesso`);
-        res.status(200).json({ message: `Comissão alterada com sucesso` });
-      } else {
-        console.log('Comissão não encontrada');
-        res.status(404).json({ message: `Comissão não encontrada` });
-      }
+      console.log('Comissão não encontrada');
+      res.status(404).json({ message: `Comissão não encontrada` });
     }
   } catch (error) {
     console.error('Erro ao alterar a comissão: ', error);

@@ -12,7 +12,7 @@ module.exports.ListCommissionsCsService = async ({ usuario, ano, mes, vendedor }
 
   // Realiza o filtro por vendedores apenas para administradores
   if(vendedor){
-    query.vendedor = cs;
+    query.vendedor = vendedor;
   }
 
   // Manipulação eficiente de filtros opcionais mes e ano usando spread syntax

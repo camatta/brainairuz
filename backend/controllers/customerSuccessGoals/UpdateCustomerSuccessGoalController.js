@@ -2,11 +2,11 @@ const { UpdateCustomerSuccessGoalService } = require('../../services/customerSuc
 
 module.exports.UpdateCustomerSuccessGoalController = async (req, res) => {
     try {
-        const { cs, mes, ano, metaIndividual } = req.body;
+        const { vendedor, mes, ano, metaIndividual } = req.body;
         const idMeta = req.params.id;
 
         const updateCustomerSuccessGoalService = await UpdateCustomerSuccessGoalService({
-            cs,
+            vendedor,
             mes,
             ano,
             metaIndividual

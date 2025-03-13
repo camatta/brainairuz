@@ -5,9 +5,9 @@ module.exports.ListCustomerSuccessGoalsController = async (req, res) => {
     const usuario = req.query.user;
     const ano = req.query.year;
     const mes = req.query.month;
-    const cs = req.query.cs;
+    const vendedor = req.query.vendedor;
     
-    const listCustomerSuccessGoalsService = await ListCustomerSuccessGoalsService({ usuario: usuario, ano: ano, mes: mes, cs: cs });
+    const listCustomerSuccessGoalsService = await ListCustomerSuccessGoalsService({ usuario: usuario, ano: ano, mes: mes, vendedor: vendedor });
 
     res.status(200).json(listCustomerSuccessGoalsService);
     

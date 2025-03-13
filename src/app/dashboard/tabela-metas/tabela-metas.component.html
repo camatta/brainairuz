@@ -18,7 +18,6 @@
           <label for="seller" class="me-3">Filtrar por Vendedor:</label>
           <select (change)="applyFilter($event.target)" id="filtroVendedor" class="select-nairuz h-100">
             <option value="">Todos</option>
-            <option value="Kyrsten Júnior">Kyrsten Júnior</option>
             <option value="Dev Nairuz">Dev Nairuz</option> 
             <!-- <option *ngFor="let vendedor of vendedores; let i = index" [value]="vendedor" [selected]="i === 0"> -->
             <option *ngFor="let vendedor of vendedores; let i = index" [value]="vendedor">
@@ -47,9 +46,9 @@
         <div class="filter-commissions">
           <label for="filtroAno" class="me-3">Filtrar por Ano:</label>
           <select (change)="applyFilter($event.target)" id="filtroAno" class="select-nairuz h-100">
-            <option *ngFor="let year of filterYears, let i = index" [value]="year" [selected]="i == 0">
-              {{ year }}
-            </option>
+            <option value="">Todos</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
           </select>
         </div>
       </form>
