@@ -26,9 +26,10 @@ export class MenuLateralComponent implements OnInit {
 
 
   master: boolean = false;
-  lider: boolean = false;
+  liderCs: boolean = false;
   comercial: boolean = false;
   cs: boolean = false;
+  exception: boolean = false;
   todos: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
@@ -54,11 +55,13 @@ export class MenuLateralComponent implements OnInit {
     const setor = user ? user.setor : '';
 
     this.master = accessLevel === 'Administrador' || name === 'Valeria Queiroz';
-    this.lider = accessLevel === 'Líder de Equipe';
+    this.liderCs = team === 'Customer Success' && accessLevel === 'Líder de Equipe';
     this.comercial = team === 'Comercial';
     this.cs = setor === 'CS' || setor === 'CSTec' || team === 'Customer Success';
 
-    this.todos = this.master || this.lider || this.comercial || this.cs;
+    this.exception = name === 'Matheus Silva';
+
+    this.todos = this.master || this.liderCs || this.comercial || this.cs;
   }
 
   collapseMenu(element: any) {

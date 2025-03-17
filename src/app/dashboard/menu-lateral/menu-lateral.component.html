@@ -24,12 +24,12 @@
             <i class="fa-solid fa-chart-line"></i>Validação ICP
           </button>
         </li>
-        <li *ngIf="master || comercial">
+        <li *ngIf="master || comercial || exception">
           <button routerLink="/dashboard/adicionar-oportunidade" [class.link-ativo]="isLinkAtivo('/dashboard/adicionar-oportunidade')">
             <i class="fa-solid fa-circle-plus"></i>Nova Oportunidade
           </button>
         </li>
-        <li *ngIf="master || comercial">
+        <li *ngIf="master || comercial || exception">
           <button routerLink="/dashboard/controle-geral" [class.link-ativo]="isLinkAtivo('/dashboard/controle-geral')">
             <i class="fa-solid fa-table-cells-large"></i>Controle Geral
           </button>
@@ -157,7 +157,7 @@
         <i class="fa-solid fa-chevron-down"></i>
       </span>
       <ul class="collapse">
-        <li *ngIf="master || comercial">
+        <li *ngIf="master || comercial || liderCs">
           <button routerLink="/dashboard/meta-empresa" [class.link-ativo]="isLinkAtivo('/dashboard/meta-empresa')">
             <i class="fa-solid fa-building"></i>Meta Empresa
           </button>
