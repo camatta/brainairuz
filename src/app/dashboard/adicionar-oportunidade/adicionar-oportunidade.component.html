@@ -72,9 +72,10 @@
             <div class="modal-dialog">
                 <div class="modal-content d-flex flex-column align-items-center">
                     <button type="button" (click)="closeModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h2 class="modal-title">Oportunidade criada com sucesso.</h2>
-                    <p class="text-modal">Você já pode visualizá-la na página de Controle.</p>
-                    <button class="btn-redirect" (click)="redirectControle()">Ir para o Controle</button>
+                    <h2 class="modal-title">{{ tituloModal }}</h2>
+                    <p class="text-modal">{{ mensagemModal }}</p>
+                    <button *ngIf="opCriada" class="btn-redirect" (click)="redirectControle()">Ir para o Controle</button>
+                    <button *ngIf="!opCriada" class="btn-redirect" (click)="closeModal()">Voltar</button>
                 </div>
             </div>
         </div>

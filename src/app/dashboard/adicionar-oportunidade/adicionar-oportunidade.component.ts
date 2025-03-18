@@ -33,6 +33,9 @@ export class AdicionarOportunidadeComponent implements OnInit {
   }
 
   vendedores: any[] = [];
+  tituloModal: string = "";
+  mensagemModal: string = "";
+  opCriada: boolean = false;
 
   // Carrega todos os vendedores
   loadVendedores() {
@@ -58,11 +61,13 @@ export class AdicionarOportunidadeComponent implements OnInit {
     responsavel: ['', Validators.required]
   });
 
-  openModal() {
+  openModal(titulo: string, mensagem: string) {
     const modal = document.getElementById("modal");
     const bgModal = document.getElementById("bg-modal");
 
     if(modal != null){
+      this.tituloModal = titulo;
+      this.mensagemModal = mensagem;
       modal.style.display = "block";
       bgModal.style.display = "block";
       modal.classList.add("show");
@@ -77,15 +82,19 @@ export class AdicionarOportunidadeComponent implements OnInit {
       modal.style.display = "none";
       bgModal.style.display = "none";
       modal.classList.remove("show");
+      this.tituloModal = "";
+      this.mensagemModal = "";
     }
 
-    this.formAdicionarOportunidade = this.formBuilder.group({
-      data: [new Date(), Validators.required],
-      suspect: ['', Validators.required],
-      origem: ['', Validators.required],
-      fonte: ['', Validators.required],
-      responsavel: ['', Validators.required]
-    });
+    if(this.opCriada) {
+      this.formAdicionarOportunidade = this.formBuilder.group({
+        data: [new Date(), Validators.required],
+        suspect: ['', Validators.required],
+        origem: ['', Validators.required],
+        fonte: ['', Validators.required],
+        responsavel: ['', Validators.required]
+      });
+    }
   }
 
   redirectControle() {
@@ -136,9 +145,16 @@ export class AdicionarOportunidadeComponent implements OnInit {
       let responsavel = this.formAdicionarOportunidade.get('responsavel').value;
       
       //Formatando data
-      let dataSeparada = String(data).split("-");
+      let dataApenasData = String(data).split("T")[0];	
+      let dataSeparada = dataApenasData.split("-");
       let mes = this.defineMes(dataSeparada[1]);
       let ano = dataSeparada[0];
+
+      if(mes == "Erro no mês enviado") {
+        this.openModal("Erro ao criar a oportunidade", "Data inválida. Tente novamente!");
+        this.opCriada = false;
+        return;
+      }
 
       const novaOportunidade: Oportunidade = {
         data: new Date(data),
@@ -171,9 +187,18 @@ export class AdicionarOportunidadeComponent implements OnInit {
         async (res) => {
           console.log(res);
           console.log(novaOportunidade);
-          this.openModal();
+          this.opCriada = true;
+          this.openModal(
+            "Oportunidade criada com sucesso!",
+            "Você já pode visualizá-la na página de Controle."
+          );
         },
         async (error) => {
+          this.opCriada = false;
+          this.openModal(
+            "Erro ao criar a oportunidade",
+            error
+          );
           console.log(novaOportunidade);
           console.error(`Erro ao criar a oportunidade: ${error}`);
         }
