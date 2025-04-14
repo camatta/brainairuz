@@ -517,7 +517,7 @@ export class ControleGeralComponent implements OnInit {
     }
   }
 
-  // Método para cálculo do SLA de Atendimento
+  // Método para cálculo do SLA de Atendimento - *** VALIDAR SE A FUNÇÃO DO NOVO SLA ESTÁ CORRETA, SE ESTIVER, APAGAR ESSA FUNÇÃO ***
   calculaSlaDeAtendimento(dataInicial: string, dataFinal: string): number {
     const inicio = parseISO(dataInicial);
     const fim = parseISO(dataFinal);
@@ -541,9 +541,13 @@ export class ControleGeralComponent implements OnInit {
         return null;
       }
 
-      let resultado = ((minutosUteis - diferencaEntreAsDatasEmMinutosTrabalhados) / (24 * 60)).toFixed(2);
-
-      return Number(resultado);
+      if(minutosUteis > 600){
+        // Validar o retorno do SLA em minutos, caso seja necessário usar a variável "diferencaEntreAsDatasEmMinutosTrabalhados"
+        let resultado = ((minutosUteis - diferencaEntreAsDatasEmMinutosTrabalhados) / (24 * 60)).toFixed(2);
+        return Number(resultado);
+      } else {
+        return diferencaEntreAsDatasEmMinutosTrabalhados;
+      }
     } else {
       return null;
     }
