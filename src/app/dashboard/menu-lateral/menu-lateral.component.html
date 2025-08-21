@@ -11,7 +11,7 @@
       <button routerLink="/dashboard/perfil" [class.link-ativo]="isLinkAtivo('/dashboard/perfil')">
         <i class="fas fa-user"></i>Perfil
       </button>
-    </li> <!-- Perfil  -->
+    </li> <!-- Perfil -->
 
     <li *ngIf="todos">
       <span class="collapsed d-block" (click)="collapseMenu($event)">
@@ -29,7 +29,7 @@
             <i class="fa-solid fa-circle-plus"></i>Nova Oportunidade
           </button>
         </li>
-        <li *ngIf="master || comercial || exceptionn || cs">
+        <li *ngIf="master || comercial || exception || cs">
           <button routerLink="/dashboard/controle-geral" [class.link-ativo]="isLinkAtivo('/dashboard/controle-geral')">
             <i class="fa-solid fa-table-cells-large"></i>Controle Geral
           </button>
