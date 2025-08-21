@@ -24,12 +24,12 @@
             <i class="fa-solid fa-chart-line"></i>Validação ICP
           </button>
         </li>
-        <li *ngIf="master || comercial || exception">
+        <li *ngIf="master || comercial || exception || cs">
           <button routerLink="/dashboard/adicionar-oportunidade" [class.link-ativo]="isLinkAtivo('/dashboard/adicionar-oportunidade')">
             <i class="fa-solid fa-circle-plus"></i>Nova Oportunidade
           </button>
         </li>
-        <li *ngIf="master || comercial || exception">
+        <li *ngIf="master || comercial || exceptionn || cs">
           <button routerLink="/dashboard/controle-geral" [class.link-ativo]="isLinkAtivo('/dashboard/controle-geral')">
             <i class="fa-solid fa-table-cells-large"></i>Controle Geral
           </button>
