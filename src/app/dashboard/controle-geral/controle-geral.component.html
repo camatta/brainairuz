@@ -1,9 +1,11 @@
 <main class="mb-5">
     <!-- TOAST DE RETORNO DAS REQUISIÇÕES (CRIAR, EDITAR OU DELETAR UM PROTUDO) -->
-    <div id="alert-actions" class="toast text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="alert-actions" class="toast text-bg-primary border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
         <div class="d-flex">
-        <div class="toast-body"> {{ msgActions }} </div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            <div class="toast-body"> {{ msgActions }} </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
         </div>
     </div>
 
@@ -17,11 +19,12 @@
             </button>
         </form>
     </div>
-  
+
     <!-- AÇÕES DO USUÁRIO -->
     <div class="topo d-flex align-items-center justify-content-between mt-5">
         <form (submit)="filtrarColunas()" class="formFiltrarColunas">
-            <button class="d-flex align-items-center justify-content-between" (click)="toggleListaDeColunas()" type="button">
+            <button class="d-flex align-items-center justify-content-between" (click)="toggleListaDeColunas()"
+                type="button">
                 <span class="texto">Colunas</span>
                 <span class="icone">+</span>
             </button>
@@ -41,7 +44,8 @@
 
         <button class="btnFiltrarPor" type="button" (click)="sidebarToggle()">Filtrar por</button>
 
-        <form id="sidebarFilters" class="bg-white d-flex hidden flex-column gap-5 position-absolute end-0 top-0 vh-100 p-4">
+        <form id="sidebarFilters"
+            class="bg-white d-flex hidden flex-column gap-5 position-absolute end-0 top-0 vh-100 p-4">
             <button type="button" (click)="sidebarToggle()">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -105,6 +109,7 @@
                     <option value="Indicação Cliente">Indicação Cliente</option>
                     <option value="MKT">MKT</option>
                     <option value="Parceiros">Parceiros</option>
+                    <option class="options-nairuz" value="RD Summit 2025">RD Summit 2025</option>
                 </select>
             </div>
 
@@ -137,6 +142,7 @@
                     <option class="options-nairuz" value="VTEX">VTEX</option>
                     <option class="options-nairuz" value="Wake">Wake</option>
                     <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                    <option class="options-nairuz" value="Leads do Cracha">Leads do Crachá</option>
                 </select>
             </div>
 
@@ -249,7 +255,7 @@
             <i class="fa-solid fa-xmark"></i>
         </button>
     </form>
-  
+
     <!-- COLUNAS DA TABELA -->
     <div *ngIf="loading" class="w-100">
         <p class="fs-6 mb-0 text-center">Carregando...</p>
@@ -261,7 +267,8 @@
         </div>
 
         <div *ngIf="tabela.data.length > 0" class="sectionTable">
-            <table id="tabela-oportunidades" mat-table [dataSource]="tabela" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+            <table id="tabela-oportunidades" mat-table [dataSource]="tabela" matSort
+                (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
                 <!-- Suspect Column -->
                 <ng-container matColumnDef="suspect" sticky>
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -269,7 +276,8 @@
                     </th>
                     <td mat-cell *matCellDef="let element">
                         <span class="d-flex align-items-center gap-2">
-                            <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarOportunidade(element)">edit</mat-icon>
+                            <mat-icon class="editar" aria-label="Editar produto"
+                                (click)="openModalEditarOportunidade(element)">edit</mat-icon>
                             <span>{{ element.suspect }}</span>
                         </span>
                     </td>
@@ -281,7 +289,8 @@
                         Status
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="custom-badge {{ formatarTextoDaColunaStatus(element.status) }}">{{ element.status }}</span>
+                        <span class="custom-badge {{ formatarTextoDaColunaStatus(element.status) }}">{{ element.status
+                            }}</span>
                     </td>
                 </ng-container>
 
@@ -292,7 +301,8 @@
                     </th>
                     <td mat-cell *matCellDef="let element">
                         {{ element.data ? (
-                            helper.setFormatarDataParaHtmlInput(element.data).dataFormatada | date: "dd/MM/yyyy HH:mm": "pt-BR"
+                        helper.setFormatarDataParaHtmlInput(element.data).dataFormatada | date: "dd/MM/yyyy HH:mm":
+                        "pt-BR"
                         ) : ( "-" ) }}
                     </td>
                 </ng-container>
@@ -354,7 +364,8 @@
                     </th>
                     <td mat-cell *matCellDef="let element">
                         {{ element.primeiro_contato ? (
-                            helper.setFormatarDataParaHtmlInput(element.primeiro_contato).dataFormatada | date: "dd/MM/yyyy HH:mm": "pt-BR"
+                        helper.setFormatarDataParaHtmlInput(element.primeiro_contato).dataFormatada | date: "dd/MM/yyyy
+                        HH:mm": "pt-BR"
                         ) : ( "-" ) }}
                     </td>
                 </ng-container>
@@ -366,7 +377,8 @@
                     </th>
                     <td mat-cell *matCellDef="let element">
                         {{ element.reuniao_agendada ? (
-                            helper.setFormatarDataParaHtmlInput(element.reuniao_agendada).dataFormatada | date: "dd/MM/yyyy HH:mm": "pt-BR"
+                        helper.setFormatarDataParaHtmlInput(element.reuniao_agendada).dataFormatada | date: "dd/MM/yyyy
+                        HH:mm": "pt-BR"
                         ) : ( "-" ) }}
                     </td>
                 </ng-container>
@@ -488,7 +500,8 @@
                     </th>
                     <td mat-cell *matCellDef="let element">
                         {{ element.data_aceite ? (
-                            helper.setFormatarDataParaHtmlInput(element.data_aceite ).dataFormatada | date: "dd/MM/yyyy HH:mm": "pt-BR"
+                        helper.setFormatarDataParaHtmlInput(element.data_aceite ).dataFormatada | date: "dd/MM/yyyy
+                        HH:mm": "pt-BR"
                         ) : ( "-" ) }}
                     </td>
                 </ng-container>
@@ -522,20 +535,26 @@
     <!-- INFORMAÇÕES DO RODAPÉ -->
     <div class="d-flex gap-4 mt-4">
         <div class="d-flex gap-2 align-items-center">
-            <span *ngIf="tabela.filteredData.length == 1" class="infos-rodape">{{ tabela.filteredData.length }} suspect encontrado.</span>
-            <span *ngIf="tabela.filteredData.length == 0 || tabela.filteredData.length > 1" class="infos-rodape">{{ tabela.filteredData.length }} suspects encontrados.</span>
+            <span *ngIf="tabela.filteredData.length == 1" class="infos-rodape">{{ tabela.filteredData.length }} suspect
+                encontrado.</span>
+            <span *ngIf="tabela.filteredData.length == 0 || tabela.filteredData.length > 1" class="infos-rodape">{{
+                tabela.filteredData.length }} suspects encontrados.</span>
             <button class="btnCopiar" type="button" (click)="copiarParaAreaDeTransferencia(tabela.filteredData.length)">
                 <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z" fill="#A2A2A2"/>
+                    <path
+                        d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z"
+                        fill="#A2A2A2" />
                 </svg>
             </button>
         </div>
 
         <div class="d-flex gap-2 align-items-center">
-            <span class="infos-rodape">Média de Ciclo de Vendas: {{ mediaCicloDeVendas  | number:'1.2-2' }}</span>
+            <span class="infos-rodape">Média de Ciclo de Vendas: {{ mediaCicloDeVendas | number:'1.2-2' }}</span>
             <button class="btnCopiar" type="button" (click)="copiarParaAreaDeTransferencia(mediaCicloDeVendas)">
                 <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z" fill="#A2A2A2"/>
+                    <path
+                        d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z"
+                        fill="#A2A2A2" />
                 </svg>
             </button>
         </div>
@@ -544,387 +563,371 @@
             <span class="infos-rodape">Média de Projetos Vendidos: {{ mediaProjetosVendidos | percent }}</span>
             <button class="btnCopiar" type="button" (click)="copiarParaAreaDeTransferencia(mediaProjetosVendidos)">
                 <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z" fill="#A2A2A2"/>
+                    <path
+                        d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z"
+                        fill="#A2A2A2" />
                 </svg>
             </button>
         </div>
 
         <div class="d-flex gap-2 align-items-center">
-            <span class="infos-rodape">Média do SLA: {{ mediaDoSlaAtendimento  | number:'1.2-2' }}</span>
+            <span class="infos-rodape">Média do SLA: {{ mediaDoSlaAtendimento | number:'1.2-2' }}</span>
             <button class="btnCopiar" type="button" (click)="copiarParaAreaDeTransferencia(mediaDoSlaAtendimento)">
                 <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z" fill="#A2A2A2"/>
+                    <path
+                        d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z"
+                        fill="#A2A2A2" />
                 </svg>
             </button>
         </div>
 
         <div class="d-flex gap-2 align-items-center">
-            <span class="infos-rodape">Ticket médio: R$ {{ mediaDoTicket  | number:'1.2-2' }}</span>
+            <span class="infos-rodape">Ticket médio: R$ {{ mediaDoTicket | number:'1.2-2' }}</span>
             <button class="btnCopiar" type="button" (click)="copiarParaAreaDeTransferencia(mediaDoTicket)">
                 <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z" fill="#A2A2A2"/>
+                    <path
+                        d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z"
+                        fill="#A2A2A2" />
                 </svg>
             </button>
         </div>
 
         <div class="d-flex gap-2 align-items-center">
-            <span class="infos-rodape">Média do ICP {{ mediaDoIcp  | number:'1.2-2' }}</span>
+            <span class="infos-rodape">Média do ICP {{ mediaDoIcp | number:'1.2-2' }}</span>
             <button class="btnCopiar" type="button" (click)="copiarParaAreaDeTransferencia(mediaDoIcp)">
                 <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z" fill="#A2A2A2"/>
+                    <path
+                        d="M3.875 8.75004C3.57708 8.75004 3.32205 8.64396 3.1099 8.43181C2.89774 8.21966 2.79167 7.96462 2.79167 7.66671V1.16671C2.79167 0.868791 2.89774 0.613756 3.1099 0.401603C3.32205 0.18945 3.57708 0.083374 3.875 0.083374H8.75C9.04792 0.083374 9.30295 0.18945 9.5151 0.401603C9.72726 0.613756 9.83333 0.868791 9.83333 1.16671V7.66671C9.83333 7.96462 9.72726 8.21966 9.5151 8.43181C9.30295 8.64396 9.04792 8.75004 8.75 8.75004H3.875ZM1.70833 10.9167C1.41042 10.9167 1.15538 10.8106 0.943229 10.5985C0.731076 10.3863 0.625 10.1313 0.625 9.83337V2.25004H1.70833V9.83337H7.66667V10.9167H1.70833Z"
+                        fill="#A2A2A2" />
                 </svg>
             </button>
         </div>
     </div>
-  
+
     <!-- MODAIS -->
     <div id="bg-modal"></div>
-  
+
     <!-- Modal para EDITAR venda-->
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarOportunidade" aria-hidden="true">
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header position-relative flex-column">
-            <h2>Informações do Suspect</h2>
-            <h3>{{ formEditarOportunidade.get("suspect").value }}</h3>
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header position-relative flex-column">
+                    <h2>Informações do Suspect</h2>
+                    <h3>{{ formEditarOportunidade.get("suspect").value }}</h3>
 
-            <button type="button" (click)="closeModalEditarOportunidade()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            
-            <ul id="tabs" class="col-12 p-0 d-flex justify-content-center mt-4">
-                <li class="etapa-1 active">Etapa 1</li>
-                <li class="etapa-2">Etapa 2</li>
-                <li class="etapa-3">Etapa 3</li>
-            </ul>
-          </div>
+                    <button type="button" (click)="closeModalEditarOportunidade()" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
 
-          <form id="formEditarOportunidade" (submit)="onSubmitEditarOportunidade()" [formGroup]="formEditarOportunidade" class="row container">
-            <div id="etapa-1" class="formtab row active">
-                <!-- DATA -->
-                <div class="col-4 mb-3">
-                    <label for="dataEdit" class="form-label">Data</label>
-                    <input
-                        (change)="handleChangeDateOrFirstContact()"
-                        type="datetime-local"
-                        id="dataEdit"
-                        class="form-control col-12"
-                        formControlName="data"
-                        required
-                    />
+                    <ul id="tabs" class="col-12 p-0 d-flex justify-content-center mt-4">
+                        <li class="etapa-1 active">Etapa 1</li>
+                        <li class="etapa-2">Etapa 2</li>
+                        <li class="etapa-3">Etapa 3</li>
+                    </ul>
                 </div>
 
-                <!-- SUSPECT -->
-                <div class="col-4 mb-3">
-                    <label for="suspectEdit" class="form-label">Nome do Suspect</label>
-                    <input type="text" id="suspectEdit" class="form-control col-12" formControlName="suspect" required />
-                </div>
+                <form id="formEditarOportunidade" (submit)="onSubmitEditarOportunidade()"
+                    [formGroup]="formEditarOportunidade" class="row container">
+                    <div id="etapa-1" class="formtab row active">
+                        <!-- DATA -->
+                        <div class="col-4 mb-3">
+                            <label for="dataEdit" class="form-label">Data</label>
+                            <input (change)="handleChangeDateOrFirstContact()" type="datetime-local" id="dataEdit"
+                                class="form-control col-12" formControlName="data" required />
+                        </div>
 
-                <!-- ORIGEM -->
-                <div class="col-4 mb-3">
-                    <label for="origemEdit" class="form-label">Origem</label>
-                    <select id="origemEdit" class="selectForm form-select" name="origem" formControlName="origem" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="Ativo">Ativo</option>
-                        <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
-                        <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
-                        <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
-                        <option class="options-nairuz" value="MKT">MKT</option>
-                        <option class="options-nairuz" value="Parceiros">Parceiros</option>
-                    </select>
-                </div>
+                        <!-- SUSPECT -->
+                        <div class="col-4 mb-3">
+                            <label for="suspectEdit" class="form-label">Nome do Suspect</label>
+                            <input type="text" id="suspectEdit" class="form-control col-12" formControlName="suspect"
+                                required />
+                        </div>
 
-                <!-- FONTE -->
-                <div class="col-4 mb-3">
-                    <label for="fonteEdit" class="form-label">Fonte</label>
-                    <select id="fonteEdit" class="selectForm form-select" name="fonte" formControlName="fonte" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="AGV">AGV</option>
-                        <option class="options-nairuz" value="Agência Paula Conceição">Agência Paula Conceição</option>
-                        <option class="options-nairuz" value="Alexandre Pinheiro">Alexandre Pinheiro</option>
-                        <option class="options-nairuz" value="Ativo">Ativo</option>
-                        <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
-                        <option class="options-nairuz" value="Blog">Blog</option>
-                        <option class="options-nairuz" value="Botmaker">Botmaker</option>
-                        <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
-                        <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
-                        <option class="options-nairuz" value="Franquia Active">Franquia Active</option>
-                        <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
-                        <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
-                        <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
-                        <option class="options-nairuz" value="Linx">Linx</option>
-                        <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital</option>
-                        <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
-                        <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
-                        <option class="options-nairuz" value="MKT">MKT</option>
-                        <option class="options-nairuz" value="Nexell Integrado">Nexell Integrado</option>
-                        <option class="options-nairuz" value="Nivele">Nivele</option>
-                        <option class="options-nairuz" value="RD Station">RD Station</option>
-                        <option class="options-nairuz" value="Site">Site</option>
-                        <option class="options-nairuz" value="VTEX">VTEX</option>
-                        <option class="options-nairuz" value="Wake">Wake</option>
-                        <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
-                    </select>
-                </div>
+                        <!-- ORIGEM -->
+                        <div class="col-4 mb-3">
+                            <label for="origemEdit" class="form-label">Origem</label>
+                            <select id="origemEdit" class="selectForm form-select" name="origem"
+                                formControlName="origem" required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="Ativo">Ativo</option>
+                                <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                                <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                                <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
+                                <option class="options-nairuz" value="MKT">MKT</option>
+                                <option class="options-nairuz" value="Parceiros">Parceiros</option>
+                                <option class="options-nairuz" value="RD Summit 2025">RD Summit 2025</option>
+                            </select>
+                        </div>
 
-                <!-- RESPONSÁVEL -->
-                <div class="col-4 mb-3">
-                    <label for="responsavel" class="form-label">Responsável</label>
-                    <select formControlName="responsavel" class="selectForm form-select" name="responsavel" id="responsavel" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option *ngFor="let vendedor of vendedores" class="options-nairuz" [value]="vendedor">
-                            {{ vendedor }}
-                        </option>
-                    </select>
-                </div>
+                        <!-- FONTE -->
+                        <div class="col-4 mb-3">
+                            <label for="fonteEdit" class="form-label">Fonte</label>
+                            <select id="fonteEdit" class="selectForm form-select" name="fonte" formControlName="fonte"
+                                required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="AGV">AGV</option>
+                                <option class="options-nairuz" value="Agência Paula Conceição">Agência Paula Conceição
+                                </option>
+                                <option class="options-nairuz" value="Alexandre Pinheiro">Alexandre Pinheiro</option>
+                                <option class="options-nairuz" value="Ativo">Ativo</option>
+                                <option class="options-nairuz" value="Automação CRM">Automação CRM</option>
+                                <option class="options-nairuz" value="Blog">Blog</option>
+                                <option class="options-nairuz" value="Botmaker">Botmaker</option>
+                                <option class="options-nairuz" value="Cliente da Base">Cliente da Base</option>
+                                <option class="options-nairuz" value="Fishing da Base">Fishing da Base</option>
+                                <option class="options-nairuz" value="Franquia Active">Franquia Active</option>
+                                <option class="options-nairuz" value="Franquia Excelência">Franquia Excelência</option>
+                                <option class="options-nairuz" value="Franquia Grandis">Franquia Grandis</option>
+                                <option class="options-nairuz" value="Funcionairuz">Funcionairuz</option>
+                                <option class="options-nairuz" value="Linx">Linx</option>
+                                <option class="options-nairuz" value="LP Marketing Digital">LP Marketing Digital
+                                </option>
+                                <option class="options-nairuz" value="LP VTEX">LP VTEX</option>
+                                <option class="options-nairuz" value="Mage Shop">Mage Shop</option>
+                                <option class="options-nairuz" value="MKT">MKT</option>
+                                <option class="options-nairuz" value="Nexell Integrado">Nexell Integrado</option>
+                                <option class="options-nairuz" value="Nivele">Nivele</option>
+                                <option class="options-nairuz" value="RD Station">RD Station</option>
+                                <option class="options-nairuz" value="Site">Site</option>
+                                <option class="options-nairuz" value="VTEX">VTEX</option>
+                                <option class="options-nairuz" value="Wake">Wake</option>
+                                <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                                <option class="options-nairuz" value="Leads do Cracha">Leads do Crachá</option>
+
+                            </select>
+                        </div>
+
+                        <!-- RESPONSÁVEL -->
+                        <div class="col-4 mb-3">
+                            <label for="responsavel" class="form-label">Responsável</label>
+                            <select formControlName="responsavel" class="selectForm form-select" name="responsavel"
+                                id="responsavel" required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option *ngFor="let vendedor of vendedores" class="options-nairuz" [value]="vendedor">
+                                    {{ vendedor }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="etapa-2" class="formtab row hidden">
+                        <!-- PRIMEIRO CONTATO -->
+                        <div class="col-4 mb-3">
+                            <label for="primeiroContatoEdit" class="form-label">1º Contato</label>
+                            <input (change)="handleChangeDateOrFirstContact()" type="datetime-local"
+                                id="primeiroContatoEdit" class="form-control col-12" formControlName="primeiro_contato"
+                                required />
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="col-4 mb-3">
+                            <label for="statusEdit" class="form-label">Status</label>
+                            <select id="statusEdit" class="selectForm form-select" name="status"
+                                formControlName="status" required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="Dentro do ICP">Dentro do ICP</option>
+                                <option class="options-nairuz" value="Diagnóstico">Diagnóstico</option>
+                                <option class="options-nairuz" value="Exploratória">Exploratória</option>
+                                <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
+                                <option class="options-nairuz" value="Não consegui qualificar">Não consegui qualificar
+                                </option>
+                                <option class="options-nairuz" value="Não é uma oportunidade">Não é uma oportunidade
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- REUNIÃO AGENDADA -->
+                        <div class="col-4 mb-3">
+                            <label for="reuniaoAgendadaEdit" class="form-label">Reunião Agendada</label>
+                            <input type="datetime-local" id="reuniaoAgendadaEdit" class="form-control col-12"
+                                formControlName="reuniao_agendada" required />
+                        </div>
+
+                        <!-- SLA DE ATENDIMENTO -->
+                        <div class="col-4 mb-3">
+                            <label for="slaAtendimentoEdit" class="form-label">SLA de Atendimento (Em minutos)</label>
+                            <input type="text" id="slaAtendimentoEdit" class="form-control col-12" mask="separator.2"
+                                thousandSeparator="." decimalMarker="," formControlName="sla_atendimento" readonly
+                                required />
+                        </div>
+
+                        <!-- % DE FIT -->
+                        <div class="col-4 mb-3">
+                            <label for="percentualFitEdit" class="form-label">% de Fit</label>
+                            <input type="text" id="percentualFitEdit" class="form-control col-12"
+                                formControlName="percentual_fit" required />
+                        </div>
+
+                        <!-- PERFIL DO CLIENTE -->
+                        <div class="col-4 mb-3">
+                            <label for="perfilClienteEdit" class="form-label">Perfil do Cliente</label>
+                            <select id="perfilClienteEdit" class="selectForm form-select" name="perfil_cliente"
+                                formControlName="perfil_cliente" required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="A">A</option>
+                                <option class="options-nairuz" value="B">B</option>
+                                <option class="options-nairuz" value="C">C</option>
+                                <option class="options-nairuz" value="Enterprise">Enterprise</option>
+                                <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
+                            </select>
+                        </div>
+
+                        <!-- ETAPA -->
+                        <div class="col-4 mb-3">
+                            <label for="etapaEdit" class="form-label">Etapa</label>
+                            <select id="etapaEdit" class="selectForm form-select" name="etapa" formControlName="etapa"
+                                required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="Contrato">Contrato</option>
+                                <option class="options-nairuz" value="Follow">Follow</option>
+                                <option class="options-nairuz" value="Perdido">Perdido</option>
+                                <option class="options-nairuz" value="Proposta">Proposta</option>
+                                <option class="options-nairuz" value="Vendido">Vendido</option>
+                            </select>
+                        </div>
+
+                        <!-- PRODUTO -->
+                        <div class="col-4 mb-3"> <!-- Trazer os tipos de produto do banco (Mix De Produtos) -->
+                            <label for="productEdit" class="form-label">Produto</label>
+                            <select id="productEdit" class="selectForm form-select" name="produto"
+                                formControlName="produto" required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="Evolução">Evolução</option>
+                                <option class="options-nairuz" value="Help A">Help A</option>
+                                <option class="options-nairuz" value="MKT">MKT</option>
+                                <option class="options-nairuz" value="Projeto">Projeto</option>
+                                <option class="options-nairuz" value="Sustentação">Sustentação</option>
+                            </select>
+                        </div>
+
+                        <!-- DETALHES DO PRODUTO -->
+                        <div class="col-4 mb-3">
+                            <label for="detalhesProdutoEdit" class="form-label">Detalhes do Produto</label>
+                            <select id="detalhesProdutoEdit" class="selectForm form-select" name="detalhes_produto"
+                                formControlName="detalhes_produto" required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="Blog">Blog</option>
+                                <option class="options-nairuz" value="Help A">Help A</option>
+                                <option class="options-nairuz" value="Layout Personalizado">Layout Personalizado
+                                </option>
+                                <option class="options-nairuz" value="MKT Full">MKT Full</option>
+                                <option class="options-nairuz" value="MKT Parcial">MKT Parcial</option>
+                                <option class="options-nairuz" value="Sustentação">Sustentação</option>
+                                <option class="options-nairuz" value="Tema">Tema</option>
+                                <option class="options-nairuz" value="Website">Website</option>
+                            </select>
+                        </div>
+
+                        <!-- VALOR DA PROPOSTA -->
+                        <div class="col-4 mb-3">
+                            <label for="valorPropostaEdit" class="form-label">Valor da Proposta</label>
+                            <input type="text" id="valorPropostaEdit" class="form-control col-12" prefix="R$ "
+                                mask="separator.2" thousandSeparator="." decimalMarker=","
+                                formControlName="valor_proposta" required />
+                        </div>
+                    </div>
+
+                    <div id="etapa-3" class="formtab row hidden">
+                        <!-- MOTIVO DA PERDA -->
+                        <div class="col-4 mb-3">
+                            <label for="motivoPerdaEdit" class="form-label">Motivo da Perda</label>
+                            <select id="motivoPerdaEdit" class="selectForm form-select" name="motivo_perda"
+                                formControlName="motivo_perda" required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="Adiou o projeto">Adiou o projeto</option>
+                                <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
+                                <option class="options-nairuz" value="Internalizou">Internalizou</option>
+                                <option class="options-nairuz" value="Não consegui qualificar">Não consegui qualificar
+                                </option>
+                                <option class="options-nairuz" value="Não é momento para o projeto">Não é momento para o
+                                    projeto</option>
+                                <option class="options-nairuz" value="Não retorna o contato">Não retorna o contato
+                                </option>
+                                <option class="options-nairuz" value="Não sentiu confiança técnica">Não sentiu confiança
+                                    técnica</option>
+                                <option class="options-nairuz" value="Prazo de entrega">Prazo de entrega</option>
+                                <option class="options-nairuz" value="Preço">Preço</option>
+                                <option class="options-nairuz" value="Optou por seguir com outra empresa">Optou por
+                                    seguir com outra empresa</option>
+                            </select>
+                        </div>
+
+                        <!-- VALOR VENDIDO -->
+                        <div class="col-4 mb-3">
+                            <label for="valorVendidoEdit" class="form-label">Valor Vendido</label>
+                            <input type="text" id="valorVendidoEdit" class="form-control col-12" prefix="R$ "
+                                mask="separator.2" thousandSeparator="." decimalMarker=","
+                                formControlName="valor_vendido" required />
+                        </div>
+
+                        <!-- MARKUP -->
+                        <div class="col-4 mb-3">
+                            <label for="markupEdit" class="form-label">Markup</label>
+                            <input type="text" id="markupEdit" class="form-control col-12" formControlName="markup"
+                                required />
+                        </div>
+
+                        <!-- MRR -->
+                        <div class="col-4 mb-3">
+                            <label for="mrrEdit" class="form-label">MRR</label>
+                            <input type="text" id="mrrEdit" class="form-control col-12" prefix="R$ " mask="separator.2"
+                                thousandSeparator="." decimalMarker="," formControlName="mrr" required />
+                        </div>
+
+                        <!-- DATA DO ACEITE -->
+                        <div class="col-4 mb-3">
+                            <label for="dataAceiteEdit" class="form-label">Data do Aceite</label>
+                            <input (change)="handleChangeAcceptanceDate()" type="datetime-local" id="dataAceiteEdit"
+                                class="form-control col-12" formControlName="data_aceite" required />
+                        </div>
+
+                        <!-- CICLO DE VENDA -->
+                        <div class="col-4 mb-3">
+                            <label for="cicloVendaEdit" class="form-label">Ciclo de Venda</label>
+                            <input type="text" id="cicloVendaEdit" class="form-control col-12" mask="separator.2"
+                                thousandSeparator="." decimalMarker="," formControlName="ciclo_venda" required
+                                readonly />
+                        </div>
+
+                        <!-- MÊS ENCERRAMENTO -->
+                        <div class="col-4 mb-3">
+                            <label for="mesEncerramentoEdit" class="form-label">Mês de Enceramento</label>
+                            <select id="mesEncerramentoEdit" class="selectForm form-select" name="mes_encerramento"
+                                formControlName="mes_encerramento" required>
+                                <option class="options-nairuz" value="">Selecione</option>
+                                <option class="options-nairuz" value="Janeiro">Janeiro</option>
+                                <option class="options-nairuz" value="Fevereiro">Fevereiro</option>
+                                <option class="options-nairuz" value="Março">Março</option>
+                                <option class="options-nairuz" value="Abril">Abril</option>
+                                <option class="options-nairuz" value="Maio">Maio</option>
+                                <option class="options-nairuz" value="Junho">Junho</option>
+                                <option class="options-nairuz" value="Julho">Julho</option>
+                                <option class="options-nairuz" value="Agosto">Agosto</option>
+                                <option class="options-nairuz" value="Setembro">Setembro</option>
+                                <option class="options-nairuz" value="Outubro">Outubro</option>
+                                <option class="options-nairuz" value="Novembro">Novembro</option>
+                                <option class="options-nairuz" value="Dezembro">Dezembro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- BOTÕES DE AÇÃO -->
+                    <div class="col-12 mb-5 d-flex gap-3 justify-content-end">
+                        <button (click)="previewTab()" type="button"
+                            class="acao-modal-editar voltar-nairuz hidden">Voltar</button>
+                        <button (click)="nextTab()" type="button"
+                            class="acao-modal-editar avancar-nairuz">Avançar</button>
+                        <button class="acao-modal-editar salvar-nairuz" type="submit">
+                            <svg width="11" height="10" viewBox="0 0 11 10" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M10.375 2.29167V8.79167C10.375 9.08958 10.2689 9.34462 10.0568 9.55677C9.84462 9.76892 9.58958 9.875 9.29167 9.875H1.70833C1.41042 9.875 1.15538 9.76892 0.943229 9.55677C0.731076 9.34462 0.625 9.08958 0.625 8.79167V1.20833C0.625 0.910417 0.731076 0.655382 0.943229 0.443229C1.15538 0.231076 1.41042 0.125 1.70833 0.125H8.20833L10.375 2.29167ZM5.5 8.25C5.95139 8.25 6.33507 8.09201 6.65104 7.77604C6.96701 7.46007 7.125 7.07639 7.125 6.625C7.125 6.17361 6.96701 5.78993 6.65104 5.47396C6.33507 5.15799 5.95139 5 5.5 5C5.04861 5 4.66493 5.15799 4.34896 5.47396C4.03299 5.78993 3.875 6.17361 3.875 6.625C3.875 7.07639 4.03299 7.46007 4.34896 7.77604C4.66493 8.09201 5.04861 8.25 5.5 8.25ZM2.25 3.91667H7.125V1.75H2.25V3.91667Z"
+                                    fill="white" />
+                            </svg>
+                            Salvar Informações
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <div id="etapa-2" class="formtab row hidden">
-                <!-- PRIMEIRO CONTATO -->
-                <div class="col-4 mb-3">
-                    <label for="primeiroContatoEdit" class="form-label">1º Contato</label>
-                    <input
-                        (change)="handleChangeDateOrFirstContact()"
-                        type="datetime-local"
-                        id="primeiroContatoEdit"
-                        class="form-control col-12"
-                        formControlName="primeiro_contato"
-                        required
-                    />
-                </div>
-
-                <!-- STATUS -->
-                <div class="col-4 mb-3">
-                    <label for="statusEdit" class="form-label">Status</label>
-                    <select id="statusEdit" class="selectForm form-select" name="status" formControlName="status" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="Dentro do ICP">Dentro do ICP</option>
-                        <option class="options-nairuz" value="Diagnóstico">Diagnóstico</option>
-                        <option class="options-nairuz" value="Exploratória">Exploratória</option>
-                        <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
-                        <option class="options-nairuz" value="Não consegui qualificar">Não consegui qualificar</option>
-                        <option class="options-nairuz" value="Não é uma oportunidade">Não é uma oportunidade</option>
-                    </select>
-                </div>
-
-                <!-- REUNIÃO AGENDADA -->
-                <div class="col-4 mb-3">
-                    <label for="reuniaoAgendadaEdit" class="form-label">Reunião Agendada</label>
-                    <input type="datetime-local" id="reuniaoAgendadaEdit" class="form-control col-12" formControlName="reuniao_agendada" required />
-                </div>
-
-                <!-- SLA DE ATENDIMENTO -->
-                <div class="col-4 mb-3">
-                    <label for="slaAtendimentoEdit" class="form-label">SLA de Atendimento (Em minutos)</label>
-                    <input
-                        type="text"
-                        id="slaAtendimentoEdit"
-                        class="form-control col-12"
-                        mask="separator.2"
-                        thousandSeparator="."
-                        decimalMarker=","
-                        formControlName="sla_atendimento"
-                        readonly
-                        required
-                    />
-                </div>
-
-                <!-- % DE FIT -->
-                <div class="col-4 mb-3">
-                    <label for="percentualFitEdit" class="form-label">% de Fit</label>
-                    <input type="text" id="percentualFitEdit" class="form-control col-12" formControlName="percentual_fit" required />
-                </div>
-
-                <!-- PERFIL DO CLIENTE -->
-                <div class="col-4 mb-3">
-                    <label for="perfilClienteEdit" class="form-label">Perfil do Cliente</label>
-                    <select id="perfilClienteEdit" class="selectForm form-select" name="perfil_cliente" formControlName="perfil_cliente" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="A">A</option>
-                        <option class="options-nairuz" value="B">B</option>
-                        <option class="options-nairuz" value="C">C</option>
-                        <option class="options-nairuz" value="Enterprise">Enterprise</option>
-                        <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
-                    </select>
-                </div>
-
-                <!-- ETAPA -->
-                <div class="col-4 mb-3">
-                    <label for="etapaEdit" class="form-label">Etapa</label>
-                    <select id="etapaEdit" class="selectForm form-select" name="etapa" formControlName="etapa" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="Contrato">Contrato</option>
-                        <option class="options-nairuz" value="Follow">Follow</option>
-                        <option class="options-nairuz" value="Perdido">Perdido</option>
-                        <option class="options-nairuz" value="Proposta">Proposta</option>
-                        <option class="options-nairuz" value="Vendido">Vendido</option>
-                    </select>
-                </div>
-
-                <!-- PRODUTO -->
-                <div class="col-4 mb-3"> <!-- Trazer os tipos de produto do banco (Mix De Produtos) -->
-                    <label for="productEdit" class="form-label">Produto</label>
-                    <select id="productEdit" class="selectForm form-select" name="produto" formControlName="produto" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="Evolução">Evolução</option>
-                        <option class="options-nairuz" value="Help A">Help A</option>
-                        <option class="options-nairuz" value="MKT">MKT</option>
-                        <option class="options-nairuz" value="Projeto">Projeto</option>
-                        <option class="options-nairuz" value="Sustentação">Sustentação</option>
-                    </select>
-                </div>
-
-                <!-- DETALHES DO PRODUTO -->
-                <div class="col-4 mb-3">
-                    <label for="detalhesProdutoEdit" class="form-label">Detalhes do Produto</label>
-                    <select id="detalhesProdutoEdit" class="selectForm form-select" name="detalhes_produto" formControlName="detalhes_produto" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="Blog">Blog</option>
-                        <option class="options-nairuz" value="Help A">Help A</option>
-                        <option class="options-nairuz" value="Layout Personalizado">Layout Personalizado</option>
-                        <option class="options-nairuz" value="MKT Full">MKT Full</option>
-                        <option class="options-nairuz" value="MKT Parcial">MKT Parcial</option>
-                        <option class="options-nairuz" value="Sustentação">Sustentação</option>
-                        <option class="options-nairuz" value="Tema">Tema</option>
-                        <option class="options-nairuz" value="Website">Website</option>
-                    </select>
-                </div>
-
-                <!-- VALOR DA PROPOSTA -->
-                <div class="col-4 mb-3">
-                    <label for="valorPropostaEdit" class="form-label">Valor da Proposta</label>
-                    <input
-                        type="text"
-                        id="valorPropostaEdit"
-                        class="form-control col-12"
-                        prefix="R$ "
-                        mask="separator.2"
-                        thousandSeparator="."
-                        decimalMarker=","
-                        formControlName="valor_proposta"
-                        required
-                    />
-                </div>
-            </div>
-
-            <div id="etapa-3" class="formtab row hidden">
-                <!-- MOTIVO DA PERDA -->
-                <div class="col-4 mb-3">
-                    <label for="motivoPerdaEdit" class="form-label">Motivo da Perda</label>
-                    <select id="motivoPerdaEdit" class="selectForm form-select" name="motivo_perda" formControlName="motivo_perda" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="Adiou o projeto">Adiou o projeto</option>
-                        <option class="options-nairuz" value="Fora do ICP">Fora do ICP</option>
-                        <option class="options-nairuz" value="Internalizou">Internalizou</option>
-                        <option class="options-nairuz" value="Não consegui qualificar">Não consegui qualificar</option>
-                        <option class="options-nairuz" value="Não é momento para o projeto">Não é momento para o projeto</option>
-                        <option class="options-nairuz" value="Não retorna o contato">Não retorna o contato</option>
-                        <option class="options-nairuz" value="Não sentiu confiança técnica">Não sentiu confiança técnica</option>
-                        <option class="options-nairuz" value="Prazo de entrega">Prazo de entrega</option>
-                        <option class="options-nairuz" value="Preço">Preço</option>
-                        <option class="options-nairuz" value="Optou por seguir com outra empresa">Optou por seguir com outra empresa</option>
-                    </select>
-                </div>
-
-                <!-- VALOR VENDIDO -->
-                <div class="col-4 mb-3">
-                    <label for="valorVendidoEdit" class="form-label">Valor Vendido</label>
-                    <input
-                        type="text"
-                        id="valorVendidoEdit"
-                        class="form-control col-12"
-                        prefix="R$ "
-                        mask="separator.2"
-                        thousandSeparator="."
-                        decimalMarker=","
-                        formControlName="valor_vendido"
-                        required
-                    />
-                </div>
-
-                <!-- MARKUP -->
-                <div class="col-4 mb-3">
-                    <label for="markupEdit" class="form-label">Markup</label>
-                    <input type="text" id="markupEdit" class="form-control col-12" formControlName="markup" required />
-                </div>
-
-                <!-- MRR -->
-                <div class="col-4 mb-3">
-                    <label for="mrrEdit" class="form-label">MRR</label>
-                    <input
-                        type="text"
-                        id="mrrEdit"
-                        class="form-control col-12"
-                        prefix="R$ "
-                        mask="separator.2"
-                        thousandSeparator="."
-                        decimalMarker=","
-                        formControlName="mrr"
-                        required
-                    />
-                </div>
-
-                <!-- DATA DO ACEITE -->
-                <div class="col-4 mb-3">
-                    <label for="dataAceiteEdit" class="form-label">Data do Aceite</label>
-                    <input
-                        (change)="handleChangeAcceptanceDate()"
-                        type="datetime-local"
-                        id="dataAceiteEdit"
-                        class="form-control col-12"
-                        formControlName="data_aceite"
-                        required
-                    />
-                </div>
-
-                <!-- CICLO DE VENDA -->
-                <div class="col-4 mb-3">
-                    <label for="cicloVendaEdit" class="form-label">Ciclo de Venda</label>
-                    <input
-                        type="text"
-                        id="cicloVendaEdit"
-                        class="form-control col-12"
-                        mask="separator.2"
-                        thousandSeparator="."
-                        decimalMarker=","
-                        formControlName="ciclo_venda"
-                        required
-                        readonly
-                    />
-                </div>
-
-                <!-- MÊS ENCERRAMENTO -->
-                <div class="col-4 mb-3">
-                    <label for="mesEncerramentoEdit" class="form-label">Mês de Enceramento</label>
-                    <select id="mesEncerramentoEdit" class="selectForm form-select" name="mes_encerramento" formControlName="mes_encerramento" required>
-                        <option class="options-nairuz" value="">Selecione</option>
-                        <option class="options-nairuz" value="Janeiro">Janeiro</option>
-                        <option class="options-nairuz" value="Fevereiro">Fevereiro</option>
-                        <option class="options-nairuz" value="Março">Março</option>
-                        <option class="options-nairuz" value="Abril">Abril</option>
-                        <option class="options-nairuz" value="Maio">Maio</option>
-                        <option class="options-nairuz" value="Junho">Junho</option>
-                        <option class="options-nairuz" value="Julho">Julho</option>
-                        <option class="options-nairuz" value="Agosto">Agosto</option>
-                        <option class="options-nairuz" value="Setembro">Setembro</option>
-                        <option class="options-nairuz" value="Outubro">Outubro</option>
-                        <option class="options-nairuz" value="Novembro">Novembro</option>
-                        <option class="options-nairuz" value="Dezembro">Dezembro</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- BOTÕES DE AÇÃO -->
-            <div class="col-12 mb-5 d-flex gap-3 justify-content-end">
-                <button (click)="previewTab()" type="button" class="acao-modal-editar voltar-nairuz hidden">Voltar</button>
-                <button (click)="nextTab()" type="button" class="acao-modal-editar avancar-nairuz">Avançar</button>
-                <button class="acao-modal-editar salvar-nairuz" type="submit">
-                    <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10.375 2.29167V8.79167C10.375 9.08958 10.2689 9.34462 10.0568 9.55677C9.84462 9.76892 9.58958 9.875 9.29167 9.875H1.70833C1.41042 9.875 1.15538 9.76892 0.943229 9.55677C0.731076 9.34462 0.625 9.08958 0.625 8.79167V1.20833C0.625 0.910417 0.731076 0.655382 0.943229 0.443229C1.15538 0.231076 1.41042 0.125 1.70833 0.125H8.20833L10.375 2.29167ZM5.5 8.25C5.95139 8.25 6.33507 8.09201 6.65104 7.77604C6.96701 7.46007 7.125 7.07639 7.125 6.625C7.125 6.17361 6.96701 5.78993 6.65104 5.47396C6.33507 5.15799 5.95139 5 5.5 5C5.04861 5 4.66493 5.15799 4.34896 5.47396C4.03299 5.78993 3.875 6.17361 3.875 6.625C3.875 7.07639 4.03299 7.46007 4.34896 7.77604C4.66493 8.09201 5.04861 8.25 5.5 8.25ZM2.25 3.91667H7.125V1.75H2.25V3.91667Z" fill="white"/>
-                    </svg>
-                    Salvar Informações
-                </button>
-            </div>
-          </form>
         </div>
-      </div>
     </div>
 </main>
