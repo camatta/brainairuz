@@ -9,7 +9,8 @@
             </div>
             <div class="col-4 d-flex flex-column">
                 <label for="suspect" class="form-label">Nome do Suspect</label>
-                <input formControlName="suspect" class="input-nairuz" placeholder="Exemplo" type="text" name="suspect" id="suspect" required>
+                <input formControlName="suspect" class="input-nairuz" placeholder="Exemplo" type="text" name="suspect"
+                    id="suspect" required>
             </div>
             <div class="col-4 d-flex flex-column">
                 <label for="origem" class="form-label">Origem</label>
@@ -21,6 +22,7 @@
                     <option class="options-nairuz" value="Indicação Cliente">Indicação Cliente</option>
                     <option class="options-nairuz" value="MKT">MKT</option>
                     <option class="options-nairuz" value="Parceiros">Parceiros</option>
+                    <option class="options-nairuz" value="RD Summit 2025">RD Summit 2025</option>
                 </select>
             </div>
             <div class="col-4 d-flex flex-column mt-4">
@@ -52,6 +54,7 @@
                     <option class="options-nairuz" value="VTEX">VTEX</option>
                     <option class="options-nairuz" value="Wake">Wake</option>
                     <option class="options-nairuz" value="WhatsApp">WhatsApp</option>
+                    <option class="options-nairuz" value="Leads do Cracha">Leads do Crachá</option>
                 </select>
             </div>
             <div class="col-4 d-flex flex-column mt-4">
@@ -64,7 +67,8 @@
                 </select>
             </div>
             <div class="col-12">
-                <button class="submit-nairuz" type="submit" [disabled]="!formAdicionarOportunidade.valid">Criar Oportunidade</button>
+                <button class="submit-nairuz" type="submit" [disabled]="!formAdicionarOportunidade.valid">Criar
+                    Oportunidade</button>
             </div>
         </form>
 
@@ -75,10 +79,12 @@
         <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content d-flex flex-column align-items-center">
-                    <button type="button" (click)="closeModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" (click)="closeModal()" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                     <h2 class="modal-title">{{ tituloModal }}</h2>
                     <p class="text-modal">{{ mensagemModal }}</p>
-                    <button *ngIf="opCriada" class="btn-redirect" (click)="redirectControle()">Ir para o Controle</button>
+                    <button *ngIf="opCriada" class="btn-redirect" (click)="redirectControle()">Ir para o
+                        Controle</button>
                     <button *ngIf="!opCriada" class="btn-redirect" (click)="closeModal()">Voltar</button>
                 </div>
             </div>
