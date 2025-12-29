@@ -5,7 +5,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { isWeekend, isSameDay, parseISO, differenceInMinutes, differenceInHours, isBefore, isAfter, startOfDay, setHours } from 'date-fns';
+import { isWeekend, isSameDay, parseISO, startOfDay } from 'date-fns';
 
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 import { OportunidadesService } from 'src/app/services/oportunidades.service';
@@ -462,95 +462,58 @@ export class ControleGeralComponent implements OnInit {
     });
   }
 
-  // Método para cálculo de dias úteis
-  calculaDiasUteis(dataInicial: string, dataFinal: string) {
-    // Parse as datas para objetos Date
-    const inicio = parseISO(dataInicial);
-    const fim = parseISO(dataFinal);
-    const feriados = this.feriadosNacionaisCarregados;
-    const margemErro = 1000 * 60 * 60; // 1 hora em milissegundos
+  // NOVA IMPLEMENTAÇÃO DO SLA DE ATENDIMENTO
+  private readonly SHIFT_START_MIN = 8 * 60; // 08:00
+  private readonly SHIFT_END_MIN = 18 * 60; // 18:00
+  private readonly SHIFT_LEN_MIN = (18 - 8) * 60; // 600
 
-    // Inicializa o contador de dias úteis
-    let diasUteis = 0;
-
-    if(feriados) {
-      // Itera sobre cada dia entre as datas
-      for (let dataAtual = inicio; dataAtual.getTime() <= fim.getTime(); dataAtual.setDate(dataAtual.getDate() + 1)) {
-        // Verifica se o dia não é fim de semana e não é feriado
-        if (!isWeekend(dataAtual) && !this.feriadosNacionaisCarregados.some(feriado => isSameDay(dataAtual, feriado))) {
-          diasUteis++;
-        }
-      }
-
-      return diasUteis;
-    }
-
-    return "Feriados não carregados";
+  private minutosDoDia(data: Date): number {
+    return data.getHours() * 60 + data.getMinutes() + data.getSeconds() / 60;
   }
 
-  // Método para validar o horário de atendimento, padronizando para 08h inicio e 18h fim
-  validaHorarioDeAtendimento(inicio: Date, fim: Date) {
-
-    if(isBefore(inicio, setHours(startOfDay(inicio), 8))) {
-      inicio = startOfDay(inicio);
-      inicio = setHours(inicio, 8);
-    };
-
-    if(isAfter(inicio, setHours(startOfDay(inicio), 18))) {
-      inicio = startOfDay(inicio);
-      inicio = setHours(inicio, 18);
-    };
-
-    if(isBefore(fim, setHours(startOfDay(fim), 8))) {
-      fim = startOfDay(fim);
-      fim = setHours(fim, 8);
-    };
-
-    if(isAfter(fim, setHours(startOfDay(fim), 18))) {
-      fim = startOfDay(fim);
-      fim = setHours(fim, 18);
-    };
-
-    return {
-      inicioReal: inicio,
-      fimReal: fim
-    }
+  private limitadorHorarioDeTrabalho(mins: number): number {
+    return Math.min(Math.max(mins, this.SHIFT_START_MIN), this.SHIFT_END_MIN);
   }
 
-  // Método para cálculo do SLA de Atendimento - *** VALIDAR SE A FUNÇÃO DO NOVO SLA ESTÁ CORRETA, SE ESTIVER, APAGAR ESSA FUNÇÃO ***
-  calculaSlaDeAtendimento(dataInicial: string, dataFinal: string): number {
-    const inicio = parseISO(dataInicial);
-    const fim = parseISO(dataFinal);
-    const { inicioReal, fimReal } = this.validaHorarioDeAtendimento(inicio, fim);
-    
-    const diasUteis = this.calculaDiasUteis(dataInicial, dataFinal); // formula DIATRABALHOTOTAL
+  private diasDeTrabalho(inicio: Date, fim: Date, considerarFeriados = true): number {
+    let diaInicial = startOfDay(inicio);
+    let diaFinal = startOfDay(fim);
 
+    if(diaFinal < diaInicial) [diaInicial, diaFinal] = [diaFinal, diaInicial];
 
-    if(typeof(diasUteis) === "number") {
-      const minutosUteis = diasUteis * 10 * 60; // 10 horas trabalhadas por dia em minutos
-      const diferencaEntreAsDatasEmMinutos: number = differenceInMinutes(fimReal, inicioReal);
-      const diferencaEntreAsDatasEmMinutosTrabalhados = diferencaEntreAsDatasEmMinutos >= 1440 ? ((diferencaEntreAsDatasEmMinutos / 60) / 24) * 10 * 60 : diferencaEntreAsDatasEmMinutos;
+    let count = 0;
 
-      if(!dataInicial) {
-        console.log("Não tenho data inicial!");
-        return 0;
-      }
+    for(let dia = new Date(diaInicial); dia <= diaFinal; dia.setDate(dia.getDate() + 1)) {
+      const finalDeSemana = isWeekend(dia);
 
-      if(!dataFinal) {
-        console.log("Não agendado");
-        return null;
-      }
+      const feriado = considerarFeriados && this.feriadosNacionaisCarregados?.some((f: Date) => isSameDay(dia, f));
 
-      if(minutosUteis > 600){
-        // Validar o retorno do SLA em minutos, caso seja necessário usar a variável "diferencaEntreAsDatasEmMinutosTrabalhados"
-        let resultado = ((minutosUteis - diferencaEntreAsDatasEmMinutosTrabalhados) / (24 * 60)).toFixed(2);
-        return Number(resultado);
-      } else {
-        return diferencaEntreAsDatasEmMinutosTrabalhados;
-      }
-    } else {
-      return null;
+      if(!finalDeSemana && !feriado) count++;
     }
+
+    return count;
+  }
+
+  calculaSlaDeAtendimento(dataInicialISO: string, dataFinalISO: string): number | null {
+    if(!dataInicialISO) return 0;
+    if(!dataFinalISO) return null; // "Não agendado" na planilha
+
+    const inicio = parseISO(dataInicialISO);
+    const fim = parseISO(dataFinalISO);
+
+    const horasIniciaisLimitadas = this.limitadorHorarioDeTrabalho(this.minutosDoDia(inicio));
+    const horasFinaisLimitadas = this.limitadorHorarioDeTrabalho(this.minutosDoDia(fim));
+
+    const diferencaHorasLimitadas = horasFinaisLimitadas - horasIniciaisLimitadas;
+
+    const diasUteis = this.diasDeTrabalho(inicio, fim, false); // false desconsidera feriados
+
+    const diasUteisEmMinutos = diasUteis * this.SHIFT_LEN_MIN;
+
+    const slaEmMinutos = diasUteisEmMinutos - diferencaHorasLimitadas;
+    const slaEmDias = slaEmMinutos / (24 * 60);
+
+    return Number(slaEmDias.toFixed(2));
   }
   
   // Método para cálculo do ciclo de venda
