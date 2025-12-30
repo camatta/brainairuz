@@ -50,6 +50,16 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
+            <!-- Filtrar por BU -->
+            <div class="filter-commissions d-flex flex-column">
+                <label for="bu" class="mb-2">Filtrar por BU</label>
+                <select (change)="submitFormFilter()" id="bu" name="bu" class="h-100">
+                    <option selected value="{{ undefined }}">Selecione</option>
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="Marketing">Marketing</option>
+                </select>
+            </div>
+
             <!-- Filtrar por ano -->
             <div class="filter-commissions d-flex flex-column">
                 <label for="years" class="mb-2">Filtrar por Ano</label>
@@ -252,19 +262,19 @@
     </div>
 
     <!-- TERMO BUSCADO -->
-    <form class="termo-buscado" *ngIf="termoDaBusca !== ''" (submit)="limparTermoDaBusca()">
-        <span>Resultados para "<strong>{{ termoDaBusca }}</strong>"</span>
+    <form class="termo-buscado" *ngIf="termoDaBuscaSig() !== ''" (submit)="limparTermoDaBusca()">
+        <span>Resultados para "<strong>{{ termoDaBuscaSig() }}</strong>"</span>
         <button type="submit">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </form>
 
     <!-- COLUNAS DA TABELA -->
-    <div *ngIf="loading" class="w-100">
+    <div *ngIf="loadingSig()" class="w-100">
         <p class="fs-6 mb-0 text-center">Carregando...</p>
     </div>
 
-    <div *ngIf="!loading" class="mat-elevation-z8">
+    <div *ngIf="!loadingSig()" class="mat-elevation-z8">
         <div *ngIf="tabela.data.length <= 0" class="w-100">
             <p class="fs-6 mb-0 text-center">Nenhum dado encontrado...</p>
         </div>

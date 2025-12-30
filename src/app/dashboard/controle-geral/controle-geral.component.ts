@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, signal, effect, Injector, runInInjectionContext } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -27,7 +27,7 @@ interface EditarOportunidade extends Oportunidade {
   imports: [ SharedModule ]
 })
 
-export class ControleGeralComponent implements OnInit {
+export class ControleGeralComponent implements OnInit, AfterViewInit {
   msgActions: string;
   tabela: MatTableDataSource<Oportunidade> = new MatTableDataSource<Oportunidade>([]);
   displayedColumns: string[] = [
@@ -69,6 +69,14 @@ export class ControleGeralComponent implements OnInit {
   mediaDoTicket: number = 0;
   mediaDoIcp: number = 0;
 
+  // sinais do store/service (read-only)
+  readonly oportunidadesSig = this.oportunidades.oportunidades;
+  readonly loadingSig = this.oportunidades.loading;
+  readonly errorSig = this.oportunidades.error;
+
+  // busca local (client-side)
+  readonly termoDaBuscaSig = signal<string>('');
+
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
@@ -77,18 +85,39 @@ export class ControleGeralComponent implements OnInit {
     private users: UserService,
     private _liveAnnouncer: LiveAnnouncer,
     private formBuilder: FormBuilder,
-    public helper: Helper
+    public helper: Helper,
+    private injector: Injector
   ){}
 
   ngOnInit(): void {
     // Carrega as oportunidades do banco
-    this.loadOportunidades({ano: this.currentYear.toString()});
+    this.oportunidades.load({ ano: this.currentYear.toString() });
 
     // Carrega todos os vendedores
     this.loadVendedores();
 
     // Carrega os feriados nacionais
     this.carregarFeriados(this.currentYear);
+
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const lista = this.oportunidadesSig();
+        const termo = this.termoDaBuscaSig().trim().toLocaleLowerCase();
+
+        const listaFiltrada = termo ? lista.filter(oportunidade => (oportunidade.suspect ?? "").toLowerCase().includes(termo)) : lista;
+
+        this.tabela.data = listaFiltrada;
+
+        this.calculaMediaDoCicloDeVendasEProjetosVendidos(this.tabela);
+        this.calculaMediaDoSlaAtendimento(this.tabela);
+        this.calculaTicketMedio(this.tabela);
+        this.calculaMediaIcp(this.tabela);
+      });
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.tabela.sort = this.sort;
   }
 
   // Announce the change in sort state for assistive technology.
@@ -284,7 +313,7 @@ export class ControleGeralComponent implements OnInit {
       }
     });
 
-    this.loadOportunidades(filters);
+    this.oportunidades.load(filters);
   }
 
   // Carrega todos os vendedores
@@ -301,39 +330,6 @@ export class ControleGeralComponent implements OnInit {
         console.error("Erro ao carregar time comercial: ", err);
       }
     )
-  }
-
-  // Carrega as oportunidades lançadas no banco e insere na tabela
-  async loadOportunidades(filters?: Partial<Oportunidade>) {
-    this.loading = true;
-
-    this.oportunidades.getOportunidades(filters).subscribe(
-      async (oportunidades) => {
-        // DEFINE OS ITENS DA TABELA
-        this.tabela = new MatTableDataSource<Oportunidade>(oportunidades);
-        this.tabela.sort = this.sort;
-  
-        // Chama a função para calcular o ciclo de vendas e projetos vendidos (já existente)
-        this.calculaMediaDoCicloDeVendasEProjetosVendidos(this.tabela);
-
-        // Chama a função para calcular a média do SLA
-        this.calculaMediaDoSlaAtendimento(this.tabela);
-
-        // Chama a função para calcular o ticket médio
-        this.calculaTicketMedio(this.tabela);
-
-        // Chama a função para calcular a média do ICP
-        this.calculaMediaIcp(this.tabela);
-
-        // Retira o loading
-        this.loading = false;
-      }, async (error) => {
-        console.error(error);
-
-        // Retira o loading
-        this.loading = false;
-      }
-    );
   }
   
 
@@ -395,27 +391,16 @@ export class ControleGeralComponent implements OnInit {
   }
 
   // Função para fazer a busca dentro do input "Produto vendido"
-  termoDaBusca: string = "";
   filtrarBarraBusca() {
-    let inputText: HTMLInputElement = document.querySelector("#inputBusca");
-    this.termoDaBusca = inputText.value;
-    
-    this.tabela.filter = this.termoDaBusca.trim().toLowerCase();
-    
-    this.calculaMediaDoCicloDeVendasEProjetosVendidos(this.tabela);
-
-    // Função de filtragem personalizada
-    this.tabela.filterPredicate = (data: Oportunidade, filter: string) => {
-      return data.suspect.toLowerCase().includes(filter);
-    };
+    const inputText = document.querySelector("#inputBusca") as HTMLInputElement;
+    this.termoDaBuscaSig.set(inputText.value || "");
 
     inputText.value = "";
     inputText.blur();
   }
 
   limparTermoDaBusca() {
-    this.termoDaBusca = "";
-    this.filtrarBarraBusca();
+    this.termoDaBuscaSig.set("");
   }
 
   // Método para calcular a média de Ciclo de Vendas
@@ -754,8 +739,7 @@ export class ControleGeralComponent implements OnInit {
     this.oportunidades.updateOportunidade(id, editarOportunindade).subscribe(
       async (res) => {
         console.log(res, editarOportunindade);
-        await this.loadOportunidades();
-        this.tabela._updateChangeSubscription();
+        this.oportunidades.load();
         this.showMessageAction("Oportunidade editada com sucesso");
         this.closeModalEditarOportunidade();
       }, async (error) => {
