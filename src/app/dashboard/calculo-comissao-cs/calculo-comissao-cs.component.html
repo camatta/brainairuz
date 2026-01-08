@@ -3,7 +3,8 @@
   <div id="alert-actions" class="toast text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body"> {{ msgActions }} </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+        aria-label="Close"></button>
     </div>
   </div>
 
@@ -40,18 +41,16 @@
       <div class="bg-nairuzPrimary position-relative d-flex flex-column">
         <label for="fatorMultiplicador" class="form-label">Fator Multiplicador</label>
         <form [formGroup]="formFatorMultiplicador" id="formFatorMultiplicador" class="d-flex justify-content-center">
-            <input
-              type="number"
-              formControlName="fatorMultiplicador"
-              class="inputFatorMultiplicador w-50"
-              id="fatorMultiplicador"
-            />
-            <button *ngIf="mostrarBotaoEditar && userPermission()" (click)="editarFator()" mat-icon-button aria-label="Editar Fator" class="position-absolute p-0">
-              <mat-icon class="editar" aria-label="Editar fatorMultiplicador">edit</mat-icon>
-            </button>
-            <button *ngIf="mostrarBotaoEnviar && userPermission()" (click)="enviarFator()" mat-icon-button aria-label="Enviar Fator" class="position-absolute p-0" type="submit">
-              <mat-icon class="editar" aria-label="Editar fatorMultiplicador">check</mat-icon>
-            </button>
+          <input type="number" formControlName="fatorMultiplicador" class="inputFatorMultiplicador w-50"
+            id="fatorMultiplicador" />
+          <button *ngIf="mostrarBotaoEditar && userPermission()" (click)="editarFator()" mat-icon-button
+            aria-label="Editar Fator" class="position-absolute p-0">
+            <mat-icon class="editar" aria-label="Editar fatorMultiplicador">edit</mat-icon>
+          </button>
+          <button *ngIf="mostrarBotaoEnviar && userPermission()" (click)="enviarFator()" mat-icon-button
+            aria-label="Enviar Fator" class="position-absolute p-0" type="submit">
+            <mat-icon class="editar" aria-label="Editar fatorMultiplicador">check</mat-icon>
+          </button>
         </form>
       </div>
     </div>
@@ -102,22 +101,25 @@
       <div class="bg-nairuzPrimary">
         <label for="Valor Comissão" class="form-label">Valor Comissão</label>
         <mat-spinner *ngIf="onLoadComissions"></mat-spinner>
-        <p *ngIf="!onLoadComissions" class="fs-6">{{ valorComissao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+        <p *ngIf="!onLoadComissions" class="fs-6">{{ valorComissao.toLocaleString('pt-BR', { style: 'currency',
+          currency: 'BRL' }) }}</p>
       </div>
     </div>
   </div>
 
   <!-- AÇÕES DO USUÁRIO -->
   <div class="topo d-flex justify-content-between mt-5 mb-2">
-    <button button type="button" class="btn btn-addVenda" (click)="openModalNovaVenda()" data-bs-dismiss="modal">Cadastrar Venda</button>
+    <button button type="button" class="btn btn-addVenda" (click)="openModalNovaVenda()"
+      data-bs-dismiss="modal">Cadastrar Venda</button>
 
     <form id="formFilters" class="d-flex gap-5">
       <div *ngIf="userPermission()" class="filter-commissions">
         <label for="vendedor" class="me-3">Filtrar por Vendedor:</label>
         <select (change)="submitFormFilter()" id="vendedor" name="vendedor" class="select-nairuz h-100">
           <option selected value="{{ undefined }}">Selecione</option>
-          <option value="Kyrsten Júnior">Kyrsten Júnior</option>
           <option value="Dev Nairuz">Dev Nairuz</option>
+          <option value="Kyrsten Júnior">Kyrsten Júnior</option>
+
           <option *ngFor="let vendedor of vendedores" [value]="vendedor">
             {{ vendedor }}
           </option>
@@ -154,7 +156,8 @@
   <!-- COLUNAS DA TABELA -->
   <div class="mat-elevation-z8">
     <div class="sectionTable">
-      <table id="tabela-valores" mat-table [dataSource]="tabelaVendas" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+      <table id="tabela-valores" mat-table [dataSource]="tabelaVendas" matSort
+        (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
         <!-- Cliente Column -->
         <ng-container matColumnDef="cliente" sticky>
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cliente">
@@ -256,7 +259,8 @@
           </th>
           <td class="acoes" mat-cell *matCellDef="let element">
             <mat-icon class="editar" aria-label="Editar produto" (click)="openModalEditarVenda(element)">edit</mat-icon>
-            <mat-icon class="delete" aria-label="Remover produto" (click)="openModalDeletarVenda(element)">delete</mat-icon>
+            <mat-icon class="delete" aria-label="Remover produto"
+              (click)="openModalDeletarVenda(element)">delete</mat-icon>
           </td>
         </ng-container>
 
@@ -265,10 +269,8 @@
       </table>
     </div>
 
-    <mat-paginator
-      [pageSizeOptions]="[10, 20, 30]"
-      showFirstLastButtons aria-label="Select page of periodic elements"
-    ></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+      aria-label="Select page of periodic elements"></mat-paginator>
   </div>
 
   <!-- MODAIS -->
@@ -280,7 +282,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title text-black fs-5" id="modalNovaVenda">Nova Venda</h2>
-          <button type="button" (click)="closeModalNovaVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" (click)="closeModalNovaVenda()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
         </div>
 
         <form id="formCalculoComissao" [formGroup]="formNovaVenda" class="container">
@@ -313,83 +316,67 @@
             <label for="dataVenda" class="form-label">Data da Venda:</label>
             <input type="date" id="dataVenda" class="form-control col-12" formControlName="dataVenda" required />
           </div>
-        
+
           <div class="col-12 mb-3">
             <label for="nomeCliente" class="form-label">Nome do cliente:</label>
             <input type="text" id="nomeCliente" class="form-control col-12" formControlName="nomeCliente" required />
           </div>
-        
+
           <div class="col-12 mb-3">
             <div class="d-flex gap-3">
               <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
-              <button (click)="redirectToMixProdutos()" class="btn btn-primary btn-mix-produto mb-2">Gerenciar mix de produtos</button>
+              <button (click)="redirectToMixProdutos()" class="btn btn-primary btn-mix-produto mb-2">Gerenciar mix de
+                produtos</button>
             </div>
-            <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
+            <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos"
+              class="selectForm form-select">
               <option *ngFor="let item of mixProdutos" value="{{ item.mixProduto }}">{{ item.mixProduto }}</option>
             </select>
           </div>
-        
+
           <div class="col-12 mb-3">
             <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
             <mat-form-field class="selectForm form-control">
-              <mat-select (valueChange)="defineMixProdutosValidate()" formControlName="produtoVendido" id="produtoVendido">
+              <mat-select (valueChange)="defineMixProdutosValidate()" formControlName="produtoVendido"
+                id="produtoVendido">
                 <mat-form-field class="form-search">
                   <input matInput (keyup)="applyFilter($event)" placeholder="O que está procurando?" #input>
                 </mat-form-field>
-                <mat-option (click)="setInputsValoresNovaVenda($event)" *ngFor="let item of produtosFiltrados" [value]="item.produto">
+                <mat-option (click)="setInputsValoresNovaVenda($event)" *ngFor="let item of produtosFiltrados"
+                  [value]="item.produto">
                   {{ item.produto }} - {{ item.tecnologia_servico }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-      
+
           <div class="col-12 mb-3">
-            <label *ngIf="formNovaVenda.get('mixProdutos').value !== 'Marketing'" for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
-            <label *ngIf="formNovaVenda.get('mixProdutos').value === 'Marketing'" class="form-label">Número de meses:</label>
-            <input
-              type="number"
-              formControlName="multiplicador"
-              step="1"
-              min="1"
-              id="multiplicador"
-              class="form-control form-floating col-12"
-              required
-            />
+            <label *ngIf="formNovaVenda.get('mixProdutos').value !== 'Marketing'" for="multiplicador"
+              class="form-label">Quantidade de Produto ou MRR:</label>
+            <label *ngIf="formNovaVenda.get('mixProdutos').value === 'Marketing'" class="form-label">Número de
+              meses:</label>
+            <input type="number" formControlName="multiplicador" step="1" min="1" id="multiplicador"
+              class="form-control form-floating col-12" required />
           </div>
-        
+
           <div class="col-12 mb-3">
             <label for="markup-novo" class="form-label">Qualidade = Markup:</label>
-            <input
-              type="number"
-              formControlName="markup"
-              step="0.01"
-              value="{{ minMarkup }}"
-              class="form-control form-floating col-12"
-              id="markup-novo"
-              (change)="verifyValueMarkup($event)"
-              required
-            />
+            <input type="number" formControlName="markup" step="0.01" value="{{ minMarkup }}"
+              class="form-control form-floating col-12" id="markup-novo" (change)="verifyValueMarkup($event)"
+              required />
             <div *ngIf="minMarkup && maxMarkup" class="small text-danger my-2">
               A faixa de markup para este produto é de {{ minMarkup }} a {{ maxMarkup }}
             </div>
           </div>
-        
+
           <div *ngIf="!mixProdutosValidate" class="col-12 mb-3">
             <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
-            <input
-              type="text"
-              prefix="R$ "
-              mask="separator.2"
-              thousandSeparator="."
-              decimalMarker=","
-              class="form-control"
-              id="vendaAvulsa"
-              formControlName="vendaAvulsa"
-              required
-            >
+            <input type="text" prefix="R$ " mask="separator.2" thousandSeparator="." decimalMarker=","
+              class="form-control" id="vendaAvulsa" formControlName="vendaAvulsa" required>
           </div>
 
-          <button type="submit" (click)="onSubmitNovaVenda()" [disabled]="!formNovaVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
+          <button type="submit" (click)="onSubmitNovaVenda()"
+            [disabled]="!formNovaVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
             <mat-spinner class="mx-auto" *ngIf="onLoadComission"></mat-spinner>
             <span *ngIf="!onLoadComission" class="fs-6">Inserir</span>
           </button>
@@ -404,11 +391,12 @@
       <div class="modal-content">
         <div class="modal-header mb-5">
           <h2 class="modal-title text-black fs-5" id="modalEditarVenda">Editar Venda</h2>
-          <button type="button" (click)="closeModalEditarVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" (click)="closeModalEditarVenda()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
         </div>
 
         <form id="formCalculoComissao" [formGroup]="formEditarVenda" class="container">
-          <div  *ngIf="userPermission()" class="col-12 d-flex flex-column align-items-start mb-3">
+          <div *ngIf="userPermission()" class="col-12 d-flex flex-column align-items-start mb-3">
             <label class="form-label">Status:</label>
 
             <select formControlName="status" id="status" class="selectForm form-select">
@@ -428,17 +416,19 @@
             <label for="nomeCliente" class="form-label">Nome do cliente:</label>
             <input type="text" id="nomeCliente" class="form-control col-12" formControlName="nomeCliente" required />
           </div>
-        
+
           <div class="col-12 mb-3">
             <div class="d-flex gap-3">
               <label for="mixProdutos" class="form-label">Mix de Produtos:</label>
-              <button (click)="redirectToMixProdutos()" class="btn btn-primary btn-mix-produto mb-2">Gerenciar mix de produtos</button>
+              <button (click)="redirectToMixProdutos()" class="btn btn-primary btn-mix-produto mb-2">Gerenciar mix de
+                produtos</button>
             </div>
-            <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos" class="selectForm form-select">
+            <select (change)="defineMixProdutosValidate()" formControlName="mixProdutos" id="mixProdutos"
+              class="selectForm form-select">
               <option *ngFor="let item of mixProdutos" value="{{ item.mixProduto }}">{{ item.mixProduto }}</option>
             </select>
           </div>
-        
+
           <div class="col-12 mb-3">
             <label for="produtoVendido" class="form-label">Selecione o produto vendido:</label>
             <mat-form-field class="selectForm form-control">
@@ -446,60 +436,41 @@
                 <mat-form-field class="form-search">
                   <input matInput (keyup)="applyFilter($event)" placeholder="O que está procurando?" #input>
                 </mat-form-field>
-                <mat-option (click)="setInputsValoresEditarVenda($event)" *ngFor="let item of produtosFiltrados" [value]="item.produto">
+                <mat-option (click)="setInputsValoresEditarVenda($event)" *ngFor="let item of produtosFiltrados"
+                  [value]="item.produto">
                   {{ item.produto }} - {{ item.tecnologia_servico }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-      
+
           <div class="col-12 mb-3">
-            <label *ngIf="formEditarVenda.get('mixProdutos').value !== 'Marketing'" for="multiplicador" class="form-label">Quantidade de Produto ou MRR:</label>
-            <label *ngIf="formEditarVenda.get('mixProdutos').value === 'Marketing'" class="form-label">Número de meses:</label>
-            <input
-              type="number"
-              formControlName="multiplicador"
-              step="1"
-              min="1"
-              id="multiplicador"
-              class="form-control form-floating col-12"
-              required
-            />
+            <label *ngIf="formEditarVenda.get('mixProdutos').value !== 'Marketing'" for="multiplicador"
+              class="form-label">Quantidade de Produto ou MRR:</label>
+            <label *ngIf="formEditarVenda.get('mixProdutos').value === 'Marketing'" class="form-label">Número de
+              meses:</label>
+            <input type="number" formControlName="multiplicador" step="1" min="1" id="multiplicador"
+              class="form-control form-floating col-12" required />
           </div>
-        
+
           <div class="col-12 mb-3">
             <label for="markup-editar" class="form-label">Qualidade = Markup:</label>
-            <input
-              type="number"
-              formControlName="markup"
-              step="0.01"
-              class="form-control form-floating col-12"
-              id="markup-editar"
-              (change)="verifyValueMarkup($event)"
-              required
-            />
+            <input type="number" formControlName="markup" step="0.01" class="form-control form-floating col-12"
+              id="markup-editar" (change)="verifyValueMarkup($event)" required />
             <div *ngIf="minMarkup && maxMarkup" class="small text-danger my-2">
               A faixa de markup para este produto é de {{ minMarkup }} a {{ maxMarkup }}
             </div>
           </div>
-        
+
 
           <div *ngIf="!mixProdutosValidate" class="col-12 mb-3">
             <label for="vendaAvulsa" class="form-label">Venda Avulsa:</label>
-            <input
-              type="text"
-              prefix="R$ "
-              mask="separator.2"
-              thousandSeparator="."
-              decimalMarker=","
-              class="form-control"
-              id="vendaAvulsa"
-              formControlName="vendaAvulsa"
-              required
-            >
+            <input type="text" prefix="R$ " mask="separator.2" thousandSeparator="." decimalMarker=","
+              class="form-control" id="vendaAvulsa" formControlName="vendaAvulsa" required>
           </div>
 
-          <button type="submit" (click)="onSubmitEditarVenda()" [disabled]="!formEditarVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
+          <button type="submit" (click)="onSubmitEditarVenda()"
+            [disabled]="!formEditarVenda.valid || !controlMarkupInputForm" class="col-12 btn-calcular">
             <mat-spinner class="mx-auto" *ngIf="onLoadComission"></mat-spinner>
             <span *ngIf="!onLoadComission" class="fs-6">Editar</span>
           </button>
@@ -514,13 +485,15 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title text-black fs-5" id="modalDeletarVenda">Excluir Venda</h2>
-          <button type="button" (click)="closeModalDeletarVenda()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" (click)="closeModalDeletarVenda()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
         </div>
         <form [formGroup]="formDeletarVenda" (ngSubmit)="onSubmitDeletarVenda()">
           <div class="modal-body">
             <div class="">
               <div class="form-label mt-1">
-                <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> a venda: <strong class="text-dark-emphasis">{{ formDeletarVenda.get('cliente').value }}</strong></p>
+                <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> a venda: <strong
+                    class="text-dark-emphasis">{{ formDeletarVenda.get('cliente').value }}</strong></p>
               </div>
             </div>
           </div>

@@ -1,295 +1,280 @@
 <main class="mb-5">
-    <!-- TOAST DE RETORNO DAS REQUISIÇÕES (CRIAR, EDITAR OU DELETAR) -->
-    <div id="alert-actions" class="toast text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="d-flex">
-        <div class="toast-body"> {{ msgActions }} </div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  <!-- TOAST DE RETORNO DAS REQUISIÇÕES (CRIAR, EDITAR OU DELETAR) -->
+  <div id="alert-actions" class="toast text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body"> {{ msgActions }} </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+  </div>
+
+  <h1 class="titlePage">Tabela de Metas</h1>
+
+  <!-- AÇÕES DO USUÁRIO -->
+  <div class="topo d-flex justify-content-between mt-5 mb-4">
+    <button button type="button" class="btn btn-addVenda" *ngIf="userPermission()" (click)="openModalNovaMeta()"
+      data-bs-dismiss="modal">Cadastrar Meta</button>
+
+    <form class="d-flex gap-5">
+      <div *ngIf="userPermission()" class="filter-commissions">
+        <label for="seller" class="me-3">Filtrar por Vendedor:</label>
+        <select (change)="applyFilter($event.target)" id="filtroVendedor" class="select-nairuz h-100">
+          <option value="">Todos</option>
+          <option value="Dev Nairuz">Dev Nairuz</option>
+          <!-- <option *ngFor="let vendedor of vendedores; let i = index" [value]="vendedor" [selected]="i === 0"> -->
+          <option *ngFor="let vendedor of vendedores; let i = index" [value]="vendedor">
+            {{ vendedor }}
+          </option>
+        </select>
+      </div>
+      <div class="filter-commissions">
+        <label for="filtroMes" class="me-3">Filtrar por mês:</label>
+        <select (change)="applyFilter($event.target)" id="filtroMes" class="select-nairuz h-100">
+          <option [selected]="true" value="">Todos</option>
+          <option value="Janeiro">Janeiro</option>
+          <option value="Fevereiro">Fevereiro</option>
+          <option value="Março">Março</option>
+          <option value="Abril">Abril</option>
+          <option value="Maio">Maio</option>
+          <option value="Junho">Junho</option>
+          <option value="Julho">Julho</option>
+          <option value="Agosto">Agosto</option>
+          <option value="Setembro">Setembro</option>
+          <option value="Outubro">Outubro</option>
+          <option value="Novembro">Novembro</option>
+          <option value="Dezembro">Dezembro</option>
+        </select>
+      </div>
+      <div class="filter-commissions">
+        <label for="filtroAno" class="me-3">Filtrar por Ano:</label>
+        <select (change)="applyFilter($event.target)" id="filtroAno" class="select-nairuz h-100">
+          <option value="">Todos</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <!-- COLUNAS DA TABELA -->
+  <div class="mat-elevation-z8">
+    <!-- LOADING -->
+    <div *ngIf="onLoad" class="d-flex align-items-center justify-content-center p-4">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="!onLoad" class="sectionTable">
+      <table id="tabela-valores" mat-table [dataSource]="tabelaMetas" class="mat-elevation-z8">
+        <!-- Mês Column -->
+        <ng-container matColumnDef="mes">
+          <th mat-header-cell *matHeaderCellDef>Mês</th>
+          <td mat-cell *matCellDef="let element"> {{ element.mes }} </td>
+          <td mat-footer-cell *matFooterCellDef class="texto-soma">Total</td>
+        </ng-container>
+
+        <!-- Empresa Column -->
+        <ng-container matColumnDef="metaEmpresa">
+          <th mat-header-cell *matHeaderCellDef>Empresa</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.metaEmpresa | currency: "BRL" }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="texto-soma">{{ totalAnualEmpresa | currency: 'BRL' }}</td>
+        </ng-container>
+
+        <!-- Realizado Empresa Column -->
+        <ng-container matColumnDef="metaRealizadaEmpresa">
+          <th mat-header-cell *matHeaderCellDef>Realizado Empresa</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.metaEmpresaRealizada | currency: "BRL" }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="texto-soma">{{ totalAnualEmpresaRealizado | currency: 'BRL' }}
+          </td>
+        </ng-container>
+
+        <!-- Individual Column -->
+        <ng-container matColumnDef="metaIndividual">
+          <th mat-header-cell *matHeaderCellDef>Individual</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.metaIndividual | currency: "BRL" }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="texto-soma">{{ totalAnualIndividual | currency: 'BRL' }}</td>
+        </ng-container>
+
+        <!-- Realizado Individual Column -->
+        <ng-container matColumnDef="metaRealizadaIndividual">
+          <th mat-header-cell *matHeaderCellDef>Realizado Individual</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.metaIndividualRealizada | currency: "BRL" }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="texto-soma">{{ totalAnualIndividualRealizado | currency: 'BRL' }}
+          </td>
+        </ng-container>
+
+        <!-- Vendedor Column -->
+        <ng-container matColumnDef="vendedor">
+          <th mat-header-cell *matHeaderCellDef>Vendedor</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.vendedor }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="texto-soma"></td>
+        </ng-container>
+
+        <!-- Ações Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td class="acoes" mat-cell *matCellDef="let element">
+            <mat-icon *ngIf="element.vendedor" class="editar" aria-label="Editar produto"
+              (click)="openModalEditarMeta(element)">edit</mat-icon>
+            <mat-icon *ngIf="element.vendedor" class="delete" aria-label="Remover produto"
+              (click)="openModalDeletarMeta(element)">delete</mat-icon>
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="texto-soma"></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="bg-modal"></div>
+
+  <!-- Modal para NOVA Meta -->
+  <div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="modalNovaMeta" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header mb-5">
+          <h2 class="modal-title text-black fs-5" id="modalNovaMeta">Nova Meta:</h2>
+          <button type="button" (click)="closeModalNovaMeta()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+
+        <form id="formNovaMeta" *ngIf="userPermission()" [formGroup]="formNovaMeta" class="container actions-form">
+          <div class="col-12 mb-3">
+            <label for="vendedor" class="form-label">Vendedor:</label>
+            <select id="vendedor" class="selectForm form-select" formControlName="vendedor">
+              <option value="Dev Nairuz">Dev Nairuz</option>
+              <option value="Kyrsten Júnior">Kyrsten Júnior</option>
+              <option *ngFor="let vendedor of vendedores" [value]="vendedor">
+                {{ vendedor }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="ano" class="form-label">Ano:</label>
+            <input type="number" id="ano" step="1" value="{{ formNovaMeta.get('ano').value }}"
+              class="form-control col-12"
+              [class.is-invalid]="formNovaMeta.get('ano')?.errors?.['min'] && formNovaMeta.get('ano')?.touched"
+              formControlName="ano" required />
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="mes" class="form-label">Mês:</label>
+            <select id="mes" class="selectForm form-select" formControlName="mes">
+              <option *ngFor="let mes of meses" [value]="mes"> {{ mes }} </option>
+            </select>
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="metaIndividual" class="form-label">Meta Individual:</label>
+            <input type="text" prefix="R$ " mask="separator.2" thousandSeparator="." decimalMarker=","
+              id="metaIndividual" class="form-control col-12"
+              [class.is-invalid]="formNovaMeta.get('metaIndividual')?.errors?.['min'] && formNovaMeta.get('metaIndividual')?.touched"
+              formControlName="metaIndividual" required />
+          </div>
+
+          <button type="submit" (click)="submitNovaMeta()" [disabled]="!formNovaMeta.valid"
+            class="col-12 btn-calcular">Inserir</button>
+        </form>
       </div>
     </div>
-  
-    <h1 class="titlePage">Tabela de Metas</h1>
-  
-    <!-- AÇÕES DO USUÁRIO -->
-    <div class="topo d-flex justify-content-between mt-5 mb-4">
-      <button button type="button" class="btn btn-addVenda" *ngIf="userPermission()" (click)="openModalNovaMeta()" data-bs-dismiss="modal">Cadastrar Meta</button>
-  
-      <form class="d-flex gap-5">
-        <div *ngIf="userPermission()" class="filter-commissions">
-          <label for="seller" class="me-3">Filtrar por Vendedor:</label>
-          <select (change)="applyFilter($event.target)" id="filtroVendedor" class="select-nairuz h-100">
-            <option value="">Todos</option>
-            <option value="Dev Nairuz">Dev Nairuz</option> 
-            <!-- <option *ngFor="let vendedor of vendedores; let i = index" [value]="vendedor" [selected]="i === 0"> -->
-            <option *ngFor="let vendedor of vendedores; let i = index" [value]="vendedor">
-              {{ vendedor }}
-            </option>
-          </select>
-        </div>
-        <div class="filter-commissions">
-          <label for="filtroMes" class="me-3">Filtrar por mês:</label>
-          <select (change)="applyFilter($event.target)" id="filtroMes" class="select-nairuz h-100">
-            <option [selected]="true" value="">Todos</option>
-            <option value="Janeiro">Janeiro</option>
-            <option value="Fevereiro">Fevereiro</option>
-            <option value="Março">Março</option>
-            <option value="Abril">Abril</option>
-            <option value="Maio">Maio</option>
-            <option value="Junho">Junho</option>
-            <option value="Julho">Julho</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Setembro">Setembro</option>
-            <option value="Outubro">Outubro</option>
-            <option value="Novembro">Novembro</option>
-            <option value="Dezembro">Dezembro</option>
-          </select>
-        </div>
-        <div class="filter-commissions">
-          <label for="filtroAno" class="me-3">Filtrar por Ano:</label>
-          <select (change)="applyFilter($event.target)" id="filtroAno" class="select-nairuz h-100">
-            <option value="">Todos</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-          </select>
-        </div>
-      </form>
-    </div>
-  
-    <!-- COLUNAS DA TABELA -->
-    <div class="mat-elevation-z8">
-        <!-- LOADING -->
-         <div *ngIf="onLoad" class="d-flex align-items-center justify-content-center p-4">
-           <mat-spinner></mat-spinner>
-         </div>
-        <div *ngIf="!onLoad" class="sectionTable">
-          <table id="tabela-valores" mat-table [dataSource]="tabelaMetas" class="mat-elevation-z8">
-              <!-- Mês Column -->
-              <ng-container matColumnDef="mes">
-                  <th mat-header-cell *matHeaderCellDef>Mês</th>
-                  <td mat-cell *matCellDef="let element"> {{ element.mes }} </td>
-                  <td mat-footer-cell *matFooterCellDef class="texto-soma">Total</td>
-              </ng-container>
-      
-              <!-- Empresa Column -->
-              <ng-container matColumnDef="metaEmpresa">
-                  <th mat-header-cell *matHeaderCellDef>Empresa</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.metaEmpresa | currency: "BRL" }}
-                  </td>
-                  <td mat-footer-cell *matFooterCellDef class="texto-soma">{{ totalAnualEmpresa | currency: 'BRL' }}</td>
-              </ng-container>
-      
-              <!-- Realizado Empresa Column -->
-              <ng-container matColumnDef="metaRealizadaEmpresa">
-                  <th mat-header-cell *matHeaderCellDef>Realizado Empresa</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.metaEmpresaRealizada | currency: "BRL" }}
-                  </td>
-                  <td mat-footer-cell *matFooterCellDef class="texto-soma">{{ totalAnualEmpresaRealizado | currency: 'BRL' }}</td>
-              </ng-container>
+  </div>
 
-              <!-- Individual Column -->
-              <ng-container matColumnDef="metaIndividual">
-                  <th mat-header-cell *matHeaderCellDef>Individual</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.metaIndividual | currency: "BRL" }}
-                  </td>
-                  <td mat-footer-cell *matFooterCellDef class="texto-soma">{{ totalAnualIndividual | currency: 'BRL' }}</td>
-              </ng-container>
-
-              <!-- Realizado Individual Column -->
-              <ng-container matColumnDef="metaRealizadaIndividual">
-                  <th mat-header-cell *matHeaderCellDef>Realizado Individual</th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.metaIndividualRealizada | currency: "BRL" }}
-                  </td>
-                  <td mat-footer-cell *matFooterCellDef class="texto-soma">{{ totalAnualIndividualRealizado | currency: 'BRL' }}</td>
-              </ng-container>
-
-              <!-- Vendedor Column -->
-              <ng-container matColumnDef="vendedor">
-                <th mat-header-cell *matHeaderCellDef>Vendedor</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.vendedor }}
-                </td>
-                <td mat-footer-cell *matFooterCellDef class="texto-soma"></td>
-              </ng-container>
-  
-              <!-- Ações Column -->
-              <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef>Ações</th>
-                  <td class="acoes" mat-cell *matCellDef="let element">
-                    <mat-icon *ngIf="element.vendedor" class="editar" aria-label="Editar produto" (click)="openModalEditarMeta(element)">edit</mat-icon>
-                    <mat-icon *ngIf="element.vendedor" class="delete" aria-label="Remover produto" (click)="openModalDeletarMeta(element)">delete</mat-icon>
-                  </td>
-                  <td mat-footer-cell *matFooterCellDef class="texto-soma"></td>
-              </ng-container>
-  
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-          </table>
+  <!-- Modal para EDITAR Meta-->
+  <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarMeta" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header mb-5">
+          <h2 class="modal-title text-black fs-5" id="modalEditarMeta">Editar Meta: <span class="fw-bold">{{
+              formEditarMeta.get('mes').value }}</span></h2>
+          <button type="button" (click)="closeModalEditarMeta()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
         </div>
-    </div>
-  
-    <!-- MODAL -->
-    <div id="bg-modal"></div>
 
-    <!-- Modal para NOVA Meta -->
-    <div class="modal fade" id="modalNew" tabindex="-1" aria-labelledby="modalNovaMeta" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header mb-5">
-            <h2 class="modal-title text-black fs-5" id="modalNovaMeta">Nova Meta:</h2>
-            <button type="button" (click)="closeModalNovaMeta()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <form id="formEditarMeta" *ngIf="userPermission()" [formGroup]="formEditarMeta" class="container actions-form">
+          <div class="col-12 mb-3">
+            <label for="vendedor" class="form-label">Vendedor:</label>
+            <select id="vendedor" class="selectForm form-select" formControlName="vendedor">
+              <option value="Dev Nairuz">Dev Nairuz</option>
+              <option value="Kyrsten Júnior">Kyrsten Júnior</option>
+              <option *ngFor="let vendedor of vendedores" [value]="vendedor">
+                {{ vendedor }}
+              </option>
+            </select>
           </div>
-  
-          <form id="formNovaMeta" *ngIf="userPermission()" [formGroup]="formNovaMeta" class="container actions-form">
-            <div class="col-12 mb-3">
-              <label for="vendedor" class="form-label">Vendedor:</label>
-              <select id="vendedor" class="selectForm form-select" formControlName="vendedor">
-                <option value="Kyrsten Júnior">Kyrsten Júnior</option>
-                <option value="Dev Nairuz">Dev Nairuz</option>
-                <option *ngFor="let vendedor of vendedores" [value]="vendedor">
-                  {{ vendedor }}
-                </option>
-              </select>
-            </div>
 
-            <div class="col-12 mb-3">
-              <label for="ano" class="form-label">Ano:</label>
-              <input
-                  type="number"
-                  id="ano"
-                  step="1"
-                  value="{{ formNovaMeta.get('ano').value }}"
-                  class="form-control col-12"
-                  [class.is-invalid]="formNovaMeta.get('ano')?.errors?.['min'] && formNovaMeta.get('ano')?.touched"
-                  formControlName="ano"
-                  required
-              />
-            </div>
+          <div class="col-12 mb-3">
+            <label for="ano" class="form-label">Ano:</label>
+            <input type="number" id="ano" step="1" value="{{ formNovaMeta.get('ano').value }}"
+              class="form-control col-12"
+              [class.is-invalid]="formNovaMeta.get('ano')?.errors?.['min'] && formNovaMeta.get('ano')?.touched"
+              formControlName="ano" required />
+          </div>
 
-            <div class="col-12 mb-3">
-              <label for="mes" class="form-label">Mês:</label>
-              <select id="mes" class="selectForm form-select" formControlName="mes">
-                <option *ngFor="let mes of meses" [value]="mes"> {{ mes }} </option>
-              </select>
-            </div>
+          <div class="col-12 mb-3">
+            <label for="mes" class="form-label">Mês:</label>
+            <select id="mes" class="selectForm form-select" formControlName="mes">
+              <option *ngFor="let mes of meses" [value]="mes"> {{ mes }} </option>
+            </select>
+          </div>
 
-            <div class="col-12 mb-3">
-                <label for="metaIndividual" class="form-label">Meta Individual:</label>
-                <input
-                    type="text"
-                    prefix="R$ "
-                    mask="separator.2"
-                    thousandSeparator="."
-                    decimalMarker=","
-                    id="metaIndividual"
-                    class="form-control col-12"
-                    [class.is-invalid]="formNovaMeta.get('metaIndividual')?.errors?.['min'] && formNovaMeta.get('metaIndividual')?.touched"
-                    formControlName="metaIndividual"
-                    required
-                />
-            </div>
-  
-            <button type="submit" (click)="submitNovaMeta()" [disabled]="!formNovaMeta.valid" class="col-12 btn-calcular">Inserir</button>
-          </form>
-        </div>
+          <div class="col-12 mb-3">
+            <label for="metaIndividual" class="form-label">Meta Individual:</label>
+            <input type="text" prefix="R$ " mask="separator.2" thousandSeparator="." decimalMarker=","
+              id="metaIndividual" class="form-control col-12"
+              [class.is-invalid]="formEditarMeta.get('metaIndividual')?.errors?.['min'] && formEditarMeta.get('metaIndividual')?.touched"
+              formControlName="metaIndividual" required />
+          </div>
+
+          <button type="submit" (click)="submitEditarMeta()" [disabled]="!formEditarMeta.valid"
+            class="col-12 btn-calcular">Editar</button>
+        </form>
       </div>
     </div>
+  </div>
 
-    <!-- Modal para EDITAR Meta-->
-    <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditarMeta" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header mb-5">
-            <h2 class="modal-title text-black fs-5" id="modalEditarMeta">Editar Meta: <span class="fw-bold">{{ formEditarMeta.get('mes').value }}</span></h2>
-            <button type="button" (click)="closeModalEditarMeta()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-  
-          <form id="formEditarMeta" *ngIf="userPermission()" [formGroup]="formEditarMeta" class="container actions-form">
-            <div class="col-12 mb-3">
-              <label for="vendedor" class="form-label">Vendedor:</label>
-              <select id="vendedor" class="selectForm form-select" formControlName="vendedor">
-                <option value="Kyrsten Júnior">Kyrsten Júnior</option>
-                <option value="Dev Nairuz">Dev Nairuz</option>
-                <option *ngFor="let vendedor of vendedores" [value]="vendedor">
-                  {{ vendedor }}
-                </option>
-              </select>
-            </div>
-
-            <div class="col-12 mb-3">
-              <label for="ano" class="form-label">Ano:</label>
-              <input
-                  type="number"
-                  id="ano"
-                  step="1"
-                  value="{{ formNovaMeta.get('ano').value }}"
-                  class="form-control col-12"
-                  [class.is-invalid]="formNovaMeta.get('ano')?.errors?.['min'] && formNovaMeta.get('ano')?.touched"
-                  formControlName="ano"
-                  required
-              />
-            </div>
-
-            <div class="col-12 mb-3">
-              <label for="mes" class="form-label">Mês:</label>
-              <select id="mes" class="selectForm form-select" formControlName="mes">
-                <option *ngFor="let mes of meses" [value]="mes"> {{ mes }} </option>
-              </select>
-            </div>
-
-            <div class="col-12 mb-3">
-                <label for="metaIndividual" class="form-label">Meta Individual:</label>
-                <input
-                    type="text"
-                    prefix="R$ "
-                    mask="separator.2"
-                    thousandSeparator="."
-                    decimalMarker=","
-                    id="metaIndividual"
-                    class="form-control col-12"
-                    [class.is-invalid]="formEditarMeta.get('metaIndividual')?.errors?.['min'] && formEditarMeta.get('metaIndividual')?.touched"
-                    formControlName="metaIndividual"
-                    required
-                />
-            </div>
-  
-            <button type="submit" (click)="submitEditarMeta()" [disabled]="!formEditarMeta.valid" class="col-12 btn-calcular">Editar</button>
-          </form>
+  <!-- Modal para EXCLUIR Meta -->
+  <div class="modal fade" id="modalDeletar" tabindex="-1" aria-labelledby="modalDeletarMeta" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-black fs-5" id="modalDeletarMeta">
+            Excluir Meta: <span>{{ formDeletarMeta.get('mes').value }}/{{ formDeletarMeta.get('ano').value }}</span>
+          </h2>
+          <button type="button" (click)="closeModalDeletarMeta()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
         </div>
-      </div>
-    </div>
-
-    <!-- Modal para EXCLUIR Meta -->
-    <div class="modal fade" id="modalDeletar" tabindex="-1" aria-labelledby="modalDeletarMeta" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 class="modal-title text-black fs-5" id="modalDeletarMeta">
-              Excluir Meta: <span>{{ formDeletarMeta.get('mes').value }}/{{ formDeletarMeta.get('ano').value }}</span>
-            </h2>
-            <button type="button" (click)="closeModalDeletarMeta()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form [formGroup]="formDeletarMeta" (ngSubmit)="submitDeletarMeta()">
-            <div class="modal-body">
-              <div class="">
-                <div class="form-label mt-1">
-                  <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> a meta de <strong class="text-dark-emphasis">{{ formDeletarMeta.get('vendedor').value }}</strong></p>
-                </div>
+        <form [formGroup]="formDeletarMeta" (ngSubmit)="submitDeletarMeta()">
+          <div class="modal-body">
+            <div class="">
+              <div class="form-label mt-1">
+                <p class="text-black">Deseja realmente <strong class="text-danger">excluir</strong> a meta de <strong
+                    class="text-dark-emphasis">{{ formDeletarMeta.get('vendedor').value }}</strong></p>
               </div>
             </div>
-            <div class="modal-footer d-flex justify-content-center">
-              <button type="submit" class="btn btn-danger">
-                Excluir
-              </button>
-              <button type="button" class="btn btn-secondary" (click)="closeModalDeletarMeta()" data-bs-dismiss="modal">
-                Fechar
-              </button>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="submit" class="btn btn-danger">
+              Excluir
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="closeModalDeletarMeta()" data-bs-dismiss="modal">
+              Fechar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  </main>
+  </div>
+</main>
