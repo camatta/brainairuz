@@ -117,8 +117,8 @@
         <label for="vendedor" class="me-3">Filtrar por Vendedor:</label>
         <select (change)="submitFormFilter()" id="vendedor" name="vendedor" class="select-nairuz h-100">
           <option selected value="{{ undefined }}">Selecione</option>
-          <option value="Dev Nairuz">Dev Nairuz</option>
           <option value="Kyrsten Júnior">Kyrsten Júnior</option>
+          <option value="Dev Nairuz">Dev Nairuz</option>
 
           <option *ngFor="let vendedor of vendedores" [value]="vendedor">
             {{ vendedor }}
