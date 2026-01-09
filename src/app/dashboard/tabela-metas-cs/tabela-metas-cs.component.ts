@@ -27,7 +27,7 @@ type Meta = {
   templateUrl: './tabela-metas-cs.component.html',
   styleUrls: ['./tabela-metas-cs.component.css'],
   standalone: true,
-  imports: [ SharedModule ]
+  imports: [SharedModule]
 })
 
 export class TabelaMetasCsComponent implements OnInit {
@@ -38,7 +38,7 @@ export class TabelaMetasCsComponent implements OnInit {
     private metasEmpresaService: MetasEmpresaService,
     private commissionsCsService: ComissoesCsService,
     private formBuilder: FormBuilder,
-  ) {}
+  ) { }
 
   displayedColumns: string[] = [
     'mes',
@@ -73,22 +73,22 @@ export class TabelaMetasCsComponent implements OnInit {
 
   // Verifica a permissão do usuário
   userPermission(): boolean {
-    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"  || this.currentUser.name === 'Adriany Oliveira'){
+    if (this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz" || this.currentUser.name === 'Adriany Oliveira') {
       return true;
     }
     return false;
   }
 
   // Método para realizar o filtro dos dados na tabela
-  applyFilter(el: any){
-    if(el.id == "filtroVendedor") {
+  applyFilter(el: any) {
+    if (el.id == "filtroVendedor") {
       this.filtroVendedor = el.value;
-    } else if(el.id == "filtroMes") {
+    } else if (el.id == "filtroMes") {
       this.filtroMes = el.value;
-    } else if(el.id == "filtroAno") {
+    } else if (el.id == "filtroAno") {
       this.filtroAno = el.value;
     }
-    
+
     this.objetoTabela(this.metasEmpresa, this.metasIndividuais, this.filtroMes, this.filtroAno, this.filtroVendedor);
 
     this.onLoad = true;
@@ -98,9 +98,9 @@ export class TabelaMetasCsComponent implements OnInit {
     }, 2000)
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     // Carrega colunas para administradores
-    if(this.userPermission()){
+    if (this.userPermission()) {
       this.displayedColumns = [
         'mes',
         'metaEmpresa',
@@ -111,7 +111,7 @@ export class TabelaMetasCsComponent implements OnInit {
         'actions'
       ];
     }
-    
+
     // Carrega vendedores do time Comercial
     this.loadVendedores();
 
@@ -122,7 +122,7 @@ export class TabelaMetasCsComponent implements OnInit {
     this.loadAnosMetas();
 
     // Carrega as comissões dos vendedores
-    if(this.userPermission()){
+    if (this.userPermission()) {
       let usuario: string = "adm";
       this.loadComissoes(usuario, "sem filtro", this.currentYear, "sem filtro");
     } else {
@@ -145,7 +145,7 @@ export class TabelaMetasCsComponent implements OnInit {
       async (data) => {
         data.forEach((meta) => {
           const ano: string = meta.ano;
-          if(!this.filterYears.includes(ano)){
+          if (!this.filterYears.includes(ano)) {
             this.filterYears.push(ano);
           }
         })
@@ -159,14 +159,14 @@ export class TabelaMetasCsComponent implements OnInit {
   // Método para carregar os anos e inserir no select de filtros
   loadVendedores() {
     this.usersService.getUsers().subscribe(
-      async(data: any) => {
+      async (data: any) => {
         data.users.map((user: any) => {
-          if(user.setor == "CS" && user.status == "Ativo" || user.setor == "CSTec" && user.status == "Ativo") {
+          if (user.team == "Comercial") {
             this.vendedores.push(user.name);
           }
         })
       }, (err) => {
-        console.error("Erro ao carregar time Customer Success: ", err);
+        console.error("Erro ao carregar time comercial: ", err);
       }
     );
   }
@@ -178,7 +178,7 @@ export class TabelaMetasCsComponent implements OnInit {
     filtroMes: string,
     filtroAno: string,
     filtroVendedor: string
-  ){
+  ) {
     this.tabela = [];
     this.totalAnualIndividual = 0;
     this.totalAnualEmpresaRealizado = 0;
@@ -186,11 +186,11 @@ export class TabelaMetasCsComponent implements OnInit {
     this.metaEmpresaRealizada = []; // Array para loop abaixo inserir somar todas das vendas realizadas no mês
 
     this.metasIndividuaisRealizadas.forEach((meta) => {
-      if(!this.metaEmpresaRealizada.some(venda => venda.mes === meta.mes)) {
+      if (!this.metaEmpresaRealizada.some(venda => venda.mes === meta.mes)) {
         let mes = 0;
-        
+
         this.metasIndividuaisRealizadas.map((res) => {
-          if(meta.mes === res.mes && meta.ano === res.ano) {
+          if (meta.mes === res.mes && meta.ano === res.ano) {
             mes += res.valorTotalVendido;
           }
         })
@@ -208,12 +208,12 @@ export class TabelaMetasCsComponent implements OnInit {
     this.metaEmpresaRealizada.forEach((meta) => {
       this.totalAnualEmpresaRealizado += meta.totalMes;
     });
-    
+
     // Crie um mapa para metas individuais
     const mapaMetasIndividuais = new Map();
     metasIndividuais.forEach((metaVendedor) => {
       const chave = `${metaVendedor.ano}-${metaVendedor.mes}`;
-      if(!mapaMetasIndividuais.has(chave)) {
+      if (!mapaMetasIndividuais.has(chave)) {
         mapaMetasIndividuais.set(chave, []);
       }
       mapaMetasIndividuais.get(chave).push(metaVendedor);
@@ -224,25 +224,25 @@ export class TabelaMetasCsComponent implements OnInit {
       const metasVendedores = mapaMetasIndividuais.get(chave) || [];
       const metasVendedoresRealizadas = this.metasIndividuaisRealizadas;
 
-      if(metasVendedores.length > 0) {
+      if (metasVendedores.length > 0) {
         metasVendedores.forEach((metaVendedor: any) => {
-          if((!filtroVendedor || metaVendedor.vendedor === filtroVendedor) &&
-          (!filtroMes || metaVendedor.mes === filtroMes) &&
-          (!filtroAno || metaVendedor.ano === filtroAno)) {
+          if ((!filtroVendedor || metaVendedor.vendedor === filtroVendedor) &&
+            (!filtroMes || metaVendedor.mes === filtroMes) &&
+            (!filtroAno || metaVendedor.ano === filtroAno)) {
             let individualRealizada = null;
             let empresaRealizada = null;
 
             this.totalAnualIndividual += metaVendedor.metaIndividual;
 
             metasVendedoresRealizadas.forEach((meta) => {
-              if(meta.vendedor === metaVendedor.vendedor && meta.mes === metaVendedor.mes && meta.ano === metaVendedor.ano) {
+              if (meta.vendedor === metaVendedor.vendedor && meta.mes === metaVendedor.mes && meta.ano === metaVendedor.ano) {
                 individualRealizada = meta.valorTotalVendido;
                 this.totalAnualIndividualRealizado += individualRealizada;
               }
             })
 
             this.metaEmpresaRealizada.forEach((meta) => {
-              if(meta.mes === metaEmpresa.mes && meta.ano === metaEmpresa.ano) {
+              if (meta.mes === metaEmpresa.mes && meta.ano === metaEmpresa.ano) {
                 empresaRealizada = meta.totalMes;
               }
             });
@@ -314,7 +314,7 @@ export class TabelaMetasCsComponent implements OnInit {
 
   // Método que chama os métodos loadMetasEmpresa, loadMetasVendedores e objetoTabela
   loadMetas(mes: string = "", ano: string = "", vendedor: string = "") {
-    if(this.userPermission()){
+    if (this.userPermission()) {
       let usuario: string = "adm";
 
       // Carrega as metas da empresa
@@ -373,8 +373,8 @@ export class TabelaMetasCsComponent implements OnInit {
     comissoes.forEach((comissao) => {
       const { vendedor, valorVendido, mes } = comissao;
       const chaveVendedorMes = `${vendedor}-${mes}-${ano}`;
-      
-      if(!vendedorComissoesMensais[chaveVendedorMes]) {
+
+      if (!vendedorComissoesMensais[chaveVendedorMes]) {
         vendedorComissoesMensais[chaveVendedorMes] = {
           ano,
           mes,
@@ -399,17 +399,17 @@ export class TabelaMetasCsComponent implements OnInit {
     this.metasIndividuaisRealizadas = resultado;
 
     // Filtro
-    if(!vendedor && !mes) {
+    if (!vendedor && !mes) {
       comissoes.forEach(comissao => this.totalAnualIndividualRealizado += comissao.valorVendido);
     } else {
       comissoes.forEach((comissao) => {
-        if(vendedor === comissao.vendedor) {
+        if (vendedor === comissao.vendedor) {
           this.totalAnualIndividualRealizado += comissao.valorVendido;
         }
-        if(mes === comissao.mes) {
+        if (mes === comissao.mes) {
           this.totalAnualIndividualRealizado += comissao.valorVendido;
         }
-        if(ano === comissao.ano) {
+        if (ano === comissao.ano) {
           this.totalAnualIndividualRealizado += comissao.valorVendido;
         }
       })
@@ -428,7 +428,7 @@ export class TabelaMetasCsComponent implements OnInit {
     const modal = document.getElementById("modalNew");
     const bgModal = document.getElementById("bg-modal");
 
-    if(modal != null){
+    if (modal != null) {
       modal.style.display = "block";
       bgModal.style.display = "block";
       modal.classList.add("show");
@@ -439,7 +439,7 @@ export class TabelaMetasCsComponent implements OnInit {
     const modal = document.getElementById("modalNew");
     const bgModal = document.getElementById("bg-modal");
 
-    if(modal != null){
+    if (modal != null) {
       modal.style.display = "none";
       bgModal.style.display = "none";
       modal.classList.remove("show");
@@ -457,7 +457,7 @@ export class TabelaMetasCsComponent implements OnInit {
     this.formNovaMeta.updateValueAndValidity();
     const formNovaMetaStatus: string = this.formNovaMeta.status;
 
-    if(formNovaMetaStatus !== "INVALID") {
+    if (formNovaMetaStatus !== "INVALID") {
       const novaMeta = {
         vendedor: this.formNovaMeta.get('vendedor').value,
         ano: this.formNovaMeta.get('ano').value,
@@ -513,7 +513,7 @@ export class TabelaMetasCsComponent implements OnInit {
       metaIndividual: element.metaIndividual
     });
 
-    if(modal != null){
+    if (modal != null) {
       modal.style.display = "block";
       bgModal.style.display = "block";
       modal.classList.add("show");
@@ -523,7 +523,7 @@ export class TabelaMetasCsComponent implements OnInit {
   closeModalEditarMeta() {
     const modal = document.getElementById("modalEdit");
     const bgModal = document.getElementById("bg-modal");
-    if(modal != null){
+    if (modal != null) {
       modal.style.display = "none";
       bgModal.style.display = "none";
       modal.classList.remove("show");
@@ -534,7 +534,7 @@ export class TabelaMetasCsComponent implements OnInit {
     this.formEditarMeta.updateValueAndValidity();
     const formEditarMetaStatus: string = this.formEditarMeta.status;
 
-    if(formEditarMetaStatus !== "INVALID") {
+    if (formEditarMetaStatus !== "INVALID") {
       const idMeta = this.formEditarMeta.get('_id').value;
       const metaEditada = {
         vendedor: this.formEditarMeta.get('vendedor').value,
@@ -572,7 +572,7 @@ export class TabelaMetasCsComponent implements OnInit {
   openModalDeletarMeta(element: any) {
     const modal = document.getElementById("modalDeletar");
     const bgModal = document.getElementById("bg-modal");
-    if(modal != null){
+    if (modal != null) {
       modal.style.display = "block";
       bgModal.style.display = "block";
       modal.classList.add("show");
@@ -590,7 +590,7 @@ export class TabelaMetasCsComponent implements OnInit {
   closeModalDeletarMeta() {
     const modal = document.getElementById("modalDeletar");
     const bgModal = document.getElementById("bg-modal");
-    if(modal != null){
+    if (modal != null) {
       modal.style.display = "none";
       bgModal.style.display = "none";
       modal.classList.remove("show");

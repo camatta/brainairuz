@@ -154,9 +154,6 @@
           <div class="col-12 mb-3">
             <label for="vendedor" class="form-label">Vendedor:</label>
             <select id="vendedor" class="selectForm form-select" formControlName="vendedor">
-              <option value="Dev Nairuz">Dev Nairuz</option>
-              <option value="Leandro Aguiar">Leandro Aguiar</option>
-              <option value="Kyrsten Júnior">Kyrsten Júnior</option>
               <option *ngFor="let vendedor of vendedores" [value]="vendedor">
                 {{ vendedor }}
               </option>
@@ -208,9 +205,6 @@
           <div class="col-12 mb-3">
             <label for="vendedor" class="form-label">Vendedor:</label>
             <select id="vendedor" class="selectForm form-select" formControlName="vendedor">
-              <option value="Dev Nairuz">Dev Nairuz</option>
-              <option value="Kyrsten Júnior">Kyrsten Júnior</option>
-              <option value="Leandro Aguiar">Leandro Aguiar</option>
               <option *ngFor="let vendedor of vendedores" [value]="vendedor">
                 {{ vendedor }}
               </option>
