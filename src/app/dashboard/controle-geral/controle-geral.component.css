@@ -200,6 +200,15 @@ form.formFiltrarColunas #listaDeColunas button {
     outline: none;
 }
 
+#formEditarOportunidade .display-input {
+    border: 1px solid var(--nairuz-primary);
+    font-family: var(--nairuz-default-oportunidades);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #666666;
+}
+
 
 #alert-actions {
     position: absolute;

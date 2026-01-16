@@ -97,7 +97,7 @@ export class CalculoComissaoCsComponent implements OnInit {
   qualidade: number = 0; // Se valorTotal == 0 então qualidade = 0 senão (valorTotal * 2) / soma(valoresBase)
   metaTotalMesEmpresa: number = 0; // Meta Realizada da Empresa / Meta Total da Empresa (todos os valores vem da tabela de metas)
   metaEmpresa: number = 0; // Regra feita dentro do método loadMetas para um limite na % de comissão
-  mix: number = 1;
+  // mix: number = 1;
   comissaoFinal: number = 0; // (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
   valorComissao: number = 0; // (vendasTotal * comissaoFinal) / 100) - (vendasTotal * comissaoFinal) / 100) * 0.16
   valorBaseTotal: number = 0; // Valor Base vem da tabela de valores dos produtos
@@ -486,7 +486,7 @@ export class CalculoComissaoCsComponent implements OnInit {
           // COMISSÃO FINAL
           // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
           // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
-          let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.mix * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
+          let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
           calcComissaoFinal >= 6.2 ? this.comissaoFinal = 6.2 : this.comissaoFinal = calcComissaoFinal;
   
           // R$ COMISSÃO

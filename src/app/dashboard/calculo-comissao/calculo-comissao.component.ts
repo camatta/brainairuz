@@ -101,7 +101,7 @@ export class CalculoComissaoComponent implements OnInit {
   qualidade: number = 0; // Se valorTotal == 0 então qualidade = 0 senão (valorTotal * 2) / soma(valoresBase)
   metaTotalMesEmpresa: number = 0; // Meta Realizada da Empresa / Meta Total da Empresa (todos os valores vem da tabela de metas)
   metaEmpresa: number = 0; // Regra feita dentro do método loadMetas para um limite na % de comissão
-  mix: number = 0.5; // Se tiver pelo menos 1 produto MKT e 1 produto TEC, mix = 1 senão mix = 0,5
+  // mix: number = 0.5; // Se tiver pelo menos 1 produto MKT e 1 produto TEC, mix = 1 senão mix = 0,5
   comissaoFinal: number = 0; // (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
   valorComissao: number = 0; // (vendasTotal * comissaoFinal) / 100) - (vendasTotal * comissaoFinal) / 100) * 0.16
   valorBaseTotal: number = 0; // Valor Base vem da tabela de valores dos produtos
@@ -492,16 +492,16 @@ export class CalculoComissaoComponent implements OnInit {
         }
   
         // MIX
-        if(this.currentUser.setorTratado === "CSTec" || this.currentUser.setorTratado === "CS"){
-          this.mix = 1;
-        } else {
-          this.verifyProductsMix(data);
-          if(this.verifyProductsMix(data)) {
-            this.mix == 0.5 ? this.mix = 1 : this.mix = 1;
-          } else {
-            this.mix == 1 ? this.mix = 0.5 : this.mix = 0.5;
-          }
-        }
+        // if(this.currentUser.setorTratado === "CSTec" || this.currentUser.setorTratado === "CS"){
+        //   this.mix = 1;
+        // } else {
+        //   this.verifyProductsMix(data);
+        //   if(this.verifyProductsMix(data)) {
+        //     this.mix == 0.5 ? this.mix = 1 : this.mix = 1;
+        //   } else {
+        //     this.mix == 1 ? this.mix = 0.5 : this.mix = 0.5;
+        //   }
+        // }
 
   
         this.onLoadComissions = true;
@@ -509,7 +509,7 @@ export class CalculoComissaoComponent implements OnInit {
           // COMISSÃO FINAL
           // Se (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor) >= 6,2 então comissaoFinal = 6,2 senão
           // comissaoFinal = (100 * vendasTotal * mix * qualidade * metaEmpresa * metaVendedor)
-          let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.mix * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
+          let calcComissaoFinal = Number((100 * this.fatorMultiplicador * this.qualidade * this.metaEmpresa * this.metaVendedor).toFixed(2));
           calcComissaoFinal >= 6.2 ? this.comissaoFinal = 6.2 : this.comissaoFinal = calcComissaoFinal;
   
           // R$ COMISSÃO
@@ -523,7 +523,6 @@ export class CalculoComissaoComponent implements OnInit {
       this.vendasTotal = 0;
       this.valorBaseTotal = 0;
       this.qualidade = 0;
-      this.mix = 0.5;
       this.comissaoFinal = 0;
       this.valorComissao = 0;
     }
@@ -1011,7 +1010,6 @@ export class CalculoComissaoComponent implements OnInit {
     } else {
       valorBase = valorBase * multiplicador;
       valorVendido = (valorBase / this.maxMarkup) * markup;
-      console.log(this.maxMarkup);
     }
 
     const editarVenda2 = new FormData();

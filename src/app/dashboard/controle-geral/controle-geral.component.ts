@@ -5,7 +5,8 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { isWeekend, isSameDay, parseISO, startOfDay } from 'date-fns';
+// import { isWeekend, isSameDay, parseISO, startOfDay, addDays, isBefore, isEqual, max, min } from 'date-fns';
+import { parseISO, startOfDay, addDays, isBefore, isEqual, max, min } from 'date-fns';
 
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 import { OportunidadesService } from 'src/app/services/oportunidades.service';
@@ -18,6 +19,8 @@ import { Helper } from 'src/app/lib/helper';
 interface EditarOportunidade extends Oportunidade {
   _id: string;
 }
+
+type WorkWindow = { startMin: number; endMin: number };
 
 @Component({
   selector: 'app-controle-geral',
@@ -335,21 +338,23 @@ export class ControleGeralComponent implements OnInit, AfterViewInit {
 
   // Método para calcular a SLA Atendimento
   calculaMediaDoSlaAtendimento(tabela: MatTableDataSource<Oportunidade>) {
-    let somaDoSla: number = 0;
-    let mediaDoSla: number = 0;
+    let soma = 0;
+    let count = 0;
 
     tabela.filteredData.forEach((oportunidade) => {
-      if(oportunidade.sla_atendimento) {
-        somaDoSla += oportunidade.sla_atendimento;  // Somando o valor de sla_atendimento
+      const sla = oportunidade.sla_atendimento;
+
+      // conta apenas valores numéricos válidos (inclui 0)
+      if (sla != null && !Number.isNaN(sla)) {
+        soma += sla;
+        count += 1;
       }
     });
 
-    // Verifica se há oportunidades para evitar divisão por zero
-    if (tabela.filteredData.length > 0) {
-      mediaDoSla = somaDoSla / tabela.filteredData.length;
-    }
+    const media = count > 0 ? soma / count : 0;
 
-    return this.mediaDoSlaAtendimento = mediaDoSla;
+    this.mediaDoSlaAtendimento = media; // em minutos
+    return media;
   }
 
   // Método para calcular o Ticket Médio
@@ -437,6 +442,18 @@ export class ControleGeralComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // Método para copiar textos para a área de transferência
+  async copiarTextoFormatadoParaAreaDeTransferencia(texto: number) {
+    try {
+      let textoFormatado = this.formatarSlaAtendimento(texto);
+      await navigator.clipboard.writeText(textoFormatado);
+      this.showMessageAction('Texto copiado com sucesso!');
+    } catch (err) {
+      this.showMessageAction('Falha ao copiar');
+      console.error('Falha ao copiar:', err);
+    }
+  }
+
   // Método para carregar os feriados nacionais da API
   async carregarFeriados(year: number) {
     const apiFeriados = await this.feriadosNacionais.getFeriadosNacionais(year).toPromise();
@@ -448,58 +465,215 @@ export class ControleGeralComponent implements OnInit, AfterViewInit {
   }
 
   // NOVA IMPLEMENTAÇÃO DO SLA DE ATENDIMENTO
-  private readonly SHIFT_START_MIN = 8 * 60; // 08:00
-  private readonly SHIFT_END_MIN = 18 * 60; // 18:00
-  private readonly SHIFT_LEN_MIN = (18 - 8) * 60; // 600
+  // private readonly SHIFT_START_MIN = 8 * 60; // 08:00
+  // private readonly SHIFT_END_MIN = 18 * 60; // 18:00
+  // private readonly SHIFT_LEN_MIN = (18 - 8) * 60; // 600
 
-  private minutosDoDia(data: Date): number {
-    return data.getHours() * 60 + data.getMinutes() + data.getSeconds() / 60;
+  // private minutosDoDia(data: Date): number {
+  //   return data.getHours() * 60 + data.getMinutes() + data.getSeconds() / 60;
+  // }
+
+  // private limitadorHorarioDeTrabalho(mins: number): number {
+  //   return Math.min(Math.max(mins, this.SHIFT_START_MIN), this.SHIFT_END_MIN);
+  // }
+
+  // private diasDeTrabalho(inicio: Date, fim: Date, considerarFeriados = true): number {
+  //   let diaInicial = startOfDay(inicio);
+  //   let diaFinal = startOfDay(fim);
+
+  //   if(diaFinal < diaInicial) [diaInicial, diaFinal] = [diaFinal, diaInicial];
+
+  //   let count = 0;
+
+  //   for(let dia = new Date(diaInicial); dia <= diaFinal; dia.setDate(dia.getDate() + 1)) {
+  //     const finalDeSemana = isWeekend(dia);
+
+  //     const feriado = considerarFeriados && this.feriadosNacionaisCarregados?.some((f: Date) => isSameDay(dia, f));
+
+  //     if(!finalDeSemana && !feriado) count++;
+  //   }
+
+  //   return count;
+  // }
+
+  // calculaSlaDeAtendimento(dataInicialISO: string, dataFinalISO: string): number | null {
+  //   if(!dataInicialISO) return 0;
+  //   if(!dataFinalISO) return null; // "Não agendado" na planilha
+
+  //   const inicio = parseISO(dataInicialISO);
+  //   const fim = parseISO(dataFinalISO);
+
+  //   const horasIniciaisLimitadas = this.limitadorHorarioDeTrabalho(this.minutosDoDia(inicio));
+  //   const horasFinaisLimitadas = this.limitadorHorarioDeTrabalho(this.minutosDoDia(fim));
+
+  //   const diferencaHorasLimitadas = horasFinaisLimitadas - horasIniciaisLimitadas;
+
+  //   const diasUteis = this.diasDeTrabalho(inicio, fim, false); // false desconsidera feriados
+
+  //   const diasUteisEmMinutos = diasUteis * this.SHIFT_LEN_MIN;
+
+  //   const slaEmMinutos = diasUteisEmMinutos - diferencaHorasLimitadas;
+  //   const slaEmDias = slaEmMinutos / (24 * 60);
+
+  //   return Number(slaEmDias.toFixed(2));
+  // }
+
+  // formatarDiasSLAAtendimento(
+  //   slaEmDias: number | null | undefined,
+  //   options: SlaFormatOptions = { hideZeroUnits: true, roundUp: false }
+  // ): string {
+  //   if (slaEmDias == null || Number.isNaN(slaEmDias)) return '-';
+
+  //   // Se SLA puder ser negativo por algum edge case:
+  //   const sign = slaEmDias < 0 ? '-' : '';
+  //   const absDays = Math.abs(slaEmDias);
+
+  //   const totalMinutesRaw = absDays * 24 * 60;
+  //   const totalMinutes = options.roundUp ? Math.ceil(totalMinutesRaw) : Math.round(totalMinutesRaw);
+
+  //   const days = Math.floor(totalMinutes / (24 * 60));
+  //   const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
+  //   const minutes = totalMinutes % 60;
+
+  //   const parts: string[] = [];
+
+  //   const push = (value: number, singular: string, plural: string) => {
+  //     if (options.hideZeroUnits && value === 0) return;
+  //     parts.push(`${value} ${value === 1 ? singular : plural}`);
+  //   };
+
+  //   push(days, 'dia', 'dias');
+  //   push(hours, 'hora', 'horas');
+  //   push(minutes, 'minuto', 'minutos');
+
+  //   // Se tudo zerado (ex.: slaEmDias = 0)
+  //   if (parts.length === 0) return '0 minutos';
+
+  //   // junta com vírgula e "e" no final (pt-BR)
+  //   const text =
+  //     parts.length === 1
+  //       ? parts[0]
+  //       : parts.length === 2
+  //         ? `${parts[0]} e ${parts[1]}`
+  //         : `${parts.slice(0, -1).join(', ')} e ${parts[parts.length - 1]}`;
+
+  //   return sign + text;
+  // }
+
+
+
+
+
+  // NOVA IMPLEMENTAÇÃO DE SLA DE ATENDIMENTO COM FORMATAÇÃO NO FRONT
+  // SLA (minutos úteis) - Seg a Qui 08-18, Sex 08-17, ignora feriados e finais de semana
+  private SHIFT_START_MIN = 8 * 60;        // 08:00
+  private SHIFT_END_MIN_MON_THU = 18 * 60; // 18:00
+  private SHIFT_END_MIN_FRI = 17 * 60;     // 17:00
+
+  private isWeekend(d: Date): boolean {
+    const day = d.getDay(); // 0 dom ... 6 sáb
+    return day === 0 || day === 6;
   }
 
-  private limitadorHorarioDeTrabalho(mins: number): number {
-    return Math.min(Math.max(mins, this.SHIFT_START_MIN), this.SHIFT_END_MIN);
+  // importante: chave local (não UTC) para não “virar o dia”
+  private toYMDLocal(d: Date): string {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   }
 
-  private diasDeTrabalho(inicio: Date, fim: Date, considerarFeriados = true): number {
-    let diaInicial = startOfDay(inicio);
-    let diaFinal = startOfDay(fim);
+  private workWindowForDay(d: Date): WorkWindow {
+    const day = d.getDay(); // 1..5 úteis
+    const end = (day === 5) ? this.SHIFT_END_MIN_FRI : this.SHIFT_END_MIN_MON_THU;
+    return { startMin: this.SHIFT_START_MIN, endMin: end };
+  }
 
-    if(diaFinal < diaInicial) [diaInicial, diaFinal] = [diaFinal, diaInicial];
+  private atMinutes(d: Date, minInDay: number): Date {
+    const base = startOfDay(d);
+    base.setHours(Math.floor(minInDay / 60), minInDay % 60, 0, 0);
+    return base;
+  }
 
-    let count = 0;
+  private getHolidaysSetFromLoaded(): Set<string> {
+    // seu array já é Date[] (carregado em carregarFeriados)
+    return new Set(this.feriadosNacionaisCarregados.map((dt: Date) => this.toYMDLocal(dt)));
+  }
 
-    for(let dia = new Date(diaInicial); dia <= diaFinal; dia.setDate(dia.getDate() + 1)) {
-      const finalDeSemana = isWeekend(dia);
+  /**
+   * Retorna minutos úteis entre duas datas ISO (ex: "2026-01-01T11:39" ou "2026-01-01")
+   * Observação: se vier "dd/MM/yyyy", parseISO NÃO funciona. Aqui no seu fluxo está vindo "yyyy-MM-dd" do input, então ok.
+   */
+  private workingMinutesBetween(startISO: string, endISO: string): number {
+    if (!startISO || !endISO) return 0;
 
-      const feriado = considerarFeriados && this.feriadosNacionaisCarregados?.some((f: Date) => isSameDay(dia, f));
+    const start = parseISO(startISO);
+    const end = parseISO(endISO);
 
-      if(!finalDeSemana && !feriado) count++;
+    // se invertido ou igual, retorna 0
+    if (!isBefore(start, end)) return 0;
+
+    const holidays = this.getHolidaysSetFromLoaded();
+
+    let total = 0;
+    let dayCursor = startOfDay(start);
+    const endDay = startOfDay(end);
+
+    while (isBefore(dayCursor, addDays(endDay, 1))) {
+      const dayKey = this.toYMDLocal(dayCursor);
+
+      if (!this.isWeekend(dayCursor) && !holidays.has(dayKey)) {
+        const win = this.workWindowForDay(dayCursor);
+
+        const dayWorkStart = this.atMinutes(dayCursor, win.startMin);
+        const dayWorkEnd = this.atMinutes(dayCursor, win.endMin);
+
+        const intervalStart = max([start, dayWorkStart]);
+        const intervalEnd = min([end, dayWorkEnd]);
+
+        if (isBefore(intervalStart, intervalEnd)) {
+          const diffMin = Math.floor((intervalEnd.getTime() - intervalStart.getTime()) / 60000);
+          total += diffMin;
+        }
+      }
+
+      dayCursor = addDays(dayCursor, 1);
     }
 
-    return count;
+    return total;
+}
+
+  /**
+   * Formata minutos úteis para exibir no front.
+   * Regra: 1 "dia útil" = jornada inteira do dia (10h seg-qui, 9h sex), e o resto vira horas/minutos.
+   * Para simplificar e ficar estável: mostramos "X dias úteis" como blocos de 10h (seg-qui).
+   * Se você quiser 100% literal (contando sexta como dia completo de 9h), eu te passo uma versão também.
+   */
+  formatarSlaAtendimento(minutosUteis: number | null | undefined): string {
+    if (minutosUteis == null || Number.isNaN(minutosUteis)) return '-';
+
+    const total = Math.max(0, Math.floor(minutosUteis));
+
+    const dayMin = 10 * 60; // padrão seg-qui
+    const dias = Math.floor(total / dayMin);
+    const resto = total % dayMin;
+
+    const horas = Math.floor(resto / 60);
+    const minutos = resto % 60;
+
+    const parts: string[] = [];
+    if (dias) parts.push(`${dias} dia${dias > 1 ? 's' : ''}`);
+    if (horas) parts.push(`${horas} hora${horas > 1 ? 's' : ''}`);
+    if (minutos || parts.length === 0) parts.push(`${minutos} minuto${minutos > 1 ? 's' : ''}`);
+
+    if (parts.length === 1) return parts[0];
+    if (parts.length === 2) return `${parts[0]} e ${parts[1]}`;
+    return `${parts[0]}, ${parts[1]} e ${parts[2]}`;
   }
 
-  calculaSlaDeAtendimento(dataInicialISO: string, dataFinalISO: string): number | null {
-    if(!dataInicialISO) return 0;
-    if(!dataFinalISO) return null; // "Não agendado" na planilha
 
-    const inicio = parseISO(dataInicialISO);
-    const fim = parseISO(dataFinalISO);
 
-    const horasIniciaisLimitadas = this.limitadorHorarioDeTrabalho(this.minutosDoDia(inicio));
-    const horasFinaisLimitadas = this.limitadorHorarioDeTrabalho(this.minutosDoDia(fim));
 
-    const diferencaHorasLimitadas = horasFinaisLimitadas - horasIniciaisLimitadas;
-
-    const diasUteis = this.diasDeTrabalho(inicio, fim, false); // false desconsidera feriados
-
-    const diasUteisEmMinutos = diasUteis * this.SHIFT_LEN_MIN;
-
-    const slaEmMinutos = diasUteisEmMinutos - diferencaHorasLimitadas;
-    const slaEmDias = slaEmMinutos / (24 * 60);
-
-    return Number(slaEmDias.toFixed(2));
-  }
   
   // Método para cálculo do ciclo de venda
   calculaCiclodeVendas(dataInicial: string, dataDoAceite: string) {
@@ -557,7 +731,7 @@ export class ControleGeralComponent implements OnInit, AfterViewInit {
     const primeiroContato = this.formEditarOportunidade.get("primeiro_contato").value;
 
     if(dataInicial && primeiroContato) {
-      this.formEditarOportunidade.patchValue({ sla_atendimento: this.calculaSlaDeAtendimento(dataInicial, primeiroContato) })
+      this.formEditarOportunidade.patchValue({ sla_atendimento: this.workingMinutesBetween(dataInicial, primeiroContato) })
     } else {
       this.formEditarOportunidade.patchValue({ sla_atendimento: null });
     }
@@ -587,7 +761,7 @@ export class ControleGeralComponent implements OnInit, AfterViewInit {
     let cicloDeVenda: number;
 
     if(dataInicial && primeiroContato) {
-      slaDeAtendimento = this.calculaSlaDeAtendimento(dataInicial.dataFormatada, primeiroContato.dataFormatada);
+      slaDeAtendimento = this.workingMinutesBetween(dataInicial.dataFormatada, primeiroContato.dataFormatada);
     }
 
     if(dataAceite) {

@@ -72,7 +72,7 @@
     </div>
 
     <!--Meta Empresa Para Comissão-->
-    <div class="col-3">
+    <div class="col-4">
       <div class="bg-nairuzPrimary">
         <label for="metaEmpresa" class="form-label">Vendas do time</label>
         <p class="fs-6">{{ metaRealizadaEmpresa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
@@ -80,15 +80,15 @@
     </div>
 
     <!--Mix-->
-    <div class="col-3">
+    <!-- <div class="col-3">
       <div class="bg-nairuzPrimary">
         <label for="mix" class="form-label">Mix</label>
         <p class="fs-6">{{ mix }}</p>
       </div>
-    </div>
+    </div> -->
 
     <!--Comissão Final-->
-    <div class="col-3">
+    <div class="col-4">
       <div class="bg-nairuzPrimary">
         <label for="Valor Comissão" class="form-label">Comissão Final</label>
         <mat-spinner *ngIf="onLoadComissions"></mat-spinner>
@@ -97,7 +97,7 @@
     </div>
 
     <!--Valor Comissão-->
-    <div class="col-3">
+    <div class="col-4">
       <div class="bg-nairuzPrimary">
         <label for="Valor Comissão" class="form-label">Valor Comissão</label>
         <mat-spinner *ngIf="onLoadComissions"></mat-spinner>
@@ -130,6 +130,7 @@
         <select (change)="submitFormFilter()" id="years" name="ano" class="select-nairuz h-100">
           <option value="2024" selected>2024</option>
           <option value="2025">2025</option>
+          <option value="2026">2026</option>
         </select>
       </div>
       <div class="filter-commissions">
