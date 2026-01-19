@@ -5,8 +5,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-// import { isWeekend, isSameDay, parseISO, startOfDay, addDays, isBefore, isEqual, max, min } from 'date-fns';
-import { parseISO, startOfDay, addDays, isBefore, isEqual, max, min } from 'date-fns';
+import { parseISO, startOfDay, addDays, isBefore, max, min } from 'date-fns';
 
 import { SharedModule } from 'src/app/modules/shared-module/shared-module.module';
 import { OportunidadesService } from 'src/app/services/oportunidades.service';
@@ -464,106 +463,6 @@ export class ControleGeralComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // NOVA IMPLEMENTAÇÃO DO SLA DE ATENDIMENTO
-  // private readonly SHIFT_START_MIN = 8 * 60; // 08:00
-  // private readonly SHIFT_END_MIN = 18 * 60; // 18:00
-  // private readonly SHIFT_LEN_MIN = (18 - 8) * 60; // 600
-
-  // private minutosDoDia(data: Date): number {
-  //   return data.getHours() * 60 + data.getMinutes() + data.getSeconds() / 60;
-  // }
-
-  // private limitadorHorarioDeTrabalho(mins: number): number {
-  //   return Math.min(Math.max(mins, this.SHIFT_START_MIN), this.SHIFT_END_MIN);
-  // }
-
-  // private diasDeTrabalho(inicio: Date, fim: Date, considerarFeriados = true): number {
-  //   let diaInicial = startOfDay(inicio);
-  //   let diaFinal = startOfDay(fim);
-
-  //   if(diaFinal < diaInicial) [diaInicial, diaFinal] = [diaFinal, diaInicial];
-
-  //   let count = 0;
-
-  //   for(let dia = new Date(diaInicial); dia <= diaFinal; dia.setDate(dia.getDate() + 1)) {
-  //     const finalDeSemana = isWeekend(dia);
-
-  //     const feriado = considerarFeriados && this.feriadosNacionaisCarregados?.some((f: Date) => isSameDay(dia, f));
-
-  //     if(!finalDeSemana && !feriado) count++;
-  //   }
-
-  //   return count;
-  // }
-
-  // calculaSlaDeAtendimento(dataInicialISO: string, dataFinalISO: string): number | null {
-  //   if(!dataInicialISO) return 0;
-  //   if(!dataFinalISO) return null; // "Não agendado" na planilha
-
-  //   const inicio = parseISO(dataInicialISO);
-  //   const fim = parseISO(dataFinalISO);
-
-  //   const horasIniciaisLimitadas = this.limitadorHorarioDeTrabalho(this.minutosDoDia(inicio));
-  //   const horasFinaisLimitadas = this.limitadorHorarioDeTrabalho(this.minutosDoDia(fim));
-
-  //   const diferencaHorasLimitadas = horasFinaisLimitadas - horasIniciaisLimitadas;
-
-  //   const diasUteis = this.diasDeTrabalho(inicio, fim, false); // false desconsidera feriados
-
-  //   const diasUteisEmMinutos = diasUteis * this.SHIFT_LEN_MIN;
-
-  //   const slaEmMinutos = diasUteisEmMinutos - diferencaHorasLimitadas;
-  //   const slaEmDias = slaEmMinutos / (24 * 60);
-
-  //   return Number(slaEmDias.toFixed(2));
-  // }
-
-  // formatarDiasSLAAtendimento(
-  //   slaEmDias: number | null | undefined,
-  //   options: SlaFormatOptions = { hideZeroUnits: true, roundUp: false }
-  // ): string {
-  //   if (slaEmDias == null || Number.isNaN(slaEmDias)) return '-';
-
-  //   // Se SLA puder ser negativo por algum edge case:
-  //   const sign = slaEmDias < 0 ? '-' : '';
-  //   const absDays = Math.abs(slaEmDias);
-
-  //   const totalMinutesRaw = absDays * 24 * 60;
-  //   const totalMinutes = options.roundUp ? Math.ceil(totalMinutesRaw) : Math.round(totalMinutesRaw);
-
-  //   const days = Math.floor(totalMinutes / (24 * 60));
-  //   const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
-  //   const minutes = totalMinutes % 60;
-
-  //   const parts: string[] = [];
-
-  //   const push = (value: number, singular: string, plural: string) => {
-  //     if (options.hideZeroUnits && value === 0) return;
-  //     parts.push(`${value} ${value === 1 ? singular : plural}`);
-  //   };
-
-  //   push(days, 'dia', 'dias');
-  //   push(hours, 'hora', 'horas');
-  //   push(minutes, 'minuto', 'minutos');
-
-  //   // Se tudo zerado (ex.: slaEmDias = 0)
-  //   if (parts.length === 0) return '0 minutos';
-
-  //   // junta com vírgula e "e" no final (pt-BR)
-  //   const text =
-  //     parts.length === 1
-  //       ? parts[0]
-  //       : parts.length === 2
-  //         ? `${parts[0]} e ${parts[1]}`
-  //         : `${parts.slice(0, -1).join(', ')} e ${parts[parts.length - 1]}`;
-
-  //   return sign + text;
-  // }
-
-
-
-
-
   // NOVA IMPLEMENTAÇÃO DE SLA DE ATENDIMENTO COM FORMATAÇÃO NO FRONT
   // SLA (minutos úteis) - Seg a Qui 08-18, Sex 08-17, ignora feriados e finais de semana
   private SHIFT_START_MIN = 8 * 60;        // 08:00
@@ -670,10 +569,6 @@ export class ControleGeralComponent implements OnInit, AfterViewInit {
     if (parts.length === 2) return `${parts[0]} e ${parts[1]}`;
     return `${parts[0]}, ${parts[1]} e ${parts[2]}`;
   }
-
-
-
-
   
   // Método para cálculo do ciclo de venda
   calculaCiclodeVendas(dataInicial: string, dataDoAceite: string) {
