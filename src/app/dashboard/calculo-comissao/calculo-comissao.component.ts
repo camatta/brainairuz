@@ -114,7 +114,7 @@ export class CalculoComissaoComponent implements OnInit {
   onLoadComission: boolean = false;
 
   userPermission(): boolean {
-    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz" || this.currentUser.name === 'Adriany Oliveira'){
+    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz" || this.currentUser.name === 'Adriany Oliveira' || this.currentUser.name === 'Hugo Brito'){
       return true;
     }
     return false;

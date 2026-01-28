@@ -36,7 +36,7 @@ export class MetaEmpresaComponent implements OnInit {
   metaAnual: number = 0;
 
   userPermission(): boolean {
-    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"  || this.currentUser.name === 'Adriany Oliveira'){
+    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"  || this.currentUser.name === 'Adriany Oliveira' || this.currentUser.name === 'Hugo Brito'){
       return true;
     }
     return false;
