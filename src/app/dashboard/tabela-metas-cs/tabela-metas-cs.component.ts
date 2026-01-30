@@ -161,7 +161,7 @@ export class TabelaMetasCsComponent implements OnInit {
     this.usersService.getUsers().subscribe(
       async (data: any) => {
         data.users.map((user: any) => {
-          if (user.team == "Comercial") {
+          if (user.setor == "CS" && user.status == "Ativo" || user.setor == "PMO" && user.status == "Ativo") {
             this.vendedores.push(user.name);
           }
         })
@@ -184,6 +184,8 @@ export class TabelaMetasCsComponent implements OnInit {
     this.totalAnualEmpresaRealizado = 0;
     this.totalAnualIndividualRealizado = 0;
     this.metaEmpresaRealizada = []; // Array para loop abaixo inserir somar todas das vendas realizadas no mês
+
+    if(filtroAno === "") filtroAno = this.currentYear;
 
     this.metasIndividuaisRealizadas.forEach((meta) => {
       if (!this.metaEmpresaRealizada.some(venda => venda.mes === meta.mes)) {

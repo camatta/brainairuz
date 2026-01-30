@@ -250,7 +250,7 @@ export class CalculoComissaoCsComponent implements OnInit {
     this.userService.getUsers().subscribe(
       async(data: any) => {
         data.users.map((user: any) => {
-          if(user.setor == "CS" && user.status == "Ativo" || user.setor == "CSTec" && user.status == "Ativo") {
+          if(user.setor == "CS" && user.status == "Ativo" || user.setor == "PMO" && user.status == "Ativo") {
             this.vendedores.push(user.name);
           }
         })
@@ -326,7 +326,7 @@ export class CalculoComissaoCsComponent implements OnInit {
   }
 
   // Carrega as comissões de acordo com o filtro
-  loadComissoes(filterMonth: string = "Janeiro", filterYear: string = "2024", vendedor: string = "sem filtro") {
+  loadComissoes(filterMonth: string = "Janeiro", filterYear: string = "2026", vendedor: string = "sem filtro") {
     if(this.userPermission()) {
       let usuario: string = "adm";
 
@@ -358,7 +358,7 @@ export class CalculoComissaoCsComponent implements OnInit {
     }
   }
 
-  loadVendasTotais(filterMonth: string = "Janeiro", filterYear: string = "2024"){
+  loadVendasTotais(filterMonth: string = "Janeiro", filterYear: string = "2026"){
     this.comissoesService.getComissoesCs("adm", filterMonth, filterYear).subscribe(
       async (data) => {
         this.metaRealizadaEmpresa = 0;
@@ -372,7 +372,7 @@ export class CalculoComissaoCsComponent implements OnInit {
   }
 
   // Carrega as comissões de acordo com o filtro
-  loadMetas(vendedor: string, filterYear: string = "2024", filterMonth: string, zerar?: boolean) {
+  loadMetas(vendedor: string, filterYear: string = "2026", filterMonth: string, zerar?: boolean) {
     // Carrega as metas do mês selecionado
     if(vendedor !== "sem filtro") {
       this.metasVendedoresService.getMetasCs(vendedor, filterMonth, filterYear).subscribe(
