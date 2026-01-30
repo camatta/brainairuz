@@ -78,7 +78,7 @@ export class TabelaDeValores implements OnInit {
     const user = this.authService.getUser();
     const accessLevel = user ? user.accessLevel : '';
 
-    this.showAdmin = accessLevel === 'Administrador' || user.name === 'Adriany Oliveira';
+    this.showAdmin = accessLevel === 'Administrador' || user.name === 'Adriany Oliveira' || this.currentUser.name === 'Leandro Aguiar';
 
     if(this.showAdmin) {
       this.displayedColumns = ['id', 'produto', 'tecnologia_servico', 'valor_venda', 'observacao', 'actions'];
