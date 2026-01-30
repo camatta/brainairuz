@@ -62,7 +62,13 @@ export class TabelaDeValores implements OnInit {
   showAdmin = false;
 
   userPermission(): boolean {
-    if(this.currentUser.accessLevel == "Administrador" || this.currentUser.name == "Valeria Queiroz"  || this.currentUser.name === 'Adriany Oliveira' || this.currentUser.name === 'Hugo Brito'){
+    if(
+        this.currentUser.accessLevel == "Administrador" ||
+        this.currentUser.name == "Valeria Queiroz"  ||
+        this.currentUser.name === 'Adriany Oliveira' ||
+        this.currentUser.name === 'Hugo Brito'||
+        this.currentUser.name === 'Leandro Aguiar'
+    ){
       return true;
     }
     return false;
