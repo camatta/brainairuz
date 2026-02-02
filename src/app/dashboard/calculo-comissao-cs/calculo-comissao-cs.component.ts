@@ -250,7 +250,7 @@ export class CalculoComissaoCsComponent implements OnInit {
     this.userService.getUsers().subscribe(
       async(data: any) => {
         data.users.map((user: any) => {
-          if(user.setor == "CS" && user.status == "Ativo" || user.setor == "PMO" && user.status == "Ativo") {
+          if(user.setor == "CS" && user.status == "Ativo" || user.setor == "PMO" && user.status == "Ativo" || user.setor == "HeadCS" && user.status == "Ativo") {
             this.vendedores.push(user.name);
           }
         })

@@ -161,7 +161,7 @@ export class TabelaMetasCsComponent implements OnInit {
     this.usersService.getUsers().subscribe(
       async (data: any) => {
         data.users.map((user: any) => {
-          if (user.setor == "CS" && user.status == "Ativo" || user.setor == "PMO" && user.status == "Ativo") {
+          if (user.setor == "CS" && user.status == "Ativo" || user.setor == "PMO" && user.status == "Ativo" || user.setor == "HeadCS" && user.status == "Ativo") {
             this.vendedores.push(user.name);
           }
         })
